@@ -2,10 +2,10 @@ import { Injectable } from '@angular/core';
 import { LoggerService } from './logger.service';
 
 @Injectable({
-    providedIn: 'root',
+  providedIn: 'root',
 })
 export class ProdLoggerService extends LoggerService {
-    logMessage(message: string): void {
-        console.log(`[PROD]: ${message}`);
-    }
+  logMessage(message: string): void {
+    console.log(`[PROD]: ${message}`);
+  }
 }

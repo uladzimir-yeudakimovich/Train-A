@@ -5,8 +5,6 @@ import { HomeComponent } from './home/home.component';
   selector: 'app-root',
   standalone: true,
   imports: [HomeComponent],
-  templateUrl: './app.component.html'
+  templateUrl: './app.component.html',
 })
-export class AppComponent {
-
-}
+export class AppComponent {}
