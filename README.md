@@ -1,9 +1,11 @@
 # Train-A
 
 ## Project Purpose
+
 The primary goal of this project is to develop a platform for managing train trips. User roles include anonymous users, authorized users, and a resource manager with distinct responsibilities.
 
 ## Roles
+
 - an anonymous user can search for routes and find trips, but before booking, they will be required to authorize.
 - an authorized user can book trips and view their past trips.
 - the resource manager has the authority to create trips and manage routes and schedules.
