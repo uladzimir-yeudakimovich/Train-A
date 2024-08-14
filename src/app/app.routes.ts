@@ -7,10 +7,11 @@ export enum RoutePath {
   UserProfile = 'profile',
   TripDetails = 'trip/:rideId',
   Orders = 'orders',
-  Stations = 'admin/stations',
-  Carriages = 'admin/carriages',
-  Routes = 'admin/routes',
-  RideManagement = 'admin/routes/:id',
+  Admin = 'admin',
+  AdminStations = 'stations',
+  AdminCarriages = 'carriages',
+  AdminRoutes = 'routes',
+  AdminRideManagement = 'routes/:id',
   NotFound = '**',
 }
 
@@ -52,28 +53,37 @@ export const routes: Routes = [
       import('./pages/order-page/order-page.component').then((m) => m.OrderPageComponent),
   },
   {
-    path: RoutePath.Stations,
+    path: RoutePath.Admin,
     loadComponent: () =>
-      import('./pages/stations-page/stations-page.component').then((m) => m.StationsPageComponent),
-  },
-  {
-    path: RoutePath.Carriages,
-    loadComponent: () =>
-      import('./pages/carriages-page/carriages-page.component').then(
-        (m) => m.CarriagesPageComponent,
-      ),
-  },
-  {
-    path: RoutePath.Routes,
-    loadComponent: () =>
-      import('./pages/routes-page/routes-page.component').then((m) => m.RoutesPageComponent),
-  },
-  {
-    path: RoutePath.RideManagement,
-    loadComponent: () =>
-      import('./pages/ride-management-page/ride-management-page.component').then(
-        (m) => m.RideManagementPageComponent,
-      ),
+      import('./pages/admin-page/admin-page.component').then((m) => m.AdminPageComponent),
+    children: [
+      {
+        path: RoutePath.AdminStations,
+        loadComponent: () =>
+          import('./pages/stations-page/stations-page.component').then(
+            (m) => m.StationsPageComponent,
+          ),
+      },
+      {
+        path: RoutePath.AdminCarriages,
+        loadComponent: () =>
+          import('./pages/carriages-page/carriages-page.component').then(
+            (m) => m.CarriagesPageComponent,
+          ),
+      },
+      {
+        path: RoutePath.AdminRoutes,
+        loadComponent: () =>
+          import('./pages/routes-page/routes-page.component').then((m) => m.RoutesPageComponent),
+      },
+      {
+        path: RoutePath.AdminRideManagement,
+        loadComponent: () =>
+          import('./pages/ride-management-page/ride-management-page.component').then(
+            (m) => m.RideManagementPageComponent,
+          ),
+      },
+    ],
   },
   {
     path: RoutePath.NotFound,
