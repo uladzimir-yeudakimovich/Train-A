@@ -65,6 +65,11 @@ export const routes: Routes = [
       import('./pages/admin-page/admin-page.component').then((m) => m.AdminPageComponent),
     children: [
       {
+        path: '',
+        redirectTo: RoutePath.AdminStations,
+        pathMatch: 'full',
+      },
+      {
         path: RoutePath.AdminStations,
         title: 'Admin Stations',
         loadComponent: () =>
