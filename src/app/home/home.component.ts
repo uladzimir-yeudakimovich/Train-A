@@ -6,13 +6,9 @@ import { LoggerService } from '../core/services/logger.service';
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [
-    RouterOutlet,
-  ],
+  imports: [RouterOutlet],
   templateUrl: './home.component.html',
-  providers: [
-    LoggerProvider,
-  ]
+  providers: [LoggerProvider],
 })
 export class HomeComponent implements OnInit {
   constructor(private loggerService: LoggerService) {}
@@ -20,7 +16,7 @@ export class HomeComponent implements OnInit {
   ngOnInit(): void {
     this.onUserLogin();
   }
-  
+
   onUserLogin(): void {
     this.loggerService.logMessage('User has logged in.');
   }
