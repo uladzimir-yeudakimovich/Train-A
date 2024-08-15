@@ -7,10 +7,8 @@ describe('HomeComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-        imports: [HomeComponent],
-        providers: [
-            {provide: LoggerService},
-        ],
+      imports: [HomeComponent],
+      providers: [{ provide: LoggerService }],
     }).compileComponents();
 
     const fixture = TestBed.createComponent(HomeComponent);
