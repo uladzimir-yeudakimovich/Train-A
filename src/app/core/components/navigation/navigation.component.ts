@@ -1,10 +1,16 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { navigationImports } from './navigation.config';
+import { RouterLink, RouterLinkActive } from '@angular/router';
+import { MatNavList, MatListItem } from '@angular/material/list';
 
 @Component({
   selector: 'app-navigation',
   standalone: true,
-  imports: [navigationImports],
+  imports: [
+    MatNavList,
+    MatListItem,
+    RouterLink,
+    RouterLinkActive,
+  ],
   templateUrl: './navigation.component.html',
   styleUrl: './navigation.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
