@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { NgFor } from '@angular/common';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { MatNavList, MatListItem } from '@angular/material/list';
+import { NavigationLink } from '../../../shared/models/interfaces/navigation.model';
+import { RoutePath } from '../../../shared/models/enums/route-path.enum';
 
 @Component({
   selector: 'app-navigation',
@@ -17,15 +19,15 @@ import { MatNavList, MatListItem } from '@angular/material/list';
   styleUrl: './navigation.component.scss',
 })
 export class NavigationComponent {
-  navItems = [
-    { label: 'Home', link: '/', exact: true },
-    { label: 'Profile', link: '/profile' },
-    { label: 'My Orders', link: '/orders' },
+  navItems: NavigationLink[] = [
+    { label: 'Home', link: RoutePath.Search, exact: true },
+    { label: 'Profile', link: RoutePath.UserProfile },
+    { label: 'My Orders', link: RoutePath.Orders },
   ];
 
   authItems = [
-    { label: 'Admin', link: '/admin' },
-    { label: 'Sign In', link: '/signin' },
-    { label: 'Sign Up', link: '/signup' },
+    { label: 'Admin', link: RoutePath.Admin },
+    { label: 'Sign In', link: RoutePath.Login },
+    { label: 'Sign Up', link: RoutePath.Registration },
   ];
 }
