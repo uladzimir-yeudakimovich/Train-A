@@ -5,7 +5,8 @@
     routerLink="/"
     routerLinkActive
     #home="routerLinkActive"
-    [activated]="home.isActive">
+    [activated]="home.isActive"
+    [routerLinkActiveOptions]="{ exact: true }">
     Home
   </a>
   <a
