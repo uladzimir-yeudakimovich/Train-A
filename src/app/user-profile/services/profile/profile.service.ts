@@ -1,12 +1,13 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { catchError, tap, Observable, throwError } from 'rxjs';
+import { catchError, tap, Observable, throwError, map } from 'rxjs';
 import {
   UpdateInformationRequestBody,
   UpdatePasswordRequestBody,
   UserProfileResponse,
 } from '../../interfaces';
-import { FAKE_CREDENTIALS } from '../../constants/constants';
+import { FAKE_CREDENTIALS, LOCAL_STORAGE_TOKEN_KEY } from '../../constants/constants';
+import { getLocalStorage, setLocalStorage } from '../../utils/utils';
 
 @Injectable({
   providedIn: 'root',
@@ -24,44 +25,41 @@ export class ProfileService {
     this.http
       .post('/api/signin', FAKE_CREDENTIALS)
       .pipe(
-        tap((response) => {
-          // window.localStorage.setItem('token', response.token);
-          console.log('FROM TAP', response);
-        }),
+        map((response) => response as { token: string }),
+        tap((response) => setLocalStorage(LOCAL_STORAGE_TOKEN_KEY, response.token)),
+        catchError((error) => throwError(() => error)),
       )
-      .subscribe((response) => {
-        console.log(response);
-      });
+      .subscribe();
   }
 
-  public getUserInformation(token: string): Observable<UserProfileResponse> {
+  public getUserInformation(): Observable<UserProfileResponse> {
     return this.http
       .get<UserProfileResponse>('/api/profile', {
-        headers: { Authorization: `Bearer ${token}` },
+        headers: { Authorization: `Bearer ${getLocalStorage(LOCAL_STORAGE_TOKEN_KEY) ?? ''}` },
       })
       .pipe(catchError((error) => throwError(() => error)));
   }
 
-  public updateUserInformation(token: string, body: UpdateInformationRequestBody) {
+  public updateUserInformation(body: UpdateInformationRequestBody) {
     return this.http
       .put('/api/profile', body, {
-        headers: { Authorization: `Bearer ${token}` },
+        headers: { Authorization: `Bearer ${getLocalStorage(LOCAL_STORAGE_TOKEN_KEY) ?? ''}` },
       })
       .pipe(catchError((error) => throwError(() => error)));
   }
 
-  public updateUserPassword(token: string, body: UpdatePasswordRequestBody) {
+  public updateUserPassword(body: UpdatePasswordRequestBody) {
     return this.http
       .put('/api/profile/password', body, {
-        headers: { Authorization: `Bearer ${token}` },
+        headers: { Authorization: `Bearer ${getLocalStorage(LOCAL_STORAGE_TOKEN_KEY) ?? ''}` },
       })
       .pipe(catchError((error) => throwError(() => error)));
   }
 
-  public logout(token: string) {
+  public logout() {
     return this.http
       .delete('/api/logout', {
-        headers: { Authorization: `Bearer ${token}` },
+        headers: { Authorization: `Bearer ${getLocalStorage(LOCAL_STORAGE_TOKEN_KEY) ?? ''}` },
       })
       .pipe(catchError((error) => throwError(() => error)));
   }
