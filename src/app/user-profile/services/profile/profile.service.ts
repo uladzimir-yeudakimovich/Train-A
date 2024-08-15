@@ -14,14 +14,6 @@ import { ApiEndpoint } from '../../enums/api-endpoint.enum';
   providedIn: 'root',
 })
 export class ProfileService {
-  private getHttpOptions(): { headers: { Authorization: string } } {
-    return {
-      headers: {
-        Authorization: `Bearer ${getLocalStorage(LOCAL_STORAGE_TOKEN_KEY) ?? ''}`,
-      },
-    };
-  }
-
   constructor(private readonly http: HttpClient) {}
 
   // TODO: replace by auth service
@@ -63,5 +55,14 @@ export class ProfileService {
     return this.http
       .delete(ApiEndpoint.Logout, this.getHttpOptions())
       .pipe(catchError((error) => throwError(() => error)));
+  }
+
+  // TODO: replace by auth service
+  private getHttpOptions(): { headers: { Authorization: string } } {
+    return {
+      headers: {
+        Authorization: `Bearer ${getLocalStorage(LOCAL_STORAGE_TOKEN_KEY) ?? ''}`,
+      },
+    };
   }
 }
