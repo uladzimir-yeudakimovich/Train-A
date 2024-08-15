@@ -39,19 +39,19 @@ export class ProfileService {
       .pipe(catchError((error) => throwError(() => error)));
   }
 
-  public updateUserInformation(body: UpdateInformationRequestBody) {
+  public updateUserInformation(body: UpdateInformationRequestBody): Observable<object> {
     return this.http
       .put(ApiEndpoint.Profile, body, this.getHttpOptions())
       .pipe(catchError((error) => throwError(() => error)));
   }
 
-  public updateUserPassword(body: UpdatePasswordRequestBody) {
+  public updateUserPassword(body: UpdatePasswordRequestBody): Observable<object> {
     return this.http
       .put(ApiEndpoint.ProfilePassword, body, this.getHttpOptions())
       .pipe(catchError((error) => throwError(() => error)));
   }
 
-  public logout() {
+  public logout(): Observable<object> {
     return this.http
       .delete(ApiEndpoint.Logout, this.getHttpOptions())
       .pipe(catchError((error) => throwError(() => error)));
