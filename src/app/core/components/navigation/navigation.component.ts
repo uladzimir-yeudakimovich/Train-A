@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { NgFor } from '@angular/common';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { MatNavList, MatListItem } from '@angular/material/list';
 
@@ -6,6 +7,7 @@ import { MatNavList, MatListItem } from '@angular/material/list';
   selector: 'app-navigation',
   standalone: true,
   imports: [
+    NgFor,
     MatNavList,
     MatListItem,
     RouterLink,
@@ -14,4 +16,16 @@ import { MatNavList, MatListItem } from '@angular/material/list';
   templateUrl: './navigation.component.html',
   styleUrl: './navigation.component.scss',
 })
-export class NavigationComponent {}
+export class NavigationComponent {
+  navItems = [
+    { label: 'Home', link: '/', exact: true },
+    { label: 'Profile', link: '/profile' },
+    { label: 'My Orders', link: '/orders' },
+  ];
+
+  authItems = [
+    { label: 'Admin', link: '/admin' },
+    { label: 'Sign In', link: '/signin' },
+    { label: 'Sign Up', link: '/signup' },
+  ];
+}
