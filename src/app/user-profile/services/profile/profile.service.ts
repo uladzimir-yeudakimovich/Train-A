@@ -14,11 +14,13 @@ import { ApiEndpoint } from '../../enums/api-endpoint.enum';
   providedIn: 'root',
 })
 export class ProfileService {
-  private httpOptions = {
-    headers: {
-      Authorization: `Bearer ${getLocalStorage(LOCAL_STORAGE_TOKEN_KEY) ?? ''}`,
-    },
-  };
+  private getHttpOptions(): { headers: { Authorization: string } } {
+    return {
+      headers: {
+        Authorization: `Bearer ${getLocalStorage(LOCAL_STORAGE_TOKEN_KEY) ?? ''}`,
+      },
+    };
+  }
 
   constructor(private readonly http: HttpClient) {}
 
@@ -41,25 +43,25 @@ export class ProfileService {
 
   public getUserInformation(): Observable<UserProfileResponse> {
     return this.http
-      .get<UserProfileResponse>(ApiEndpoint.Profile, this.httpOptions)
+      .get<UserProfileResponse>(ApiEndpoint.Profile, this.getHttpOptions())
       .pipe(catchError((error) => throwError(() => error)));
   }
 
   public updateUserInformation(body: UpdateInformationRequestBody) {
     return this.http
-      .put(ApiEndpoint.Profile, body, this.httpOptions)
+      .put(ApiEndpoint.Profile, body, this.getHttpOptions())
       .pipe(catchError((error) => throwError(() => error)));
   }
 
   public updateUserPassword(body: UpdatePasswordRequestBody) {
     return this.http
-      .put(ApiEndpoint.ProfilePassword, body, this.httpOptions)
+      .put(ApiEndpoint.ProfilePassword, body, this.getHttpOptions())
       .pipe(catchError((error) => throwError(() => error)));
   }
 
   public logout() {
     return this.http
-      .delete(ApiEndpoint.Logout, this.httpOptions)
+      .delete(ApiEndpoint.Logout, this.getHttpOptions())
       .pipe(catchError((error) => throwError(() => error)));
   }
 }
