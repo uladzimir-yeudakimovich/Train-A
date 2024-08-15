@@ -1,0 +1,22 @@
+.card {
+  width: 450px;
+  margin: 40px auto;
+  padding: 20px;
+  background-color: #F2F2F2;
+  text-align: center;
+
+  .form-field {
+    width: 100%;
+    margin-bottom: 20px;
+  }
+
+  .card-actions {
+    padding: 0;
+    justify-content: end;
+    gap: 5px;
+
+    .btn {
+      border-radius: 4px;
+    }
+  }
+}
