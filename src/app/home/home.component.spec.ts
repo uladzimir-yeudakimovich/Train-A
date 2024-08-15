@@ -1,15 +1,23 @@
 import { TestBed } from '@angular/core/testing';
+import { ActivatedRoute, RouterOutlet } from '@angular/router';
 import { HomeComponent } from './home.component';
 import { LoggerService } from '../core/services/logger.service';
+import { HeaderComponent } from '../core/components/header/header.component';
+import { activatedRouteMock } from '../testing/mock-data';
 
 describe('HomeComponent', () => {
   let component: HomeComponent;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-        imports: [HomeComponent],
+        imports: [
+          HeaderComponent,
+          RouterOutlet,
+          HomeComponent,
+        ],
         providers: [
-            {provide: LoggerService},
+          { provide: LoggerService },
+          { provide: ActivatedRoute, useValue: activatedRouteMock },
         ],
     }).compileComponents();
 

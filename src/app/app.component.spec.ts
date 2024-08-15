@@ -1,25 +1,32 @@
 import { TestBed } from '@angular/core/testing';
+import { ActivatedRoute } from '@angular/router';
 import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
-import { By } from '@angular/platform-browser';
+import { activatedRouteMock } from './testing/mock-data';
 
 describe('AppComponent', () => {
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [AppComponent, HomeComponent],
+  let component: AppComponent;
+
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      imports: [HomeComponent, AppComponent],
+      providers: [
+        { provide: ActivatedRoute, useValue: activatedRouteMock },
+      ],
     }).compileComponents();
-  });
 
-  it('should create the app', () => {
     const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.componentInstance;
-    expect(app).toBeTruthy();
+    component = fixture.componentInstance;
   });
 
-  it('should render home component', () => {
+  it('should create the app component', () => {
+    expect(component).toBeTruthy();
+  });
+
+  it('should render HomeComponent', () => {
     const fixture = TestBed.createComponent(AppComponent);
     fixture.detectChanges();
-    const homeComponentElement = fixture.debugElement.query(By.directive(HomeComponent));
-    expect(homeComponentElement).toBeTruthy();
+    const compiled = fixture.nativeElement as HTMLElement;
+    expect(compiled.querySelector('app-home')).not.toBeNull();
   });
 });

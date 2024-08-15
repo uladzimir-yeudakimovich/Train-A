@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { Component } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { MatNavList, MatListItem } from '@angular/material/list';
 
@@ -13,6 +13,5 @@ import { MatNavList, MatListItem } from '@angular/material/list';
   ],
   templateUrl: './navigation.component.html',
   styleUrl: './navigation.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NavigationComponent {}
