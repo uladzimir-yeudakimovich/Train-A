@@ -1,0 +1,59 @@
+<mat-nav-list class="nav-list" role="navigation">
+  <a
+    class="nav-item"
+    mat-list-item
+    routerLink="/"
+    routerLinkActive
+    #home="routerLinkActive"
+    [activated]="home.isActive">
+    Home
+  </a>
+  <a
+    class="nav-item"
+    mat-list-item
+    routerLink="profile"
+    routerLinkActive
+    #profile="routerLinkActive"
+    [activated]="profile.isActive">
+    Profile
+  </a>
+  <a
+    class="nav-item"
+    mat-list-item
+    routerLink="orders"
+    routerLinkActive
+    #orders="routerLinkActive"
+    [activated]="orders.isActive">
+    My Orders
+  </a>
+
+  <div class="nav-auth">
+    <a
+      class="nav-item"
+      mat-list-item
+      routerLink="admin"
+      routerLinkActive
+      #admin="routerLinkActive"
+      [activated]="admin.isActive">
+      Admin
+    </a>
+    <a
+      class="nav-item"
+      mat-list-item
+      routerLink="signin"
+      routerLinkActive
+      #signin="routerLinkActive"
+      [activated]="signin.isActive">
+      Sign In
+    </a>
+    <a
+      class="nav-item"
+      mat-list-item
+      routerLink="signup"
+      routerLinkActive
+      #signup="routerLinkActive"
+      [activated]="signup.isActive">
+      Sign Up
+    </a>
+  </div>
+</mat-nav-list>
