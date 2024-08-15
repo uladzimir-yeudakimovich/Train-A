@@ -12,7 +12,7 @@ export const routes: Routes = [
     path: RoutePath.Registration,
     title: 'Sign Up',
     loadComponent: () =>
-      import('./pages/registration-page/registration-page.component').then(
+      import('./auth/components/registration-page/registration-page.component').then(
         (m) => m.RegistrationPageComponent,
       ),
   },
@@ -20,7 +20,7 @@ export const routes: Routes = [
     path: RoutePath.Login,
     title: 'Sign In',
     loadComponent: () =>
-      import('./pages/login-page/login-page.component').then((m) => m.LoginPageComponent),
+      import('./auth/components/login-page/login-page.component').then((m) => m.LoginPageComponent),
   },
   {
     path: RoutePath.UserProfile,
@@ -91,7 +91,7 @@ export const routes: Routes = [
     path: RoutePath.NotFound,
     title: 'Not Found',
     loadComponent: () =>
-      import('./pages/not-found-page/not-found-page.component').then(
+      import('./core/components/not-found-page/not-found-page.component').then(
         (m) => m.NotFoundPageComponent,
       ),
   },
