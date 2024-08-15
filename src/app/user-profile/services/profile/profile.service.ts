@@ -1,18 +1,12 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { catchError, tap, Observable, throwError } from 'rxjs';
-
 import {
   UpdateInformationRequestBody,
   UpdatePasswordRequestBody,
   UserProfileResponse,
 } from '../../interfaces';
-
-// TODO: replace by auth service
-const FAKE_CREDENTIALS = {
-  email: 'cc@cc.com',
-  password: 'dddddddd',
-};
+import { FAKE_CREDENTIALS } from '../../constants/constants';
 
 @Injectable({
   providedIn: 'root',
