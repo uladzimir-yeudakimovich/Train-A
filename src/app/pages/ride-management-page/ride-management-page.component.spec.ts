@@ -8,9 +8,8 @@ describe('RideManagementPageComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [RideManagementPageComponent]
-    })
-    .compileComponents();
+      imports: [RideManagementPageComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(RideManagementPageComponent);
     component = fixture.componentInstance;

@@ -8,9 +8,8 @@ describe('RoutesPageComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [RoutesPageComponent]
-    })
-    .compileComponents();
+      imports: [RoutesPageComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(RoutesPageComponent);
     component = fixture.componentInstance;
