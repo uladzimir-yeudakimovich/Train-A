@@ -1,0 +1,11 @@
+.header {
+  &-row {
+    display: flex;
+    gap: 2rem;
+  }
+
+  &-logo {
+    text-transform: uppercase;
+    border-radius: 0.5rem;
+  }
+}
