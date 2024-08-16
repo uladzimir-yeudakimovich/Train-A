@@ -42,7 +42,7 @@
       ],
       "@testing/*": [
         "./src/app/testing/*"
-      ],
+      ]
     }
   },
   "angularCompilerOptions": {
