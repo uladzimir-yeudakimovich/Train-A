@@ -1,5 +1,37 @@
-.input-and-buton{
+.layout {
+  display: grid;
+  gap: 30px;
+}
+
+.btn-change-password {
+  justify-self: end;
+}
+
+.btn-logout {
+  justify-self: start;
+}
+
+.form {
+  display: grid;
+  gap: 10px;
+}
+
+.spinner {
+  justify-self: center;
+}
+
+.label {
+  font-weight: bold;
+}
+
+.input-and-buton {
   display: flex;
-  align-items: center;
+  justify-content: space-between;
   gap: 20px;
+  align-items: center;
+}
+
+.full-width,
+.ng-star-inserted {
+  width: 100%;
 }
