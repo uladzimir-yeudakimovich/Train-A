@@ -1,4 +1,4 @@
-import { Component, DestroyRef, inject, OnInit, signal } from '@angular/core';
+import { Component, DestroyRef, OnInit, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { NonNullableFormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { MatButton, MatMiniFabButton } from '@angular/material/button';
@@ -25,13 +25,12 @@ import { ChangePasswordFormComponent } from '../change-password-form/change-pass
   styleUrl: './user-profile.component.scss',
 })
 export class UserProfileComponent implements OnInit {
-  private readonly profileService = inject(ProfileService);
-
-  private readonly formBuilder = inject(NonNullableFormBuilder);
-
-  private readonly destroyRef = inject(DestroyRef);
-
-  private readonly matDialog = inject(MatDialog);
+  constructor(
+    private readonly profileService: ProfileService,
+    private readonly formBuilder: NonNullableFormBuilder,
+    private readonly matDialog: MatDialog,
+    private readonly destroyRef: DestroyRef,
+  ) {}
 
   public readonly userInformationForm = this.formBuilder.group({
     email: this.formBuilder.control(''),
