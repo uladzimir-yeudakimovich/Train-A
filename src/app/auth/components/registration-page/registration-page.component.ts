@@ -6,7 +6,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { AuthService } from '../../services/auth.service';
-import { RoutePath } from '../../../shared/models/enums/route-path.enum';
+import { RoutePath } from '@shared/models/enums/route-path.enum';
 
 @Component({
   selector: 'app-registration-page',
@@ -21,6 +21,7 @@ import { RoutePath } from '../../../shared/models/enums/route-path.enum';
   styleUrl: './registration-page.component.scss',
 })
 export class RegistrationPageComponent {
+  linkLogin = RoutePath.Login;
   registrationForm: FormGroup = new FormGroup({
     email: new FormControl('', [
       Validators.required,
