@@ -47,7 +47,7 @@ export class RegistrationPageComponent {
         err => {
           const emailControl = this.registrationForm.get('email');
           emailControl?.setErrors({ alreadyExists: err.message });
-          this.cdr.markForCheck();
+          this.cdr.detectChanges();
         }
       );
     } else {
