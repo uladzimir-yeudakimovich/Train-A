@@ -6,6 +6,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatIcon } from '@angular/material/icon';
 import { MatFormField, MatInput } from '@angular/material/input';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import { Router } from '@angular/router';
+import { RoutePath } from '../../../shared/models/enums/route-path.enum';
 import { ProfileService } from '../../services';
 import { ChangePasswordFormComponent } from '../change-password-form/change-password-form.component';
 
@@ -26,6 +28,7 @@ import { ChangePasswordFormComponent } from '../change-password-form/change-pass
 })
 export class UserProfileComponent implements OnInit {
   constructor(
+    private readonly router: Router,
     private readonly profileService: ProfileService,
     private readonly formBuilder: NonNullableFormBuilder,
     private readonly matDialog: MatDialog,
@@ -94,6 +97,17 @@ export class UserProfileComponent implements OnInit {
         },
         complete: () => {
           this.hideSpinner();
+        },
+      });
+  }
+
+  public logout(): void {
+    this.profileService
+      .logout()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        complete: () => {
+          this.router.navigate([RoutePath.Search]);
         },
       });
   }
