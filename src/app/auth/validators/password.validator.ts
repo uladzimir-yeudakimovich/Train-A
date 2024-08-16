@@ -1,6 +1,6 @@
 import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 
-export const loginEmailValidator = (): ValidatorFn => {
+export const passwordValidator = (): ValidatorFn => {
   return (control: AbstractControl): ValidationErrors | null => {
     const { value } = control;
 
@@ -8,8 +8,8 @@ export const loginEmailValidator = (): ValidatorFn => {
       return null;
     }
 
-    const validEmail = /^[\w\d_]+@[\w\d_]+\.\w{2,7}$/.test(value);
+    const validPassword = value.trim().length > 7;
 
-    return validEmail ? null : { invalidEmail: true };
+    return validPassword ? null : { invalidPassword: true };
   };
 };
