@@ -2,8 +2,8 @@ import { ChangeDetectorRef, Component, DestroyRef } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormBuilder, FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
-import { loginEmailValidator } from '@auth/validators/login-email.validator';
-import { loginPasswordValidator } from '@auth/validators/login-password.validator';
+import { emailValidator } from '@auth/validators/email.validator';
+import { passwordValidator } from '@auth/validators/password.validator';
 import { RoutePath } from '@shared/models/enums/route-path.enum';
 import { MatFormField, MatError } from '@angular/material/form-field';
 import { MatInput, MatLabel } from '@angular/material/input';
@@ -38,8 +38,8 @@ export class LoginComponent {
 
   public readonly loginForm = this.formBuilder.nonNullable.group(
     {
-      email: ['', [Validators.required, loginEmailValidator()]],
-      password: ['', [Validators.required, loginPasswordValidator()]],
+      email: ['', [Validators.required, emailValidator()]],
+      password: ['', [Validators.required, passwordValidator()]],
     },
     { updateOn: 'blur' },
   );
@@ -87,19 +87,16 @@ export class LoginComponent {
   onSubmit(): void {
     const body = this.loginForm.value as LoginCredentials;
 
-    this.authService
-      .login(body)
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe({
-        next: ({ token }) => {
-          localStorage.setItem('token', token);
-          this.router.navigate([RoutePath.Search]);
-        },
-        error: () => {
-          this.email.setErrors({ errorResponse: true });
-          this.password.setErrors({ errorResponse: true });
-          this.changeDetectorRef.markForCheck();
-        },
-      });
+    this.authService.login(body).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
+      next: ({ token }) => {
+        localStorage.setItem('token', token);
+        this.router.navigate([RoutePath.Search]);
+      },
+      error: () => {
+        this.email.setErrors({ errorResponse: true });
+        this.password.setErrors({ errorResponse: true });
+        this.changeDetectorRef.detectChanges();
+      },
+    });
   }
 }
