@@ -8,9 +8,9 @@ import { MatFormField, MatInput } from '@angular/material/input';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { Router } from '@angular/router';
 import { RoutePath } from '../../../shared/models/enums/route-path.enum';
+import { UserProfileResponse } from '../../interfaces';
 import { ProfileService } from '../../services';
 import { ChangePasswordFormComponent } from '../change-password-form/change-password-form.component';
-import { UserProfileResponse } from '../../interfaces';
 
 @Component({
   selector: 'app-user-profile',
@@ -51,13 +51,7 @@ export class UserProfileComponent implements OnInit {
   public readonly loading = signal(false);
 
   public toggleEditMode(field: 'name' | 'email'): void {
-    if (field === 'name') {
-      this.editMode.update((value) => ({ ...value, name: !value.name }));
-    }
-
-    if (field === 'email') {
-      this.editMode.update((value) => ({ ...value, email: !value.email }));
-    }
+    this.editMode()[field] = !this.editMode()[field];
   }
 
   public ngOnInit(): void {
