@@ -1,11 +1,13 @@
 import { Component, DestroyRef, inject, OnInit, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { NonNullableFormBuilder, ReactiveFormsModule } from '@angular/forms';
-import { MatMiniFabButton } from '@angular/material/button';
+import { MatButton, MatMiniFabButton } from '@angular/material/button';
+import { MatDialog } from '@angular/material/dialog';
 import { MatIcon } from '@angular/material/icon';
 import { MatFormField, MatInput } from '@angular/material/input';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { ProfileService } from '../../services';
+import { ChangePasswordFormComponent } from '../change-password-form/change-password-form.component';
 
 @Component({
   selector: 'app-user-profile',
@@ -17,6 +19,7 @@ import { ProfileService } from '../../services';
     MatFormField,
     MatInput,
     MatProgressSpinner,
+    MatButton,
   ],
   templateUrl: './user-profile.component.html',
   styleUrl: './user-profile.component.scss',
@@ -27,6 +30,8 @@ export class UserProfileComponent implements OnInit {
   private readonly formBuilder = inject(NonNullableFormBuilder);
 
   private readonly destroyRef = inject(DestroyRef);
+
+  private readonly matDialog = inject(MatDialog);
 
   public readonly userInformationForm = this.formBuilder.group({
     email: this.formBuilder.control(''),
@@ -100,5 +105,9 @@ export class UserProfileComponent implements OnInit {
 
   private hideSpinner(): void {
     this.loading.set(false);
+  }
+
+  public openDialog(): void {
+    this.matDialog.open(ChangePasswordFormComponent, {});
   }
 }
