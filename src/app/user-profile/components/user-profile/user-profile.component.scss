@@ -3,8 +3,14 @@
   gap: 30px;
 }
 
-.btn-change-password {
+.role-and-button {
   justify-self: end;
+  text-align: right;
+}
+
+.role {
+  text-transform: capitalize;
+  padding-right: 10px;
 }
 
 .btn-logout {

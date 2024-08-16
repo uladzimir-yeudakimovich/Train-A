@@ -10,6 +10,7 @@ import { Router } from '@angular/router';
 import { RoutePath } from '../../../shared/models/enums/route-path.enum';
 import { ProfileService } from '../../services';
 import { ChangePasswordFormComponent } from '../change-password-form/change-password-form.component';
+import { UserProfileResponse } from '../../interfaces';
 
 @Component({
   selector: 'app-user-profile',
@@ -45,6 +46,8 @@ export class UserProfileComponent implements OnInit {
     name: false,
   });
 
+  public readonly userRole = signal<UserProfileResponse['role']>('user');
+
   public readonly loading = signal(false);
 
   public toggleEditMode(field: 'name' | 'email'): void {
@@ -73,8 +76,9 @@ export class UserProfileComponent implements OnInit {
       .getUserInformation()
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
-        next: ({ name, email }) => {
+        next: ({ name, email, role }) => {
           this.userInformationForm.setValue({ name, email });
+          this.userRole.set(role);
         },
         error: () => {
           this.hideSpinner();

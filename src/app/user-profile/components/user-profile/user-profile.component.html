@@ -1,7 +1,8 @@
 <div class="layout">
-  <button class="btn-change-password" mat-flat-button (click)="openDialog()">
-    Change Password
-  </button>
+  <div class="role-and-button">
+    <div class="role">{{ userRole() === 'manager' ? 'manager' : '' }}</div>
+    <button mat-flat-button (click)="openDialog()">Change Password</button>
+  </div>
 
   <form [formGroup]="userInformationForm" class="form">
     @if (loading()) {
