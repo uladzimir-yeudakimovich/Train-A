@@ -1,8 +1,10 @@
+@import "@shared/styles/variables.scss";
+
 .card {
   width: 450px;
   margin: 40px auto;
   padding: 20px;
-  background-color: #F2F2F2;
+  background-color: $primaryBackgroundColor;
   text-align: center;
 
   .form-field {

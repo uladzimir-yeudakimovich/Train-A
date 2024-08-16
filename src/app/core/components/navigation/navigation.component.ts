@@ -2,8 +2,8 @@ import { Component } from '@angular/core';
 import { NgFor } from '@angular/common';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { MatNavList, MatListItem } from '@angular/material/list';
-import { NavigationLink } from '../../../shared/models/interfaces/navigation.model';
-import { RoutePath } from '../../../shared/models/enums/route-path.enum';
+import { NavigationLink } from '@shared/models/interfaces/navigation.model';
+import { RoutePath } from '@shared/models/enums/route-path.enum';
 
 @Component({
   selector: 'app-navigation',

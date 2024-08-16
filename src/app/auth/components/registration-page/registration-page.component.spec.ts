@@ -10,8 +10,8 @@ import { ChangeDetectorRef } from '@angular/core';
 
 import { RegistrationPageComponent } from './registration-page.component';
 import { AuthService } from '../../services/auth.service';
-import { RoutePath } from '../../../shared/models/enums/route-path.enum';
-import { authServiceMock, routerMock } from '../../../testing/mock-data';
+import { authServiceMock, routerMock } from '@testing/mock-data';
+import { RoutePath } from '@shared/models/enums/route-path.enum';
 
 describe('RegistrationPageComponent', () => {
   let component: RegistrationPageComponent;

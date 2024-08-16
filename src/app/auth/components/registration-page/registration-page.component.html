@@ -1,30 +1,30 @@
 <mat-card class="card">
   <h4><b>Sign Up</b></h4>
   <form [formGroup]="registrationForm" (ngSubmit)="onRegistration()">
-      <mat-form-field appearance="outline" class="form-field">
-          <mat-label>Email</mat-label>
-          <input matInput placeholder="email" formControlName="email" name="email" type="email">
-          @if (registrationForm.get('email')!.invalid) {
-              <mat-error>{{ getEmailErrorMessage() }}</mat-error>
-          }
-      </mat-form-field>
-      <mat-form-field appearance="outline" class="form-field">
-          <mat-label>Password</mat-label>
-          <input matInput placeholder="password" formControlName="password" name="password" type="password">
-          @if (registrationForm.get('password')!.invalid) {
-              <mat-error>{{ getPasswordErrorMessage() }}</mat-error>
-          }
-      </mat-form-field>
-      <mat-form-field appearance="outline" class="form-field">
-        <mat-label>Repeat Password</mat-label>
-        <input matInput placeholder="confirmPassword" formControlName="confirmPassword" name="confirmPassword" type="password">
-        @if (registrationForm.get('confirmPassword')!.invalid) {
-            <mat-error>{{ getConfirmPasswordErrorMessage() }}</mat-error>
-        }
+    <mat-form-field appearance="outline" class="form-field">
+      <mat-label>Email</mat-label>
+      <input matInput placeholder="email" formControlName="email" name="email" type="email">
+      @if (registrationForm.get('email')!.invalid) {
+        <mat-error>{{ getEmailErrorMessage() }}</mat-error>
+      }
     </mat-form-field>
-      <mat-card-actions class="card-actions">
-          <button type="submit" mat-flat-button class="btn" [disabled]="registrationForm.invalid">Register</button>
-          <button type="button" mat-button class="btn">Sign In</button>
-      </mat-card-actions>
+    <mat-form-field appearance="outline" class="form-field">
+      <mat-label>Password</mat-label>
+      <input matInput placeholder="password" formControlName="password" name="password" type="password">
+      @if (registrationForm.get('password')!.invalid) {
+        <mat-error>{{ getPasswordErrorMessage() }}</mat-error>
+      }
+    </mat-form-field>
+    <mat-form-field appearance="outline" class="form-field">
+      <mat-label>Repeat Password</mat-label>
+      <input matInput placeholder="confirmPassword" formControlName="confirmPassword" name="confirmPassword" type="password">
+      @if (registrationForm.get('confirmPassword')!.invalid) {
+        <mat-error>{{ getConfirmPasswordErrorMessage() }}</mat-error>
+      }
+    </mat-form-field>
+    <mat-card-actions class="card-actions">
+      <button type="submit" mat-flat-button class="btn" [disabled]="registrationForm.invalid">Register</button>
+      <a mat-button class="btn" [href]="linkLogin">Sign In</a>
+    </mat-card-actions>
   </form>
 </mat-card>
