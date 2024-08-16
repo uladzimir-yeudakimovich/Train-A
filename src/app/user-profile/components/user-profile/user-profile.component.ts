@@ -121,6 +121,6 @@ export class UserProfileComponent implements OnInit {
   }
 
   public openDialog(): void {
-    this.matDialog.open(ChangePasswordFormComponent, {});
+    this.matDialog.open(ChangePasswordFormComponent);
   }
 }
