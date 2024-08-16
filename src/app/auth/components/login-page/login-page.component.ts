@@ -1,13 +1,13 @@
-import { LoginFormInterface } from './../../models/login-form.interface';
-import { ChangeDetectorRef, Component, DestroyRef, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, DestroyRef } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormBuilder, FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { loginPageImports } from './login-page.config';
-import { loginEmailValidator } from '../../validators/login-email.validator';
-import { loginPasswordValidator } from '../../validators/login-password.validator';
-import { LoginService } from '../../services/login.service';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { RoutePath } from '../../../shared/models/enums/route-path.enum';
+import { loginEmailValidator } from '@auth/validators/login-email.validator';
+import { loginPasswordValidator } from '@auth/validators/login-password.validator';
+import { LoginService } from '@auth/services/login.service';
+import { LoginFormInterface } from '@auth/models/login-form.interface';
+import { RoutePath } from '@shared/models/enums/route-path.enum';
 
 @Component({
   selector: 'app-login-page',
@@ -17,15 +17,13 @@ import { RoutePath } from '../../../shared/models/enums/route-path.enum';
   styleUrl: './login-page.component.scss',
 })
 export class LoginPageComponent {
-  private readonly formBuilder = inject(FormBuilder);
-
-  private readonly loginService = inject(LoginService);
-
-  private readonly destroyRef = inject(DestroyRef);
-
-  private readonly router = inject(Router);
-
-  private readonly changeDetectorRef = inject(ChangeDetectorRef);
+  constructor(
+    private readonly router: Router,
+    private readonly formBuilder: FormBuilder,
+    private readonly loginService: LoginService,
+    private readonly changeDetectorRef: ChangeDetectorRef,
+    private readonly destroyRef: DestroyRef,
+  ) {}
 
   public readonly loginForm = this.formBuilder.nonNullable.group(
     {
@@ -75,7 +73,7 @@ export class LoginPageComponent {
     return null;
   }
 
-  onSubmit() {
+  onSubmit(): void {
     const body = this.loginForm.value as LoginFormInterface;
 
     this.loginService
