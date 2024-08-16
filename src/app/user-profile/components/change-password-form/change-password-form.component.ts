@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButton, MatMiniFabButton } from '@angular/material/button';
 import {
@@ -31,6 +31,7 @@ import { passwordValidator } from '../../validators';
   ],
   templateUrl: './change-password-form.component.html',
   styleUrl: './change-password-form.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ChangePasswordFormComponent {
   constructor(
