@@ -90,16 +90,7 @@ const config: Config = {
   // ],
 
   // A map from regular expressions to module names or to arrays of module names that allow to stub out resources with a single module
-  moduleNameMapper: {
-    '@admin/(.*)': '<rootDir>/src/app/admin/$1',
-    '@auth/(.*)': '<rootDir>/src/app/auth/$1',
-    '@core/(.*)': '<rootDir>/src/app/core/$1',
-    '@home/(.*)': '<rootDir>/src/app/home/$1',
-    '@redux/(.*)': '<rootDir>/src/app/redux/$1',
-    '@shared/(.*)': '<rootDir>/src/app/shared/$1',
-    '@user/(.*)': '<rootDir>/src/app/user/$1',
-    '@testing/(.*)': '<rootDir>/src/app/testing/$1',
-  },
+  // moduleNameMapper: {},
 
   // An array of regexp pattern strings, matched against all module paths before considered 'visible' to the module loader
   // modulePathIgnorePatterns: [],
