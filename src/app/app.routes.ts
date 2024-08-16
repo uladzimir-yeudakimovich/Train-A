@@ -1,54 +1,54 @@
 import { Routes } from '@angular/router';
-import { RoutePath } from './shared/models/enums/route-path.enum';
+import { RoutePath } from '@shared/models/enums/route-path.enum';
 
 export const routes: Routes = [
   {
     path: RoutePath.Search,
     title: 'Search',
     loadComponent: () =>
-      import('./pages/search-page/search-page.component').then((m) => m.SearchPageComponent),
+      import('@home/pages/search/search.component').then((m) => m.SearchComponent),
   },
   {
     path: RoutePath.Registration,
     title: 'Sign Up',
     loadComponent: () =>
-      import('./auth/components/registration-page/registration-page.component').then(
-        (m) => m.RegistrationPageComponent,
+      import('@auth/pages/registration/registration.component').then(
+        (m) => m.RegistrationComponent,
       ),
   },
   {
     path: RoutePath.Login,
     title: 'Sign In',
     loadComponent: () =>
-      import('./auth/components/login-page/login-page.component').then((m) => m.LoginPageComponent),
+      import('@auth/pages/login/login.component').then((m) => m.LoginComponent),
   },
   {
     path: RoutePath.UserProfile,
     title: 'Profile',
     loadComponent: () =>
-      import('./pages/user-profile-page/user-profile-page.component').then(
-        (m) => m.UserProfilePageComponent,
+      import('@user/pages/profile/profile.component').then(
+        (m) => m.ProfileComponent,
       ),
   },
   {
     path: RoutePath.TripDetails,
     title: 'Trip Details',
     loadComponent: () =>
-      import('./pages/trip-details-page/trip-details-page.component').then(
-        (m) => m.TripDetailsPageComponent,
+      import('@home/pages/trip/trip.component').then(
+        (m) => m.TripComponent,
       ),
   },
   {
     path: RoutePath.Orders,
     title: 'Orders',
     loadComponent: () =>
-      import('./pages/order-page/order-page.component').then((m) => m.OrderPageComponent),
+      import('@user/pages/orders/orders.component').then((m) => m.OrdersComponent),
   },
   {
     path: RoutePath.Admin,
     title: 'Admin',
     loadComponent: () =>
-      import('./pages/admin-page/admin-page.component').then((m) => m.AdminPageComponent),
+      import('@admin/components/sidebar/sidebar.component').then((m) => m.SidebarComponent),
     children: [
       {
         path: '',
@@ -59,30 +59,30 @@ export const routes: Routes = [
         path: RoutePath.AdminStations,
         title: 'Admin Stations',
         loadComponent: () =>
-          import('./pages/stations-page/stations-page.component').then(
-            (m) => m.StationsPageComponent,
+          import('@admin/pages/stations/stations.component').then(
+            (m) => m.StationsComponent,
           ),
       },
       {
         path: RoutePath.AdminCarriages,
         title: 'Admin Carriages',
         loadComponent: () =>
-          import('./pages/carriages-page/carriages-page.component').then(
-            (m) => m.CarriagesPageComponent,
+          import('@admin/pages/carriages/carriages.component').then(
+            (m) => m.CarriagesComponent,
           ),
       },
       {
         path: RoutePath.AdminRoutes,
         title: 'Admin Routes',
         loadComponent: () =>
-          import('./pages/routes-page/routes-page.component').then((m) => m.RoutesPageComponent),
+          import('@admin/pages/routes/routes.component').then((m) => m.RoutesComponent),
       },
       {
         path: RoutePath.AdminRideManagement,
         title: 'Admin Ride Management',
         loadComponent: () =>
-          import('./pages/ride-management-page/ride-management-page.component').then(
-            (m) => m.RideManagementPageComponent,
+          import('@admin/pages/rides/rides.component').then(
+            (m) => m.RidesComponent,
           ),
       },
     ],
@@ -91,8 +91,8 @@ export const routes: Routes = [
     path: RoutePath.NotFound,
     title: 'Not Found',
     loadComponent: () =>
-      import('./core/components/not-found-page/not-found-page.component').then(
-        (m) => m.NotFoundPageComponent,
+      import('@core/pages/not-found/not-found.component').then(
+        (m) => m.NotFoundComponent,
       ),
   },
 ];
