@@ -98,7 +98,7 @@ const config: Config = {
     '@redux/(.*)': '<rootDir>/src/app/redux/$1',
     '@shared/(.*)': '<rootDir>/src/app/shared/$1',
     '@user/(.*)': '<rootDir>/src/app/user/$1',
-    '@testing/(.*)': '<rootDir>/src/testing/$1',
+    '@testing/(.*)': '<rootDir>/src/app/testing/$1',
   },
 
   // An array of regexp pattern strings, matched against all module paths before considered 'visible' to the module loader
