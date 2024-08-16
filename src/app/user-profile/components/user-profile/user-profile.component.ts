@@ -1,15 +1,16 @@
 import { Component, DestroyRef, OnInit, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { NonNullableFormBuilder, ReactiveFormsModule } from '@angular/forms';
+import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButton, MatMiniFabButton } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
 import { MatIcon } from '@angular/material/icon';
-import { MatFormField, MatInput } from '@angular/material/input';
+import { MatError, MatFormField, MatInput } from '@angular/material/input';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { Router } from '@angular/router';
 import { RoutePath } from '../../../shared/models/enums/route-path.enum';
 import { UserProfileResponse } from '../../interfaces';
 import { ProfileService } from '../../services';
+import { emailValidator } from '../../validators';
 import { ChangePasswordFormComponent } from '../change-password-form/change-password-form.component';
 
 @Component({
@@ -23,6 +24,7 @@ import { ChangePasswordFormComponent } from '../change-password-form/change-pass
     MatInput,
     MatProgressSpinner,
     MatButton,
+    MatError,
   ],
   templateUrl: './user-profile.component.html',
   styleUrl: './user-profile.component.scss',
@@ -37,8 +39,8 @@ export class UserProfileComponent implements OnInit {
   ) {}
 
   public readonly userInformationForm = this.formBuilder.group({
-    email: this.formBuilder.control(''),
-    name: this.formBuilder.control(''),
+    email: this.formBuilder.control('', [Validators.required, emailValidator()]),
+    name: this.formBuilder.control('', [Validators.required]),
   });
 
   public readonly editMode = signal({
@@ -49,6 +51,14 @@ export class UserProfileComponent implements OnInit {
   public readonly userRole = signal<UserProfileResponse['role']>('user');
 
   public readonly loading = signal(false);
+
+  public get invalidEmail(): boolean {
+    return this.userInformationForm.controls.email.errors?.['invalidEmail'];
+  }
+
+  public get invalidName(): boolean {
+    return this.userInformationForm.controls.name.errors?.['required'];
+  }
 
   public toggleEditMode(field: 'name' | 'email'): void {
     this.editMode()[field] = !this.editMode()[field];

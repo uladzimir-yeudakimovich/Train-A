@@ -17,10 +17,16 @@
             <div>
               <mat-form-field class="full-width" appearance="outline" subscriptSizing="dynamic">
                 <input type="text" matInput formControlName="name" />
+                @if (invalidName) {
+                  <mat-error>required</mat-error>
+                }
               </mat-form-field>
             </div>
           }
-          <button mat-mini-fab (click)="editMode().name ? onSubmit() : toggleEditMode('name')">
+          <button
+            [disabled]="invalidName"
+            mat-mini-fab
+            (click)="editMode().name ? onSubmit() : toggleEditMode('name')">
             <mat-icon>{{ editMode().name ? 'save' : 'edit' }}</mat-icon>
           </button>
         </div>
@@ -34,10 +40,16 @@
             <div>
               <mat-form-field class="full-width" appearance="outline" subscriptSizing="dynamic">
                 <input type="email" matInput formControlName="email" />
+                @if (invalidEmail) {
+                  <mat-error>invalid email</mat-error>
+                }
               </mat-form-field>
             </div>
           }
-          <button mat-mini-fab (click)="editMode().email ? onSubmit() : toggleEditMode('email')">
+          <button
+            [disabled]="invalidEmail"
+            mat-mini-fab
+            (click)="editMode().email ? onSubmit() : toggleEditMode('email')">
             <mat-icon>{{ editMode().email ? 'save' : 'edit' }}</mat-icon>
           </button>
         </div>
