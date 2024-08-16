@@ -1,31 +1,23 @@
 <h2>Sign In</h2>
 
-<form class="form" [formGroup]="loginForm">
+<form class="form" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
   <mat-form-field class="form-field" subscriptSizing="dynamic" appearance="outline">
     <mat-label> email </mat-label>
 
-    <input matInput formControlName="email" />
+    <input matInput formControlName="email" name="email" type="email" />
 
-    @if (isRequiredEmail) {
-      <mat-error> Required </mat-error>
-    }
-
-    @if (isInvalidEmail) {
-      <mat-error> Incorrect email </mat-error>
+    @if (email.invalid) {
+      <mat-error> {{ emailErrorMessage }} </mat-error>
     }
   </mat-form-field>
 
   <mat-form-field class="form-field" subscriptSizing="dynamic" appearance="outline">
     <mat-label> password </mat-label>
 
-    <input matInput formControlName="password" />
+    <input matInput formControlName="password" name="password" type="password" />
 
-    @if (isRequiredPassword) {
-      <mat-error> Required </mat-error>
-    }
-
-    @if (isInvalidPassword) {
-      <mat-error> Not less 8 symbols </mat-error>
+    @if (password.invalid) {
+      <mat-error> {{ passwordErrorMessage }} </mat-error>
     }
   </mat-form-field>
 
