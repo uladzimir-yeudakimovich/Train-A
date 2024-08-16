@@ -1,8 +1,13 @@
-import { Component, inject } from '@angular/core';
+import { LoginFormInterface } from './../../models/login-form.interface';
+import { ChangeDetectorRef, Component, DestroyRef, inject } from '@angular/core';
+import { FormBuilder, FormControl, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { loginPageImports } from './login-page.config';
-import { FormBuilder, FormControl, ValidationErrors, Validators } from '@angular/forms';
 import { loginEmailValidator } from '../../validators/login-email.validator';
 import { loginPasswordValidator } from '../../validators/login-password.validator';
+import { LoginService } from '../../services/login.service';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { RoutePath } from '../../../shared/models/enums/route-path.enum';
 
 @Component({
   selector: 'app-login-page',
@@ -13,6 +18,14 @@ import { loginPasswordValidator } from '../../validators/login-password.validato
 })
 export class LoginPageComponent {
   private readonly formBuilder = inject(FormBuilder);
+
+  private readonly loginService = inject(LoginService);
+
+  private readonly destroyRef = inject(DestroyRef);
+
+  private readonly router = inject(Router);
+
+  private readonly changeDetectorRef = inject(ChangeDetectorRef);
 
   public readonly loginForm = this.formBuilder.nonNullable.group(
     {
@@ -26,23 +39,58 @@ export class LoginPageComponent {
     return this.loginForm.controls['email'];
   }
 
-  get isRequiredEmail(): ValidationErrors | null {
-    return this.email.errors?.['required'];
-  }
+  get emailErrorMessage(): string | null {
+    if (this.email.errors?.['required']) {
+      return 'Required';
+    }
 
-  get isInvalidEmail(): ValidationErrors | null {
-    return this.email.errors?.['invalidEmail'];
+    if (this.email.errors?.['invalidEmail']) {
+      return 'Incorrect email';
+    }
+
+    if (this.email.errors?.['errorResponse']) {
+      return 'Incorrect email or password';
+    }
+
+    return null;
   }
 
   get password(): FormControl<string> {
     return this.loginForm.controls['password'];
   }
 
-  get isRequiredPassword(): ValidationErrors | null {
-    return this.password.errors?.['required'];
+  get passwordErrorMessage(): string | null {
+    if (this.password.errors?.['required']) {
+      return 'Required';
+    }
+
+    if (this.password.errors?.['invalidPassword']) {
+      return 'Not less 8 symbols';
+    }
+
+    if (this.password.errors?.['errorResponse']) {
+      return 'Incorrect email or password';
+    }
+
+    return null;
   }
 
-  get isInvalidPassword(): ValidationErrors | null {
-    return this.password.errors?.['invalidPassword'];
+  onSubmit() {
+    const body = this.loginForm.value as LoginFormInterface;
+
+    this.loginService
+      .login(body)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: ({ token }) => {
+          localStorage.setItem('token', token);
+          this.router.navigate([RoutePath.Search]);
+        },
+        error: () => {
+          this.email.setErrors({ errorResponse: true });
+          this.password.setErrors({ errorResponse: true });
+          this.changeDetectorRef.markForCheck();
+        },
+      });
   }
 }
