@@ -56,6 +56,10 @@ export class UserProfileComponent implements OnInit {
     return this.userInformationForm.controls.email.errors?.['invalidEmail'];
   }
 
+  public get emptyEmail(): boolean {
+    return this.userInformationForm.controls.email.errors?.['required'];
+  }
+
   public get invalidName(): boolean {
     return this.userInformationForm.controls.name.errors?.['required'];
   }

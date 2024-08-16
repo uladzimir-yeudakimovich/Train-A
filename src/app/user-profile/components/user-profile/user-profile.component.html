@@ -40,6 +40,9 @@
             <div>
               <mat-form-field class="full-width" appearance="outline" subscriptSizing="dynamic">
                 <input type="email" matInput formControlName="email" />
+                @if (emptyEmail) {
+                  <mat-error>required</mat-error>
+                }
                 @if (invalidEmail) {
                   <mat-error>invalid email</mat-error>
                 }
@@ -47,7 +50,7 @@
             </div>
           }
           <button
-            [disabled]="invalidEmail"
+            [disabled]="invalidEmail || emptyEmail"
             mat-mini-fab
             (click)="editMode().email ? onSubmit() : toggleEditMode('email')">
             <mat-icon>{{ editMode().email ? 'save' : 'edit' }}</mat-icon>
