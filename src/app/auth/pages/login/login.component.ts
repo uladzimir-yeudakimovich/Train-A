@@ -72,7 +72,6 @@ export class LoginComponent {
         this.router.navigate([RoutePath.Search]);
       },
       error: () => {
-        this.loginForm.setErrors({notExists: true});
         const emailControl = this.loginForm.get('email');
         emailControl?.setErrors({ notExists: true });
         const passwordControl = this.loginForm.get('password');
