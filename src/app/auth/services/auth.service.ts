@@ -16,8 +16,12 @@ export class AuthService {
   }
 
   login(credentials: LoginCredentials): Observable<TokenInterface> {
+    const { email } = credentials;
     return this.http.post<TokenInterface>(RoutePath.Login, credentials).pipe(
-      tap(({token}) => localStorage.setItem('token', token))
+      tap(({token}) => {
+        localStorage.setItem('token', token);
+        localStorage.setItem('username', email);
+      })
     );
   }
 }
