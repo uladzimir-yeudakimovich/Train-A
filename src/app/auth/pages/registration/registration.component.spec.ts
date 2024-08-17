@@ -1,8 +1,4 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ReactiveFormsModule } from '@angular/forms';
-import { MatInputModule } from '@angular/material/input';
-import { MatButtonModule } from '@angular/material/button';
-import { MatCardModule } from '@angular/material/card';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { of } from 'rxjs';
 import { Router } from '@angular/router';
@@ -12,6 +8,7 @@ import { RegistrationComponent } from './registration.component';
 import { AuthService } from '../../services/auth.service';
 import { authServiceMock, routerMock } from '@testing/mock-data';
 import { RoutePath } from '@shared/models/enums/route-path.enum';
+import { formImports } from '../form.config';
 
 describe('RegistrationComponent', () => {
   let component: RegistrationComponent;
@@ -19,13 +16,7 @@ describe('RegistrationComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [
-        ReactiveFormsModule,
-        MatInputModule,
-        MatButtonModule,
-        MatCardModule,
-        BrowserAnimationsModule,
-      ],
+      imports: [formImports, BrowserAnimationsModule],
       providers: [
         { provide: AuthService, useValue: authServiceMock },
         { provide: Router, useValue: routerMock },

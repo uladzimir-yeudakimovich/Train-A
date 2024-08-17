@@ -1,1 +1,23 @@
-<p>login works!</p>
+<mat-card class="card">
+  <h4><b>Sign In</b></h4>
+  <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+    <mat-form-field class="form-field" subscriptSizing="dynamic" appearance="outline">
+      <mat-label>email</mat-label>
+      <input matInput formControlName="email" name="email" type="email" />
+      @if (loginForm.get('email')!.invalid) {
+        <mat-error> {{ getEmailErrorMessage() }} </mat-error>
+      }
+    </mat-form-field>
+    <mat-form-field class="form-field" subscriptSizing="dynamic" appearance="outline">
+      <mat-label>password</mat-label>
+      <input matInput formControlName="password" name="password" type="password" />
+      @if (loginForm.get('password')!.invalid) {
+        <mat-error> {{ getPasswordErrorMessage() }} </mat-error>
+      }
+    </mat-form-field>
+    <mat-card-actions class="card-actions">
+      <button type="submit" mat-flat-button class="btn" [disabled]="loginForm.invalid">Sign In</button>
+      <a mat-button class="btn" [href]="linkRegistration">Sign Up</a>
+    </mat-card-actions>
+  </form>
+</mat-card>

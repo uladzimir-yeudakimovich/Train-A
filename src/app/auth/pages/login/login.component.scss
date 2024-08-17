@@ -1,0 +1,26 @@
+@import "@shared/styles/variables.scss";
+
+.card {
+  width: 450px;
+  margin: 40px auto;
+  padding: 20px;
+  background-color: $primaryBackgroundColor;
+  text-align: center;
+
+  .form-field {
+    width: 100%;
+    margin-bottom: 20px;
+  }
+
+  .card-actions {
+    padding: 0;
+    justify-content: end;
+    gap: 5px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+
+    .btn {
+      border-radius: 4px;
+    }
+  }
+}

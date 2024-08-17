@@ -4,8 +4,10 @@
       class="nav-item"
       mat-list-item
       [routerLink]="item.link"
-      [routerLinkActiveOptions]="{ exact: item.exact || false }"
-      routerLinkActive="active-link"
+      [routerLinkActiveOptions]="{ exact: item.exact ?? false }"
+      routerLinkActive
+      #rla="routerLinkActive"
+      [activated]="rla.isActive"
       role="link">
       {{ item.label }}
     </a>
@@ -17,7 +19,9 @@
         class="nav-item"
         mat-list-item
         [routerLink]="item.link"
-        routerLinkActive="active-link"
+        routerLinkActive
+        #rla="routerLinkActive"
+        [activated]="rla.isActive"
         role="link">
         {{ item.label }}
       </a>
