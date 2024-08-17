@@ -68,8 +68,7 @@ export class LoginComponent {
 
   onSubmit(): void {
     this.authService.login(this.loginForm.value).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
-      next: ({ token }) => {
-        localStorage.setItem('token', token);
+      next: () => {
         this.router.navigate([RoutePath.Search]);
       },
       error: () => {
