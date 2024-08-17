@@ -15,10 +15,11 @@ export class NavigationComponent {
   public readonly navItems: NavigationLink[] = [
     { label: 'Home', link: RoutePath.Search, exact: true },
     { label: 'Profile', link: RoutePath.UserProfile },
-    { label: 'My Orders', link: RoutePath.Orders },
+    { label: 'My Orders', link: RoutePath.UserOrders },
+    { label: 'Orders', link: RoutePath.Orders },
   ];
 
-  public readonly authItems = [
+  public readonly authItems: NavigationLink[] = [
     { label: 'Admin', link: RoutePath.Admin },
     { label: 'Sign In', link: RoutePath.Login },
     { label: 'Sign Up', link: RoutePath.Registration },

@@ -30,6 +30,7 @@
       "@redux/*": ["./src/app/redux/*"],
       "@shared/*": ["./src/app/shared/*"],
       "@testing/*": ["./src/app/testing/*"],
+      "@orders/*": ["./src/app/orders/*"],
       "@user/*": ["./src/app/user/*"]
     }
   },
