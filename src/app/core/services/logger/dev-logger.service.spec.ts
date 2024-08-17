@@ -18,9 +18,9 @@ describe('DevLoggerService', () => {
   it('should log a message with the [DEV] prefix when logMessage is called', () => {
     const consoleSpy = jest.spyOn(console, 'log');
     const message = 'Test message';
-    
+
     service.logMessage(message);
-    
+
     expect(consoleSpy).toHaveBeenCalledWith(`[DEV]: ${message}`);
   });
 });

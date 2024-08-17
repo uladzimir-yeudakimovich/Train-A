@@ -1,0 +1,43 @@
+.layout {
+  display: grid;
+  gap: 30px;
+}
+
+.role-and-button {
+  justify-self: end;
+  text-align: right;
+}
+
+.role {
+  text-transform: capitalize;
+  padding-right: 10px;
+}
+
+.btn-logout {
+  justify-self: start;
+}
+
+.form {
+  display: grid;
+  gap: 10px;
+}
+
+.spinner {
+  justify-self: center;
+}
+
+.label {
+  font-weight: bold;
+}
+
+.input-and-buton {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  align-items: center;
+}
+
+.full-width,
+.ng-star-inserted {
+  width: 100%;
+}
