@@ -12,4 +12,5 @@ export const activatedRouteMock = {
 
 export const authServiceMock = {
   registration: jest.fn(),
+  login: jest.fn(),
 };
