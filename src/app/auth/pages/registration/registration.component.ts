@@ -1,22 +1,15 @@
-import { ChangeDetectorRef, Component, DestroyRef, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, DestroyRef } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Router } from '@angular/router';
-import { AbstractControl, FormControl, FormGroup, ReactiveFormsModule, ValidatorFn, Validators } from '@angular/forms';
-import { MatInputModule } from '@angular/material/input';
-import { MatButtonModule } from '@angular/material/button';
-import { MatCardModule } from '@angular/material/card';
+import { AbstractControl, FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
 import { RoutePath } from '@shared/models/enums/route-path.enum';
+import { formImports } from '../form.config';
 
 @Component({
   selector: 'app-registration',
   standalone: true,
-  imports: [
-    MatInputModule,
-    MatButtonModule,
-    MatCardModule,
-    ReactiveFormsModule,
-  ],
+  imports: [formImports],
   templateUrl: './registration.component.html',
   styleUrl: './registration.component.scss'
 })
@@ -36,9 +29,13 @@ export class RegistrationComponent {
     ])},
     { validators: this.matchValidator('password', 'confirmPassword') },
   );
-  private destroyRef = inject(DestroyRef);
 
-  constructor(private authService: AuthService, private router: Router, private cdr: ChangeDetectorRef) { }
+  constructor(
+    private authService: AuthService,
+    private router: Router,
+    private destroyRef: DestroyRef,
+    private cdr: ChangeDetectorRef,
+  ) { }
 
   onRegistration(): void {
     if (this.registrationForm.valid) {

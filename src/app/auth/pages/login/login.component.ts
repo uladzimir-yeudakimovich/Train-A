@@ -1,101 +1,84 @@
 import { ChangeDetectorRef, Component, DestroyRef } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { FormBuilder, FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { emailValidator } from '@auth/validators/email.validator';
-import { passwordValidator } from '@auth/validators/password.validator';
 import { RoutePath } from '@shared/models/enums/route-path.enum';
-import { MatFormField, MatError } from '@angular/material/form-field';
-import { MatInput, MatLabel } from '@angular/material/input';
-import { MatButton, MatAnchor } from '@angular/material/button';
-import { LoginCredentials } from '@auth/models/auth.model';
 import { AuthService } from '@auth/services/auth.service';
+import { formImports } from '../form.config';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [
-    ReactiveFormsModule,
-    MatFormField,
-    MatError,
-    MatInput,
-    MatLabel,
-    MatButton,
-    MatAnchor,
-    RouterLink,
-  ],
+  imports: [formImports],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss'
 })
 export class LoginComponent {
+  linkRegistration = RoutePath.Registration;
+
   constructor(
-    private readonly router: Router,
-    private readonly formBuilder: FormBuilder,
-    private readonly authService: AuthService,
-    private readonly changeDetectorRef: ChangeDetectorRef,
-    private readonly destroyRef: DestroyRef,
+    private router: Router,
+    private authService: AuthService,
+    private cdr: ChangeDetectorRef,
+    private destroyRef: DestroyRef,
   ) {}
 
-  public readonly loginForm = this.formBuilder.nonNullable.group(
-    {
-      email: ['', [Validators.required, emailValidator()]],
-      password: ['', [Validators.required, passwordValidator()]],
-    },
-    { updateOn: 'blur' },
-  );
+  loginForm: FormGroup = new FormGroup({
+    email: new FormControl('', [
+      Validators.required,
+      Validators.email,
+      emailValidator,
+    ]),
+    password: new FormControl('', [
+      Validators.required,
+      Validators.minLength(8),
+    ]),
+  });
 
-  get email(): FormControl<string> {
-    return this.loginForm.controls['email'];
-  }
 
-  get emailErrorMessage(): string | null {
-    if (this.email.errors?.['required']) {
-      return 'Required';
+
+  getEmailErrorMessage(): string {
+    const emailControl = this.loginForm.get('email');
+    if (emailControl!.hasError('required')) {
+      return 'Please enter a email';
     }
-
-    if (this.email.errors?.['invalidEmail']) {
+    if (emailControl!.hasError('email')) {
       return 'Incorrect email';
     }
-
-    if (this.email.errors?.['errorResponse']) {
+    if (emailControl!.hasError('notExists')) {
       return 'Incorrect email or password';
     }
-
-    return null;
+    return '';
   }
 
-  get password(): FormControl<string> {
-    return this.loginForm.controls['password'];
-  }
-
-  get passwordErrorMessage(): string | null {
-    if (this.password.errors?.['required']) {
-      return 'Required';
+  getPasswordErrorMessage(): string {
+    const passwordControl = this.loginForm.get('password');
+    if (passwordControl!.hasError('required')) {
+      return 'Please enter a password';
     }
-
-    if (this.password.errors?.['invalidPassword']) {
-      return 'Not less 8 symbols';
+    if (passwordControl!.hasError('minlength')) {
+      return 'Password must be at least 8 characters long';
     }
-
-    if (this.password.errors?.['errorResponse']) {
+    if (passwordControl!.hasError('notExists')) {
       return 'Incorrect email or password';
     }
-
-    return null;
+    return '';
   }
 
   onSubmit(): void {
-    const body = this.loginForm.value as LoginCredentials;
-
-    this.authService.login(body).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
+    this.authService.login(this.loginForm.value).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: ({ token }) => {
         localStorage.setItem('token', token);
         this.router.navigate([RoutePath.Search]);
       },
       error: () => {
-        this.email.setErrors({ errorResponse: true });
-        this.password.setErrors({ errorResponse: true });
-        this.changeDetectorRef.detectChanges();
+        this.loginForm.setErrors({notExists: true});
+        const emailControl = this.loginForm.get('email');
+        emailControl?.setErrors({ notExists: true });
+        const passwordControl = this.loginForm.get('password');
+        passwordControl?.setErrors({ notExists: true });
+        this.cdr.detectChanges();
       },
     });
   }
