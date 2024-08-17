@@ -1,0 +1,17 @@
+.layout {
+  display: grid;
+  gap: 20px;
+  max-width: 600px;
+  margin-inline: auto;
+  padding: 20px;
+}
+
+.layout h1 {
+  text-align: center;
+}
+
+@media (width <= 640px) {
+  .layout {
+    padding: 10px;
+  }
+}
