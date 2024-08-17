@@ -40,7 +40,7 @@ export class ProfileService {
       .pipe(catchError((error) => throwError(() => error)));
   }
 
-  // TODO: replace by auth service
+  // TODO: replace by auth service or interceptor
   private getHttpOptions(): { headers: { Authorization: string } } {
     return {
       headers: {
