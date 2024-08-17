@@ -7,7 +7,7 @@ import { MatIcon } from '@angular/material/icon';
 import { MatError, MatFormField, MatInput } from '@angular/material/input';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { Router } from '@angular/router';
-import { RoutePath } from '../../../shared/models/enums/route-path.enum';
+import { RoutePath } from '@shared/models/enums/route-path.enum';
 import { UserProfileResponse } from '../../interfaces';
 import { ProfileService } from '../../services';
 import { emailValidator } from '../../validators';
