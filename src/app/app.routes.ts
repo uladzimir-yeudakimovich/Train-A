@@ -26,8 +26,8 @@ export const routes: Routes = [
     path: RoutePath.UserProfile,
     title: 'Profile',
     loadComponent: () =>
-      import('@user/profile/pages/profile/profile.component').then(
-        (m) => m.ProfileComponent,
+      import('@user/profile/components/user-profile/user-profile.component').then(
+        (m) => m.UserProfileComponent,
       ),
   },
   {

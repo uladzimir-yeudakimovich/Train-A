@@ -10,7 +10,7 @@ import {
 import { MatError, MatFormField } from '@angular/material/form-field';
 import { MatIcon } from '@angular/material/icon';
 import { MatInput } from '@angular/material/input';
-import { ProfileService } from '../../services';
+import { ProfileService } from '@user/profile/services/profile.service';
 
 @Component({
   selector: 'app-change-password-form',
@@ -28,11 +28,11 @@ import { ProfileService } from '../../services';
     MatMiniFabButton,
     MatError,
   ],
-  templateUrl: './change-password-form.component.html',
-  styleUrl: './change-password-form.component.scss',
+  templateUrl: './change-password.component.html',
+  styleUrl: './change-password.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ChangePasswordFormComponent {
+export class ChangePasswordComponent {
   constructor(
     private readonly profileService: ProfileService,
     private readonly formBuilder: NonNullableFormBuilder,

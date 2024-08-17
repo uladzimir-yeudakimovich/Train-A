@@ -1,7 +1,8 @@
 <div class="layout">
+  <h4 class="title">Profile</h4>
   <div class="role-and-button">
     <div class="role">{{ userRole() === 'manager' ? 'manager' : '' }}</div>
-    <button mat-flat-button (click)="openDialog()">Change Password</button>
+    <button class="btn" mat-flat-button (click)="openDialog()">Change Password</button>
   </div>
 
   <form [formGroup]="userInformationForm" class="form">
@@ -60,5 +61,5 @@
     }
   </form>
 
-  <button class="btn-logout" mat-flat-button color="warn" (click)="logout()">Logout</button>
+  <button class="btn btn-logout" mat-flat-button color="warn" (click)="logout()">Logout</button>
 </div>

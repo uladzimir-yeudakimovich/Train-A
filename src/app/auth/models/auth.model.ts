@@ -1,13 +1,20 @@
-export interface RegistrationCredentials {
-  email: string;
+export interface Password {
   password: string;
 }
 
-export interface LoginCredentials {
+export interface Credentials extends Password {
   email: string;
-  password: string;
 }
 
-export interface TokenInterface {
+export interface Token {
   token: string;
+}
+
+export interface UserInfo {
+  email: string;
+  name: string;
+}
+
+export interface UserRole extends UserInfo {
+  role: 'manager' | 'user';
 }

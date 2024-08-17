@@ -41,7 +41,7 @@ export class RegistrationComponent {
     if (this.registrationForm.valid) {
       const { email, password } = this.registrationForm.value;
       this.authService.registration({ email, password}).pipe(takeUntilDestroyed(this.destroyRef)).subscribe(
-        () => this.router.navigate([RoutePath.Login]),
+        () => this.router.navigate([RoutePath.Search]),
         err => {
           const emailControl = this.registrationForm.get('email');
           emailControl?.setErrors({ alreadyExists: err.message });

@@ -9,9 +9,10 @@ import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { Router } from '@angular/router';
 import { emailValidator } from '@auth/validators/email.validator';
 import { RoutePath } from '@shared/models/enums/route-path.enum';
-import { UserProfileResponse } from '../../interfaces';
-import { ProfileService } from '../../services';
-import { ChangePasswordFormComponent } from '../change-password-form/change-password-form.component';
+import { ChangePasswordComponent } from '../change-password/change-password.component';
+import { UserRole } from '@auth/models/auth.model';
+import { AuthService } from '@auth/services/auth.service';
+import { ProfileService } from '@user/profile/services/profile.service';
 
 @Component({
   selector: 'app-user-profile',
@@ -31,108 +32,98 @@ import { ChangePasswordFormComponent } from '../change-password-form/change-pass
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UserProfileComponent implements OnInit {
-  constructor(
-    private readonly router: Router,
-    private readonly profileService: ProfileService,
-    private readonly formBuilder: NonNullableFormBuilder,
-    private readonly matDialog: MatDialog,
-    private readonly destroyRef: DestroyRef,
-  ) {}
+  loading = signal(false);
 
-  public readonly userInformationForm = this.formBuilder.group({
+  userInformationForm = this.formBuilder.group({
     email: this.formBuilder.control('', [Validators.required, emailValidator()]),
     name: this.formBuilder.control('', [Validators.required]),
   });
 
-  public readonly editMode = signal({
+  editMode = signal({
     email: false,
     name: false,
   });
 
-  public readonly userRole = signal<UserProfileResponse['role']>('user');
+  readonly userRole = signal<UserRole['role']>('user');
 
-  public readonly loading = signal(false);
+  constructor(
+    private router: Router,
+    private profileService: ProfileService,
+    private authService: AuthService,
+    private formBuilder: NonNullableFormBuilder,
+    private matDialog: MatDialog,
+    private destroyRef: DestroyRef,
+  ) {}
 
-  public get invalidEmail(): boolean {
-    return this.userInformationForm.controls.email.errors?.['invalidEmail'];
-  }
-
-  public get emptyEmail(): boolean {
-    return this.userInformationForm.controls.email.errors?.['required'];
-  }
-
-  public get invalidName(): boolean {
-    return this.userInformationForm.controls.name.errors?.['required'];
-  }
-
-  public toggleEditMode(field: 'name' | 'email'): void {
-    this.editMode()[field] = !this.editMode()[field];
-  }
-
-  public ngOnInit(): void {
+  ngOnInit(): void {
     this.getUserInformation();
   }
 
-  public onSubmit(): void {
+  get invalidEmail(): boolean {
+    return this.userInformationForm.controls.email.errors?.['invalidEmail'];
+  }
+
+  get emptyEmail(): boolean {
+    return this.userInformationForm.controls.email.errors?.['required'];
+  }
+
+  get invalidName(): boolean {
+    return this.userInformationForm.controls.name.errors?.['required'];
+  }
+
+  toggleEditMode(field: 'name' | 'email'): void {
+    this.editMode()[field] = !this.editMode()[field];
+  }
+
+  onSubmit(): void {
     this.editMode.set({ email: false, name: false });
     this.updateUserInformation();
+  }
+
+  logout(): void {
+    this.authService.logout();
+    this.router.navigate([RoutePath.Search]);
+  }
+
+  openDialog(): void {
+    this.matDialog.open(ChangePasswordComponent);
   }
 
   private getUserInformation(): void {
     this.setLoading(true);
 
-    this.profileService
-      .getUserInformation()
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe({
-        next: (response) => {
-          this.userInformationForm.setValue({
-            name: response.name ?? 'John Doe',
-            email: response.email,
-          });
-          this.userRole.set(response.role);
-        },
-        error: () => {
-          this.setLoading(false);
-        },
-        complete: () => {
-          this.setLoading(false);
-        },
-      });
+    this.profileService.getUserInformation().pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
+      next: (response) => {
+        this.userInformationForm.setValue({
+          name: response.name ?? 'John Doe',
+          email: response.email,
+        });
+        this.userRole.set(response.role);
+      },
+      error: () => {
+        this.setLoading(false);
+      },
+      complete: () => {
+        this.setLoading(false);
+      },
+    });
   }
 
   private updateUserInformation(): void {
     this.setLoading(true);
+    const userInfo = this.userInformationForm.getRawValue();
 
-    this.profileService
-      .updateUserInformation(this.userInformationForm.getRawValue())
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe({
-        error: () => {
-          this.setLoading(false);
-        },
-        complete: () => {
-          this.setLoading(false);
-        },
-      });
-  }
-
-  public logout(): void {
-    this.profileService
-      .logout()
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe({
-        complete: () => {
-          this.router.navigate([RoutePath.Search]);
-        },
-      });
+    this.profileService.updateUserInformation(userInfo).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
+      error: () => {
+        this.setLoading(false);
+      },
+      complete: () => {
+        this.setLoading(false);
+      },
+    });
   }
 
   private setLoading(loading: boolean): void {
     this.loading.set(loading);
-  }
-
-  public openDialog(): void {
-    this.matDialog.open(ChangePasswordFormComponent);
   }
 }
