@@ -1,37 +1,20 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { catchError, tap, Observable, throwError, map } from 'rxjs';
+import { catchError, Observable, throwError } from 'rxjs';
+import { LOCAL_STORAGE_TOKEN_KEY } from '../../../constants/constants';
+import { ApiEndpoint } from '../../enums/api-endpoint.enum';
 import {
   UpdateInformationRequestBody,
   UpdatePasswordRequestBody,
   UserProfileResponse,
 } from '../../interfaces';
-import { FAKE_CREDENTIALS, LOCAL_STORAGE_TOKEN_KEY } from '../../../constants/constants';
-import { getLocalStorage, setLocalStorage } from '../../utils/utils';
-import { ApiEndpoint } from '../../enums/api-endpoint.enum';
+import { getLocalStorage } from '../../utils/utils';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ProfileService {
   constructor(private readonly http: HttpClient) {}
-
-  // TODO: replace by auth service
-  public signUp(): Observable<object> {
-    return this.http.post(ApiEndpoint.SignUp, FAKE_CREDENTIALS);
-  }
-
-  // TODO: replace by auth service
-  public signIn(): void {
-    this.http
-      .post(ApiEndpoint.SignIn, FAKE_CREDENTIALS)
-      .pipe(
-        map((response) => response as { token: string }),
-        tap((response) => setLocalStorage(LOCAL_STORAGE_TOKEN_KEY, response.token)),
-        catchError((error) => throwError(() => error)),
-      )
-      .subscribe();
-  }
 
   public getUserInformation(): Observable<UserProfileResponse> {
     return this.http
