@@ -42,8 +42,8 @@ export class ChangePasswordFormComponent {
     password: this.formBuilder.control('', [Validators.required, Validators.minLength(8)]),
   });
 
-  public get invalidPassword(): boolean {
-    return this.passwordForm.controls.password.errors?.['invalidPassword'];
+  public get shortPassword(): boolean {
+    return this.passwordForm.controls.password.errors?.['minlength'];
   }
 
   public get emptyPassword(): boolean {
