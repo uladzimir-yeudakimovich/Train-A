@@ -79,7 +79,7 @@ export class UserProfileComponent implements OnInit {
   }
 
   private getUserInformation(): void {
-    this.showSpinner();
+    this.setLoading(true);
 
     this.profileService
       .getUserInformation()
@@ -93,26 +93,26 @@ export class UserProfileComponent implements OnInit {
           this.userRole.set(response.role);
         },
         error: () => {
-          this.hideSpinner();
+          this.setLoading(false);
         },
         complete: () => {
-          this.hideSpinner();
+          this.setLoading(false);
         },
       });
   }
 
   private updateUserInformation(): void {
-    this.showSpinner();
+    this.setLoading(true);
 
     this.profileService
       .updateUserInformation(this.userInformationForm.getRawValue())
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         error: () => {
-          this.hideSpinner();
+          this.setLoading(false);
         },
         complete: () => {
-          this.hideSpinner();
+          this.setLoading(false);
         },
       });
   }
@@ -128,12 +128,8 @@ export class UserProfileComponent implements OnInit {
       });
   }
 
-  private showSpinner(): void {
-    this.loading.set(true);
-  }
-
-  private hideSpinner(): void {
-    this.loading.set(false);
+  private setLoading(loading: boolean): void {
+    this.loading.set(loading);
   }
 
   public openDialog(): void {
