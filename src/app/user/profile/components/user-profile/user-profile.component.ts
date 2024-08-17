@@ -85,9 +85,12 @@ export class UserProfileComponent implements OnInit {
       .getUserInformation()
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
-        next: ({ name, email, role }) => {
-          this.userInformationForm.setValue({ name, email });
-          this.userRole.set(role);
+        next: (response) => {
+          this.userInformationForm.setValue({
+            name: response.name ?? 'John Doe',
+            email: response.email,
+          });
+          this.userRole.set(response.role);
         },
         error: () => {
           this.hideSpinner();
