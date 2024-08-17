@@ -11,7 +11,6 @@ import { MatError, MatFormField } from '@angular/material/form-field';
 import { MatIcon } from '@angular/material/icon';
 import { MatInput } from '@angular/material/input';
 import { ProfileService } from '../../services';
-import { passwordValidator } from '../../validators';
 
 @Component({
   selector: 'app-change-password-form',
@@ -40,7 +39,7 @@ export class ChangePasswordFormComponent {
   ) {}
 
   public readonly passwordForm = this.formBuilder.group({
-    password: this.formBuilder.control('', [Validators.required, passwordValidator()]),
+    password: this.formBuilder.control('', [Validators.required, Validators.minLength(8)]),
   });
 
   public get invalidPassword(): boolean {

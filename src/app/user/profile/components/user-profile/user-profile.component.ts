@@ -7,10 +7,10 @@ import { MatIcon } from '@angular/material/icon';
 import { MatError, MatFormField, MatInput } from '@angular/material/input';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { Router } from '@angular/router';
+import { emailValidator } from '@auth/validators/email.validator';
 import { RoutePath } from '@shared/models/enums/route-path.enum';
 import { UserProfileResponse } from '../../interfaces';
 import { ProfileService } from '../../services';
-import { emailValidator } from '../../validators';
 import { ChangePasswordFormComponent } from '../change-password-form/change-password-form.component';
 
 @Component({
