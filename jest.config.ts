@@ -95,6 +95,7 @@ const config: Config = {
     '@auth/(.*)': '<rootDir>/src/app/auth/$1',
     '@core/(.*)': '<rootDir>/src/app/core/$1',
     '@home/(.*)': '<rootDir>/src/app/home/$1',
+    '@pages/(.*)': '<rootDir>/src/app/pages/$1',
     '@redux/(.*)': '<rootDir>/src/app/redux/$1',
     '@shared/(.*)': '<rootDir>/src/app/shared/$1',
     '@user/(.*)': '<rootDir>/src/app/user/$1',

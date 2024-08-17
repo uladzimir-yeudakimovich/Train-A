@@ -1,15 +1,15 @@
 import { TestBed } from '@angular/core/testing';
 import { ActivatedRoute } from '@angular/router';
 import { AppComponent } from './app.component';
-import { HomeComponent } from './home/home.component';
-import { activatedRouteMock } from './testing/mock-data';
+import { HeaderComponent } from '@core/components/header/header.component';
+import { activatedRouteMock } from '@testing/mock-data';
 
 describe('AppComponent', () => {
   let component: AppComponent;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HomeComponent, AppComponent],
+      imports: [HeaderComponent, AppComponent],
       providers: [
         { provide: ActivatedRoute, useValue: activatedRouteMock },
       ],
@@ -23,10 +23,10 @@ describe('AppComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should render HomeComponent', () => {
+  it('should render HeaderComponent', () => {
     const fixture = TestBed.createComponent(AppComponent);
     fixture.detectChanges();
     const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('app-home')).not.toBeNull();
+    expect(compiled.querySelector('app-header')).not.toBeNull();
   });
 });
