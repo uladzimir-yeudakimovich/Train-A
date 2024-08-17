@@ -42,7 +42,7 @@ export const routes: Routes = [
     path: RoutePath.Orders,
     title: 'Orders',
     loadComponent: () =>
-<<<<<<< HEAD
+
       import('@orders/orders/orders.component').then((m) => m.OrdersComponent),
   },
   {
@@ -50,9 +50,6 @@ export const routes: Routes = [
     title: 'My Orders',
     loadComponent: () =>
       import('@orders/user-orders/user-orders.component').then((m) => m.UserOrdersComponent),
-=======
-      import('@user/orders/pages/orders/orders.component').then((m) => m.OrdersComponent),
->>>>>>> main
   },
   {
     path: RoutePath.Admin,
