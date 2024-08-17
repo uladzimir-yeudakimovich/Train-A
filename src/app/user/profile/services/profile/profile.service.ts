@@ -6,7 +6,7 @@ import {
   UpdatePasswordRequestBody,
   UserProfileResponse,
 } from '../../interfaces';
-import { FAKE_CREDENTIALS, LOCAL_STORAGE_TOKEN_KEY } from '../../constants/constants';
+import { FAKE_CREDENTIALS, LOCAL_STORAGE_TOKEN_KEY } from '../../../constants/constants';
 import { getLocalStorage, setLocalStorage } from '../../utils/utils';
 import { ApiEndpoint } from '../../enums/api-endpoint.enum';
 
