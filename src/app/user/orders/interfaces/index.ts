@@ -1,3 +1,4 @@
+export { OrderBody } from './order-body.interface';
 export { OrderSegment } from './order-segment.interface';
 export { Order } from './order.interface';
 export { RideSegment } from './ride-segment.interface';
