@@ -3,8 +3,9 @@
 .layout {
   display: grid;
   gap: 30px;
-  width: 450px;
-  margin: 40px auto;
+  max-width: 450px;
+  margin-block: 40px;
+  margin-inline: auto;
   padding: 20px;
   background-color: $primaryBackgroundColor;
   border-radius: 12px;
