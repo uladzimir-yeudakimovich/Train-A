@@ -1,13 +1,8 @@
 @let state = seat().state;
+@let seatState = SeatState.Available ? 'available' : SeatState.Selected ? 'selected' : SeatState.Reserved ? 'reserved' : '';
 <button
   class="seat"
-  [ngClass]="{
-    available: state === SeatState.Available,
-    selected: state === SeatState.Selected,
-    reserved: state === SeatState.Reserved,
-    left: isLeftDirection,
-    right: !isLeftDirection,
-  }"
+  [ngClass]="[direction, seatState]"
   [disabled]="state === SeatState.Reserved"
   (click)="onSeatClick()"
   >

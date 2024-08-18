@@ -12,7 +12,7 @@ import { CarSeat } from '@shared/models/interfaces/carriage.model';
 })
 export class CarSeatComponent {
   seat = input.required<CarSeat>();
-  @Input() isLeftDirection!: boolean;
+  @Input() direction!: string;
   select = output<number>();
 
   public get SeatState() {

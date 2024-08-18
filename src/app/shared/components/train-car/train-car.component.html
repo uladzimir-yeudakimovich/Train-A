@@ -1,22 +1,36 @@
 @let car = carriage();
 <div>
-    <div class="head">
-        <span class="car-name">{{ car.name }}</span>
-        <span class="available-number">{{ store.getAvailableSeatsNumber(car.code) }} seats</span>
-    </div>
-    <div class="schema">
-        @for (seat of car.seats; track seat.number; let i = $index) {
-            <app-car-seat
-            [seat]="seat"
-            [isLeftDirection]="isLeftDirection(seat.number)"
-            (select)="toggleSeatState($event)"
-            ></app-car-seat>
-            @if ((i + 1) % car.rows === 0) {
-                <br />
-            }
-            @if((i + 1)  === car.rows * car.rightSeats) {
-                <div class="separator"></div>
-            }
+  <div class="head">
+    <span class="car-name">{{ car.name }}</span>
+    <span class="available-number">{{ store.getAvailableSeatsNumber(car.code) }} seats</span>
+  </div>
+  <div class="schema">
+    @if (isHorizontal()) {
+      @for (seat of car.seats; track seat.number; let i = $index) {
+        <app-car-seat
+          [seat]="seat"
+          [direction]="getSeatDirection(seat.number)"
+          (select)="toggleSeatState($event)"></app-car-seat>
+        @if ((i + 1) % car.rows === 0) {
+          <br />
         }
-    </div>
+        @if (i + 1 === car.rows * car.rightSeats) {
+          <div class="separator"></div>
+        }
+      }
+    } @else {
+      @for (seat of car.sortedSeats; track seat.number; let i = $index) {
+        <app-car-seat
+          [seat]="seat"
+          [direction]="getSeatDirection(seat.number)"
+          (select)="toggleSeatState($event)"></app-car-seat>
+        @if (seat.number % car.cols === car.leftSeats) {
+          <div class="separator inline"></div>
+        }
+        @if ((i + 1) % car.cols === 0) {
+          <br />
+        }
+      }
+    }
+  </div>
 </div>
