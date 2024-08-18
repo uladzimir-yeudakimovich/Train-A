@@ -92,35 +92,41 @@ export class UserProfileComponent implements OnInit {
   private getUserInformation(): void {
     this.setLoading(true);
 
-    this.profileService.getUserInformation().pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
-      next: (response) => {
-        this.userInformationForm.setValue({
-          name: response.name ?? 'John Doe',
-          email: response.email,
-        });
-        this.userRole.set(response.role);
-      },
-      error: () => {
-        this.setLoading(false);
-      },
-      complete: () => {
-        this.setLoading(false);
-      },
-    });
+    this.profileService
+      .getUserInformation()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (response) => {
+          this.userInformationForm.setValue({
+            name: response.name ?? 'John Doe',
+            email: response.email,
+          });
+          this.userRole.set(response.role);
+        },
+        error: () => {
+          this.setLoading(false);
+        },
+        complete: () => {
+          this.setLoading(false);
+        },
+      });
   }
 
   private updateUserInformation(): void {
     this.setLoading(true);
     const userInfo = this.userInformationForm.getRawValue();
 
-    this.profileService.updateUserInformation(userInfo).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
-      error: () => {
-        this.setLoading(false);
-      },
-      complete: () => {
-        this.setLoading(false);
-      },
-    });
+    this.profileService
+      .updateUserInformation(userInfo)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        error: () => {
+          this.setLoading(false);
+        },
+        complete: () => {
+          this.setLoading(false);
+        },
+      });
   }
 
   private setLoading(loading: boolean): void {

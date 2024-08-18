@@ -19,8 +19,7 @@ export const routes: Routes = [
   {
     path: RoutePath.Login,
     title: 'Sign In',
-    loadComponent: () =>
-      import('@auth/pages/login/login.component').then((m) => m.LoginComponent),
+    loadComponent: () => import('@auth/pages/login/login.component').then((m) => m.LoginComponent),
   },
   {
     path: RoutePath.UserProfile,
@@ -33,10 +32,7 @@ export const routes: Routes = [
   {
     path: RoutePath.TripDetails,
     title: 'Trip Details',
-    loadComponent: () =>
-      import('@home/pages/trip/trip.component').then(
-        (m) => m.TripComponent,
-      ),
+    loadComponent: () => import('@home/pages/trip/trip.component').then((m) => m.TripComponent),
   },
   {
     path: RoutePath.Orders,
@@ -59,17 +55,13 @@ export const routes: Routes = [
         path: RoutePath.AdminStations,
         title: 'Admin Stations',
         loadComponent: () =>
-          import('@admin/pages/stations/stations.component').then(
-            (m) => m.StationsComponent,
-          ),
+          import('@admin/pages/stations/stations.component').then((m) => m.StationsComponent),
       },
       {
         path: RoutePath.AdminCarriages,
         title: 'Admin Carriages',
         loadComponent: () =>
-          import('@admin/pages/carriages/carriages.component').then(
-            (m) => m.CarriagesComponent,
-          ),
+          import('@admin/pages/carriages/carriages.component').then((m) => m.CarriagesComponent),
       },
       {
         path: RoutePath.AdminRoutes,
@@ -81,9 +73,7 @@ export const routes: Routes = [
         path: RoutePath.AdminRideManagement,
         title: 'Admin Ride Management',
         loadComponent: () =>
-          import('@admin/pages/rides/rides.component').then(
-            (m) => m.RidesComponent,
-          ),
+          import('@admin/pages/rides/rides.component').then((m) => m.RidesComponent),
       },
     ],
   },
@@ -91,8 +81,6 @@ export const routes: Routes = [
     path: RoutePath.NotFound,
     title: 'Not Found',
     loadComponent: () =>
-      import('@core/pages/not-found/not-found.component').then(
-        (m) => m.NotFoundComponent,
-      ),
+      import('@core/pages/not-found/not-found.component').then((m) => m.NotFoundComponent),
   },
 ];

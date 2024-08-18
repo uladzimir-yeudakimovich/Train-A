@@ -13,10 +13,7 @@ describe('AuthService', () => {
 
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
-      providers: [
-        AuthService,
-        { provide: Router, useValue: routerSpy }
-      ]
+      providers: [AuthService, { provide: Router, useValue: routerSpy }],
     });
 
     service = TestBed.inject(AuthService);
@@ -34,10 +31,10 @@ describe('AuthService', () => {
   it('should make a POST request to the correct URL when registration is called', () => {
     const mockCredentials: RegistrationCredentials = {
       email: 'test@test.com',
-      password: 'password'
+      password: 'password',
     };
 
-    service.registration(mockCredentials).subscribe(response => {
+    service.registration(mockCredentials).subscribe((response) => {
       expect(response).toEqual({});
     });
 

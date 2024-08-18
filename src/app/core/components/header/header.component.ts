@@ -9,18 +9,10 @@ import { LoggerService } from '@core/services/logger/logger.service';
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [
-    MatFabButton,
-    MatIcon,
-    MatToolbar,
-    MatToolbarRow,
-    NavigationComponent,
-  ],
+  imports: [MatFabButton, MatIcon, MatToolbar, MatToolbarRow, NavigationComponent],
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss',
-  providers: [
-    LoggerProvider,
-  ]
+  providers: [LoggerProvider],
 })
 export class HeaderComponent implements OnInit {
   constructor(private loggerService: LoggerService) {}

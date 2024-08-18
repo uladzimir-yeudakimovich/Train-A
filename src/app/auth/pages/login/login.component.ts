@@ -12,7 +12,7 @@ import { formImports } from '../form.config';
   standalone: true,
   imports: [formImports],
   templateUrl: './login.component.html',
-  styleUrl: './login.component.scss'
+  styleUrl: './login.component.scss',
 })
 export class LoginComponent {
   linkRegistration = RoutePath.Registration;
@@ -25,18 +25,9 @@ export class LoginComponent {
   ) {}
 
   loginForm: FormGroup = new FormGroup({
-    email: new FormControl('', [
-      Validators.required,
-      Validators.email,
-      emailValidator,
-    ]),
-    password: new FormControl('', [
-      Validators.required,
-      Validators.minLength(8),
-    ]),
+    email: new FormControl('', [Validators.required, Validators.email, emailValidator]),
+    password: new FormControl('', [Validators.required, Validators.minLength(8)]),
   });
-
-
 
   getEmailErrorMessage(): string {
     const emailControl = this.loginForm.get('email');
@@ -67,17 +58,20 @@ export class LoginComponent {
   }
 
   onSubmit(): void {
-    this.authService.login(this.loginForm.value).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
-      next: () => {
-        this.router.navigate([RoutePath.Search]);
-      },
-      error: () => {
-        const emailControl = this.loginForm.get('email');
-        emailControl?.setErrors({ notExists: true });
-        const passwordControl = this.loginForm.get('password');
-        passwordControl?.setErrors({ notExists: true });
-        this.cdr.detectChanges();
-      },
-    });
+    this.authService
+      .login(this.loginForm.value)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: () => {
+          this.router.navigate([RoutePath.Search]);
+        },
+        error: () => {
+          const emailControl = this.loginForm.get('email');
+          emailControl?.setErrors({ notExists: true });
+          const passwordControl = this.loginForm.get('password');
+          passwordControl?.setErrors({ notExists: true });
+          this.cdr.detectChanges();
+        },
+      });
   }
 }

@@ -20,7 +20,7 @@ describe('LoginComponent', () => {
       providers: [
         { provide: AuthService, useValue: authServiceMock },
         { provide: Router, useValue: routerMock },
-        ChangeDetectorRef
+        ChangeDetectorRef,
       ],
     }).compileComponents();
 

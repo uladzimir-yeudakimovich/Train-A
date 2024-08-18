@@ -10,11 +10,8 @@ describe('NavigationComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [NavigationComponent],
-      providers: [
-        { provide: ActivatedRoute, useValue: activatedRouteMock },
-      ],
-    })
-    .compileComponents();
+      providers: [{ provide: ActivatedRoute, useValue: activatedRouteMock }],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(NavigationComponent);
     component = fixture.componentInstance;

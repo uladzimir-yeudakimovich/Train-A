@@ -11,22 +11,16 @@ import { formImports } from '../form.config';
   standalone: true,
   imports: [formImports],
   templateUrl: './registration.component.html',
-  styleUrl: './registration.component.scss'
+  styleUrl: './registration.component.scss',
 })
 export class RegistrationComponent {
   linkLogin = RoutePath.Login;
-  registrationForm: FormGroup = new FormGroup({
-    email: new FormControl('', [
-      Validators.required,
-      Validators.email,
-    ]),
-    password: new FormControl('', [
-      Validators.required,
-      Validators.minLength(8),
-    ]),
-    confirmPassword: new FormControl('', [
-      Validators.required,
-    ])},
+  registrationForm: FormGroup = new FormGroup(
+    {
+      email: new FormControl('', [Validators.required, Validators.email]),
+      password: new FormControl('', [Validators.required, Validators.minLength(8)]),
+      confirmPassword: new FormControl('', [Validators.required]),
+    },
     { validators: this.matchValidator('password', 'confirmPassword') },
   );
 
@@ -35,19 +29,22 @@ export class RegistrationComponent {
     private router: Router,
     private destroyRef: DestroyRef,
     private cdr: ChangeDetectorRef,
-  ) { }
+  ) {}
 
   onRegistration(): void {
     if (this.registrationForm.valid) {
       const { email, password } = this.registrationForm.value;
-      this.authService.registration({ email, password}).pipe(takeUntilDestroyed(this.destroyRef)).subscribe(
-        () => this.router.navigate([RoutePath.Search]),
-        err => {
-          const emailControl = this.registrationForm.get('email');
-          emailControl?.setErrors({ alreadyExists: err.message });
-          this.cdr.detectChanges();
-        }
-      );
+      this.authService
+        .registration({ email, password })
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe(
+          () => this.router.navigate([RoutePath.Search]),
+          (err) => {
+            const emailControl = this.registrationForm.get('email');
+            emailControl?.setErrors({ alreadyExists: err.message });
+            this.cdr.detectChanges();
+          },
+        );
     } else {
       this.registrationForm.markAllAsTouched();
     }
@@ -104,6 +101,6 @@ export class RegistrationComponent {
         matchingControl!.setErrors(null);
         return null;
       }
-    }
+    };
   }
 }

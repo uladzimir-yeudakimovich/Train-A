@@ -10,11 +10,8 @@ describe('HeaderComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [HeaderComponent],
-      providers: [
-        { provide: ActivatedRoute, useValue: activatedRouteMock },
-      ],
-    })
-    .compileComponents();
+      providers: [{ provide: ActivatedRoute, useValue: activatedRouteMock }],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(HeaderComponent);
     component = fixture.componentInstance;
