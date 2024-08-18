@@ -1,7 +1,9 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ActivatedRoute } from '@angular/router';
 import { NavigationComponent } from './navigation.component';
-import { activatedRouteMock } from '@testing/mock-data';
+import { authServiceMock, profileServiceMock } from '@testing/mock-service';
+import { HttpClientModule } from '@angular/common/http';
+import { AuthService } from '@auth/services/auth.service';
+import { ProfileService } from '@user/services/profile.service';
 
 describe('NavigationComponent', () => {
   let component: NavigationComponent;
@@ -9,16 +11,19 @@ describe('NavigationComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [NavigationComponent],
+      imports: [
+        NavigationComponent,
+        HttpClientModule,
+      ],
       providers: [
-        { provide: ActivatedRoute, useValue: activatedRouteMock },
+        { provide: AuthService, useValue: authServiceMock },
+        { provide: ProfileService, useValue: profileServiceMock },
       ],
     })
     .compileComponents();
 
     fixture = TestBed.createComponent(NavigationComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
   });
 
   it('should create', () => {

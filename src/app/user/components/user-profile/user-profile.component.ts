@@ -10,9 +10,8 @@ import { Router } from '@angular/router';
 import { emailValidator } from '@auth/validators/email.validator';
 import { RoutePath } from '@shared/models/enums/route-path.enum';
 import { ChangePasswordComponent } from '../change-password/change-password.component';
-import { UserRole } from '@auth/models/auth.model';
 import { AuthService } from '@auth/services/auth.service';
-import { ProfileService } from '@user/profile/services/profile.service';
+import { ProfileService } from '@user/services/profile.service';
 
 @Component({
   selector: 'app-user-profile',
@@ -44,7 +43,7 @@ export class UserProfileComponent implements OnInit {
     name: false,
   });
 
-  readonly userRole = signal<UserRole['role']>('user');
+  userRole = this.profileService.userRole;
 
   constructor(
     private router: Router,
@@ -82,6 +81,7 @@ export class UserProfileComponent implements OnInit {
 
   logout(): void {
     this.authService.logout();
+    this.profileService.userRole.set('user');
     this.router.navigate([RoutePath.Search]);
   }
 
@@ -98,7 +98,6 @@ export class UserProfileComponent implements OnInit {
           name: response.name ?? 'John Doe',
           email: response.email,
         });
-        this.userRole.set(response.role);
       },
       error: () => {
         this.setLoading(false);

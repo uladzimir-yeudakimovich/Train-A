@@ -6,6 +6,7 @@ import { emailValidator } from '@auth/validators/email.validator';
 import { RoutePath } from '@shared/models/enums/route-path.enum';
 import { AuthService } from '@auth/services/auth.service';
 import { formImports } from '../form.config';
+import { ProfileService } from '@user/services/profile.service';
 
 @Component({
   selector: 'app-login',
@@ -22,6 +23,7 @@ export class LoginComponent {
     private authService: AuthService,
     private cdr: ChangeDetectorRef,
     private destroyRef: DestroyRef,
+    private profileService: ProfileService,
   ) {}
 
   loginForm: FormGroup = new FormGroup({
@@ -35,8 +37,6 @@ export class LoginComponent {
       Validators.minLength(8),
     ]),
   });
-
-
 
   getEmailErrorMessage(): string {
     const emailControl = this.loginForm.get('email');
@@ -69,7 +69,9 @@ export class LoginComponent {
   onSubmit(): void {
     this.authService.login(this.loginForm.value).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: () => {
-        this.router.navigate([RoutePath.Search]);
+        this.profileService.getUserInformation().pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
+          next: () => this.router.navigate([RoutePath.Search]),
+        });
       },
       error: () => {
         const emailControl = this.loginForm.get('email');

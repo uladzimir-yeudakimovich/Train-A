@@ -4,6 +4,7 @@ export enum RoutePath {
   Login = 'signin',
   UserProfile = 'profile',
   TripDetails = 'trip/:rideId',
+  UserOrders = 'user-orders',
   Orders = 'orders',
   Admin = 'admin',
   AdminStations = 'stations',
