@@ -1,4 +1,4 @@
-export enum RoutePath {
+export const enum RoutePath {
   Search = '',
   Registration = 'signup',
   Login = 'signin',
