@@ -8,8 +8,6 @@ import { ProfileService } from '@user/services/profile.service';
 describe('NavigationComponent', () => {
   let component: NavigationComponent;
   let fixture: ComponentFixture<NavigationComponent>;
-  let authService: jest.Mocked<AuthService>;
-  let profileService: jest.Mocked<ProfileService>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -26,8 +24,6 @@ describe('NavigationComponent', () => {
 
     fixture = TestBed.createComponent(NavigationComponent);
     component = fixture.componentInstance;
-    authService = TestBed.inject(AuthService) as jest.Mocked<AuthService>;
-    profileService = TestBed.inject(ProfileService) as jest.Mocked<ProfileService>;
   });
 
   it('should create', () => {

@@ -76,8 +76,9 @@ describe('UserProfileComponent', () => {
   });
 
   it('should submit the form and call updateUserInformation', () => {
-    const spy = jest.spyOn(component, 'updateUserInformation' as any);
+    const spy = jest.spyOn(component as unknown as { updateUserInformation: () => void }, 'updateUserInformation');
     component.onSubmit();
+
     expect(component.editMode().email).toBe(false);
     expect(component.editMode().name).toBe(false);
     expect(spy).toHaveBeenCalled();
@@ -104,7 +105,7 @@ describe('UserProfileComponent', () => {
   });
 
   it('should call getUserInformation on init', () => {
-    const spy = jest.spyOn(component, 'getUserInformation' as any);
+    const spy = jest.spyOn(component as unknown as { getUserInformation: () => void }, 'getUserInformation');
     component.ngOnInit();
     expect(spy).toHaveBeenCalled();
   });
