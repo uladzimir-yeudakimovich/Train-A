@@ -1,0 +1,13 @@
+:host {
+  .available {
+    background-color: var($availableSeatColor);
+  }
+
+  .selected {
+    background-color: var($selectedSeatColor);
+  }
+
+  .reserved {
+    background-color: var($reservedSeatColor);
+  }
+}

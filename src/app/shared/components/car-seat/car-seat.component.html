@@ -1,0 +1,12 @@
+<button
+  mat-flat-button
+  [ngClass]="{
+    available: state() === SeatState.Available,
+    selected: state() === SeatState.Selected,
+    reserved: state() === SeatState.Reserved
+  }"
+  [disabled]="state() === SeatState.Reserved"
+  (click)="onSeatClick()"
+  >
+  {{ number }}
+</button>
