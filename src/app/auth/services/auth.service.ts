@@ -1,5 +1,5 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, signal } from '@angular/core';
 import { Observable, tap } from 'rxjs';
 import { Credentials, Token } from '../models/auth.model';
 import { RoutePath } from '@shared/models/enums/route-path.enum';
@@ -15,6 +15,7 @@ const httpOptions = {
   providedIn: 'root'
 })
 export class AuthService {
+  isLogin = signal<boolean>(!!localStorage.getItem('token'));
 
   constructor(private http: HttpClient) { }
 
@@ -28,6 +29,7 @@ export class AuthService {
       tap(({token}) => {
         localStorage.setItem('token', token);
         localStorage.setItem('username', email);
+        this.isLogin.set(true);
       })
     );
   }
@@ -35,5 +37,6 @@ export class AuthService {
   logout(): void {
     localStorage.removeItem('token');
     localStorage.removeItem('username');
+    this.isLogin.set(false);
   }
 }

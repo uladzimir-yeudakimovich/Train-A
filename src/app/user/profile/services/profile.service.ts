@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { catchError, Observable, throwError } from 'rxjs';
+import { Injectable, signal } from '@angular/core';
+import { catchError, Observable, tap, throwError } from 'rxjs';
 import { Password, UserInfo, UserRole } from '@auth/models/auth.model';
 
 const httpOptions = {
@@ -13,10 +13,13 @@ const httpOptions = {
   providedIn: 'root',
 })
 export class ProfileService {
+  userRole = signal<UserRole['role']>('user');
+
   constructor(private readonly http: HttpClient) {}
 
   getUserInformation(): Observable<UserRole> {
     return this.http.get<UserRole>('profile', httpOptions).pipe(
+      tap(res => this.userRole.set(res.role)),
       catchError((error) => throwError(() => error))
     );
   }
