@@ -20,4 +20,17 @@ export class TrainCarComponent {
     const newState = seat.state === SeatState.Selected ? SeatState.Available : SeatState.Selected;
     this.store.updateSeat(this.carriage(), { ...seat, state: newState });
   }
+
+  isLeftDirection(seatNumber: number) {
+    const cols = this.carriage().leftSeats + this.carriage().rightSeats;
+    const rows = this.carriage().rows;
+    if (seatNumber <= cols) {
+      return false;
+    }
+    if (seatNumber > cols*(rows - 1)) {
+      return true;
+    }
+    const isLeftSeat = (seatNumber - 1) % cols < this.carriage().leftSeats;
+    return isLeftSeat;
+  }
 }

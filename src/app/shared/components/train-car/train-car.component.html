@@ -1,19 +1,21 @@
-<p>train-car works!</p>
 @let car = carriage();
 <div>
-    <h5>Carriage {{ car.name }} #{{ car.code }}</h5>
-    <p> Available seats: {{ store.getAvailableSeatsNumber(car.code) }}</p>
-    <div>
+    <div class="head">
+        <span class="car-name">{{ car.name }}</span>
+        <span class="available-number">{{ store.getAvailableSeatsNumber(car.code) }} seats</span>
+    </div>
+    <div class="schema">
         @for (seat of car.seats; track seat.number; let i = $index) {
             <app-car-seat
             [seat]="seat"
+            [isLeftDirection]="isLeftDirection(seat.number)"
             (select)="toggleSeatState($event)"
             ></app-car-seat>
             @if ((i + 1) % car.rows === 0) {
                 <br />
             }
             @if((i + 1)  === car.rows * car.rightSeats) {
-                <br /> <br />
+                <div class="separator"></div>
             }
         }
     </div>

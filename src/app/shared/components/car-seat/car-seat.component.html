@@ -1,10 +1,12 @@
 @let state = seat().state;
 <button
-  mat-flat-button
+  class="seat"
   [ngClass]="{
     available: state === SeatState.Available,
     selected: state === SeatState.Selected,
-    reserved: state === SeatState.Reserved
+    reserved: state === SeatState.Reserved,
+    left: isLeftDirection,
+    right: !isLeftDirection,
   }"
   [disabled]="state === SeatState.Reserved"
   (click)="onSeatClick()"

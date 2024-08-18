@@ -1,20 +1,58 @@
 @import '@shared/styles/variables.scss';
 
 :host {
-  button {
-    min-width: 40px;
-    min-height: 40px;
-  }
-
   .available {
     background-color: $availableSeatColor;
+    border-color: $availableSeatColor;
   }
 
   .selected {
     background-color: $selectedSeatColor;
+    border-color: $selectedSeatColor;
   }
 
   .reserved {
     background-color: $reservedSeatColor;
+    border-color: $reservedSeatColor;
+  }
+
+  .seat {
+    width: 40px;
+    height: 40px;
+    margin: 10px;
+    border: 0;
+    border-radius: 5px;
+    position: relative;
+
+    &.available {
+      color: $primaryLightTextColor;
+      cursor: pointer;
+    }
+
+    &.right::before {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      border: 3px solid $lightGrey;
+      top: -4px;
+
+      left: -4px;
+      width: 24px;
+      border-right: 0;
+      border-radius: 7px 0 0 7px;
+    }
+
+    &.left::before {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      border: 3px solid $lightGrey;
+      top: -4px;
+
+      right: -4px;
+      width: 24px;
+      border-left: 0;
+      border-radius: 0 7px 7px 0;
+    }
   }
 }

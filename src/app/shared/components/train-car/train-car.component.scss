@@ -1,0 +1,59 @@
+@import '@shared/styles/variables.scss';
+
+:host {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+
+    .separator {
+        width: 1px;
+        height: 40px;
+    }
+
+    .car-name {
+        font-weight: 500;
+        font-size: 1.2rem;
+        margin-right: 10px;
+    }
+
+    .available-number {
+        padding: 5px 15px;
+        border-radius: 15px;
+        border-width: 1px;
+        border-style: solid;
+        border-color: $lightGrey;
+    }
+    
+    .schema {
+        position: relative;
+        display: inline-block;
+        margin-top: 20px;
+        border-radius: 15px;
+        border-width: 1px;
+        border-style: solid;
+        border-color: $lightGrey;
+        padding: 15px 100px;
+    }
+
+    .schema:before, .schema:after {
+        content: '';
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        width: 1px;
+        background-color: $lightGrey;
+    }
+    
+    .schema:before {
+        left: 50px;
+        top: 20px;
+        bottom: 20px;
+    }
+    
+    .schema:after {
+        right: 50px;
+        top: 20px;
+        bottom: 20px;
+    }
+}

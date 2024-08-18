@@ -65,6 +65,7 @@ export const CarriagesStore = signalStore(
 
     // TODO: remove this method
     initState() {
+      if (store.carriagesIds().length) return;
       const carriage = new Carriage('1', 'Carriage 1', 4, 2, 1);
       carriage.seats[2].state = SeatState.Reserved;
       carriage.seats[3].state = SeatState.Reserved;
