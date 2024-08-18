@@ -1,1 +1,13 @@
 <p>train-car works!</p>
+<div>
+    <h5>Carriage {{ carriage().name }} #{{ carriage().code }}</h5>
+    <div>
+        @for (seat of carriage().seats; track seat.number) {
+            <app-car-seat
+            [number]="seat.number"
+            [state]="seat.state"
+            (select)="onSeatSelect($event)"
+            ></app-car-seat>
+        }
+    </div>
+</div>

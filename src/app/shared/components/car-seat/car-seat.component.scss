@@ -1,13 +1,15 @@
+@import "@shared/styles/variables.scss";
+
 :host {
   .available {
-    background-color: var($availableSeatColor);
+    background-color: $availableSeatColor;
   }
 
   .selected {
-    background-color: var($selectedSeatColor);
+    background-color: $selectedSeatColor;
   }
 
   .reserved {
-    background-color: var($reservedSeatColor);
+    background-color: $reservedSeatColor;
   }
 }
