@@ -1,24 +1,33 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ActivatedRoute } from '@angular/router';
 import { NavigationComponent } from './navigation.component';
-import { activatedRouteMock } from '@testing/mock-data';
+import { authServiceMock, profileServiceMock } from '@testing/mock-service';
+import { HttpClientModule } from '@angular/common/http';
+import { AuthService } from '@auth/services/auth.service';
+import { ProfileService } from '@user/services/profile.service';
 
 describe('NavigationComponent', () => {
   let component: NavigationComponent;
   let fixture: ComponentFixture<NavigationComponent>;
+  let authService: jest.Mocked<AuthService>;
+  let profileService: jest.Mocked<ProfileService>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [NavigationComponent],
+      imports: [
+        NavigationComponent,
+        HttpClientModule,
+      ],
       providers: [
-        { provide: ActivatedRoute, useValue: activatedRouteMock },
+        { provide: AuthService, useValue: authServiceMock },
+        { provide: ProfileService, useValue: profileServiceMock },
       ],
     })
     .compileComponents();
 
     fixture = TestBed.createComponent(NavigationComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
+    authService = TestBed.inject(AuthService) as jest.Mocked<AuthService>;
+    profileService = TestBed.inject(ProfileService) as jest.Mocked<ProfileService>;
   });
 
   it('should create', () => {

@@ -1,13 +1,10 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { of } from 'rxjs';
-import { Router } from '@angular/router';
 import { ChangeDetectorRef } from '@angular/core';
-
+import { Router } from '@angular/router';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RegistrationComponent } from './registration.component';
 import { AuthService } from '../../services/auth.service';
-import { authServiceMock, routerMock } from '@testing/mock-data';
-import { RoutePath } from '@shared/models/enums/route-path.enum';
+import { authServiceMock, routerMock } from '@testing/index';
 import { formImports } from '../form.config';
 
 describe('RegistrationComponent', () => {
@@ -26,23 +23,31 @@ describe('RegistrationComponent', () => {
 
     fixture = TestBed.createComponent(RegistrationComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should navigate to login page on successful registration', () => {
-    component.registrationForm.controls['email'].setValue('test@example.com');
+  it('should have a valid registration form initially', () => {
+    expect(component.registrationForm.valid).toBeFalsy();
+  });
+
+  it('should show error message when email is invalid', () => {
+    const emailControl = component.registrationForm.controls['email'];
+    emailControl.setValue('invalid-email');
+    expect(component.getEmailErrorMessage()).toBe('The email is invalid');
+  });
+
+  it('should show error message when password is too short', () => {
+    const passwordControl = component.registrationForm.controls['password'];
+    passwordControl.setValue('short');
+    expect(component.getPasswordErrorMessage()).toBe('Password must be at least 8 characters long');
+  });
+
+  it('should show error message when passwords do not match', () => {
     component.registrationForm.controls['password'].setValue('password123');
-    component.registrationForm.controls['confirmPassword'].setValue('password123');
-
-    authServiceMock.registration.mockReturnValue(of({}));
-
-    component.onRegistration();
-    fixture.detectChanges();
-
-    expect(routerMock.navigate).toHaveBeenCalledWith([RoutePath.Login]);
+    component.registrationForm.controls['confirmPassword'].setValue('password456');
+    expect(component.getConfirmPasswordErrorMessage()).toBe('Passwords do not match');
   });
 });

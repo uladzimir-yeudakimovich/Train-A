@@ -1,15 +1,20 @@
 import { TestBed } from '@angular/core/testing';
 import { ActivatedRoute } from '@angular/router';
+import { HttpClientModule } from '@angular/common/http';
 import { AppComponent } from './app.component';
 import { HeaderComponent } from '@core/components/header/header.component';
-import { activatedRouteMock } from '@testing/mock-data';
+import { activatedRouteMock } from '@testing/mock-service';
 
 describe('AppComponent', () => {
   let component: AppComponent;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HeaderComponent, AppComponent],
+      imports: [
+        AppComponent,
+        HeaderComponent,
+        HttpClientModule,
+      ],
       providers: [
         { provide: ActivatedRoute, useValue: activatedRouteMock },
       ],
