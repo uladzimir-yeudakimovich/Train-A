@@ -1,4 +1,4 @@
-import { Component, inject, input } from '@angular/core';
+import { Component, HostListener, inject, input, OnInit, signal } from '@angular/core';
 import { CarSeatComponent } from '../car-seat/car-seat.component';
 import { Carriage } from '@shared/models/interfaces/carriage.model';
 import { CarriagesStore } from '@shared/store/carriages.store';
@@ -11,9 +11,20 @@ import { SeatState } from '@shared/models/enums/seat-state.enum';
   templateUrl: './train-car.component.html',
   styleUrl: './train-car.component.scss'
 })
-export class TrainCarComponent {
+export class TrainCarComponent implements OnInit {
   carriage = input.required<Carriage>();
   store = inject(CarriagesStore);
+
+  isHorizontal = signal<boolean>(false);
+
+  ngOnInit() {
+    this.isHorizontal.set(window.innerWidth > 992);
+  }
+
+  @HostListener('window:resize', ['$event'])
+  onResize() {
+    this.isHorizontal.set(window.innerWidth > 992);
+  }
 
   toggleSeatState(seatNumber: number) {
     const seat = this.carriage().seats.find((s) => s.number === seatNumber)!;
@@ -21,16 +32,23 @@ export class TrainCarComponent {
     this.store.updateSeat(this.carriage(), { ...seat, state: newState });
   }
 
-  isLeftDirection(seatNumber: number) {
+  getSeatDirection(seatNumber: number): string {
     const cols = this.carriage().leftSeats + this.carriage().rightSeats;
     const rows = this.carriage().rows;
     if (seatNumber <= cols) {
-      return false;
+      return this.modifySeatDirection('right');
     }
     if (seatNumber > cols*(rows - 1)) {
-      return true;
+      return this.modifySeatDirection('left');
     }
     const isLeftSeat = (seatNumber - 1) % cols < this.carriage().leftSeats;
-    return isLeftSeat;
+    return isLeftSeat ? this.modifySeatDirection('left') : this.modifySeatDirection('right');
+  }
+
+  private modifySeatDirection(direction: string): string {
+    if (this.isHorizontal()) {
+      return direction;
+    }
+    return direction === 'left' ? 'bottom' : 'top';
   }
 }

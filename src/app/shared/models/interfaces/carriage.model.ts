@@ -24,6 +24,14 @@ export class Carriage {
             this.seats.push({ number: seatNumber, state: SeatState.Available });
         }
     }
+
+    get cols() {
+        return this.leftSeats + this.rightSeats;
+    }
+
+    get sortedSeats() {
+        return this.seats.sort((a, b) => a.number - b.number);
+    }
 }
 
 export interface CarSeat {
