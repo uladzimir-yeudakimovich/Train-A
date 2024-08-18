@@ -1,6 +1,11 @@
-@import "@shared/styles/variables.scss";
+@import '@shared/styles/variables.scss';
 
 :host {
+  button {
+    min-width: 40px;
+    min-height: 40px;
+  }
+
   .available {
     background-color: $availableSeatColor;
   }

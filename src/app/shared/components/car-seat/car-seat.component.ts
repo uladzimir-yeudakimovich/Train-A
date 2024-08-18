@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input, input, output } from '@angular/core';
+import { Component, input, output } from '@angular/core';
 import { SeatState } from '@shared/models/enums/seat-state.enum';
+import { CarSeat } from '@shared/models/interfaces/carriage.model';
 
 @Component({
   selector: 'app-car-seat',
@@ -10,8 +11,7 @@ import { SeatState } from '@shared/models/enums/seat-state.enum';
   styleUrl: './car-seat.component.scss'
 })
 export class CarSeatComponent {
-  @Input() number!: number;
-  state = input<SeatState>();
+  seat = input.required<CarSeat>();
   select = output<number>();
 
   public get SeatState() {
@@ -19,9 +19,9 @@ export class CarSeatComponent {
   }
 
   public onSeatClick() {
-    if (this.state() === SeatState.Reserved) {
+    if (this.seat().state === SeatState.Reserved) {
       return;
     }
-    this.select.emit(this.number);
+    this.select.emit(this.seat().number);
   }
 }

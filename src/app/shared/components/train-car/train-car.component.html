@@ -1,13 +1,20 @@
 <p>train-car works!</p>
+@let car = carriage();
 <div>
-    <h5>Carriage {{ carriage().name }} #{{ carriage().code }}</h5>
+    <h5>Carriage {{ car.name }} #{{ car.code }}</h5>
+    <p> Available seats: {{ store.getAvailableSeatsNumber(car.code) }}</p>
     <div>
-        @for (seat of carriage().seats; track seat.number) {
+        @for (seat of car.seats; track seat.number; let i = $index) {
             <app-car-seat
-            [number]="seat.number"
-            [state]="seat.state"
-            (select)="onSeatSelect($event)"
+            [seat]="seat"
+            (select)="toggleSeatState($event)"
             ></app-car-seat>
+            @if ((i + 1) % car.rows === 0) {
+                <br />
+            }
+            @if((i + 1)  === car.rows * car.rightSeats) {
+                <br /> <br />
+            }
         }
     </div>
 </div>
