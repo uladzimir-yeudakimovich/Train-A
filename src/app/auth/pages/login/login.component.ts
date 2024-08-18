@@ -6,7 +6,7 @@ import { emailValidator } from '@auth/validators/email.validator';
 import { RoutePath } from '@shared/models/enums/route-path.enum';
 import { AuthService } from '@auth/services/auth.service';
 import { formImports } from '../form.config';
-import { ProfileService } from '@user/profile/services/profile.service';
+import { ProfileService } from '@user/services/profile.service';
 
 @Component({
   selector: 'app-login',

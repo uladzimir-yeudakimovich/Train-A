@@ -3,7 +3,7 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
 import { MatNavList, MatListItem } from '@angular/material/list';
 import { NavigationLink } from '@shared/models/interfaces/navigation.model';
 import { RoutePath } from '@shared/models/enums/route-path.enum';
-import { ProfileService } from '@user/profile/services/profile.service';
+import { ProfileService } from '@user/services/profile.service';
 import { AuthService } from '@auth/services/auth.service';
 
 @Component({

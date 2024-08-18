@@ -11,7 +11,7 @@ import { emailValidator } from '@auth/validators/email.validator';
 import { RoutePath } from '@shared/models/enums/route-path.enum';
 import { ChangePasswordComponent } from '../change-password/change-password.component';
 import { AuthService } from '@auth/services/auth.service';
-import { ProfileService } from '@user/profile/services/profile.service';
+import { ProfileService } from '@user/services/profile.service';
 
 @Component({
   selector: 'app-user-profile',

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { CanActivate } from '@angular/router';
-import { ProfileService } from '@user/profile/services/profile.service';
+import { ProfileService } from '@user/services/profile.service';
 
 @Injectable({
   providedIn: 'root'

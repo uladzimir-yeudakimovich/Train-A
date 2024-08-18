@@ -10,7 +10,7 @@ import {
 import { MatError, MatFormField } from '@angular/material/form-field';
 import { MatIcon } from '@angular/material/icon';
 import { MatInput } from '@angular/material/input';
-import { ProfileService } from '@user/profile/services/profile.service';
+import { ProfileService } from '@user/services/profile.service';
 
 @Component({
   selector: 'app-change-password-form',
