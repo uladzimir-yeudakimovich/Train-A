@@ -15,10 +15,11 @@ export class TrainCarComponent implements OnInit {
   carriage = input.required<Carriage>();
   isHorizontal = signal<boolean>(false);
   seats = computed(() => {
+    const carriage = this.carriage();
     if (this.isHorizontal()) {
-      return this.carriage().seats;
+      return carriage.seats;
     }
-    return this.carriage().sortedSeats;
+    return this.trainCarService.getSortedSeats(carriage);
   });
 
   constructor(private trainCarService: TrainCarService) {}

@@ -25,6 +25,7 @@ export class Carriage {
   private initializeSeats(): CarSeat[] {
     const seats: CarSeat[] = [];
     const cols = this.leftSeats + this.rightSeats;
+
     for (let i = 0; i < this.rows * cols; i++) {
       const row = i % this.rows;
       const col = Math.floor(i / this.rows);
@@ -32,10 +33,6 @@ export class Carriage {
       seats.push({ number: seatNumber, state: SeatState.Available });
     }
     return seats;
-  }
-
-  get cols() {
-    return this.leftSeats + this.rightSeats;
   }
 
   get sortedSeats(): CarSeat[] {

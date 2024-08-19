@@ -15,6 +15,10 @@ export class TrainCarService {
     this.carriagesStore.updateSeat(carriage, { ...seat, state: newState });
   }
 
+  getSortedSeats(carriage: Carriage): Carriage['seats'] {
+    return this.carriagesStore.getSortedSeats(carriage.code);
+  }
+
   getAvailableSeatsNumber(carriage: Carriage): number {
     return this.carriagesStore.getAvailableSeatsNumber(carriage.code);
   }
@@ -37,17 +41,19 @@ export class TrainCarService {
   }
 
   isLastInRow(carriage: Carriage, seatIndex: number, isHorizontal: boolean): boolean {
+    const cols = carriage.leftSeats + carriage.rightSeats;
     if (isHorizontal) {
       return (seatIndex + 1) % carriage.rows === 0;
     }
-    return (seatIndex + 1) % carriage.cols === 0;
+    return (seatIndex + 1) % cols === 0;
   }
 
   isCorridor(carriage: Carriage, seatIndex: number, isHorizontal: boolean): boolean {
+    const cols = carriage.leftSeats + carriage.rightSeats;
     if (isHorizontal) {
       return seatIndex + 1 === carriage.rows * carriage.rightSeats;
     }
-    return (seatIndex + 1) % carriage.cols === carriage.leftSeats;
+    return (seatIndex + 1) % cols === carriage.leftSeats;
   }
 
   private adjustDirectionForOrientation(

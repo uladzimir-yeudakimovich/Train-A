@@ -17,6 +17,11 @@ export const CarriagesStore = signalStore(
   withMethods((store) => ({
     getCarriageSignal: (carriageCode: string) => computed(() => store.getCarriage(carriageCode)),
 
+    getSortedSeats: (carriageCode: string) => {
+      const carriage = store.getCarriage(carriageCode);
+      return [...carriage.seats].sort((a, b) => a.number - b.number);
+    },
+
     getAvailableSeatsNumber: (carriageCode: string) => {
       const carriage = store.getCarriage(carriageCode);
       return carriage.seats.filter((s) => s.state !== SeatState.Reserved).length;
