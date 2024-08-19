@@ -1,4 +1,4 @@
-import { Component, HostListener, inject, input, OnInit, signal } from '@angular/core';
+import { Component, computed, HostListener, inject, input, OnInit, signal } from '@angular/core';
 import { CarSeatComponent } from '../car-seat/car-seat.component';
 import { Carriage } from '@shared/models/interfaces/carriage.model';
 import { CarriagesStore } from '@shared/store/carriages.store';
@@ -9,13 +9,19 @@ import { SeatState } from '@shared/models/enums/seat-state.enum';
   standalone: true,
   imports: [CarSeatComponent],
   templateUrl: './train-car.component.html',
-  styleUrl: './train-car.component.scss'
+  styleUrl: './train-car.component.scss',
 })
 export class TrainCarComponent implements OnInit {
   carriage = input.required<Carriage>();
+  isHorizontal = signal<boolean>(false);
   store = inject(CarriagesStore);
 
-  isHorizontal = signal<boolean>(false);
+  seats = computed(() => {
+    if (this.isHorizontal()) {
+      return this.carriage().seats;
+    }
+    return this.carriage().sortedSeats;
+  });
 
   ngOnInit() {
     this.isHorizontal.set(window.innerWidth > 992);
@@ -33,22 +39,42 @@ export class TrainCarComponent implements OnInit {
   }
 
   getSeatDirection(seatNumber: number): string {
-    const cols = this.carriage().leftSeats + this.carriage().rightSeats;
-    const rows = this.carriage().rows;
-    if (seatNumber <= cols) {
-      return this.modifySeatDirection('right');
+    const { leftSeats, rightSeats, rows } = this.carriage();
+    const totalSeatsPerRow = leftSeats + rightSeats;
+    const isFirstRow = seatNumber <= totalSeatsPerRow;
+    const isLastRow = seatNumber > totalSeatsPerRow * (rows - 1);
+
+    if (isFirstRow) {
+      return this.adjustDirectionForOrientation('right');
     }
-    if (seatNumber > cols*(rows - 1)) {
-      return this.modifySeatDirection('left');
+    if (isLastRow) {
+      return this.adjustDirectionForOrientation('left');
     }
-    const isLeftSeat = (seatNumber - 1) % cols < this.carriage().leftSeats;
-    return isLeftSeat ? this.modifySeatDirection('left') : this.modifySeatDirection('right');
+
+    const isLeftSeat = (seatNumber - 1) % totalSeatsPerRow < leftSeats;
+    return this.adjustDirectionForOrientation(isLeftSeat ? 'left' : 'right');
   }
 
-  private modifySeatDirection(direction: string): string {
+  private adjustDirectionForOrientation(direction: 'left' | 'right'): string {
     if (this.isHorizontal()) {
       return direction;
     }
     return direction === 'left' ? 'bottom' : 'top';
+  }
+
+  isLastInRow(seatIndex: number): boolean {
+    const car = this.carriage();
+    if (this.isHorizontal()) {
+      return (seatIndex + 1) % car.rows === 0;  
+    }
+    return (seatIndex + 1) % car.cols === 0;
+  }
+
+  isCorridor(seatIndex: number): boolean {
+    const car = this.carriage();
+    if (this.isHorizontal()) {
+      return (seatIndex + 1) === car.rows * car.rightSeats;
+    }
+    return (seatIndex + 1) % car.cols === car.leftSeats; 
   }
 }

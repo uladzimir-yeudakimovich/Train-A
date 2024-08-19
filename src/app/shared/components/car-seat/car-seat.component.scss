@@ -1,84 +1,87 @@
 @import '@shared/styles/variables.scss';
 
+$borderDistance: 0.25rem;
+$borderRadius: 7px;
+$borderOpacity: .5;
+$seatSize: 2rem;
+
 :host {
-  .available {
-    background-color: $availableSeatColor;
-    border-color: $availableSeatColor;
-  }
-
-  .selected {
-    background-color: $selectedSeatColor;
-    border-color: $selectedSeatColor;
-  }
-
-  .reserved {
-    background-color: $reservedSeatColor;
-    border-color: $reservedSeatColor;
-  }
-
   .seat {
-    width: 40px;
-    height: 40px;
+    position: relative;
+    width: $seatSize;
+    height: $seatSize;
     margin: 10px;
     border: 0;
     border-radius: 5px;
-    position: relative;
-
-    &.available {
+    
+    &.available, &.selected { 
       color: $primaryLightTextColor;
       cursor: pointer;
     }
-
-    &.right::before {
+    
+    &::before {
       content: '';
       position: absolute;
-      bottom: -4px;
-      border: 3px solid $lightGrey;
-      top: -4px;
-
-      left: -4px;
-      width: 24px;
-      border-right: 0;
-      border-radius: 7px 0 0 7px;
+      border: 3px solid;
     }
-
-    &.top::before {
-      content: '';
-      position: absolute;
-      top: -4px;
-      border: 3px solid $lightGrey;
-      left: -4px;
-
-      right: -4px;
-      height: 24px;
-      border-bottom: 0;
-      border-radius: 7px 7px 0 0;
-    }
-
-    &.bottom::before {
-      content: '';
-      position: absolute;
-      bottom: -4px;
-      border: 3px solid $lightGrey;
-      right: -4px;
-
-      left: -4px;
-      height: 24px;
-      border-top: 0;
-      border-radius: 0 0 7px 7px;
-    }
-
+    
+    &.right::before,
     &.left::before {
-      content: '';
-      position: absolute;
-      bottom: -4px;
-      border: 3px solid $lightGrey;
-      top: -4px;
-
-      right: -4px;
-      width: 24px;
+      top: -$borderDistance;
+      bottom: -$borderDistance;
+      width: $seatSize*.5+$borderDistance;
+    }
+    
+    &.top::before,
+    &.bottom::before {
+      left: -$borderDistance;
+      right: -$borderDistance;
+      height: $seatSize*.5+$borderDistance;
+    }
+    
+    &.left:before {
+      right: -$borderDistance;
       border-left: 0;
-      border-radius: 0 7px 7px 0;
+      border-radius: 0 $borderRadius $borderRadius 0;
+    }
+    
+    &.right::before {
+      left: -$borderDistance;
+      border-right: 0;
+      border-radius: $borderRadius 0 0 $borderRadius;
+    }
+    
+    &.top::before {
+      top: -$borderDistance;
+      border-bottom: 0;
+      border-radius: $borderRadius $borderRadius 0 0;
+    }
+    
+    &.bottom::before {
+      bottom: -$borderDistance;
+      border-top: 0;
+      border-radius: 0 0 $borderRadius $borderRadius;
+    }
+  }
+
+  .available {
+    background-color: $availableSeatColor;
+    &::before {
+      border-color: rgba($availableSeatColor, $borderOpacity);
+    }
+  }
+  
+  .reserved {
+    background-color: $reservedSeatColor;
+    &::before {
+      border-color: rgba($reservedSeatColor, $borderOpacity);
+    }
+  }
+  
+  .selected {
+    background-color: $selectedSeatColor;
+    &::before {
+      border-color: rgba($selectedSeatColor, $borderOpacity);
     }
   }
 }

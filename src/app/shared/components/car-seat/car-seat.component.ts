@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input, input, output } from '@angular/core';
+import { Component, input, output } from '@angular/core';
 import { SeatState } from '@shared/models/enums/seat-state.enum';
 import { CarSeat } from '@shared/models/interfaces/carriage.model';
 
@@ -12,7 +12,7 @@ import { CarSeat } from '@shared/models/interfaces/carriage.model';
 })
 export class CarSeatComponent {
   seat = input.required<CarSeat>();
-  @Input() direction!: string;
+  direction = input.required<string>();
   select = output<number>();
 
   public get SeatState() {
