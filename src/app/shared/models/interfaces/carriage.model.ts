@@ -1,5 +1,10 @@
 import { SeatState } from "../enums/seat-state.enum";
 
+export interface CarSeat {
+    number: number;
+    state: SeatState;
+}
+
 export class Carriage {
     code: string;
     name: string;
@@ -14,27 +19,27 @@ export class Carriage {
         this.rows = rows;
         this.leftSeats = leftSeats;
         this.rightSeats = rightSeats;
-        
-        this.seats = [];
-        const cols = leftSeats + rightSeats;
-        for (let i = 0; i < rows * cols; i++) {
-            const row = i % rows;
-            const col = Math.floor(i / rows);
-            const seatNumber = (row + 1) * cols - col;
-            this.seats.push({ number: seatNumber, state: SeatState.Available });
-        }
+        this.seats = this.initializeSeats();
     }
+
+    private initializeSeats(): CarSeat[] {
+        const seats: CarSeat[] = [];
+        const cols = this.leftSeats + this.rightSeats;
+        for (let i = 0; i < this.rows * cols; i++) {
+            const row = i % this.rows;
+            const col = Math.floor(i / this.rows);
+            const seatNumber = (row + 1) * cols - col;
+            seats.push({ number: seatNumber, state: SeatState.Available });
+        }
+        return seats;
+    }
+
 
     get cols() {
         return this.leftSeats + this.rightSeats;
     }
 
-    get sortedSeats() {
-        return this.seats.sort((a, b) => a.number - b.number);
+    get sortedSeats(): CarSeat[] {
+        return [...this.seats].sort((a, b) => a.number - b.number);
     }
-}
-
-export interface CarSeat {
-    number: number;
-    state: SeatState;
 }
