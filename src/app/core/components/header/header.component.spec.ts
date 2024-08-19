@@ -1,7 +1,11 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ActivatedRoute } from '@angular/router';
+import { HttpClientModule } from '@angular/common/http';
 import { HeaderComponent } from './header.component';
-import { activatedRouteMock } from '@testing/mock-data';
+import { loggerServiceMock } from '@testing/index';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { LoggerService } from '@core/services/logger/logger.service';
 
 describe('HeaderComponent', () => {
   let component: HeaderComponent;
@@ -9,19 +13,29 @@ describe('HeaderComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [HeaderComponent],
+      imports: [
+        HttpClientModule,
+        MatToolbarModule,
+        MatButtonModule,
+        MatIconModule,
+      ],
       providers: [
-        { provide: ActivatedRoute, useValue: activatedRouteMock },
+        { provide: LoggerService, useValue: loggerServiceMock },
       ],
     })
     .compileComponents();
 
     fixture = TestBed.createComponent(HeaderComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should call onUserLogin on init', () => {
+    const spy = jest.spyOn(component, 'onUserLogin');
+    component.ngOnInit();
+    expect(spy).toHaveBeenCalled();
   });
 });

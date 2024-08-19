@@ -1,11 +1,16 @@
+@import "@shared/styles/variables.scss";
+
 .header {
   &-row {
     display: flex;
     gap: 2rem;
+    background-color: $primaryBackgroundColor;
   }
 
   &-logo {
-    text-transform: uppercase;
-    border-radius: 0.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
   }
 }

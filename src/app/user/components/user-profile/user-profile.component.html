@@ -1,0 +1,65 @@
+<div class="layout">
+  <h4 class="title">Profile</h4>
+  <div class="role-and-button">
+    <div class="role">{{ userRole() === 'manager' ? 'manager' : '' }}</div>
+    <button class="btn" mat-flat-button (click)="openDialog()">Change Password</button>
+  </div>
+
+  <form [formGroup]="userInformationForm" class="form">
+    @if (loading()) {
+      <mat-progress-spinner class="spinner" mode="indeterminate"></mat-progress-spinner>
+    } @else {
+      <div class="control">
+        <div class="label">Name</div>
+        <div class="input-and-buton">
+          @if (!editMode().name) {
+            <div>{{ userInformationForm.value.name }}</div>
+          } @else {
+            <div>
+              <mat-form-field class="full-width" appearance="outline" subscriptSizing="dynamic">
+                <input type="text" matInput formControlName="name" />
+                @if (invalidName) {
+                  <mat-error>required</mat-error>
+                }
+              </mat-form-field>
+            </div>
+          }
+          <button
+            [disabled]="invalidName"
+            mat-mini-fab
+            (click)="editMode().name ? onSubmit() : toggleEditMode('name')">
+            <mat-icon>{{ editMode().name ? 'save' : 'edit' }}</mat-icon>
+          </button>
+        </div>
+      </div>
+      <div class="control">
+        <div class="label">Email</div>
+        <div class="input-and-buton">
+          @if (!editMode().email) {
+            <div>{{ userInformationForm.value.email }}</div>
+          } @else {
+            <div>
+              <mat-form-field class="full-width" appearance="outline" subscriptSizing="dynamic">
+                <input type="email" matInput formControlName="email" />
+                @if (emptyEmail) {
+                  <mat-error>required</mat-error>
+                }
+                @if (invalidEmail) {
+                  <mat-error>invalid email</mat-error>
+                }
+              </mat-form-field>
+            </div>
+          }
+          <button
+            [disabled]="invalidEmail || emptyEmail"
+            mat-mini-fab
+            (click)="editMode().email ? onSubmit() : toggleEditMode('email')">
+            <mat-icon>{{ editMode().email ? 'save' : 'edit' }}</mat-icon>
+          </button>
+        </div>
+      </div>
+    }
+  </form>
+
+  <button class="btn btn-logout" mat-flat-button color="warn" (click)="logout()">Logout</button>
+</div>

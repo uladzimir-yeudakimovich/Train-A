@@ -1,14 +1,15 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ChangeDetectorRef } from '@angular/core';
+import { Router } from '@angular/router';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { of } from 'rxjs';
-import { Router } from '@angular/router';
-import { ChangeDetectorRef } from '@angular/core';
 
 import { LoginComponent } from './login.component';
 import { AuthService } from '../../services/auth.service';
-import { authServiceMock, routerMock } from '@testing/mock-data';
+import { authServiceMock, profileServiceMock, routerMock } from '@testing/index';
 import { RoutePath } from '@shared/models/enums/route-path.enum';
 import { formImports } from '../form.config';
+import { ProfileService } from '@user/services/profile.service';
 
 describe('LoginComponent', () => {
   let component: LoginComponent;
@@ -20,6 +21,7 @@ describe('LoginComponent', () => {
       providers: [
         { provide: AuthService, useValue: authServiceMock },
         { provide: Router, useValue: routerMock },
+        { provide: ProfileService, useValue: profileServiceMock },
         ChangeDetectorRef
       ],
     }).compileComponents();
