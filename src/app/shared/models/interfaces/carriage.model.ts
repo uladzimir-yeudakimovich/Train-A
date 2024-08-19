@@ -34,8 +34,4 @@ export class Carriage {
     }
     return seats;
   }
-
-  get sortedSeats(): CarSeat[] {
-    return [...this.seats].sort((a, b) => a.number - b.number);
-  }
 }

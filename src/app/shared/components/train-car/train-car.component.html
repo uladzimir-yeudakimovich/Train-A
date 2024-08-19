@@ -1,24 +1,20 @@
-<div>
-  <div class="head">
-    <span class="car-name">{{ carriage().name }}</span>
-    <span class="available-number">{{ availableSeatsNumber }} seats</span>
-  </div>
-  <div class="schema">
-    @for (seat of seats(); track seat.number; let i = $index) {
-      <app-car-seat
-        [seat]="seat"
-        [direction]="getSeatDirection(seat.number)"
-        (select)="toggleSeatState($event)">
-      </app-car-seat>
-      
-      @if (isLastInRow(i)) {
-        <br />
-      }
-      @if (isCorridor(i)) {
-        <div
-        class="separator {{ isHorizontal() ? '' : 'inline' }}"
-        ></div>
-      }
+<div class="head">
+  <span class="car-name">{{ carriage().name }}</span>
+  <span class="available-number">{{ availableSeatsNumber }} seats</span>
+</div>
+<div class="schema">
+  @for (seat of seats(); track seat.number; let i = $index) {
+    <app-car-seat
+      [seat]="seat"
+      [direction]="getSeatDirection(seat.number)"
+      (select)="toggleSeatState($event)">
+    </app-car-seat>
+
+    @if (isLastInRow(i)) {
+      <br />
     }
-  </div>
+    @if (isCorridor(i)) {
+      <div class="separator {{ isHorizontal() ? '' : 'inline' }}"></div>
+    }
+  }
 </div>
