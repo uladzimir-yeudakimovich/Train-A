@@ -1,1 +1,40 @@
-<p>route-card works!</p>
+<mat-toolbar>
+  <mat-toolbar-row class="toolbar">
+    <span class="route-name">Route {{ route().id }}</span>
+    <span class="toolbar-spacer"></span>
+    
+    <div class="toolbar-icon">
+        <mat-icon id="update" aria-hidden="false" aria-label="Example heart icon"
+          >edit_square</mat-icon
+        >
+        <label for="edit">Update</label>
+    </div>
+    <div class="toolbar-icon">
+        <mat-icon id="ride" aria-hidden="false" aria-label="Example heart icon"
+          >train</mat-icon
+        > 
+        <label for="ride">Assign ride</label>
+    </div>
+    <div class="toolbar-icon">
+        <mat-icon aria-hidden="false" aria-label="Example delete icon"
+        >delete</mat-icon
+        >
+    </div>
+  </mat-toolbar-row>
+</mat-toolbar>
+<div class="cities">
+  <p>
+    Cities:<br />
+    @for (city of cities(); track $index) {
+      {{ city }}{{ $index < cities().length - 1 ? '  —  ' : '' }}
+    }
+  </p>
+</div>
+<div class="carriages">
+  <p>
+    Carriage Types:<br />
+    @for (carriageType of route().carriages; track $index) {
+      {{ carriageType }}{{ $index < route().carriages.length - 1 ? '  —  ' : '' }}
+    }
+  </p>
+</div>

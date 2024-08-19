@@ -1,0 +1,28 @@
+@import '@shared/styles/variables.scss';
+
+:host {
+  display: block;
+  margin: 1rem;
+  padding: 2rem;
+  border-radius: 1rem;
+  box-shadow: 0 0 0.5rem rgba(0, 0, 0, 0.3);
+
+  .toolbar {
+    background-color: $white;
+    padding: 0;
+  }
+
+  .route-name {
+    font-weight: bold;
+  }
+
+  .toolbar-icon {
+    display: flex;
+    align-items: center;
+    margin: 0 1rem;
+  }
+
+  .toolbar-spacer {
+    flex: 1 1 auto;
+  }
+}
