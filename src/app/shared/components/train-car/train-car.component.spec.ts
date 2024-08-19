@@ -3,8 +3,6 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { TrainCarComponent } from './train-car.component';
 import { Carriage } from '@shared/models/interfaces/carriage.model';
 import { TrainCarService } from '@shared/services/train-car/train-car.service';
-import { SeatState } from '@shared/models/enums/seat-state.enum';
-import { CarriagesStore } from '@shared/store/carriages.store';
 
 describe('TrainCarComponent', () => {
   let component: TrainCarComponent;
