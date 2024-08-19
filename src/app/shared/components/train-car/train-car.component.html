@@ -2,7 +2,7 @@
 <div>
   <div class="head">
     <span class="car-name">{{ car.name }}</span>
-    <span class="available-number">{{ store.getAvailableSeatsNumber(car.code) }} seats</span>
+    <span class="available-number">{{ availableSeatsNumber }} seats</span>
   </div>
   <div class="schema">
     @for (seat of seats(); track seat.number; let i = $index) {

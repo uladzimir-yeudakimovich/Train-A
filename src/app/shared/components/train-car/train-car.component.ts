@@ -1,8 +1,7 @@
-import { Component, computed, HostListener, inject, input, OnInit, signal } from '@angular/core';
+import { Component, computed, HostListener, input, OnInit, signal } from '@angular/core';
 import { CarSeatComponent } from '../car-seat/car-seat.component';
 import { Carriage } from '@shared/models/interfaces/carriage.model';
-import { CarriagesStore } from '@shared/store/carriages.store';
-import { SeatState } from '@shared/models/enums/seat-state.enum';
+import { TrainCarService } from '@shared/services/train-car.service';
 
 @Component({
   selector: 'app-train-car',
@@ -14,14 +13,14 @@ import { SeatState } from '@shared/models/enums/seat-state.enum';
 export class TrainCarComponent implements OnInit {
   carriage = input.required<Carriage>();
   isHorizontal = signal<boolean>(false);
-  store = inject(CarriagesStore);
-
   seats = computed(() => {
     if (this.isHorizontal()) {
       return this.carriage().seats;
     }
     return this.carriage().sortedSeats;
   });
+
+  constructor(private trainCarService: TrainCarService) {}
 
   ngOnInit() {
     this.isHorizontal.set(window.innerWidth > 992);
@@ -31,50 +30,24 @@ export class TrainCarComponent implements OnInit {
   onResize() {
     this.isHorizontal.set(window.innerWidth > 992);
   }
-
+  
   toggleSeatState(seatNumber: number) {
-    const seat = this.carriage().seats.find((s) => s.number === seatNumber)!;
-    const newState = seat.state === SeatState.Selected ? SeatState.Available : SeatState.Selected;
-    this.store.updateSeat(this.carriage(), { ...seat, state: newState });
+    this.trainCarService.toggleSeatState(this.carriage(), seatNumber);
   }
-
+  
+  get availableSeatsNumber(): number {
+    return this.trainCarService.getAvailableSeatsNumber(this.carriage());
+  }
+  
   getSeatDirection(seatNumber: number): string {
-    const { leftSeats, rightSeats, rows } = this.carriage();
-    const totalSeatsPerRow = leftSeats + rightSeats;
-    const isFirstRow = seatNumber <= totalSeatsPerRow;
-    const isLastRow = seatNumber > totalSeatsPerRow * (rows - 1);
-
-    if (isFirstRow) {
-      return this.adjustDirectionForOrientation('right');
-    }
-    if (isLastRow) {
-      return this.adjustDirectionForOrientation('left');
-    }
-
-    const isLeftSeat = (seatNumber - 1) % totalSeatsPerRow < leftSeats;
-    return this.adjustDirectionForOrientation(isLeftSeat ? 'left' : 'right');
-  }
-
-  private adjustDirectionForOrientation(direction: 'left' | 'right'): string {
-    if (this.isHorizontal()) {
-      return direction;
-    }
-    return direction === 'left' ? 'bottom' : 'top';
+    return this.trainCarService.getSeatDirection(this.carriage(), seatNumber, this.isHorizontal());
   }
 
   isLastInRow(seatIndex: number): boolean {
-    const car = this.carriage();
-    if (this.isHorizontal()) {
-      return (seatIndex + 1) % car.rows === 0;  
-    }
-    return (seatIndex + 1) % car.cols === 0;
+    return this.trainCarService.isLastInRow(this.carriage(), seatIndex, this.isHorizontal());
   }
 
   isCorridor(seatIndex: number): boolean {
-    const car = this.carriage();
-    if (this.isHorizontal()) {
-      return (seatIndex + 1) === car.rows * car.rightSeats;
-    }
-    return (seatIndex + 1) % car.cols === car.leftSeats; 
+    return this.trainCarService.isCorridor(this.carriage(), seatIndex, this.isHorizontal());
   }
 }
