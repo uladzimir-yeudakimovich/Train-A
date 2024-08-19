@@ -3,9 +3,7 @@ import { SeatState } from '@shared/models/enums/seat-state.enum';
 import { Carriage } from '@shared/models/interfaces/carriage.model';
 import { CarriagesStore } from '@shared/store/carriages.store';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable()
 export class TrainCarService {
   private carriagesStore = inject(CarriagesStore);
 

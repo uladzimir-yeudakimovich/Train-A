@@ -14,15 +14,15 @@ export class CarSeatComponent {
   seat = input.required<CarSeat>();
   direction = input.required<string>();
   select = output<number>();
-
-  public get SeatState() {
-    return SeatState;
-  }
-
-  public onSeatClick() {
+  
+  onSeatClick() {
     if (this.seat().state === SeatState.Reserved) {
       return;
     }
     this.select.emit(this.seat().number);
+  }
+
+  get SeatState() {
+    return SeatState;
   }
 }
