@@ -12,4 +12,8 @@ export class AdminService {
   getStations(): Observable<StationInterface[]> {
     return this.http.get<StationInterface[]>('station');
   }
+
+  deleteStation(id: number): Observable<StationInterface> {
+    return this.http.delete<StationInterface>(`station/${id}`);
+  }
 }

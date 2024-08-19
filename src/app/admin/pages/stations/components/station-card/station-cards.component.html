@@ -1,0 +1,18 @@
+@for (station of stations(); track station.id) {
+  <mat-card class="card">
+    <mat-card-header>
+      <mat-card-title class="card-title">
+        {{ station.city }}
+      </mat-card-title>
+      <mat-card-subtitle> {{ station.latitude }}, {{ station.longitude }} </mat-card-subtitle>
+
+      <button class="card-btn" type="button" mat-mini-fab (click)="deleteStation(station.id)">
+        <mat-icon>delete</mat-icon>
+      </button>
+    </mat-card-header>
+    <mat-card-content class="card-content">
+      <p>Connected to:</p>
+      <p>{{ station.connectedTo }}</p>
+    </mat-card-content>
+  </mat-card>
+}
