@@ -14,3 +14,12 @@ export interface Route {
   carriages: string[];
   schedule: Schedule[];
 }
+
+export interface Station {
+  id: number;
+  city: string;
+  latitude: number;
+  longitude: number;
+  // TODO: create a separate interface for { id: number; distance: number }
+  connectedTo: { id: number; distance: number }[];
+}
