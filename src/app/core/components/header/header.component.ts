@@ -10,13 +10,7 @@ import { NavigationComponent } from '../navigation/navigation.component';
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [
-    MatFabButton,
-    MatIcon,
-    MatToolbar,
-    MatToolbarRow,
-    NavigationComponent,
-  ],
+  imports: [MatFabButton, MatIcon, MatToolbar, MatToolbarRow, NavigationComponent],
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss',
   providers: [LoggerProvider],

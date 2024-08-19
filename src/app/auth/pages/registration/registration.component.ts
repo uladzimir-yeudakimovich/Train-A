@@ -22,6 +22,7 @@ import { formImports } from '../form.config';
 })
 export class RegistrationComponent {
   linkLogin = RoutePath.Login;
+<<<<<<< HEAD
 
   registrationForm: FormGroup = new FormGroup(
     {
@@ -30,6 +31,12 @@ export class RegistrationComponent {
         Validators.required,
         Validators.minLength(8),
       ]),
+=======
+  registrationForm: FormGroup = new FormGroup(
+    {
+      email: new FormControl('', [Validators.required, Validators.email]),
+      password: new FormControl('', [Validators.required, Validators.minLength(8)]),
+>>>>>>> 696896e (chore: run prettier)
       confirmPassword: new FormControl('', [Validators.required]),
     },
     { validators: this.matchValidator('password', 'confirmPassword') },
@@ -116,8 +123,11 @@ export class RegistrationComponent {
         matchingControl!.setErrors(error);
         return error;
       }
+<<<<<<< HEAD
       matchingControl!.setErrors(null);
       return null;
+=======
+>>>>>>> 696896e (chore: run prettier)
     };
   }
 }

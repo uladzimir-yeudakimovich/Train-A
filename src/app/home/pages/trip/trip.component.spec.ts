@@ -9,8 +9,7 @@ xdescribe('TripComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [TripComponent],
-    })
-      .compileComponents();
+    }).compileComponents();
 
     fixture = TestBed.createComponent(TripComponent);
     component = fixture.componentInstance;

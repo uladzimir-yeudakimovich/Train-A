@@ -1,7 +1,10 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatListItem, MatNavList } from '@angular/material/list';
 import {
-  ActivatedRoute, RouterLink, RouterLinkActive, RouterOutlet,
+  ActivatedRoute,
+  RouterLink,
+  RouterLinkActive,
+  RouterOutlet,
 } from '@angular/router';
 import { activatedRouteMock } from '@testing/mock-service';
 
@@ -21,11 +24,8 @@ describe('SidebarComponent', () => {
         RouterLinkActive,
         RouterOutlet,
       ],
-      providers: [
-        { provide: ActivatedRoute, useValue: activatedRouteMock },
-      ],
-    })
-      .compileComponents();
+      providers: [{ provide: ActivatedRoute, useValue: activatedRouteMock }],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(SidebarComponent);
     component = fixture.componentInstance;

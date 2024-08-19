@@ -45,8 +45,12 @@ describe('UserProfileComponent', () => {
         { provide: MatDialog, useValue: matDialogMock },
         ChangeDetectorRef,
       ],
+<<<<<<< HEAD
     })
       .compileComponents();
+=======
+    }).compileComponents();
+>>>>>>> 696896e (chore: run prettier)
 
     fixture = TestBed.createComponent(UserProfileComponent);
     component = fixture.componentInstance;
@@ -80,7 +84,10 @@ describe('UserProfileComponent', () => {
   });
 
   it('should submit the form and call updateUserInformation', () => {
-    const spy = jest.spyOn(component as unknown as { updateUserInformation: () => void }, 'updateUserInformation');
+    const spy = jest.spyOn(
+      component as unknown as { updateUserInformation: () => void },
+      'updateUserInformation',
+    );
     component.onSubmit();
 
     expect(component.editMode().email).toBe(false);
@@ -109,7 +116,10 @@ describe('UserProfileComponent', () => {
   });
 
   it('should call getUserInformation on init', () => {
-    const spy = jest.spyOn(component as unknown as { getUserInformation: () => void }, 'getUserInformation');
+    const spy = jest.spyOn(
+      component as unknown as { getUserInformation: () => void },
+      'getUserInformation',
+    );
     component.ngOnInit();
     expect(spy).toHaveBeenCalled();
   });

@@ -1,5 +1,8 @@
 import { ChangeDetectorRef, Component, effect } from '@angular/core';
+<<<<<<< HEAD
 import { MatListItem, MatNavList } from '@angular/material/list';
+=======
+>>>>>>> 696896e (chore: run prettier)
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { AuthService } from '@auth/services/auth.service';
 import { RoutePath } from '@shared/models/enums/route-path.enum';

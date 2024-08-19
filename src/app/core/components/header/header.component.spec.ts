@@ -14,6 +14,7 @@ describe('HeaderComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
+<<<<<<< HEAD
       imports: [
         HttpClientModule,
         MatToolbarModule,
@@ -25,6 +26,11 @@ describe('HeaderComponent', () => {
       ],
     })
       .compileComponents();
+=======
+      imports: [HttpClientModule, MatToolbarModule, MatButtonModule, MatIconModule],
+      providers: [{ provide: LoggerService, useValue: loggerServiceMock }],
+    }).compileComponents();
+>>>>>>> 696896e (chore: run prettier)
 
     fixture = TestBed.createComponent(HeaderComponent);
     component = fixture.componentInstance;

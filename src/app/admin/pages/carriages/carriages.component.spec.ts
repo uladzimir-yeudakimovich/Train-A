@@ -11,11 +11,8 @@ describe('CarriagesComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [CarriagesComponent],
-      providers: [
-        { provide: CarriageStore, useValue: mockCarriageStore },
-      ],
-    })
-      .compileComponents();
+      providers: [{ provide: CarriageStore, useValue: mockCarriageStore }],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(CarriagesComponent);
     component = fixture.componentInstance;
