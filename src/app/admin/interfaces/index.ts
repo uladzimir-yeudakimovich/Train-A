@@ -23,3 +23,9 @@ export interface Station {
   // TODO: create a separate interface for { id: number; distance: number }
   connectedTo: { id: number; distance: number }[];
 }
+
+export interface RouteInformation {
+  routeId: number;
+  stations: string[];
+  schedule: Schedule[];
+}
