@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { stationFormImports } from './station-form.config';
 import { FormArray, FormBuilder, FormControl } from '@angular/forms';
+import { AdminService } from '@admin/services/admin.service';
+import { toSignal } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-station-form',
@@ -10,6 +12,8 @@ import { FormArray, FormBuilder, FormControl } from '@angular/forms';
   styleUrl: './station-form.component.scss',
 })
 export class StationFormComponent {
+  stations = toSignal(this.adminService.getStations(), { initialValue: [] });
+
   stationForm = this.formBuilder.nonNullable.group(
     {
       city: [''],
@@ -20,7 +24,10 @@ export class StationFormComponent {
     { updateOn: 'blur' },
   );
 
-  constructor(private formBuilder: FormBuilder) {}
+  constructor(
+    private formBuilder: FormBuilder,
+    private adminService: AdminService,
+  ) {}
 
   get city(): FormControl<string> {
     return this.stationForm.controls?.['city'];

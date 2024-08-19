@@ -3,6 +3,7 @@ import { MatFormField, MatSuffix } from '@angular/material/form-field';
 import { MatInput, MatLabel } from '@angular/material/input';
 import { MatButton, MatIconButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 
 export const stationFormImports = [
   ReactiveFormsModule,
@@ -13,4 +14,5 @@ export const stationFormImports = [
   MatButton,
   MatIconButton,
   MatIcon,
+  MatAutocompleteModule,
 ];
