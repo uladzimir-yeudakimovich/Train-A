@@ -1,11 +1,13 @@
 import { Segment } from '@admin/interfaces';
 import { DatePipe } from '@angular/common';
 import { Component, computed, input } from '@angular/core';
+import { MatMiniFabButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
 
 @Component({
   selector: 'app-ride-card',
   standalone: true,
-  imports: [DatePipe],
+  imports: [DatePipe, MatMiniFabButton, MatIcon],
   templateUrl: './ride-card.component.html',
   styleUrl: './ride-card.component.scss',
 })

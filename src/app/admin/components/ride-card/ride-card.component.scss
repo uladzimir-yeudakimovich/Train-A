@@ -26,6 +26,7 @@
 .row {
   display: grid;
   grid-template-columns: 2fr 1fr;
+  column-gap: 20px;
 }
 
 .dates {
@@ -36,4 +37,15 @@
 
 .prices {
   padding-block: 50px;
+}
+
+.date-and-icon,
+.price-and-icon {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.icon:hover {
+  cursor: pointer;
 }
