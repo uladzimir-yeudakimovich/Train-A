@@ -6,12 +6,22 @@
         <div class="station">{{ station }}</div>
       }
     </div>
-    <div class="dates">
+    <div class="dates-and-prices">
       @for (segment of segments(); track $index) {
-        <div>Departure: {{ segment.time[0] | date: 'yyyy-MM-dd hh-mm a' }}</div>
-        <div>Arrival: {{ segment.time[1] | date: 'yyyy-MM-dd hh-mm a' }}</div>
+        <div class="row">
+          <div class="dates">
+            <div>Departure: {{ segment.time[0] | date: 'yyyy-MM-dd hh-mm a' }}</div>
+            <div>Arrival: {{ segment.time[1] | date: 'yyyy-MM-dd hh-mm a' }}</div>
+          </div>
+
+          <div class="prices">
+            <div>Price</div>
+            @for (price of prices()[$index]; track $index) {
+              <div>{{ price.type }} - ${{ price.value }}</div>
+            }
+          </div>
+        </div>
       }
     </div>
-    <div class="prices"></div>
   </div>
 </div>

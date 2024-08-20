@@ -1,6 +1,6 @@
 import { Segment } from '@admin/interfaces';
 import { DatePipe } from '@angular/common';
-import { Component, input } from '@angular/core';
+import { Component, computed, input } from '@angular/core';
 
 @Component({
   selector: 'app-ride-card',
@@ -15,4 +15,10 @@ export class RideCardComponent {
   stations = input.required<string[]>();
 
   segments = input.required<Segment[]>();
+
+  prices = computed(() => {
+    return this.segments().map((segment) =>
+      Object.entries(segment.price).map(([type, value]) => ({ type, value })),
+    );
+  });
 }
