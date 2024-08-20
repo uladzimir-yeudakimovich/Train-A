@@ -1,7 +1,7 @@
 import { RailRoute } from '@admin/models/route.model';
-import { RouteManagementService } from '@admin/services/route-management/route-management.service';
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { RouteCardComponent } from '../route-card/route-card.component';
+import { RouteStore } from '@admin/store/routes/routes.store';
 
 @Component({
   selector: 'app-route-list',
@@ -12,10 +12,9 @@ import { RouteCardComponent } from '../route-card/route-card.component';
 })
 export class RouteListComponent implements OnInit {
   routes = signal<RailRoute[]>([]);
-  
-  constructor(private routeService: RouteManagementService) {}
+  private routesStore = inject(RouteStore);
 
   ngOnInit() {
-    this.routeService.getRoutes().then(routes => this.routes.set(routes));    
+    this.routesStore.getRoutes().then(routes => this.routes.set(routes()));
   }
 }

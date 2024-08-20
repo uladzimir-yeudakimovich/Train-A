@@ -5,10 +5,9 @@
       @for (station of stations.controls; track station; let i = $index) {
         <mat-form-field class="form-field">
           <mat-label>City</mat-label>
-          <mat-select [formControlName]="i" (selectionChange)="onSetStation(i)">
-            @let prevStationId = i > 0 ? stations.controls[i - 1].value : null;
-            @let connectedCities = getConnectedStations(prevStationId);
-            @for (connectedStation of connectedCities(); track connectedStation.id) {
+          @let prevStationId = i > 0 ? stations.controls[i - 1].value : null;
+          <mat-select [formControlName]="i" (selectionChange)="onSetStation(i)" (click)="getConnectedStations(prevStationId)">
+            @for (connectedStation of connectedStations(); track connectedStation.id) {
               <mat-option [value]="connectedStation.id">{{ connectedStation.city }}</mat-option>
             }
           </mat-select>
