@@ -3,23 +3,27 @@
     <div class="col" formArrayName="stations">
       <!-- TODO: replace 'track station' (track $index doesn't update select option on delete) -->
       @for (station of stations.controls; track station; let i = $index) {
-        @let isLastSelected = i === stations.controls.length - 2;
         <mat-form-field class="form-field">
           <mat-label>City</mat-label>
           <mat-select [formControlName]="i" (selectionChange)="onSetStation(i)">
-            <mat-option value="city-one">First option</mat-option>
-            <mat-option value="city-two">Second option</mat-option>
+            @let prevStationId = i > 0 ? stations.controls[i - 1].value : null;
+            @let connectedCities = getConnectedStations(prevStationId);
+            @for (connectedStation of connectedCities(); track connectedStation.id) {
+              <mat-option [value]="connectedStation.id">{{ connectedStation.city }}</mat-option>
+            }
           </mat-select>
+
+          @let isLastSelected = i === stations.controls.length - 2;
           @if (isLastSelected) {
             <button
-              mat-fab
-              type="button"
-              class="delete-button"
-              (click)="onDeleteStation($event, i)">
-              <mat-icon>delete</mat-icon>
-            </button>
-          }
-        </mat-form-field>
+                mat-fab
+                type="button"
+                class="delete-button"
+                (click)="onDeleteStation($event, i)">
+                <mat-icon>delete</mat-icon>
+              </button>
+            }
+          </mat-form-field>
       }
     </div>
     <div class="col" formArrayName="carriages">
@@ -27,11 +31,16 @@
         <mat-form-field>
           <mat-label>Carriage</mat-label>
           <mat-select [formControlName]="i" (selectionChange)="onSetCarriage(i)">
-            <mat-option value="car-one">First option</mat-option>
-            <mat-option value="car-two">Second option</mat-option>
+            @for(car of carriageTypes(); track car.code) {
+              <mat-option [value]="car.code">{{ car.name }}</mat-option>
+            }
           </mat-select>
-          @if (!$last) { 
-            <button mat-fab type="button" class="delete-button" (click)="onDeleteCarriage($event, i)">
+          @if (!$last) {
+            <button
+              mat-fab
+              type="button"
+              class="delete-button"
+              (click)="onDeleteCarriage($event, i)">
               <mat-icon>delete</mat-icon>
             </button>
           }

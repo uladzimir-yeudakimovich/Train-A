@@ -26,7 +26,8 @@ export class RouteCardComponent implements OnInit {
 
   ngOnInit(): void {
     console.log('route(): ', this.route());
-    this.routeService.getStationCities(this.route().path).then(cities => this.cities.set(cities)); 
+    this.routeService.getStationCities(this.route().path)
+      .then(cities => this.cities.set(cities)); 
   }
 
   onAssignRideClick(): void {

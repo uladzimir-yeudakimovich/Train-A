@@ -8,5 +8,10 @@ export interface RailRoute {
 export interface Station {
     id: number;
     city: string;
-    connectedTo: Station[];
+    connectedTo: Connection[];
+}
+
+export interface Connection {
+    id: number;
+    distance: number;
 }
