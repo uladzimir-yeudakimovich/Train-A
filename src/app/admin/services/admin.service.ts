@@ -27,6 +27,11 @@ export class AdminService {
     );
   }
 
+  // TODO: Temporary method
+  getStations(): Observable<Station[]> {
+    return this.http.get<Station[]>('station').pipe(catchError((err) => throwError(() => err)));
+  }
+
   createRide() {}
 
   updateRide() {}
