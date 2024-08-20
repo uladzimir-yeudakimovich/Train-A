@@ -1,0 +1,16 @@
+@import "@shared/styles/variables.scss";
+
+.admin-nav {
+  &-list {
+    display: flex;
+    justify-content: end;
+    align-items: center;
+    gap: 1rem;
+    background-color: $primaryBackgroundColor;
+  }
+
+  &-item {
+    width: fit-content;
+    border-radius: 0.5rem !important;
+  }
+}

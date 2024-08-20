@@ -1,0 +1,89 @@
+@import '@shared/styles/variables.scss';
+
+$borderDistance: 0.25rem;
+$borderRadius: 7px;
+$borderOpacity: .5;
+$seatSize: 2rem;
+
+:host {
+  .seat {
+    position: relative;
+    width: $seatSize;
+    height: $seatSize;
+    margin: 10px;
+    padding: 0;
+    border: 0;
+    border-radius: 5px;
+    font-size: 1.1rem;
+    
+    &.available, &.selected { 
+      color: $primaryLightTextColor;
+      cursor: pointer;
+    }
+    
+    &::before {
+      content: '';
+      position: absolute;
+      border: 3px solid;
+    }
+    
+    &.right::before,
+    &.left::before {
+      top: -$borderDistance;
+      bottom: -$borderDistance;
+      width: $seatSize*.5+$borderDistance;
+    }
+    
+    &.top::before,
+    &.bottom::before {
+      left: -$borderDistance;
+      right: -$borderDistance;
+      height: $seatSize*.5+$borderDistance;
+    }
+    
+    &.left:before {
+      right: -$borderDistance;
+      border-left: 0;
+      border-radius: 0 $borderRadius $borderRadius 0;
+    }
+    
+    &.right::before {
+      left: -$borderDistance;
+      border-right: 0;
+      border-radius: $borderRadius 0 0 $borderRadius;
+    }
+    
+    &.top::before {
+      top: -$borderDistance;
+      border-bottom: 0;
+      border-radius: $borderRadius $borderRadius 0 0;
+    }
+    
+    &.bottom::before {
+      bottom: -$borderDistance;
+      border-top: 0;
+      border-radius: 0 0 $borderRadius $borderRadius;
+    }
+  }
+
+  .available {
+    background-color: $availableSeatColor;
+    &::before {
+      border-color: rgba($availableSeatColor, $borderOpacity);
+    }
+  }
+  
+  .reserved {
+    background-color: $reservedSeatColor;
+    &::before {
+      border-color: rgba($reservedSeatColor, $borderOpacity);
+    }
+  }
+  
+  .selected {
+    background-color: $selectedSeatColor;
+    &::before {
+      border-color: rgba($selectedSeatColor, $borderOpacity);
+    }
+  }
+}

@@ -1,1 +1,17 @@
-<p>sidebar works!</p>
+<mat-nav-list class="admin-nav-list" role="navigation">
+  @for (item of navItems; track item.label) {
+    <a
+      class="admin-nav-item"
+      mat-list-item
+      [routerLink]="item.link"
+      [routerLinkActiveOptions]="{ exact: item.exact ?? false }"
+      routerLinkActive
+      #rla="routerLinkActive"
+      [activated]="rla.isActive"
+      role="link">
+      {{ item.label }}
+    </a>
+  }
+</mat-nav-list>
+
+<router-outlet />
