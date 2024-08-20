@@ -1,6 +1,6 @@
 import { computed, inject } from '@angular/core';
 import { signalStore, type, patchState, withMethods, withComputed } from '@ngrx/signals';
-import { withEntities, setAllEntities, removeEntity } from '@ngrx/signals/entities';
+import { withEntities, setAllEntities, removeEntity, addEntity } from '@ngrx/signals/entities';
 import { AdminService } from '@admin/services/admin.service';
 import { StationInterface } from './../models/station.model';
 import { StationFormInterface } from '@admin/models/station-form.model';
@@ -21,7 +21,8 @@ export const StationStore = signalStore(
     },
 
     async addStation(body: StationFormInterface): Promise<void> {
-      await adminService.postStation(body);
+      const station = await adminService.postStation(body);
+      patchState(store, addEntity(station, { collection: 'stations' }));
     },
   })),
 

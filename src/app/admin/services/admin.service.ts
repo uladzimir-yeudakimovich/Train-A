@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { firstValueFrom } from 'rxjs';
+import { firstValueFrom, map } from 'rxjs';
 import { StationInterface } from '@admin/models/station.model';
 import { StationFormInterface } from '@admin/models/station-form.model';
+import { mapFromIdToStation } from '@admin/utils/mapFromIdToStation';
 
 @Injectable({
   providedIn: 'root',
@@ -18,7 +19,11 @@ export class AdminService {
     return firstValueFrom(this.http.delete<StationInterface>(`station/${id}`));
   }
 
-  postStation(body: StationFormInterface): Promise<{ id: number }> {
-    return firstValueFrom(this.http.post<{ id: number }>('station', body));
+  postStation(body: StationFormInterface): Promise<StationInterface> {
+    return firstValueFrom(
+      this.http
+        .post<{ id: number }>('station', body)
+        .pipe(map((data) => mapFromIdToStation(data, body))),
+    );
   }
 }
