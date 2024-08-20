@@ -1,5 +1,5 @@
-import { inject } from '@angular/core';
-import { signalStore, type, patchState, withMethods } from '@ngrx/signals';
+import { computed, inject } from '@angular/core';
+import { signalStore, type, patchState, withMethods, withComputed } from '@ngrx/signals';
 import { withEntities, setAllEntities, removeEntity } from '@ngrx/signals/entities';
 import { AdminService } from '@admin/services/admin.service';
 import { StationInterface } from './../models/station.model';
@@ -19,5 +19,11 @@ export const StationStore = signalStore(
       await adminService.deleteStation(id);
       patchState(store, removeEntity(id, { collection: 'stations' }));
     },
+  })),
+
+  withComputed(({ stationsEntities }) => ({
+    locations: computed(() =>
+      stationsEntities().map(({ latitude, longitude }) => [latitude, longitude]),
+    ),
   })),
 );
