@@ -1,1 +1,17 @@
-<p>ride-card works!</p>
+<div class="card">
+  <h5 class="title">Ride {{ rideId() }}</h5>
+  <div class="content">
+    <div class="stations">
+      @for (station of stations(); track $index) {
+        <div class="station">{{ station }}</div>
+      }
+    </div>
+    <div class="dates">
+      @for (segment of segments(); track $index) {
+        <div>Departure: {{ segment.time[0] | date: 'yyyy-MM-dd hh-mm a' }}</div>
+        <div>Arrival: {{ segment.time[1] | date: 'yyyy-MM-dd hh-mm a' }}</div>
+      }
+    </div>
+    <div class="prices"></div>
+  </div>
+</div>

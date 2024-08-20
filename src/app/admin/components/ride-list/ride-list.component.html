@@ -1,1 +1,10 @@
-<p>ride-list works!</p>
+@if (store.loading()) {
+  <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
+} @else {
+  @for (ride of store.schedule(); track $index) {
+    <app-ride-card
+      [rideId]="ride.rideId"
+      [stations]="store.stations()"
+      [segments]="ride.segments" />
+  }
+}
