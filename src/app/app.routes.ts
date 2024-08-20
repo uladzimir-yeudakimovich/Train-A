@@ -47,12 +47,12 @@ export const routes: Routes = [
   {
     path: RoutePath.Admin,
     title: 'Admin',
-    loadComponent: () => import('@admin/components/sidebar/sidebar.component').then(m => m.SidebarComponent),
+    loadComponent: () => import('@admin/pages/routes/routes.component').then(m => m.RoutesComponent),
     canActivate: [AuthGuard, AdminRoleGuard],
     children: [
       {
         path: '',
-        redirectTo: RoutePath.AdminStations,
+        redirectTo: RoutePath.AdminRoutes,
         pathMatch: 'full',
         canActivateChild: [AuthGuard, AdminRoleGuard],
       },

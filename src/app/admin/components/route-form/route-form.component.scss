@@ -1,0 +1,22 @@
+@import '@shared/styles/variables.scss';
+
+:host {
+  .cancel-button,
+  .reset-button {
+    background-color: $lightGrey;
+  }
+
+  .form-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+
+    .col {
+      display: flex;
+      flex-wrap: wrap;
+      flex-direction: column;
+      margin: 1rem;
+      width: calc(50% - 2rem);
+    }
+  }
+}

@@ -1,0 +1,14 @@
+:host {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin: 0 5rem;
+
+  .route-form {
+    margin-top: 1rem;
+
+    .button-center {
+      margin: 0 auto;
+    }
+  }
+}

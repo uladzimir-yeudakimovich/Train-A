@@ -1,1 +1,9 @@
+<div class="route-form">
+  @if (!displayCreateRouteForm()) {
+    <button mat-flat-button class="button-center" (click)="toggleRouteForm()">Create new route</button>
+  } @else {
+    <app-route-form (closeForm)="toggleRouteForm()"></app-route-form>
+  }
+</div>
+
 <app-route-list></app-route-list>
