@@ -1,0 +1,9 @@
+@let state = seat().state;
+<button
+  class="seat"
+  [ngClass]="[direction(), state]"
+  [disabled]="state === SeatState.Reserved"
+  (click)="onSeatClick()"
+  >
+  {{ seat().number }}
+</button>
