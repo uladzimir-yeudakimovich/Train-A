@@ -1,28 +1,36 @@
 <form [formGroup]="routeForm" (ngSubmit)="onSubmit()">
   <div class="form-grid">
-    <div class="col">
-      @for (station of stations.controls; track $index) {
-          <mat-form-field>
-            <mat-label>City</mat-label>
-            <mat-select (selectionChange)="onAddStation()">
-              <mat-option value="city-one">First option</mat-option>
-              <mat-option value="city-two">Second option</mat-option>
-            </mat-select>
-          </mat-form-field>
+    <div class="col" formArrayName="stations">
+      @for (station of stations.controls; track $index; let i = $index) {
+        <mat-form-field
+        >
+        <mat-label>City</mat-label>
+        <mat-select
+        [formControlName]="i"
+          (selectionChange)="onAddStation(i)"
+          >
+            <mat-option value="city-one">First option</mat-option>
+            <mat-option value="city-two">Second option</mat-option>
+          </mat-select>
+        </mat-form-field>
       }
     </div>
-    <div class="col">
-      @for (car of carriages.controls; track $index) {
-          <mat-form-field>
-            <mat-label>Carriage</mat-label>
-            <mat-select (selectionChange)="onAddCarriage()">
-              <mat-option value="car-one">First option</mat-option>
-              <mat-option value="car-two">Second option</mat-option>
-            </mat-select>
-          </mat-form-field>
+    <div class="col" formArrayName="carriages">
+      @for (car of carriages.controls; track $index; let i = $index) {
+        <mat-form-field
+        >
+        <mat-label>Carriage</mat-label>
+        <mat-select
+        [formControlName]="i"
+          (selectionChange)="onAddCarriage(i)"
+          >
+            <mat-option value="car-one">First option</mat-option>
+            <mat-option value="car-two">Second option</mat-option>
+          </mat-select>
+        </mat-form-field>
       }
     </div>
-</div>
+  </div>
   <button mat-flat-button (click)="onClose()" class="cancel-button">Cancel</button>
   <button mat-flat-button (click)="onReset()" class="reset-button">Reset</button>
   <button mat-flat-button type="submit" [disabled]="routeForm.invalid">Submit</button>

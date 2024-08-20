@@ -1,5 +1,13 @@
 import { Component, OnInit, output } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  AbstractControl,
+  FormArray,
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  ReactiveFormsModule,
+  ValidationErrors,
+} from '@angular/forms';
 import { MatButton } from '@angular/material/button';
 import { MatOptionModule } from '@angular/material/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -9,12 +17,18 @@ import { MatSelectModule } from '@angular/material/select';
 @Component({
   selector: 'app-route-form',
   standalone: true,
-  imports: [MatFormFieldModule, MatOptionModule, MatSelectionList, MatSelectModule, MatButton, ReactiveFormsModule],
+  imports: [
+    MatFormFieldModule,
+    MatOptionModule,
+    MatSelectionList,
+    MatSelectModule,
+    MatButton,
+    ReactiveFormsModule,
+  ],
   templateUrl: './route-form.component.html',
   styleUrl: './route-form.component.scss',
 })
 export class RouteFormComponent implements OnInit {
-  // TODO: disable select inputs except the last one
   // TODO: add Trash button to the last select input
   // TODO: list connectedTo stations in select inputs
 
@@ -25,16 +39,19 @@ export class RouteFormComponent implements OnInit {
 
   ngOnInit(): void {
     this.routeForm = this.formBuilder.group({
-      stations: this.formBuilder.array([this.createFormControl()]),
-      carriages: this.formBuilder.array([this.createFormControl()]),
+      stations: this.formBuilder.array([this.createFormControl()], this.minArrayLength(3)),
+      carriages: this.formBuilder.array([this.createFormControl()], this.minArrayLength(3)),
     });
   }
 
   onSubmit() {
+    this.enableFormArrays();
     console.log('Submitted', this.routeForm.value);
+    this.onReset();
   }
 
   onReset() {
+    this.enableFormArrays();
     this.routeForm.reset();
     this.stations.clear();
     this.carriages.clear();
@@ -46,12 +63,12 @@ export class RouteFormComponent implements OnInit {
     this.closeForm.emit(true);
   }
 
-  onAddStation() {
-    this.stations.push(this.createFormControl());
+  onAddStation(idx: number) {
+    this.updateFormArray(this.stations, idx);
   }
 
-  onAddCarriage() {
-    this.carriages.push(this.createFormControl());
+  onAddCarriage(idx: number) {
+    this.updateFormArray(this.carriages, idx);
   }
 
   get stations() {
@@ -62,7 +79,35 @@ export class RouteFormComponent implements OnInit {
     return this.routeForm.get('carriages') as FormArray;
   }
 
+  private updateFormArray(array: FormArray, idx: number) {
+    const isLast = idx === array.length - 1;
+    if (!isLast) return;
+
+    if (array.length > 1) {
+      array.at(array.length - 2).disable();
+    }
+    array.push(this.createFormControl());
+  }
+
   private createFormControl() {
-    return this.formBuilder.control('', Validators.required);
+    return new FormControl('');
+  }
+
+  private minArrayLength(min: number) {
+    // the last value is always empty, so check min + 1
+    const minRequiredLength = min + 1;
+    return (control: AbstractControl): ValidationErrors | null => {
+      if (control instanceof FormArray) {
+        return control.length >= minRequiredLength
+          ? null
+          : { minArrayLength: { requiredLength: minRequiredLength, actualLength: control.length } };
+      }
+      return null;
+    };
+  }
+
+  private enableFormArrays() {
+    this.stations.enable();
+    this.carriages.enable();
   }
 }
