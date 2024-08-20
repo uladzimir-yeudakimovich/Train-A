@@ -1,14 +1,5 @@
-import { Station } from '@admin/models/station.model';
-import { RouteManagementService } from '@admin/services/route-management/route-management.service';
 import { StationStore } from '@admin/store/stations/stations.store';
-import {
-  Component,
-  inject,
-  input,
-  OnInit,
-  output,
-  signal,
-} from '@angular/core';
+import { Component, computed, inject, input, OnInit, output, signal } from '@angular/core';
 import {
   AbstractControl,
   FormArray,
@@ -47,14 +38,27 @@ export class RouteFormComponent implements OnInit {
   closeForm = output<boolean>();
   routeForm!: FormGroup;
   carriageTypes = signal<Partial<Carriage>[]>([]);
-  connectedStations = signal<Station[]>([]);
+
+  connectedStationsMap = computed(() => {
+    const stations = this.stationStore.stationsEntities();
+    const stationsMap = this.stationStore.stationsEntityMap();
+
+    return (stationId: number) => {
+      if (!stationId) {
+        return stations;
+      }
+      const fromStation = stations[stationId];
+      const connectedStations = fromStation.connectedTo.map(
+        (connection) => stationsMap[connection.id],
+      );
+      return connectedStations;
+    };
+  });
+
   private carriageStore = inject(CarriageStore);
   private stationStore = inject(StationStore);
 
-  constructor(
-    private formBuilder: FormBuilder,
-    private routeService: RouteManagementService,
-  ) {}
+  constructor(private formBuilder: FormBuilder) {}
 
   ngOnInit(): void {
     this.routeForm = this.formBuilder.group({
@@ -111,19 +115,6 @@ export class RouteFormComponent implements OnInit {
   onDeleteCarriage(event: Event, idx: number) {
     event.stopPropagation();
     this.carriages.removeAt(idx);
-  }
-
-  getConnectedStations(stationId?: number) {
-    if (!stationId) {
-      this.stationStore.getStations().then((stations) => {
-        this.connectedStations.set(stations());
-      });
-      return;
-    }
-
-    this.routeService.getConnectedStations(stationId).then((stations) => {
-      this.connectedStations.set(stations);
-    });
   }
 
   get stations() {

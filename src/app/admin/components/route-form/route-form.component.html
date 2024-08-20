@@ -2,12 +2,13 @@
   <div class="form-grid">
     <div class="col" formArrayName="stations">
       <!-- TODO: replace 'track station' (track $index doesn't update select option on delete) -->
+      @let connectedStations = connectedStationsMap();
       @for (station of stations.controls; track station; let i = $index) {
         <mat-form-field class="form-field">
           <mat-label>City</mat-label>
           @let prevStationId = i > 0 ? stations.controls[i - 1].value : null;
-          <mat-select [formControlName]="i" (selectionChange)="onSetStation(i)" (click)="getConnectedStations(prevStationId)">
-            @for (connectedStation of connectedStations(); track connectedStation.id) {
+          <mat-select [formControlName]="i" (selectionChange)="onSetStation(i)">
+            @for (connectedStation of connectedStations(prevStationId); track connectedStation.id) {
               <mat-option [value]="connectedStation.id">{{ connectedStation.city }}</mat-option>
             }
           </mat-select>
@@ -26,7 +27,7 @@
       }
     </div>
     <div class="col" formArrayName="carriages">
-      @for (car of carriages.controls; track car; let i = $index) {
+      @for (carField of carriages.controls; track carField; let i = $index) {
         <mat-form-field>
           <mat-label>Carriage</mat-label>
           <mat-select [formControlName]="i" (selectionChange)="onSetCarriage(i)">
