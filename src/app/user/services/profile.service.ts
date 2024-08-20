@@ -13,13 +13,17 @@ const httpOptions = {
   providedIn: 'root',
 })
 export class ProfileService {
-  userRole = signal<UserRole['role']>('user');
+  private role = localStorage.getItem('userRole');
+  userRole = signal<UserRole['role']>(this.role === 'manager' ? 'manager' : 'user');
 
   constructor(private readonly http: HttpClient) {}
 
   getUserInformation(): Observable<UserRole> {
     return this.http.get<UserRole>('profile', httpOptions).pipe(
-      tap(res => this.userRole.set(res.role)),
+      tap(res => {
+        this.userRole.set(res.role);
+        localStorage.setItem('userRole', res.role);
+      }),
       catchError((error) => throwError(() => error))
     );
   }
