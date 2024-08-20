@@ -1,4 +1,5 @@
-import { RailRoute, Station } from '@admin/models/route.model';
+import { RailRoute } from '@admin/models/route.model';
+import { Station } from '@admin/models/station.model';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Carriage } from '@shared/models/interfaces/carriage.model';
