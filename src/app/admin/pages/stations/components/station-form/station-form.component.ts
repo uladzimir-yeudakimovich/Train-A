@@ -1,6 +1,7 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
 import { stationFormImports } from './station-form.config';
 import { FormArray, FormBuilder, FormControl } from '@angular/forms';
+import { StationStore } from '@admin/store/stations.store';
 
 @Component({
   selector: 'app-station-form',
@@ -11,6 +12,11 @@ import { FormArray, FormBuilder, FormControl } from '@angular/forms';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class StationFormComponent {
+  private adminStore = inject(StationStore);
+  private formBuilder = inject(FormBuilder);
+
+  stations = computed(() => this.adminStore.stationsEntities());
+
   stationForm = this.formBuilder.nonNullable.group(
     {
       city: [''],
@@ -20,8 +26,6 @@ export class StationFormComponent {
     },
     { updateOn: 'blur' },
   );
-
-  constructor(private formBuilder: FormBuilder) {}
 
   get city(): FormControl<string> {
     return this.stationForm.controls?.['city'];
@@ -39,16 +43,20 @@ export class StationFormComponent {
     return this.stationForm.controls?.['connected'];
   }
 
-  addCity(): void {
+  addField(): void {
     const city = this.formBuilder.control('');
     this.connected.push(city);
   }
 
-  removeCity(index: number): void {
+  removeField(index: number): void {
     this.connected.removeAt(index);
   }
 
   createId(): string {
     return (Date.now() * Math.random()).toString(36);
+  }
+
+  createStation() {
+    console.log(this.stationForm.value);
   }
 }

@@ -1,4 +1,4 @@
-<form class="form" [formGroup]="stationForm">
+<form class="form" [formGroup]="stationForm" (ngSubmit)="createStation()">
   <mat-form-field appearance="outline" subscriptSizing="dynamic" floatLabel="always">
     <mat-label> City </mat-label>
 
@@ -23,17 +23,21 @@
           <mat-label>Connected</mat-label>
         }
 
-        <input matInput [formControlName]="$index" />
+        <mat-select [formControlName]="$index">
+          @for (station of stations(); track station.id) {
+            <mat-option [value]="station.id">{{ station.city }}</mat-option>
+          }
+        </mat-select>
 
         @if ($index !== 0) {
-          <button mat-icon-button matSuffix type="button" (click)="removeCity($index)">
+          <button mat-icon-button matSuffix type="button" (click)="removeField($index)">
             <mat-icon>close</mat-icon>
           </button>
         }
       </mat-form-field>
     }
 
-    <button class="form-control" mat-raised-button type="button" (click)="addCity()">
+    <button class="form-control" mat-raised-button type="button" (click)="addField()">
       add another city
     </button>
 
