@@ -3,6 +3,7 @@ import { signalStore, type, patchState, withMethods, withComputed } from '@ngrx/
 import { withEntities, setAllEntities, removeEntity } from '@ngrx/signals/entities';
 import { AdminService } from '@admin/services/admin.service';
 import { StationInterface } from './../models/station.model';
+import { StationFormInterface } from '@admin/models/station-form.model';
 
 export const StationStore = signalStore(
   { providedIn: 'root' },
@@ -18,6 +19,10 @@ export const StationStore = signalStore(
     async deleteStation(id: number): Promise<void> {
       await adminService.deleteStation(id);
       patchState(store, removeEntity(id, { collection: 'stations' }));
+    },
+
+    async addStation(body: StationFormInterface): Promise<void> {
+      await adminService.postStation(body);
     },
   })),
 

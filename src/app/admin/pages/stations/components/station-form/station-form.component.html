@@ -3,21 +3,42 @@
     <mat-label> City </mat-label>
 
     <input matInput type="text" formControlName="city" name="city" />
+
+    @if (city.errors?.['required']) {
+      <mat-error>Required</mat-error>
+    }
   </mat-form-field>
 
   <mat-form-field appearance="outline" subscriptSizing="dynamic" floatLabel="always">
     <mat-label> Latitude </mat-label>
 
     <input matInput type="number" formControlName="latitude" name="latitude" />
+
+    @if (latitude.errors?.['required']) {
+      <mat-error>Required</mat-error>
+    }
+
+    @if (latitude.errors?.['max'] || latitude.errors?.['min']) {
+      <mat-error>Invalid number</mat-error>
+    }
   </mat-form-field>
 
   <mat-form-field appearance="outline" subscriptSizing="dynamic" floatLabel="always">
     <mat-label> Longitude </mat-label>
+
     <input matInput type="number" formControlName="longitude" name="longitude" />
+
+    @if (longitude.errors?.['required']) {
+      <mat-error>Required</mat-error>
+    }
+
+    @if (longitude.errors?.['max'] || longitude.errors?.['min']) {
+      <mat-error>Invalid number</mat-error>
+    }
   </mat-form-field>
 
-  <ng-container formArrayName="connected">
-    @for (control of connected.controls; track createId()) {
+  <ng-container formArrayName="relations">
+    @for (control of relations.controls; track createId()) {
       <mat-form-field appearance="outline" subscriptSizing="dynamic" floatLabel="always">
         @if ($index === 0) {
           <mat-label>Connected</mat-label>
@@ -34,6 +55,10 @@
             <mat-icon>close</mat-icon>
           </button>
         }
+
+        @if (relations.controls.at($index)?.errors?.['required']) {
+          <mat-error>Required</mat-error>
+        }
       </mat-form-field>
     }
 
@@ -41,6 +66,8 @@
       add another city
     </button>
 
-    <button class="form-control" mat-raised-button type="submit">save</button>
+    <button class="form-control" mat-raised-button type="submit" [disabled]="stationForm.invalid">
+      save
+    </button>
   </ng-container>
 </form>

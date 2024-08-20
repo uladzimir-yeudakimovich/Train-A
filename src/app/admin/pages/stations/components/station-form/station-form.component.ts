@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
 import { stationFormImports } from './station-form.config';
-import { FormArray, FormBuilder, FormControl } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, Validators } from '@angular/forms';
 import { StationStore } from '@admin/store/stations.store';
 
 @Component({
@@ -19,10 +19,10 @@ export class StationFormComponent {
 
   stationForm = this.formBuilder.nonNullable.group(
     {
-      city: [''],
-      latitude: [null],
-      longitude: [null],
-      connected: this.formBuilder.array([this.formBuilder.control('')]),
+      city: ['', Validators.required],
+      latitude: [null, [Validators.max(90), Validators.min(-90)]],
+      longitude: [null, [Validators.max(180), Validators.min(-180)]],
+      relations: this.formBuilder.array([this.formBuilder.control('', Validators.required)]),
     },
     { updateOn: 'blur' },
   );
@@ -39,17 +39,17 @@ export class StationFormComponent {
     return this.stationForm.controls?.['longitude'];
   }
 
-  get connected(): FormArray<FormControl<string | null>> {
-    return this.stationForm.controls?.['connected'];
+  get relations(): FormArray<FormControl<string | null>> {
+    return this.stationForm.controls?.['relations'];
   }
 
   addField(): void {
-    const city = this.formBuilder.control('');
-    this.connected.push(city);
+    const city = this.formBuilder.control('', Validators.required);
+    this.relations.push(city);
   }
 
   removeField(index: number): void {
-    this.connected.removeAt(index);
+    this.relations.removeAt(index);
   }
 
   createId(): string {
@@ -57,6 +57,13 @@ export class StationFormComponent {
   }
 
   createStation() {
-    console.log(this.stationForm.value);
+    const city = this.city.value ?? '';
+    const latitude = Number(this.latitude.value ?? 0);
+    const longitude = Number(this.longitude.value ?? 0);
+    const relations = (this.relations.value ?? []).map((id) => Number(id));
+
+    const body = { city, latitude, longitude, relations };
+
+    this.adminStore.addStation(body);
   }
 }
