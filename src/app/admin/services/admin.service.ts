@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { firstValueFrom, map } from 'rxjs';
+import { mapFromIdToStation } from '@admin/utils/mapFromIdToStation';
 import { StationInterface } from '@admin/models/station.model';
 import { StationFormInterface } from '@admin/models/station-form.model';
-import { mapFromIdToStation } from '@admin/utils/mapFromIdToStation';
 
 @Injectable({
   providedIn: 'root',
