@@ -1,1 +1,10 @@
-<p>rides works!</p>
+<div class="layout">
+  <div class="title-and-button">
+    <button class="btn" mat-mini-fab>
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    <h3 class="title">Route {{ routeId() }}</h3>
+  </div>
+  <button class="btn btn-create-ride" mat-flat-button>Create Ride</button>
+  <app-ride-list />
+</div>
