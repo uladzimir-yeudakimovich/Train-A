@@ -3,14 +3,14 @@ import {
   AbstractControl,
   FormArray,
   FormBuilder,
-  FormControl,
   FormGroup,
   ReactiveFormsModule,
   ValidationErrors,
 } from '@angular/forms';
-import { MatButton } from '@angular/material/button';
+import { MatButton, MatFabButton } from '@angular/material/button';
 import { MatOptionModule } from '@angular/material/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIcon } from '@angular/material/icon';
 import { MatSelectionList } from '@angular/material/list';
 import { MatSelectModule } from '@angular/material/select';
 
@@ -24,12 +24,13 @@ import { MatSelectModule } from '@angular/material/select';
     MatSelectModule,
     MatButton,
     ReactiveFormsModule,
+    MatIcon,
+    MatFabButton,
   ],
   templateUrl: './route-form.component.html',
   styleUrl: './route-form.component.scss',
 })
 export class RouteFormComponent implements OnInit {
-  // TODO: add Trash button to the last select input
   // TODO: list connectedTo stations in select inputs
 
   closeForm = output<boolean>();
@@ -63,12 +64,34 @@ export class RouteFormComponent implements OnInit {
     this.closeForm.emit(true);
   }
 
-  onAddStation(idx: number) {
-    this.updateFormArray(this.stations, idx);
+  onSetStation(idx: number) {
+    const stationsNum = this.stations.length - 1;
+    const isLast = idx === stationsNum;
+    if (!isLast) return;
+
+    if (stationsNum) {
+      this.stations.at(stationsNum - 1).disable();
+    }
+    this.stations.push(this.createFormControl());
   }
 
-  onAddCarriage(idx: number) {
-    this.updateFormArray(this.carriages, idx);
+  onSetCarriage(idx: number) {
+    const carriagesNum = this.carriages.length - 1;
+    const isLast = idx === carriagesNum;
+    if (!isLast) return;
+
+    this.carriages.push(this.createFormControl());
+  }
+
+  onDeleteStation(event: Event, idx: number) {
+    event.stopPropagation();
+    this.stations.removeAt(idx);
+    this.stations.at(idx - 1).enable();
+  }
+
+  onDeleteCarriage(event: Event, idx: number) {
+    event.stopPropagation();
+    this.carriages.removeAt(idx);
   }
 
   get stations() {
@@ -79,18 +102,8 @@ export class RouteFormComponent implements OnInit {
     return this.routeForm.get('carriages') as FormArray;
   }
 
-  private updateFormArray(array: FormArray, idx: number) {
-    const isLast = idx === array.length - 1;
-    if (!isLast) return;
-
-    if (array.length > 1) {
-      array.at(array.length - 2).disable();
-    }
-    array.push(this.createFormControl());
-  }
-
   private createFormControl() {
-    return new FormControl('');
+    return this.formBuilder.control('');
   }
 
   private minArrayLength(min: number) {

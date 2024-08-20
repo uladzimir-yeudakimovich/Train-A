@@ -1,37 +1,45 @@
-<form [formGroup]="routeForm" (ngSubmit)="onSubmit()">
+<form [formGroup]="routeForm" (ngSubmit)="onSubmit()" class="form">
   <div class="form-grid">
     <div class="col" formArrayName="stations">
-      @for (station of stations.controls; track $index; let i = $index) {
-        <mat-form-field
-        >
-        <mat-label>City</mat-label>
-        <mat-select
-        [formControlName]="i"
-          (selectionChange)="onAddStation(i)"
-          >
+      <!-- TODO: replace 'track station' (track $index doesn't update select option on delete) -->
+      @for (station of stations.controls; track station; let i = $index) {
+        @let isLastSelected = i === stations.controls.length - 2;
+        <mat-form-field class="form-field">
+          <mat-label>City</mat-label>
+          <mat-select [formControlName]="i" (selectionChange)="onSetStation(i)">
             <mat-option value="city-one">First option</mat-option>
             <mat-option value="city-two">Second option</mat-option>
           </mat-select>
+          @if (isLastSelected) {
+            <button
+              mat-fab
+              type="button"
+              class="delete-button"
+              (click)="onDeleteStation($event, i)">
+              <mat-icon>delete</mat-icon>
+            </button>
+          }
         </mat-form-field>
       }
     </div>
     <div class="col" formArrayName="carriages">
-      @for (car of carriages.controls; track $index; let i = $index) {
-        <mat-form-field
-        >
-        <mat-label>Carriage</mat-label>
-        <mat-select
-        [formControlName]="i"
-          (selectionChange)="onAddCarriage(i)"
-          >
+      @for (car of carriages.controls; track car; let i = $index) {
+        <mat-form-field>
+          <mat-label>Carriage</mat-label>
+          <mat-select [formControlName]="i" (selectionChange)="onSetCarriage(i)">
             <mat-option value="car-one">First option</mat-option>
             <mat-option value="car-two">Second option</mat-option>
           </mat-select>
+          @if (!$last) { 
+            <button mat-fab type="button" class="delete-button" (click)="onDeleteCarriage($event, i)">
+              <mat-icon>delete</mat-icon>
+            </button>
+          }
         </mat-form-field>
       }
     </div>
   </div>
-  <button mat-flat-button (click)="onClose()" class="cancel-button">Cancel</button>
-  <button mat-flat-button (click)="onReset()" class="reset-button">Reset</button>
+  <button mat-flat-button (click)="onClose()" class="cancel-button" type="button">Cancel</button>
+  <button mat-flat-button (click)="onReset()" class="reset-button" type="button">Reset</button>
   <button mat-flat-button type="submit" [disabled]="routeForm.invalid">Submit</button>
 </form>
