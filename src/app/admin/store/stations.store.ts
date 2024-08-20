@@ -12,7 +12,6 @@ export const StationStore = signalStore(
   withMethods((store, adminService = inject(AdminService)) => ({
     async getStations(): Promise<void> {
       const stations = await adminService.getStations();
-
       patchState(store, setAllEntities(stations, { collection: 'stations' }));
     },
 
