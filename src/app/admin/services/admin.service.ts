@@ -11,7 +11,7 @@ export class AdminService {
 
   getRouteInformation(routeId: number): Observable<RouteInformation> {
     // TODO: Temporary implementation
-    return this.http.get<Station[]>('station').pipe(
+    return this.getStations().pipe(
       switchMap((stationResponse) => {
         return this.http.get<Route>(`route/${routeId}`).pipe(
           switchMap((routeResponse) => {
