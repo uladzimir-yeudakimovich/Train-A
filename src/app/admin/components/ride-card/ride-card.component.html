@@ -22,7 +22,7 @@
                 <input type="time" [value]="getTimeFromISO(segment.time[0])" />
               }
 
-              <mat-icon class="icon" color="primary" (click)="toggleEdit($index, 'departure')">
+              <mat-icon class="icon" color="primary" (click)="toggleEditMode($index, 'departure')">
                 {{ edit.departure ? 'save' : 'edit' }}
               </mat-icon>
             </div>
@@ -36,7 +36,7 @@
                 <input type="time" [value]="getTimeFromISO(segment.time[1])" />
               }
 
-              <mat-icon class="icon" color="primary" (click)="toggleEdit($index, 'arrival')">
+              <mat-icon class="icon" color="primary" (click)="toggleEditMode($index, 'arrival')">
                 {{ edit.arrival ? 'save' : 'edit' }}
               </mat-icon>
             </div>
@@ -45,7 +45,7 @@
           <div class="prices">
             <div class="price-and-icon">
               <span>Price</span>
-              <mat-icon class="icon" color="primary" (click)="toggleEdit($index, 'price')">
+              <mat-icon class="icon" color="primary" (click)="toggleEditMode($index, 'price')">
                 {{ edit.price ? 'save' : 'edit' }}
               </mat-icon>
             </div>

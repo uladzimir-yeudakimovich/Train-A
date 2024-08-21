@@ -28,9 +28,9 @@ export class RideCardComponent {
     return this.segments().map(() => signal({ departure: false, arrival: false, price: false }));
   });
 
-  toggleEdit = (index: number, type: 'departure' | 'arrival' | 'price') => {
+  toggleEditMode(index: number, type: 'departure' | 'arrival' | 'price'): void {
     this.editMode()[index].update((value) => ({ ...value, [type]: !value[type] }));
-  };
+  }
 
   getDateFromISO(isoString: string): string {
     const date = new Date(isoString);
