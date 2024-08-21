@@ -1,5 +1,5 @@
 import { RailRoute } from '@admin/models/route.model';
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, inject, OnInit, Signal } from '@angular/core';
 import { RouteCardComponent } from '../route-card/route-card.component';
 import { RouteStore } from '@admin/store/routes/routes.store';
 
@@ -11,10 +11,11 @@ import { RouteStore } from '@admin/store/routes/routes.store';
   styleUrl: './route-list.component.scss'
 })
 export class RouteListComponent implements OnInit {
-  routes = signal<RailRoute[]>([]);
-  private routesStore = inject(RouteStore);
+  routes!: Signal<RailRoute[]>;
+  private routeStore = inject(RouteStore);
 
   ngOnInit() {
-    this.routesStore.getRoutes().then(routes => this.routes.set(routes()));
+    this.routes = this.routeStore.routesEntities;
+    this.routeStore.getRoutes();
   }
 }

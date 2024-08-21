@@ -9,18 +9,14 @@ import { firstValueFrom } from 'rxjs';
   providedIn: 'root'
 })
 export class AdminService {
-  constructor(private http: HttpClient) {}
+  readonly loadRoutes = this.getRoutes();
+  readonly loadStations = this.getStations();
+  readonly loadCarriages = this.getCarriages();
 
-  getStations(): Promise<Station[]> {
-    return firstValueFrom(this.http.get<Station[]>('station'));
-  }
+  constructor(private http: HttpClient) {}
 
   deleteStation(id: number): Promise<Station> {
     return firstValueFrom(this.http.delete<Station>(`station/${id}`));
-  }
-
-  getRoutes(): Promise<RailRoute[]> {
-    return firstValueFrom(this.http.get<RailRoute[]>('route'));
   }
 
   postRoute(route: Partial<RailRoute>): Promise<object> {
@@ -38,11 +34,49 @@ export class AdminService {
   }
 
   deleteRoute(id: number): Promise<object> {
-    const params = { id };
-    return firstValueFrom(this.http.delete('route', { params }));
+    return firstValueFrom(this.http.delete(`route/${id}`));
   }
 
-  getCarriages(): Promise<Carriage[]> {
-    return firstValueFrom(this.http.get<Carriage[]>('carriage'));
+  private getStations() {
+    let isLoading = false;
+    return () => {
+      if (isLoading) {
+        return Promise.resolve([]);
+      }
+      isLoading = true;
+      return firstValueFrom(this.http.get<Station[]>('station'))
+      .finally(() => {
+        isLoading = false;
+      });
+    }
+  }
+
+  private getRoutes() {
+    let isLoading = false;
+
+    return (): Promise<RailRoute[]> => {
+      if (isLoading) {
+        return Promise.resolve([]);
+      }
+      isLoading = true;
+      return firstValueFrom(this.http.get<RailRoute[]>('route'))
+        .finally(() => {
+        isLoading = false;
+      });
+    }
+  }
+
+  private getCarriages() {
+    let isLoading = false;
+    return () => {
+      if (isLoading) {
+        return Promise.resolve([]);
+      }
+      isLoading = true;
+      return firstValueFrom(this.http.get<Carriage[]>('carriage'))
+        .finally(() => {
+        isLoading = false;
+      });
+    }
   }
 }

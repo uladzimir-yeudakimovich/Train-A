@@ -1,6 +1,6 @@
 import { RailRoute } from '@admin/models/route.model';
 import { StationStore } from '@admin/store/stations/stations.store';
-import { Component, computed, inject, input, OnInit, output, signal } from '@angular/core';
+import { Component, computed, inject, input, OnInit, output, Signal } from '@angular/core';
 import {
   AbstractControl,
   FormArray,
@@ -38,7 +38,7 @@ export class RouteFormComponent implements OnInit{
   route = input<RailRoute>();
   closeForm = output<boolean>();
   routeForm!: FormGroup;
-  carriageTypes = signal<Partial<Carriage>[]>([]);
+  carriageTypes!: Signal<Partial<Carriage>[]>;
   connectedStationsMap = computed(() => {
     const stations = this.stationStore.stationsEntities();
     const stationsMap = this.stationStore.stationsEntityMap();
@@ -63,6 +63,9 @@ export class RouteFormComponent implements OnInit{
   ) {}
 
   ngOnInit(): void {
+    this.carriageStore.getCarriages();
+    this.carriageTypes = this.carriageStore.carriagesEntities;
+    
     this.routeForm = this.formBuilder.group({
       stations: this.formBuilder.array([], this.minArrayLength(3)),
       carriages: this.formBuilder.array([], this.minArrayLength(3)),
@@ -75,7 +78,6 @@ export class RouteFormComponent implements OnInit{
     this.pushStationControl();
 
     this.enableLastTwoStations();
-    this.initCarriageTypes();
   }
 
   onSubmit() {
@@ -142,12 +144,6 @@ export class RouteFormComponent implements OnInit{
     this.stations.disable();
     stations[stations.length - 1].enable();
     stations[stations.length - 2].enable();
-  }
-
-  private initCarriageTypes() {
-    this.carriageStore.getCarriages().then((carriages) => {
-      this.carriageTypes.set(carriages());
-    });
   }
 
   private pushCarriageControl(value?: string) {

@@ -15,11 +15,10 @@ export const CarriageStore = signalStore(
     getCarriage: (carriageCode: string) => store.carriagesEntityMap()[carriageCode] ?? null,
 
     async getCarriages() {
-      if (!store.carriagesIds.length) {
-        const carriages = await adminService.getCarriages();
+      if (!store.carriagesIds().length) {
+        const carriages = await adminService.loadCarriages();
         patchState(store, setAllEntities(carriages, carriageConfig));
       }
-      return store.carriagesEntities;
     },
   })),
 

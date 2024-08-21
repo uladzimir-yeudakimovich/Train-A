@@ -10,12 +10,11 @@ export const StationStore = signalStore(
   withEntities(stationConfig),
 
   withMethods((store, adminService = inject(AdminService)) => ({
-    async getStations(): Promise<Signal<Station[]>> {
-      if (!store.stationsIds.length) {
-        const stations = await adminService.getStations();
+    async getStations() {
+      if (!store.stationsIds().length) {
+        const stations = await adminService.loadStations();
         patchState(store, setAllEntities(stations, stationConfig));
       }
-      return store.stationsEntities;
     },
 
     async deleteStation(id: number): Promise<void> {

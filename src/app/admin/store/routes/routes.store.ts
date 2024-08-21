@@ -8,14 +8,14 @@ import { RailRoute } from '@admin/models/route.model';
 export const RouteStore = signalStore(
   { providedIn: 'root' },
   withEntities(routeConfig),
+  
 
   withMethods((store, adminService = inject(AdminService)) => ({
     async getRoutes() {
-      if (!store.routesIds.length) {
-        const routes = await adminService.getRoutes();
+      if (!store.routesIds().length) {
+        const routes = await adminService.loadRoutes();
         patchState(store, setAllEntities(routes, routeConfig));
       }
-      return store.routesEntities;
     },
 
     async postRoute(route: Partial<RailRoute>) {
