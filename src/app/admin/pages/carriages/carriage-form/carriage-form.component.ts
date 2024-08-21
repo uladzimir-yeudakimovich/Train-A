@@ -1,6 +1,6 @@
 import { Carriage } from '@admin/pages/carriages/carriage.model';
 import { CarriageService } from '@admin/services/carriage.service';
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
@@ -11,7 +11,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
   styleUrl: './carriage-form.component.scss'
 })
 
-export class CarriageFormComponent {
+export class CarriageFormComponent implements OnInit {
   @Input() carriage: Carriage | null = null;
   @Output() saveCarriage = new EventEmitter<void>();
   carriageForm: FormGroup;
