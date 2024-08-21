@@ -34,7 +34,7 @@ import { CarriageStore } from '@shared/store/carriages.store';
   styleUrl: './route-form.component.scss',
 })
 export class RouteFormComponent implements OnInit {
-  routeId = input<number>(); // for update form
+  routeId = input<number>(); // TODO: update form
   closeForm = output<boolean>();
   routeForm!: FormGroup;
   carriageTypes = signal<Partial<Carriage>[]>([]);

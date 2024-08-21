@@ -19,16 +19,12 @@
 <div class="cities">
   <span>Cities:</span>
   <p class="cities-list">
-    @for (city of cities(); track $index) {
-      {{ city }}{{ $index < cities().length - 1 ? '\t—\t' : '' }}
-    }
+    {{ cities() | joinWithDash }}
   </p>
 </div>
 <div class="carriages">
   <span>Carriage Types:</span>
   <p class="carriages-list">
-    @for (carriageType of route().carriages; track $index) {
-      {{ carriageType }}{{ $index < route().carriages.length - 1 ? '\t—\t' : '' }}
-    }
+    {{ route().carriages | joinWithDash }}
   </p>
 </div>

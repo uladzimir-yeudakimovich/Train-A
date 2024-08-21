@@ -1,4 +1,5 @@
 import { RailRoute } from '@admin/models/route.model';
+import { JoinWithDashPipe } from '@admin/pipes/join-with-dash.pipe';
 import { RouteManagementService } from '@admin/services/route-management/route-management.service';
 import { Component, input, OnInit, signal } from '@angular/core';
 import { MatButton } from '@angular/material/button';
@@ -10,7 +11,7 @@ import { RoutePath } from '@shared/models/enums/route-path.enum';
 @Component({
   selector: 'app-route-card',
   standalone: true,
-  imports: [MatIcon, MatToolbarRow, MatToolbar, MatButton],
+  imports: [MatIcon, MatToolbarRow, MatToolbar, MatButton, JoinWithDashPipe],
   templateUrl: './route-card.component.html',
   styleUrl: './route-card.component.scss',
 })
