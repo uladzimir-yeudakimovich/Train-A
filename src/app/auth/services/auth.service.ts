@@ -21,18 +21,24 @@ export class AuthService {
   constructor(private http: HttpClient) {}
 
   registration(credentials: Credentials): Observable<object> {
-    return this.http.post<object>(RoutePath.Registration, credentials, httpOptions);
+    return this.http.post<object>(
+      RoutePath.Registration,
+      credentials,
+      httpOptions,
+    );
   }
 
   login(credentials: Credentials): Observable<Token> {
     const { email } = credentials;
-    return this.http.post<Token>(RoutePath.Login, credentials, httpOptions).pipe(
-      tap(({ token }) => {
-        localStorage.setItem('token', token);
-        localStorage.setItem('username', email);
-        this.isLogin.set(true);
-      }),
-    );
+    return this.http
+      .post<Token>(RoutePath.Login, credentials, httpOptions)
+      .pipe(
+        tap(({ token }) => {
+          localStorage.setItem('token', token);
+          localStorage.setItem('username', email);
+          this.isLogin.set(true);
+        }),
+      );
   }
 
   logout(): void {

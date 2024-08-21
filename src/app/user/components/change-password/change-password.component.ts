@@ -1,6 +1,10 @@
 import { ChangeDetectionStrategy, Component, DestroyRef } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  NonNullableFormBuilder,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { MatButton, MatMiniFabButton } from '@angular/material/button';
 import {
   MatDialogActions,
@@ -41,7 +45,10 @@ export class ChangePasswordComponent {
   ) {}
 
   passwordForm = this.formBuilder.group({
-    password: this.formBuilder.control('', [Validators.required, Validators.minLength(8)]),
+    password: this.formBuilder.control('', [
+      Validators.required,
+      Validators.minLength(8),
+    ]),
   });
 
   get shortPassword(): boolean {

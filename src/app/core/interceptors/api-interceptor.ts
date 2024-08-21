@@ -11,7 +11,10 @@ import { Observable } from 'rxjs';
 export class ApiInterceptor implements HttpInterceptor {
   private baseUrl = '/api';
 
-  intercept(req: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
+  intercept(
+    req: HttpRequest<unknown>,
+    next: HttpHandler,
+  ): Observable<HttpEvent<unknown>> {
     const authReq = req.clone({
       url: `${this.baseUrl}/${req.url}`,
     });

@@ -1,12 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable, signal } from '@angular/core';
 import { Password, UserInfo, UserRole } from '@auth/models/auth.model';
-import {
-  catchError,
-  Observable,
-  tap,
-  throwError,
-} from 'rxjs';
+import { catchError, Observable, tap, throwError } from 'rxjs';
 
 const httpOptions = {
   headers: new HttpHeaders({
@@ -20,7 +15,9 @@ const httpOptions = {
 export class ProfileService {
   private role = localStorage.getItem('userRole');
 
-  userRole = signal<UserRole['role']>(this.role === 'manager' ? 'manager' : 'user');
+  userRole = signal<UserRole['role']>(
+    this.role === 'manager' ? 'manager' : 'user',
+  );
 
   constructor(private readonly http: HttpClient) {}
 

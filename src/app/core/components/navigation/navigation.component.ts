@@ -33,8 +33,16 @@ export class NavigationComponent {
     this.navItems = [
       { label: 'Home', link: RoutePath.Search, exact: true, isShow: true },
       { label: 'Profile', link: RoutePath.UserProfile, isShow: isLogin },
-      { label: 'My Orders', link: RoutePath.UserOrders, isShow: isLogin && userRole === 'user' },
-      { label: 'Orders', link: RoutePath.Orders, isShow: userRole === 'manager' },
+      {
+        label: 'My Orders',
+        link: RoutePath.UserOrders,
+        isShow: isLogin && userRole === 'user',
+      },
+      {
+        label: 'Orders',
+        link: RoutePath.Orders,
+        isShow: userRole === 'manager',
+      },
     ];
 
     this.authItems = [

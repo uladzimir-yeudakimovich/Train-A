@@ -48,15 +48,27 @@ export class TrainCarComponent implements OnInit {
   }
 
   getSeatDirection(seatNumber: number): string {
-    return this.trainCarService.getSeatDirection(this.carriage(), seatNumber, this.isHorizontal());
+    return this.trainCarService.getSeatDirection(
+      this.carriage(),
+      seatNumber,
+      this.isHorizontal(),
+    );
   }
 
   isLastInRow(seatIndex: number): boolean {
-    return this.trainCarService.isLastInRow(this.carriage(), seatIndex, this.isHorizontal());
+    return this.trainCarService.isLastInRow(
+      this.carriage(),
+      seatIndex,
+      this.isHorizontal(),
+    );
   }
 
   isCorridor(seatIndex: number): boolean {
-    return this.trainCarService.isCorridor(this.carriage(), seatIndex, this.isHorizontal());
+    return this.trainCarService.isCorridor(
+      this.carriage(),
+      seatIndex,
+      this.isHorizontal(),
+    );
   }
 
   get availableSeatsNumber(): number {

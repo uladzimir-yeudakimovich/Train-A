@@ -6,7 +6,11 @@ import {
   signal,
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  NonNullableFormBuilder,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { MatButton, MatMiniFabButton } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
 import { MatIcon } from '@angular/material/icon';
@@ -41,7 +45,10 @@ export class UserProfileComponent implements OnInit {
   loading = signal(false);
 
   userInformationForm = this.formBuilder.group({
-    email: this.formBuilder.control('', [Validators.required, emailValidator()]),
+    email: this.formBuilder.control('', [
+      Validators.required,
+      emailValidator(),
+    ]),
     name: this.formBuilder.control('', [Validators.required]),
   });
 

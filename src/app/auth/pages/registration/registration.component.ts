@@ -26,7 +26,10 @@ export class RegistrationComponent {
   registrationForm: FormGroup = new FormGroup(
     {
       email: new FormControl('', [Validators.required, Validators.email]),
-      password: new FormControl('', [Validators.required, Validators.minLength(8)]),
+      password: new FormControl('', [
+        Validators.required,
+        Validators.minLength(8),
+      ]),
       confirmPassword: new FormControl('', [Validators.required]),
     },
     { validators: this.matchValidator('password', 'confirmPassword') },
@@ -94,12 +97,18 @@ export class RegistrationComponent {
     return '';
   }
 
-  matchValidator(controlName: string, matchingControlName: string): ValidatorFn {
+  matchValidator(
+    controlName: string,
+    matchingControlName: string,
+  ): ValidatorFn {
     return (abstractControl: AbstractControl) => {
       const control = abstractControl.get(controlName);
       const matchingControl = abstractControl.get(matchingControlName);
 
-      if (matchingControl!.errors && !matchingControl!.errors?.confirmedValidator) {
+      if (
+        matchingControl!.errors &&
+        !matchingControl!.errors?.confirmedValidator
+      ) {
         return null;
       }
       if (control!.value !== matchingControl!.value) {

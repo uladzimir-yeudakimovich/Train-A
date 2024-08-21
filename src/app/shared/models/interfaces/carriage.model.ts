@@ -18,7 +18,13 @@ export class Carriage {
 
   seats: CarSeat[];
 
-  constructor(code: string, name: string, rows: number, leftSeats: number, rightSeats: number) {
+  constructor(
+    code: string,
+    name: string,
+    rows: number,
+    leftSeats: number,
+    rightSeats: number,
+  ) {
     this.code = code;
     this.name = name;
     this.rows = rows;

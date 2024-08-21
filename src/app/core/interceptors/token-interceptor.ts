@@ -9,7 +9,10 @@ import { Observable } from 'rxjs';
 
 @Injectable()
 export class TokenInterceptor implements HttpInterceptor {
-  intercept(req: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
+  intercept(
+    req: HttpRequest<unknown>,
+    next: HttpHandler,
+  ): Observable<HttpEvent<unknown>> {
     if (req.headers.get('SkipAuthorization') === 'true') {
       const cleanReq = req.clone({
         headers: req.headers.delete('SkipAuthorization'),

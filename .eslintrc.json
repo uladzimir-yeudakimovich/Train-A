@@ -24,8 +24,9 @@
         "plugin:import/typescript",
         "airbnb-base"
       ],
-      "plugins": ["simple-import-sort", "import-newlines"],
+      "plugins": ["simple-import-sort", "prettier"],
       "rules": {
+        "no-console": "warn",
         "implicit-arrow-linebreak": "off",
         "function-paren-newline": "off",
         "import/prefer-default-export": "off",
@@ -76,23 +77,20 @@
             "style": "kebab-case"
           }
         ],
-        "no-console": "warn",
         "@typescript-eslint/no-explicit-any": "error",
-        "class-methods-use-this": "off",
-        "arrow-body-style": "off",
-        "import-newlines/enforce": [
+        "prettier/prettier": "error",
+        "operator-linebreak": [
           "error",
+          "after",
           {
-            "items": 3,
-            "forceSingleLine": false
+            "overrides": {
+              "?": "before",
+              ":": "before"
+            }
           }
         ],
-        "max-len": [
-          "error",
-          {
-            "code": 100
-          }
-        ]
+        "class-methods-use-this": "off",
+        "arrow-body-style": "off"
       }
     },
     {
@@ -114,7 +112,7 @@
         "plugin:import/typescript",
         "airbnb-base"
       ],
-      "plugins": ["simple-import-sort"],
+      "plugins": ["simple-import-sort", "prettier"],
       "parserOptions": {
         "ecmaVersion": "latest",
         "project": ["tsconfig.spec.json"],
