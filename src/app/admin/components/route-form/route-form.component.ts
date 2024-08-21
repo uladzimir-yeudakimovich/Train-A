@@ -18,11 +18,10 @@ import {
   ValidationErrors,
 } from '@angular/forms';
 import { MatButton, MatFabButton } from '@angular/material/button';
-import { MatOptionModule } from '@angular/material/core';
-import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatOption } from '@angular/material/core';
+import { MatFormField, MatLabel } from '@angular/material/form-field';
 import { MatIcon } from '@angular/material/icon';
 import { MatSelectionList } from '@angular/material/list';
-import { MatSelectModule } from '@angular/material/select';
 import { Carriage } from '@shared/models/interfaces/carriage.model';
 import { CarriageStore } from '@shared/store/carriages.store';
 
@@ -30,14 +29,14 @@ import { CarriageStore } from '@shared/store/carriages.store';
   selector: 'app-route-form',
   standalone: true,
   imports: [
-    MatFormFieldModule,
-    MatOptionModule,
+    MatFormField,
+    MatLabel,
+    MatOption,
     MatSelectionList,
-    MatSelectModule,
     MatButton,
-    ReactiveFormsModule,
     MatIcon,
     MatFabButton,
+    ReactiveFormsModule,
   ],
   templateUrl: './route-form.component.html',
   styleUrl: './route-form.component.scss',
