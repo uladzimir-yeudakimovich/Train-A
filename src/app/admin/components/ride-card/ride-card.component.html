@@ -16,8 +16,8 @@
               @if (!editMode().departure) {
                 {{ segment.time[0] | date: 'yyyy-MM-dd hh-mm a' }}
               } @else {
-                <input type="date" />
-                <input type="time" />
+                <input type="date" [value]="getDateFromISO(segment.time[0])" />
+                <input type="time" [value]="getTimeFromISO(segment.time[0])" />
               }
 
               <mat-icon class="icon" color="primary" (click)="toggleEdit($index, 'departure')">
@@ -30,8 +30,8 @@
               @if (!editMode().arrival) {
                 {{ segment.time[1] | date: 'yyyy-MM-dd hh-mm a' }}
               } @else {
-                <input type="date" />
-                <input type="time" />
+                <input type="date" [value]="getDateFromISO(segment.time[1])" />
+                <input type="time" [value]="getTimeFromISO(segment.time[1])" />
               }
 
               <mat-icon class="icon" color="primary" (click)="toggleEdit($index, 'arrival')">

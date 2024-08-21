@@ -1,7 +1,6 @@
 import { Segment } from '@admin/interfaces';
 import { DatePipe } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
-import { Component, computed, inject, input, signal } from '@angular/core';
+import { Component, computed, input, signal } from '@angular/core';
 import { MatMiniFabButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 
@@ -13,10 +12,6 @@ import { MatIcon } from '@angular/material/icon';
   styleUrl: './ride-card.component.scss',
 })
 export class RideCardComponent {
-  // HTTP
-
-  http = inject(HttpClient);
-
   rideId = input.required<number>();
 
   stations = input.required<string[]>();
@@ -39,4 +34,14 @@ export class RideCardComponent {
     console.log(index, type);
     this.editMode()[type] = !this.editMode()[type];
   };
+
+  getDateFromISO(isoString: string): string {
+    const date = new Date(isoString);
+    return date.toISOString().split('T')[0];
+  }
+
+  getTimeFromISO(isoString: string): string {
+    const date = new Date(isoString);
+    return date.toTimeString().slice(0, 5);
+  }
 }
