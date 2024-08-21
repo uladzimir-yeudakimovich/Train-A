@@ -2,6 +2,7 @@ import { RailRoute } from '@admin/models/route.model';
 import { Station } from '@admin/models/station.model';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { ApiPath } from '@shared/models/enums/api-path.enum';
 import { Carriage } from '@shared/models/interfaces/carriage.model';
 import { firstValueFrom } from 'rxjs';
 
@@ -9,16 +10,18 @@ import { firstValueFrom } from 'rxjs';
   providedIn: 'root',
 })
 export class AdminService {
-  readonly loadRoutes = this.getRoutes();
+  readonly loadRoutes = this.createLoader<RailRoute[]>(ApiPath.Route);
 
-  readonly loadStations = this.getStations();
+  readonly loadStations = this.createLoader<Station[]>(ApiPath.Station);
 
-  readonly loadCarriages = this.getCarriages();
+  readonly loadCarriages = this.createLoader<Carriage[]>(ApiPath.Carriage);
 
   constructor(private http: HttpClient) {}
 
   deleteStation(id: number): Promise<Station> {
-    return firstValueFrom(this.http.delete<Station>(`station/${id}`));
+    return firstValueFrom(
+      this.http.delete<Station>(`${ApiPath.Station}/${id}`),
+    );
   }
 
   postRoute(route: Partial<RailRoute>): Promise<object> {
@@ -26,58 +29,29 @@ export class AdminService {
       path: route.path,
       carriages: route.carriages,
     };
-    return firstValueFrom(this.http.post('route', body));
+    return firstValueFrom(this.http.post(ApiPath.Route, body));
   }
 
   updateRoute(id: number, route: Partial<RailRoute>): Promise<object> {
     const body = { ...route };
     const params = { id };
-    return firstValueFrom(this.http.put('route', body, { params }));
+    return firstValueFrom(this.http.put(ApiPath.Route, body, { params }));
   }
 
   deleteRoute(id: number): Promise<object> {
-    return firstValueFrom(this.http.delete(`route/${id}`));
+    return firstValueFrom(this.http.delete(`${ApiPath.Route}/${id}`));
   }
 
-  private getStations() {
+  private createLoader<T>(endpoint: string) {
     let isLoading = false;
-    return () => {
+    return (): Promise<T> => {
       if (isLoading) {
-        return Promise.resolve([]);
+        return Promise.resolve([] as unknown as T);
       }
       isLoading = true;
-      return firstValueFrom(this.http.get<Station[]>('station')).finally(() => {
+      return firstValueFrom(this.http.get<T>(endpoint)).finally(() => {
         isLoading = false;
       });
-    };
-  }
-
-  private getRoutes() {
-    let isLoading = false;
-
-    return (): Promise<RailRoute[]> => {
-      if (isLoading) {
-        return Promise.resolve([]);
-      }
-      isLoading = true;
-      return firstValueFrom(this.http.get<RailRoute[]>('route')).finally(() => {
-        isLoading = false;
-      });
-    };
-  }
-
-  private getCarriages() {
-    let isLoading = false;
-    return () => {
-      if (isLoading) {
-        return Promise.resolve([]);
-      }
-      isLoading = true;
-      return firstValueFrom(this.http.get<Carriage[]>('carriage')).finally(
-        () => {
-          isLoading = false;
-        },
-      );
     };
   }
 }
