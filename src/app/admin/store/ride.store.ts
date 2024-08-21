@@ -1,7 +1,7 @@
 import { RouteInformation } from '@admin/interfaces';
 import { AdminService } from '@admin/services/admin.service';
-import { inject } from '@angular/core';
-import { patchState, signalStore, withHooks, withState } from '@ngrx/signals';
+import { computed, inject } from '@angular/core';
+import { patchState, signalStore, withComputed, withHooks, withState } from '@ngrx/signals';
 
 export interface RidesState extends RouteInformation {
   loading: boolean;
@@ -17,6 +17,9 @@ const initialState: RidesState = {
 export const RidesStore = signalStore(
   { providedIn: 'root' },
   withState(initialState),
+  withComputed((state) => ({
+    rides: computed(() => state.schedule().map((ride) => ride)),
+  })),
   withHooks({
     onInit(store) {
       const adminService = inject(AdminService);
