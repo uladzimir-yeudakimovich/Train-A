@@ -1,7 +1,8 @@
 import { bootstrapApplication } from '@angular/platform-browser';
 import { startServer } from '@planess/train-a-backend';
-import { appConfig } from './app/app.config';
+
 import { AppComponent } from './app/app.component';
+import { appConfig } from './app/app.config';
 
 startServer()
   .then(() => bootstrapApplication(AppComponent, appConfig))

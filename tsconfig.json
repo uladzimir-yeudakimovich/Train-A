@@ -7,7 +7,7 @@
     "strict": true,
     "noImplicitAny": true,
     "noImplicitOverride": true,
-    "noPropertyAccessFromIndexSignature": true,
+    "noPropertyAccessFromIndexSignature": false,
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
     "skipLibCheck": true,
@@ -32,7 +32,7 @@
       "@testing/*": ["./src/app/testing/*"],
       "@orders/*": ["./src/app/orders/*"],
       "@user/*": ["./src/app/user/*"]
-    }
+    },
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,

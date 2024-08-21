@@ -1,9 +1,16 @@
 import { ChangeDetectorRef, Component, DestroyRef } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import {
+  AbstractControl,
+  FormControl,
+  FormGroup,
+  ValidatorFn,
+  Validators,
+} from '@angular/forms';
 import { Router } from '@angular/router';
-import { AbstractControl, FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
-import { AuthService } from '../../services/auth.service';
 import { RoutePath } from '@shared/models/enums/route-path.enum';
+
+import { AuthService } from '../../services/auth.service';
 import { formImports } from '../form.config';
 
 @Component({
@@ -11,22 +18,20 @@ import { formImports } from '../form.config';
   standalone: true,
   imports: [formImports],
   templateUrl: './registration.component.html',
-  styleUrl: './registration.component.scss'
+  styleUrl: './registration.component.scss',
 })
 export class RegistrationComponent {
   linkLogin = RoutePath.Login;
-  registrationForm: FormGroup = new FormGroup({
-    email: new FormControl('', [
-      Validators.required,
-      Validators.email,
-    ]),
-    password: new FormControl('', [
-      Validators.required,
-      Validators.minLength(8),
-    ]),
-    confirmPassword: new FormControl('', [
-      Validators.required,
-    ])},
+
+  registrationForm: FormGroup = new FormGroup(
+    {
+      email: new FormControl('', [Validators.required, Validators.email]),
+      password: new FormControl('', [
+        Validators.required,
+        Validators.minLength(8),
+      ]),
+      confirmPassword: new FormControl('', [Validators.required]),
+    },
     { validators: this.matchValidator('password', 'confirmPassword') },
   );
 
@@ -35,19 +40,22 @@ export class RegistrationComponent {
     private router: Router,
     private destroyRef: DestroyRef,
     private cdr: ChangeDetectorRef,
-  ) { }
+  ) {}
 
   onRegistration(): void {
     if (this.registrationForm.valid) {
       const { email, password } = this.registrationForm.value;
-      this.authService.registration({ email, password}).pipe(takeUntilDestroyed(this.destroyRef)).subscribe(
-        () => this.router.navigate([RoutePath.Login]),
-        err => {
-          const emailControl = this.registrationForm.get('email');
-          emailControl?.setErrors({ alreadyExists: err.message });
-          this.cdr.detectChanges();
-        }
-      );
+      this.authService
+        .registration({ email, password })
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe(
+          () => this.router.navigate([RoutePath.Login]),
+          (err) => {
+            const emailControl = this.registrationForm.get('email');
+            emailControl?.setErrors({ alreadyExists: err.message });
+            this.cdr.detectChanges();
+          },
+        );
     } else {
       this.registrationForm.markAllAsTouched();
     }
@@ -89,21 +97,27 @@ export class RegistrationComponent {
     return '';
   }
 
-  matchValidator(controlName: string, matchingControlName: string): ValidatorFn {
+  matchValidator(
+    controlName: string,
+    matchingControlName: string,
+  ): ValidatorFn {
     return (abstractControl: AbstractControl) => {
       const control = abstractControl.get(controlName);
       const matchingControl = abstractControl.get(matchingControlName);
 
-      if (matchingControl!.errors && !matchingControl!.errors?.['confirmedValidator']) {
+      if (
+        matchingControl!.errors &&
+        !matchingControl!.errors?.confirmedValidator
+      ) {
         return null;
-      } else if (control!.value !== matchingControl!.value) {
+      }
+      if (control!.value !== matchingControl!.value) {
         const error = { confirmedValidator: 'Passwords do not match' };
         matchingControl!.setErrors(error);
         return error;
-      } else {
-        matchingControl!.setErrors(null);
-        return null;
       }
-    }
+      matchingControl!.setErrors(null);
+      return null;
+    };
   }
 }

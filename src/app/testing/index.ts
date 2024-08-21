@@ -1,2 +1,2 @@
-export * from './mock-data';
-export * from './mock-service';
+export * from '@testing/mock-data';
+export * from '@testing/mock-service';
