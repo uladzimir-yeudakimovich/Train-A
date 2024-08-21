@@ -19,9 +19,9 @@ import {
 } from '@angular/forms';
 import { MatButton, MatFabButton } from '@angular/material/button';
 import { MatOption } from '@angular/material/core';
-import { MatFormField, MatLabel } from '@angular/material/form-field';
+import { MatLabel } from '@angular/material/form-field';
 import { MatIcon } from '@angular/material/icon';
-import { MatSelectionList } from '@angular/material/list';
+import { MatFormField, MatSelect } from '@angular/material/select';
 import { Carriage } from '@shared/models/interfaces/carriage.model';
 import { CarriageStore } from '@shared/store/carriages.store';
 
@@ -32,11 +32,11 @@ import { CarriageStore } from '@shared/store/carriages.store';
     MatFormField,
     MatLabel,
     MatOption,
-    MatSelectionList,
+    MatSelect,
     MatButton,
+    ReactiveFormsModule,
     MatIcon,
     MatFabButton,
-    ReactiveFormsModule,
   ],
   templateUrl: './route-form.component.html',
   styleUrl: './route-form.component.scss',
@@ -170,12 +170,13 @@ export class RouteFormComponent implements OnInit {
     this.stations.push(this.formBuilder.control(initValue));
   }
 
+  // TODO: fix
   private minArrayLength(min: number) {
     // the last value is always empty, so check min + 1
     const minRequiredLength = min + 1;
     return (control: AbstractControl): ValidationErrors | null => {
       if (control instanceof FormArray) {
-        if (control.length < minRequiredLength) {
+        if (control.length >= minRequiredLength) {
           return null;
         }
         return {

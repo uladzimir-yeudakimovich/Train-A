@@ -31,7 +31,7 @@
         <mat-form-field>
           <mat-label>Carriage</mat-label>
           <mat-select [formControlName]="i" (selectionChange)="onSetCarriage(i)">
-            @for (car of carriageTypes(); track car.code) {
+            @for (car of carriageTypes(); track $index) {
               <mat-option [value]="car.code">{{ car.name }}</mat-option>
             }
           </mat-select>
