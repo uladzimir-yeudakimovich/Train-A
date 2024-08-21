@@ -1,6 +1,10 @@
 import { ChangeDetectionStrategy, Component, DestroyRef } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  NonNullableFormBuilder,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { MatButton, MatMiniFabButton } from '@angular/material/button';
 import {
   MatDialogActions,
@@ -41,20 +45,26 @@ export class ChangePasswordComponent {
   ) {}
 
   passwordForm = this.formBuilder.group({
-    password: this.formBuilder.control('', [Validators.required, Validators.minLength(8)]),
+    password: this.formBuilder.control('', [
+      Validators.required,
+      Validators.minLength(8),
+    ]),
   });
 
   get shortPassword(): boolean {
-    return this.passwordForm.controls.password.errors?.['minlength'];
+    return this.passwordForm.controls.password.errors?.minlength;
   }
 
   get emptyPassword(): boolean {
-    return this.passwordForm.controls.password.errors?.['required'];
+    return this.passwordForm.controls.password.errors?.required;
   }
 
   onSubmit(): void {
     if (this.passwordForm.valid) {
-      this.profileService.updateUserPassword(this.passwordForm.getRawValue()).pipe(takeUntilDestroyed(this.destroyRef)).subscribe();
+      this.profileService
+        .updateUserPassword(this.passwordForm.getRawValue())
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe();
     }
   }
 }

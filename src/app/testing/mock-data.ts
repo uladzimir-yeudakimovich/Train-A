@@ -1,8 +1,13 @@
-import { Credentials, Password, UserInfo, UserRole } from "@auth/models/auth.model";
+import {
+  Credentials,
+  Password,
+  UserInfo,
+  UserRole,
+} from '@auth/models/auth.model';
 
 export const mockCredentials: Credentials = {
   email: 'test@test.com',
-  password: 'password'
+  password: 'password',
 };
 
 export const mockUser: UserInfo = {

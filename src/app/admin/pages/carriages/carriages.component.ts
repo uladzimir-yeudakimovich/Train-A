@@ -12,7 +12,7 @@ import { Observable } from 'rxjs';
   standalone: true,
   imports: [NgIf, AsyncPipe, MatToolbar, CarriageFormComponent, CarriageListComponent],
   templateUrl: './carriages.component.html',
-  styleUrl: './carriages.component.scss'
+  styleUrl: './carriages.component.scss',
 })
 export class CarriagesComponent implements OnInit {
   carriages!: Observable<Carriage[]> | null;
@@ -40,3 +40,4 @@ export class CarriagesComponent implements OnInit {
     this.formVisible = true;
   }
 }
+
