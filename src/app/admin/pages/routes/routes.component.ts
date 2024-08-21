@@ -8,7 +8,7 @@ import { RouteFormComponent } from '@admin/components/route-form/route-form.comp
   standalone: true,
   imports: [RouteListComponent, MatButton, RouteFormComponent],
   templateUrl: './routes.component.html',
-  styleUrl: './routes.component.scss'
+  styleUrl: './routes.component.scss',
 })
 export class RoutesComponent {
   displayCreateRouteForm = signal<boolean>(false);

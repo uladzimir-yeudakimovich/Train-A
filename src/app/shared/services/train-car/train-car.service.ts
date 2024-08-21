@@ -23,7 +23,11 @@ export class TrainCarService {
     return this.carriageStore.getAvailableSeatsNumber(carriage.code);
   }
 
-  getSeatDirection(carriage: Carriage, seatNumber: number, isHorizontal: boolean): string {
+  getSeatDirection(
+    carriage: Carriage,
+    seatNumber: number,
+    isHorizontal: boolean,
+  ): string {
     const { leftSeats, rightSeats, rows } = carriage;
     const totalSeatsPerRow = leftSeats + rightSeats;
     const isFirstRow = seatNumber <= totalSeatsPerRow;
@@ -37,10 +41,17 @@ export class TrainCarService {
     }
 
     const isLeftSeat = (seatNumber - 1) % totalSeatsPerRow < leftSeats;
-    return this.adjustDirectionForOrientation(isLeftSeat ? 'left' : 'right', isHorizontal);
+    return this.adjustDirectionForOrientation(
+      isLeftSeat ? 'left' : 'right',
+      isHorizontal,
+    );
   }
 
-  isLastInRow(carriage: Carriage, seatIndex: number, isHorizontal: boolean): boolean {
+  isLastInRow(
+    carriage: Carriage,
+    seatIndex: number,
+    isHorizontal: boolean,
+  ): boolean {
     const cols = carriage.leftSeats + carriage.rightSeats;
     if (isHorizontal) {
       return (seatIndex + 1) % carriage.rows === 0;
@@ -48,7 +59,11 @@ export class TrainCarService {
     return (seatIndex + 1) % cols === 0;
   }
 
-  isCorridor(carriage: Carriage, seatIndex: number, isHorizontal: boolean): boolean {
+  isCorridor(
+    carriage: Carriage,
+    seatIndex: number,
+    isHorizontal: boolean,
+  ): boolean {
     const cols = carriage.leftSeats + carriage.rightSeats;
     if (isHorizontal) {
       return seatIndex + 1 === carriage.rows * carriage.rightSeats;

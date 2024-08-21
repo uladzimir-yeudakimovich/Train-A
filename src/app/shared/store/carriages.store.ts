@@ -1,3 +1,4 @@
+import { computed } from '@angular/core';
 import { patchState, signalStore, withMethods } from '@ngrx/signals';
 import { setAllEntities, updateEntity, withEntities } from '@ngrx/signals/entities';
 import { carriageConfig } from './carriages.config';
@@ -23,7 +24,8 @@ export const CarriageStore = signalStore(
   })),
 
   withMethods((store) => ({
-    getCarriageSignal: (carriageCode: string) => computed(() => store.getCarriage(carriageCode)),
+    getCarriageSignal: (carriageCode: string) =>
+      computed(() => store.getCarriage(carriageCode)),
 
     getSortedSeats: (carriageCode: string) => {
       const carriage = store.getCarriage(carriageCode);
@@ -32,7 +34,8 @@ export const CarriageStore = signalStore(
 
     getAvailableSeatsNumber: (carriageCode: string) => {
       const carriage = store.getCarriage(carriageCode);
-      return carriage.seats.filter((s) => s.state !== SeatState.Reserved).length;
+      return carriage.seats.filter((s) => s.state !== SeatState.Reserved)
+        .length;
     },
 
     updateSeat: (carriage: Carriage, updatedSeat: CarSeat) => {
@@ -41,10 +44,12 @@ export const CarriageStore = signalStore(
         updateEntity(
           {
             id: carriage.code,
-            changes: (carriage) => {
-              const seat = carriage.seats.find((s) => s.number === updatedSeat.number)!;
+            changes: (newCar) => {
+              const seat = newCar.seats.find(
+                (s) => s.number === updatedSeat.number,
+              )!;
               seat.state = updatedSeat.state;
-              return carriage;
+              return newCar;
             },
           },
           carriageConfig,

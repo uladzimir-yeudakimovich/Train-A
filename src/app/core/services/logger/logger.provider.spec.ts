@@ -1,9 +1,10 @@
-import { TestBed } from '@angular/core/testing';
 import { isDevMode } from '@angular/core';
-import { LoggerService } from './logger.service';
+import { TestBed } from '@angular/core/testing';
+
 import { DevLoggerService } from './dev-logger.service';
-import { ProdLoggerService } from './prod-logger.service';
 import { LoggerProvider } from './logger.provider';
+import { LoggerService } from './logger.service';
+import { ProdLoggerService } from './prod-logger.service';
 
 jest.mock('@angular/core', () => ({
   ...jest.requireActual('@angular/core'),

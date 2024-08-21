@@ -8,13 +8,15 @@ import { CarSeat } from '@shared/models/interfaces/carriage.model';
   standalone: true,
   imports: [CommonModule],
   templateUrl: './car-seat.component.html',
-  styleUrl: './car-seat.component.scss'
+  styleUrl: './car-seat.component.scss',
 })
 export class CarSeatComponent {
   seat = input.required<CarSeat>();
+
   direction = input.required<string>();
+
   select = output<number>();
-  
+
   onSeatClick() {
     if (this.seat().state === SeatState.Reserved) {
       return;
