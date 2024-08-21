@@ -1,5 +1,5 @@
 import { RideListComponent } from '@admin/components/ride-list/ride-list.component';
-import { Component, OnInit, signal } from '@angular/core';
+import { Component } from '@angular/core';
 import { MatButton, MatMiniFabButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { ActivatedRoute } from '@angular/router';
@@ -11,14 +11,8 @@ import { ActivatedRoute } from '@angular/router';
   templateUrl: './rides.component.html',
   styleUrl: './rides.component.scss',
 })
-export class RidesComponent implements OnInit {
-  routeId = signal('0');
+export class RidesComponent {
+  routeId = this.activatedRoute.snapshot.paramMap.get('id');
 
   constructor(private readonly activatedRoute: ActivatedRoute) {}
-
-  ngOnInit(): void {
-    this.activatedRoute.paramMap.subscribe((params) => {
-      this.routeId.set(params.get('id') ?? '0');
-    });
-  }
 }
