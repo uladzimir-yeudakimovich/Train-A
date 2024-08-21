@@ -1,9 +1,13 @@
-import { inject, Signal } from '@angular/core';
-import { signalStore, patchState, withMethods } from '@ngrx/signals';
-import { withEntities, setAllEntities, removeEntity } from '@ngrx/signals/entities';
 import { AdminService } from '@admin/services/admin/admin.service';
+import { inject } from '@angular/core';
+import { patchState, signalStore, withMethods } from '@ngrx/signals';
+import {
+  removeEntity,
+  setAllEntities,
+  withEntities,
+} from '@ngrx/signals/entities';
+
 import { stationConfig } from './stations.config';
-import { Station } from '@admin/models/station.model';
 
 export const StationStore = signalStore(
   { providedIn: 'root' },
@@ -23,4 +27,3 @@ export const StationStore = signalStore(
     },
   })),
 );
-

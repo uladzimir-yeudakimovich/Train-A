@@ -8,9 +8,9 @@ describe('RouteFormComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [RouteFormComponent]
+      imports: [RouteFormComponent],
     })
-    .compileComponents();
+      .compileComponents();
 
     fixture = TestBed.createComponent(RouteFormComponent);
     component = fixture.componentInstance;

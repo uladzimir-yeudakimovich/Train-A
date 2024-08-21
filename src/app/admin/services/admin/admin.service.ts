@@ -6,11 +6,13 @@ import { Carriage } from '@shared/models/interfaces/carriage.model';
 import { firstValueFrom } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AdminService {
   readonly loadRoutes = this.getRoutes();
+
   readonly loadStations = this.getStations();
+
   readonly loadCarriages = this.getCarriages();
 
   constructor(private http: HttpClient) {}
@@ -44,11 +46,10 @@ export class AdminService {
         return Promise.resolve([]);
       }
       isLoading = true;
-      return firstValueFrom(this.http.get<Station[]>('station'))
-      .finally(() => {
+      return firstValueFrom(this.http.get<Station[]>('station')).finally(() => {
         isLoading = false;
       });
-    }
+    };
   }
 
   private getRoutes() {
@@ -59,11 +60,10 @@ export class AdminService {
         return Promise.resolve([]);
       }
       isLoading = true;
-      return firstValueFrom(this.http.get<RailRoute[]>('route'))
-        .finally(() => {
+      return firstValueFrom(this.http.get<RailRoute[]>('route')).finally(() => {
         isLoading = false;
       });
-    }
+    };
   }
 
   private getCarriages() {
@@ -73,10 +73,11 @@ export class AdminService {
         return Promise.resolve([]);
       }
       isLoading = true;
-      return firstValueFrom(this.http.get<Carriage[]>('carriage'))
-        .finally(() => {
-        isLoading = false;
-      });
-    }
+      return firstValueFrom(this.http.get<Carriage[]>('carriage')).finally(
+        () => {
+          isLoading = false;
+        },
+      );
+    };
   }
 }

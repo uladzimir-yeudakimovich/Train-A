@@ -1,14 +1,20 @@
+import { RailRoute } from '@admin/models/route.model';
+import { AdminService } from '@admin/services/admin/admin.service';
 import { inject } from '@angular/core';
 import { patchState, signalStore, withMethods } from '@ngrx/signals';
-import { addEntity, removeEntity, setAllEntities, updateEntity, withEntities } from '@ngrx/signals/entities';
-import { AdminService } from '@admin/services/admin/admin.service';
+import {
+  addEntity,
+  removeEntity,
+  setAllEntities,
+  updateEntity,
+  withEntities,
+} from '@ngrx/signals/entities';
+
 import { routeConfig } from './routes.config';
-import { RailRoute } from '@admin/models/route.model';
 
 export const RouteStore = signalStore(
   { providedIn: 'root' },
   withEntities(routeConfig),
-  
 
   withMethods((store, adminService = inject(AdminService)) => ({
     async getRoutes() {
@@ -27,10 +33,7 @@ export const RouteStore = signalStore(
           ...route,
           id: routeId,
         } as RailRoute;
-        patchState(
-          store,
-          addEntity(newRoute, routeConfig),
-        );
+        patchState(store, addEntity(newRoute, routeConfig));
       }
     },
 
@@ -50,10 +53,7 @@ export const RouteStore = signalStore(
 
     async deleteRoute(id: number) {
       await adminService.deleteRoute(id);
-      patchState(
-        store,
-        removeEntity(id, routeConfig),
-      );
-    }
+      patchState(store, removeEntity(id, routeConfig));
+    },
   })),
 );
