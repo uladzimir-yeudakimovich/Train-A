@@ -1,3 +1,4 @@
+import { RailRoute } from '@admin/models/route.model';
 import { StationStore } from '@admin/store/stations/stations.store';
 import { Component, computed, inject, input, OnInit, output, signal } from '@angular/core';
 import {
@@ -33,12 +34,11 @@ import { CarriageStore } from '@shared/store/carriages.store';
   templateUrl: './route-form.component.html',
   styleUrl: './route-form.component.scss',
 })
-export class RouteFormComponent implements OnInit {
-  routeId = input<number>(); // TODO: update form
+export class RouteFormComponent implements OnInit{
+  route = input<RailRoute>();
   closeForm = output<boolean>();
   routeForm!: FormGroup;
   carriageTypes = signal<Partial<Carriage>[]>([]);
-
   connectedStationsMap = computed(() => {
     const stations = this.stationStore.stationsEntities();
     const stationsMap = this.stationStore.stationsEntityMap();
@@ -58,29 +58,39 @@ export class RouteFormComponent implements OnInit {
   private carriageStore = inject(CarriageStore);
   private stationStore = inject(StationStore);
 
-  constructor(private formBuilder: FormBuilder) {}
+  constructor(
+    private formBuilder: FormBuilder,
+  ) {}
 
   ngOnInit(): void {
     this.routeForm = this.formBuilder.group({
-      stations: this.formBuilder.array([this.createFormControl()], this.minArrayLength(3)),
-      carriages: this.formBuilder.array([this.createFormControl()], this.minArrayLength(3)),
+      stations: this.formBuilder.array([], this.minArrayLength(3)),
+      carriages: this.formBuilder.array([], this.minArrayLength(3)),
     });
+    this.route()?.path.forEach((stationId) => this.pushStationControl(stationId));
+    this.route()?.carriages.forEach((carriage) => this.pushCarriageControl(carriage));
+
+    // Add empty fields at the end
+    this.pushCarriageControl();
+    this.pushStationControl();
+
+    this.enableLastTwoStations();
     this.initCarriageTypes();
   }
 
   onSubmit() {
-    this.enableFormArrays();
+    this.stations.enable();
     console.log('Submitted', this.routeForm.value);
     this.onReset();
   }
 
   onReset() {
-    this.enableFormArrays();
     this.routeForm.reset();
     this.stations.clear();
     this.carriages.clear();
-    this.stations.push(this.createFormControl());
-    this.carriages.push(this.createFormControl());
+    this.pushStationControl();
+    this.pushCarriageControl();
+    this.enableLastTwoStations();
   }
 
   onClose() {
@@ -91,11 +101,8 @@ export class RouteFormComponent implements OnInit {
     const stationsNum = this.stations.length - 1;
     const isLast = idx === stationsNum;
     if (!isLast) return;
-
-    if (stationsNum) {
-      this.stations.at(stationsNum - 1).disable();
-    }
-    this.stations.push(this.createFormControl());
+    this.pushStationControl();
+    this.enableLastTwoStations();
   }
 
   onSetCarriage(idx: number) {
@@ -103,15 +110,16 @@ export class RouteFormComponent implements OnInit {
     const isLast = idx === carriagesNum;
     if (!isLast) return;
 
-    this.carriages.push(this.createFormControl());
+    this.pushCarriageControl();
   }
 
+  
   onDeleteStation(event: Event, idx: number) {
     event.stopPropagation();
     this.stations.removeAt(idx);
-    this.stations.at(idx - 1).enable();
+    this.enableLastTwoStations();
   }
-
+  
   onDeleteCarriage(event: Event, idx: number) {
     event.stopPropagation();
     this.carriages.removeAt(idx);
@@ -120,9 +128,20 @@ export class RouteFormComponent implements OnInit {
   get stations() {
     return this.routeForm.get('stations') as FormArray;
   }
-
+  
   get carriages() {
     return this.routeForm.get('carriages') as FormArray;
+  }
+  
+  private enableLastTwoStations() {
+    const stations = this.stations.controls;
+    if (stations.length < 2) {
+      this.stations.enable();
+      return;
+    }
+    this.stations.disable();
+    stations[stations.length - 1].enable();
+    stations[stations.length - 2].enable();
   }
 
   private initCarriageTypes() {
@@ -131,8 +150,14 @@ export class RouteFormComponent implements OnInit {
     });
   }
 
-  private createFormControl() {
-    return this.formBuilder.control('');
+  private pushCarriageControl(value?: string) {
+    const initValue = value || '';
+    this.carriages.push(this.formBuilder.control(initValue));
+  }
+
+  private pushStationControl(value?: string | number) {
+    const initValue = value || '';
+    this.stations.push(this.formBuilder.control(initValue));
   }
 
   private minArrayLength(min: number) {
@@ -146,10 +171,5 @@ export class RouteFormComponent implements OnInit {
       }
       return null;
     };
-  }
-
-  private enableFormArrays() {
-    this.stations.enable();
-    this.carriages.enable();
   }
 }

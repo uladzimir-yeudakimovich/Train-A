@@ -7,17 +7,19 @@ import { MatIcon } from '@angular/material/icon';
 import { MatToolbar, MatToolbarRow } from '@angular/material/toolbar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { RoutePath } from '@shared/models/enums/route-path.enum';
+import { RouteFormComponent } from '../route-form/route-form.component';
 
 @Component({
   selector: 'app-route-card',
   standalone: true,
-  imports: [MatIcon, MatToolbarRow, MatToolbar, MatButton, JoinWithDashPipe],
+  imports: [MatIcon, MatToolbarRow, MatToolbar, MatButton, JoinWithDashPipe, RouteFormComponent],
   templateUrl: './route-card.component.html',
   styleUrl: './route-card.component.scss',
 })
 export class RouteCardComponent implements OnInit {
   route = input.required<RailRoute>();
   cities = signal<string[]>([]);
+  displayUpdateForm = signal<boolean>(false);
 
   constructor(
     private routeService: RouteManagementService,
@@ -34,5 +36,9 @@ export class RouteCardComponent implements OnInit {
   onAssignRideClick(): void {
     const routeId = this.route().id;
     this.router.navigate([RoutePath.AdminRoutes, routeId], { relativeTo: this.activatedRoute });
+  }
+
+  toggleUpdateForm(): void {
+    this.displayUpdateForm.set(!this.displayUpdateForm());
   }
 }
