@@ -1,23 +1,24 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable, signal } from '@angular/core';
-import { Observable, tap } from 'rxjs';
-import { Credentials, Token } from '../models/auth.model';
 import { RoutePath } from '@shared/models/enums/route-path.enum';
+import { Observable, tap } from 'rxjs';
+
+import { Credentials, Token } from '../models/auth.model';
 
 const httpOptions = {
   headers: new HttpHeaders({
     'Content-Type': 'application/json',
-    'SkipAuthorization': 'true',
+    SkipAuthorization: 'true',
   }),
 };
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AuthService {
   isLogin = signal<boolean>(!!localStorage.getItem('token'));
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   registration(credentials: Credentials): Observable<object> {
     return this.http.post<object>(RoutePath.Registration, credentials, httpOptions);
@@ -26,11 +27,11 @@ export class AuthService {
   login(credentials: Credentials): Observable<Token> {
     const { email } = credentials;
     return this.http.post<Token>(RoutePath.Login, credentials, httpOptions).pipe(
-      tap(({token}) => {
+      tap(({ token }) => {
         localStorage.setItem('token', token);
         localStorage.setItem('username', email);
         this.isLogin.set(true);
-      })
+      }),
     );
   }
 

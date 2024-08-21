@@ -1,9 +1,10 @@
+import { computed } from '@angular/core';
 import { patchState, signalStore, withMethods } from '@ngrx/signals';
 import { updateEntity, withEntities } from '@ngrx/signals/entities';
-import { carriageConfig } from './carriages.config';
 import { SeatState } from '@shared/models/enums/seat-state.enum';
 import { Carriage, CarSeat } from '@shared/models/interfaces/carriage.model';
-import { computed } from '@angular/core';
+
+import { carriageConfig } from './carriages.config';
 
 export const CarriagesStore = signalStore(
   { providedIn: 'root' },
@@ -33,10 +34,10 @@ export const CarriagesStore = signalStore(
         updateEntity(
           {
             id: carriage.code,
-            changes: (carriage) => {
-              const seat = carriage.seats.find((s) => s.number === updatedSeat.number)!;
+            changes: (newCar) => {
+              const seat = newCar.seats.find((s) => s.number === updatedSeat.number)!;
               seat.state = updatedSeat.state;
-              return carriage;
+              return newCar;
             },
           },
           carriageConfig,

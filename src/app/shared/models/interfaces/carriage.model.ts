@@ -7,10 +7,15 @@ export interface CarSeat {
 
 export class Carriage {
   code: string;
+
   name: string;
+
   rows: number;
+
   leftSeats: number;
+
   rightSeats: number;
+
   seats: CarSeat[];
 
   constructor(code: string, name: string, rows: number, leftSeats: number, rightSeats: number) {
@@ -26,7 +31,7 @@ export class Carriage {
     const seats: CarSeat[] = [];
     const cols = this.leftSeats + this.rightSeats;
 
-    for (let i = 0; i < this.rows * cols; i++) {
+    for (let i = 0; i < this.rows * cols; i += 1) {
       const row = i % this.rows;
       const col = Math.floor(i / this.rows);
       const seatNumber = (row + 1) * cols - col;

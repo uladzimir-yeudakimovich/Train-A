@@ -1,11 +1,12 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpClientModule } from '@angular/common/http';
-import { HeaderComponent } from './header.component';
-import { loggerServiceMock } from '@testing/index';
-import { MatToolbarModule } from '@angular/material/toolbar';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { MatToolbarModule } from '@angular/material/toolbar';
 import { LoggerService } from '@core/services/logger/logger.service';
+import { loggerServiceMock } from '@testing/index';
+
+import { HeaderComponent } from './header.component';
 
 describe('HeaderComponent', () => {
   let component: HeaderComponent;
@@ -23,7 +24,7 @@ describe('HeaderComponent', () => {
         { provide: LoggerService, useValue: loggerServiceMock },
       ],
     })
-    .compileComponents();
+      .compileComponents();
 
     fixture = TestBed.createComponent(HeaderComponent);
     component = fixture.componentInstance;

@@ -1,8 +1,9 @@
-import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
-import { AuthService } from './auth.service';
 import { mockCredentials } from '@testing/index';
+
+import { AuthService } from './auth.service';
 
 describe('AuthService', () => {
   let service: AuthService;
@@ -16,8 +17,8 @@ describe('AuthService', () => {
       imports: [HttpClientTestingModule],
       providers: [
         AuthService,
-        { provide: Router, useValue: routerSpy }
-      ]
+        { provide: Router, useValue: routerSpy },
+      ],
     });
 
     service = TestBed.inject(AuthService);
@@ -33,7 +34,7 @@ describe('AuthService', () => {
   });
 
   it('should make a POST request to the correct URL when registration is called', () => {
-    service.registration(mockCredentials).subscribe(response => {
+    service.registration(mockCredentials).subscribe((response) => {
       expect(response).toEqual({});
     });
 
@@ -45,7 +46,7 @@ describe('AuthService', () => {
   });
 
   it('should handle successful registration response correctly', () => {
-    service.registration(mockCredentials).subscribe(response => {
+    service.registration(mockCredentials).subscribe((response) => {
       expect(response).toEqual({});
     });
 
@@ -64,7 +65,7 @@ describe('AuthService', () => {
       (error) => {
         expect(error.status).toBe(400);
         expect(error.error).toContain(errorMessage);
-      }
+      },
     );
 
     const req = httpMock.expectOne('signup');

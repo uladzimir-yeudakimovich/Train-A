@@ -1,8 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
-import { TrainCarComponent } from './train-car.component';
 import { Carriage } from '@shared/models/interfaces/carriage.model';
 import { TrainCarService } from '@shared/services/train-car/train-car.service';
+
+import { TrainCarComponent } from './train-car.component';
 
 describe('TrainCarComponent', () => {
   let component: TrainCarComponent;
@@ -19,16 +19,16 @@ describe('TrainCarComponent', () => {
             isLastInRow: () => false,
             isCorridor: () => false,
             getAvailableSeatsNumber: () => 15,
-          }
+          },
         },
-      ]
+      ],
     })
-    .compileComponents();
+      .compileComponents();
 
     fixture = TestBed.createComponent(TrainCarComponent);
     component = fixture.componentInstance;
 
-    component['trainCarService'] = TestBed.inject(TrainCarService);
+    component.trainCarService = TestBed.inject(TrainCarService);
     fixture.componentRef.setInput('carriage', new Carriage('1', 'Carriage 1', 5, 2, 1));
     fixture.detectChanges();
   });

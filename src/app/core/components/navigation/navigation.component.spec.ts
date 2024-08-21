@@ -1,9 +1,10 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { NavigationComponent } from './navigation.component';
-import { authServiceMock, profileServiceMock } from '@testing/mock-service';
 import { HttpClientModule } from '@angular/common/http';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { AuthService } from '@auth/services/auth.service';
+import { authServiceMock, profileServiceMock } from '@testing/mock-service';
 import { ProfileService } from '@user/services/profile.service';
+
+import { NavigationComponent } from './navigation.component';
 
 describe('NavigationComponent', () => {
   let component: NavigationComponent;
@@ -20,7 +21,7 @@ describe('NavigationComponent', () => {
         { provide: ProfileService, useValue: profileServiceMock },
       ],
     })
-    .compileComponents();
+      .compileComponents();
 
     fixture = TestBed.createComponent(NavigationComponent);
     component = fixture.componentInstance;

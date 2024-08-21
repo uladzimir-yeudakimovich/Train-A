@@ -45,16 +45,19 @@ export class ChangePasswordComponent {
   });
 
   get shortPassword(): boolean {
-    return this.passwordForm.controls.password.errors?.['minlength'];
+    return this.passwordForm.controls.password.errors?.minlength;
   }
 
   get emptyPassword(): boolean {
-    return this.passwordForm.controls.password.errors?.['required'];
+    return this.passwordForm.controls.password.errors?.required;
   }
 
   onSubmit(): void {
     if (this.passwordForm.valid) {
-      this.profileService.updateUserPassword(this.passwordForm.getRawValue()).pipe(takeUntilDestroyed(this.destroyRef)).subscribe();
+      this.profileService
+        .updateUserPassword(this.passwordForm.getRawValue())
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe();
     }
   }
 }

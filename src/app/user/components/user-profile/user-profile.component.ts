@@ -1,4 +1,10 @@
-import { ChangeDetectionStrategy, Component, DestroyRef, OnInit, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  DestroyRef,
+  OnInit,
+  signal,
+} from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButton, MatMiniFabButton } from '@angular/material/button';
@@ -7,11 +13,12 @@ import { MatIcon } from '@angular/material/icon';
 import { MatError, MatFormField, MatInput } from '@angular/material/input';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { Router } from '@angular/router';
+import { AuthService } from '@auth/services/auth.service';
 import { emailValidator } from '@auth/validators/email.validator';
 import { RoutePath } from '@shared/models/enums/route-path.enum';
-import { ChangePasswordComponent } from '../change-password/change-password.component';
-import { AuthService } from '@auth/services/auth.service';
 import { ProfileService } from '@user/services/profile.service';
+
+import { ChangePasswordComponent } from '../change-password/change-password.component';
 
 @Component({
   selector: 'app-user-profile',
@@ -59,15 +66,15 @@ export class UserProfileComponent implements OnInit {
   }
 
   get invalidEmail(): boolean {
-    return this.userInformationForm.controls.email.errors?.['invalidEmail'];
+    return this.userInformationForm.controls.email.errors?.invalidEmail;
   }
 
   get emptyEmail(): boolean {
-    return this.userInformationForm.controls.email.errors?.['required'];
+    return this.userInformationForm.controls.email.errors?.required;
   }
 
   get invalidName(): boolean {
-    return this.userInformationForm.controls.name.errors?.['required'];
+    return this.userInformationForm.controls.name.errors?.required;
   }
 
   toggleEditMode(field: 'name' | 'email'): void {
@@ -92,34 +99,40 @@ export class UserProfileComponent implements OnInit {
   private getUserInformation(): void {
     this.setLoading(true);
 
-    this.profileService.getUserInformation().pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
-      next: (response) => {
-        this.userInformationForm.setValue({
-          name: response.name ?? 'John Doe',
-          email: response.email,
-        });
-      },
-      error: () => {
-        this.setLoading(false);
-      },
-      complete: () => {
-        this.setLoading(false);
-      },
-    });
+    this.profileService
+      .getUserInformation()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (response) => {
+          this.userInformationForm.setValue({
+            name: response.name ?? 'John Doe',
+            email: response.email,
+          });
+        },
+        error: () => {
+          this.setLoading(false);
+        },
+        complete: () => {
+          this.setLoading(false);
+        },
+      });
   }
 
   private updateUserInformation(): void {
     this.setLoading(true);
     const userInfo = this.userInformationForm.getRawValue();
 
-    this.profileService.updateUserInformation(userInfo).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
-      error: () => {
-        this.setLoading(false);
-      },
-      complete: () => {
-        this.setLoading(false);
-      },
-    });
+    this.profileService
+      .updateUserInformation(userInfo)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        error: () => {
+          this.setLoading(false);
+        },
+        complete: () => {
+          this.setLoading(false);
+        },
+      });
   }
 
   private setLoading(loading: boolean): void {

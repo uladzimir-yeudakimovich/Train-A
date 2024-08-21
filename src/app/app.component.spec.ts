@@ -1,9 +1,10 @@
+import { HttpClientModule } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
 import { ActivatedRoute } from '@angular/router';
-import { HttpClientModule } from '@angular/common/http';
-import { AppComponent } from './app.component';
 import { HeaderComponent } from '@core/components/header/header.component';
 import { activatedRouteMock } from '@testing/mock-service';
+
+import { AppComponent } from './app.component';
 
 describe('AppComponent', () => {
   let component: AppComponent;

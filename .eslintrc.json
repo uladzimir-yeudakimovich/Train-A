@@ -1,0 +1,153 @@
+{
+  "env": {
+    "browser": true,
+    "jest": true
+  },
+  "overrides": [
+    {
+      "files": ["**/*.ts"],
+      "excludedFiles": ["**/*.spec.ts", "**/*.test.ts"],
+      "parser": "@typescript-eslint/parser",
+      "parserOptions": {
+        "ecmaVersion": "latest",
+        "project": ["tsconfig.(app|spec).json"],
+        "sourceType": "module",
+        "ecmaFeatures": {
+          "modules": true
+        }
+      },
+      "extends": [
+        "eslint:recommended",
+        "plugin:@typescript-eslint/recommended",
+        "plugin:@typescript-eslint/stylistic",
+        "plugin:@angular-eslint/recommended",
+        "plugin:import/typescript",
+        "airbnb-base"
+      ],
+      "plugins": ["simple-import-sort", "import-newlines"],
+      "rules": {
+        "implicit-arrow-linebreak": "off",
+        "function-paren-newline": "off",
+        "import/prefer-default-export": "off",
+        "simple-import-sort/imports": [
+          "warn",
+          {
+            "groups": [
+              ["^@?\\w"],
+              ["^\\u0000"],
+              ["^\\.\\.(?!/?$)", "^\\.\\./?$"],
+              ["^\\./(?=.*/)(?!/?$)", "^\\.(?!/?$)", "^\\./?$"]
+            ]
+          }
+        ],
+        "import/no-unresolved": "off",
+        "@typescript-eslint/no-unused-vars": [
+          "error",
+          {
+            "varsIgnorePattern": "[sS]ervice"
+          }
+        ],
+        "no-empty-function": [
+          "error",
+          {
+            "allow": ["constructors"]
+          }
+        ],
+        "no-useless-constructor": "off",
+        "object-curly-newline": [
+          "error",
+          {
+            "consistent": true
+          }
+        ],
+        "@angular-eslint/directive-selector": [
+          "error",
+          {
+            "type": "attribute",
+            "prefix": "app",
+            "style": "camelCase"
+          }
+        ],
+        "@angular-eslint/component-selector": [
+          "error",
+          {
+            "type": "element",
+            "prefix": "app",
+            "style": "kebab-case"
+          }
+        ],
+        "no-console": "warn",
+        "@typescript-eslint/no-explicit-any": "error",
+        "class-methods-use-this": "off",
+        "arrow-body-style": "off",
+        "import-newlines/enforce": [
+          "error",
+          {
+            "items": 3,
+            "forceSingleLine": false
+          }
+        ],
+        "max-len": [
+          "error",
+          {
+            "code": 100
+          }
+        ]
+      }
+    },
+    {
+      "files": ["**/*.html"],
+      "extends": [
+        "plugin:@angular-eslint/template/recommended",
+        "plugin:@angular-eslint/template/accessibility"
+      ],
+      "rules": {}
+    },
+    {
+      "files": ["**/*.spec.ts", "**/*.test.ts"],
+      "parser": "@typescript-eslint/parser",
+      "extends": [
+        "eslint:recommended",
+        "plugin:@typescript-eslint/recommended",
+        "plugin:@typescript-eslint/stylistic",
+        "plugin:@angular-eslint/recommended",
+        "plugin:import/typescript",
+        "airbnb-base"
+      ],
+      "plugins": ["simple-import-sort"],
+      "parserOptions": {
+        "ecmaVersion": "latest",
+        "project": ["tsconfig.spec.json"],
+        "sourceType": "module",
+        "ecmaFeatures": {
+          "modules": true
+        }
+      },
+      "rules": {
+        "import/no-unresolved": "off",
+        "simple-import-sort/imports": [
+          "warn",
+          {
+            "groups": [
+              ["^@?\\w"],
+              ["^\\u0000"],
+              ["^\\./(?=.*/)(?!/?$)", "^\\.(?!/?$)", "^\\./?$"],
+              ["^\\.\\.(?!/?$)", "^\\.\\./?$"]
+            ]
+          }
+        ],
+        "no-undef": "off"
+      }
+    },
+    {
+      "files": ["*.ts"],
+      "extends": ["plugin:@ngrx/all"]
+    },
+    {
+      "files": ["**/logger/*.ts", "main.ts"],
+      "rules": {
+        "no-console": "off"
+      }
+    }
+  ]
+}
