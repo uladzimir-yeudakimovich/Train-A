@@ -24,15 +24,12 @@ export class RideCardComponent {
     );
   });
 
-  editMode = signal({
-    departure: false,
-    arrival: false,
-    price: false,
+  editMode = computed(() => {
+    return this.segments().map(() => signal({ departure: false, arrival: false, price: false }));
   });
 
   toggleEdit = (index: number, type: 'departure' | 'arrival' | 'price') => {
-    console.log(index, type);
-    this.editMode()[type] = !this.editMode()[type];
+    this.editMode()[index].update((value) => ({ ...value, [type]: !value[type] }));
   };
 
   getDateFromISO(isoString: string): string {
