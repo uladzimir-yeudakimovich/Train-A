@@ -1,13 +1,7 @@
 import { ChangeDetectionStrategy, Component, effect, input, viewChild } from '@angular/core';
 
 import { stationFormImports } from './station-form.config';
-import {
-  FormArray,
-  FormBuilder,
-  FormControl,
-  FormGroupDirective,
-  Validators,
-} from '@angular/forms';
+import { FormArray, FormBuilder, FormGroupDirective, Validators } from '@angular/forms';
 import { StationStore } from '@admin/store/stations.store';
 import { StationFormData, StationGeoLocation } from '@admin/models/station-form.model';
 
@@ -42,9 +36,9 @@ export class StationFormComponent {
   ) {
     effect(() => {
       const [lat, lng] = this.latlng();
-      this.latitude.setValue(lat as number);
+      this.latitude.setValue(lat);
       this.latitude.markAsTouched();
-      this.longitude.setValue(lng as number);
+      this.longitude.setValue(lng);
       this.longitude.markAsTouched();
     });
   }
@@ -111,8 +105,8 @@ export class StationFormComponent {
     return '';
   }
 
-  get relations(): FormArray<FormControl<number | null>> {
-    return this.stationForm.controls?.['relations'];
+  get relations(): FormArray {
+    return this.stationForm.get('relations') as FormArray;
   }
 
   addField(): void {
