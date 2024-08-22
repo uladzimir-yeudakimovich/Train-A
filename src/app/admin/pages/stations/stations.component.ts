@@ -12,7 +12,7 @@ import { StationGeoLocation } from '@admin/models/station-form.model';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class StationsComponent implements OnInit {
-  location = signal<StationGeoLocation>([null, null]);
+  location = signal<StationGeoLocation>([0, 0]);
 
   constructor(private stationStore: StationStore) {}
 

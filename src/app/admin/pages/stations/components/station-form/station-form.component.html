@@ -4,8 +4,8 @@
 
     <input matInput type="text" formControlName="city" name="city" />
 
-    @if (city.errors?.['required']) {
-      <mat-error>Required</mat-error>
+    @if (city.invalid) {
+      <mat-error>{{ cityError }}</mat-error>
     }
   </mat-form-field>
 
@@ -14,12 +14,8 @@
 
     <input matInput type="number" formControlName="latitude" name="latitude" />
 
-    @if (latitude.errors?.['required']) {
-      <mat-error>Required</mat-error>
-    }
-
-    @if (latitude.errors?.['max'] || latitude.errors?.['min']) {
-      <mat-error>Invalid number</mat-error>
+    @if (latitude.invalid) {
+      <mat-error>{{ latError }}</mat-error>
     }
   </mat-form-field>
 
@@ -28,12 +24,8 @@
 
     <input matInput type="number" formControlName="longitude" name="longitude" />
 
-    @if (longitude.errors?.['required']) {
-      <mat-error>Required</mat-error>
-    }
-
-    @if (longitude.errors?.['max'] || longitude.errors?.['min']) {
-      <mat-error>Invalid number</mat-error>
+    @if (longitude.invalid) {
+      <mat-error>{{ lngError }}</mat-error>
     }
   </mat-form-field>
 

@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, effect, input, viewChild } from '@angular/core';
+
 import { stationFormImports } from './station-form.config';
 import {
   FormArray,
@@ -8,7 +9,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { StationStore } from '@admin/store/stations.store';
-import { StationGeoLocation } from '@admin/models/station-form.model';
+import { StationFormData, StationGeoLocation } from '@admin/models/station-form.model';
 
 @Component({
   selector: 'app-station-form',
@@ -25,10 +26,10 @@ export class StationFormComponent {
 
   stationForm = this.formBuilder.nonNullable.group(
     {
-      city: ['', Validators.required],
-      latitude: [null, [Validators.max(90), Validators.min(-90)]],
-      longitude: [null, [Validators.max(180), Validators.min(-180)]],
-      relations: this.formBuilder.array([this.formBuilder.control('', Validators.required)]),
+      city: ['', [Validators.required, Validators.maxLength(15), Validators.minLength(3)]],
+      latitude: [0, [Validators.max(90), Validators.min(-90)]],
+      longitude: [0, [Validators.max(180), Validators.min(-180)]],
+      relations: this.formBuilder.array([this.formBuilder.control(0, Validators.required)]),
     },
     { updateOn: 'blur' },
   );
@@ -41,31 +42,81 @@ export class StationFormComponent {
   ) {
     effect(() => {
       const [lat, lng] = this.latlng();
-      this.latitude.setValue(lat);
-      this.longitude.markAsTouched();
-      this.longitude.setValue(lng);
+      this.latitude.setValue(lat as number);
+      this.latitude.markAsTouched();
+      this.longitude.setValue(lng as number);
       this.longitude.markAsTouched();
     });
   }
 
-  get city(): FormControl<string> {
-    return this.stationForm.controls?.['city'];
+  get city() {
+    return this.stationForm.get('city')!;
   }
 
-  get latitude(): FormControl<number | null> {
-    return this.stationForm.controls?.['latitude'];
+  get cityError(): string {
+    if (this.city.hasError('required')) {
+      return 'Enter a city name';
+    }
+
+    if (this.city.hasError('maxlength')) {
+      return 'Max length is 15';
+    }
+
+    if (this.city.hasError('minlength')) {
+      return 'Min length is 3';
+    }
+
+    return '';
   }
 
-  get longitude(): FormControl<number | null> {
-    return this.stationForm.controls?.['longitude'];
+  get latitude() {
+    return this.stationForm.get('latitude')!;
   }
 
-  get relations(): FormArray<FormControl<string | null>> {
+  get latError(): string {
+    if (this.latitude.hasError('required')) {
+      return 'Enter a latitude value';
+    }
+
+    if (this.latitude.hasError('max')) {
+      return 'Max value is 90';
+    }
+
+    if (this.latitude.hasError('min')) {
+      return 'Min value is -90';
+    }
+
+    return '';
+  }
+
+  get longitude() {
+    return this.stationForm.get('longitude')!;
+  }
+
+  get lngError(): string {
+    const longitude = this.stationForm.get('longitude');
+
+    if (longitude!.hasError('required')) {
+      return 'Enter a longitude value';
+    }
+
+    if (longitude!.hasError('max')) {
+      return 'Max value is 180';
+    }
+
+    if (longitude!.hasError('min')) {
+      return 'Min value is -180';
+    }
+
+    return '';
+  }
+
+  get relations(): FormArray<FormControl<number | null>> {
     return this.stationForm.controls?.['relations'];
   }
 
   addField(): void {
-    const city = this.formBuilder.control('', Validators.required);
+    const city = this.formBuilder.control(0, Validators.required);
     this.relations.push(city);
   }
 
@@ -78,14 +129,7 @@ export class StationFormComponent {
   }
 
   async createStation() {
-    const city = this.city.value ?? '';
-    const latitude = Number(this.latitude.value ?? 0);
-    const longitude = Number(this.longitude.value ?? 0);
-    const relations = (this.relations.value ?? []).map(Number);
-
-    const body = { city, latitude, longitude, relations };
-
-    await this.stationStore.addStation(body);
+    await this.stationStore.addStation(this.stationForm.value as StationFormData);
 
     this.formViewChild().resetForm();
   }

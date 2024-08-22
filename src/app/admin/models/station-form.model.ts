@@ -5,4 +5,4 @@ export interface StationFormData {
   relations: number[];
 }
 
-export type StationGeoLocation = [number, number] | [null, null];
+export type StationGeoLocation = [number, number];
