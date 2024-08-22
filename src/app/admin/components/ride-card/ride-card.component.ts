@@ -1,6 +1,7 @@
 import { Segment } from '@admin/interfaces';
+import { RidesStore } from '@admin/store/ride.store';
 import { DatePipe } from '@angular/common';
-import { Component, computed, input, signal } from '@angular/core';
+import { Component, computed, inject, input, signal } from '@angular/core';
 import { MatMiniFabButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 
@@ -12,6 +13,8 @@ import { MatIcon } from '@angular/material/icon';
   styleUrl: './ride-card.component.scss',
 })
 export class RideCardComponent {
+  ridesStore = inject(RidesStore);
+
   rideId = input.required<number>();
 
   stations = input.required<string[]>();
@@ -43,5 +46,10 @@ export class RideCardComponent {
   onPriceInput(segmentIndex: number, priceIndex: number, type: string, value: string): void {
     this.prices()[segmentIndex][priceIndex].value = Number(value);
     this.segments()[segmentIndex].price[type] = Number(value);
+  }
+
+  onSave(): void {
+    this.editMode().forEach((edit) => edit.set({ departure: false, arrival: false, price: false }));
+    this.ridesStore.updateRide(this.rideId());
   }
 }
