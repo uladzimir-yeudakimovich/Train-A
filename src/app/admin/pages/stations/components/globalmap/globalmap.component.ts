@@ -26,7 +26,7 @@ export class GlobalmapComponent {
     ],
     zoom: 2,
 
-    center: latLng(52.22779941887071, 21.066284179687504),
+    center: latLng(52.2277, 21.0662),
   };
 
   latLngOutput = model<StationGeoLocation>();

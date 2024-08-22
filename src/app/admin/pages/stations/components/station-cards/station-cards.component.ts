@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, computed } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { stationCardsImports } from './station-cards.config';
 import { StationStore } from '@admin/store/stations.store';
 
@@ -11,7 +11,7 @@ import { StationStore } from '@admin/store/stations.store';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class StationCardsComponent {
-  stations = computed(() => this.stationStore.stationsEntities());
+  stations = this.stationStore.stationsEntities;
 
   constructor(private stationStore: StationStore) {}
 

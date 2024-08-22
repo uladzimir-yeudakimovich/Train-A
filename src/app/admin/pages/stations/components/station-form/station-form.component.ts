@@ -1,12 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  computed,
-  effect,
-  input,
-  viewChild,
-} from '@angular/core';
-
+import { ChangeDetectionStrategy, Component, effect, input, viewChild } from '@angular/core';
 import { stationFormImports } from './station-form.config';
 import {
   FormArray,
@@ -29,7 +21,7 @@ import { StationGeoLocation } from '@admin/models/station-form.model';
 export class StationFormComponent {
   latlng = input.required<StationGeoLocation>();
 
-  stations = computed(() => this.stationStore.stationsEntities());
+  stations = this.stationStore.stationsEntities;
 
   stationForm = this.formBuilder.nonNullable.group(
     {
