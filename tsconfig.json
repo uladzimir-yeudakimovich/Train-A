@@ -31,7 +31,8 @@
       "@shared/*": ["./src/app/shared/*"],
       "@testing/*": ["./src/app/testing/*"],
       "@orders/*": ["./src/app/orders/*"],
-      "@user/*": ["./src/app/user/*"]
+      "@user/*": ["./src/app/user/*"],
+      "@environments/*": ["./src/environments/*"]
     }
   },
   "angularCompilerOptions": {
