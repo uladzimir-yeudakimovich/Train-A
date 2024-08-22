@@ -17,7 +17,7 @@ import {
   ReactiveFormsModule,
   ValidationErrors,
 } from '@angular/forms';
-import { MatButton, MatFabButton } from '@angular/material/button';
+import { MatButton, MatIconButton } from '@angular/material/button';
 import { MatOption } from '@angular/material/core';
 import { MatLabel } from '@angular/material/form-field';
 import { MatIcon } from '@angular/material/icon';
@@ -36,7 +36,7 @@ import { CarriageStore } from '@shared/store/carriages.store';
     MatButton,
     ReactiveFormsModule,
     MatIcon,
-    MatFabButton,
+    MatIconButton,
   ],
   templateUrl: './route-form.component.html',
   styleUrl: './route-form.component.scss',
@@ -167,7 +167,6 @@ export class RouteFormComponent implements OnInit {
   private pushStationControl(value?: string | number) {
     const initValue = value || '';
     const control = this.formBuilder.control(initValue);
-    console.log('-station set init value', control.value);
     this.stations.push(control);
   }
 
