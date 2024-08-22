@@ -51,14 +51,13 @@ export class RouteFormComponent implements OnInit {
   carriageTypes!: Signal<Partial<Carriage>[]>;
 
   connectedStationsMap = computed(() => {
-    const stations = this.stationStore.stationsEntities();
     const stationsMap = this.stationStore.stationsEntityMap();
 
     return (stationId: number) => {
       if (!stationId) {
-        return stations;
+        return this.stationStore.stationsEntities();
       }
-      const fromStation = stations[stationId];
+      const fromStation = stationsMap[stationId];
       const connectedStations = fromStation.connectedTo.map(
         (connection) => stationsMap[connection.id],
       );
@@ -80,9 +79,9 @@ export class RouteFormComponent implements OnInit {
       stations: this.formBuilder.array([], this.minArrayLength(3)),
       carriages: this.formBuilder.array([], this.minArrayLength(3)),
     });
-    this.route()?.path.forEach((stationId) =>
-      this.pushStationControl(stationId),
-    );
+    this.route()?.path.forEach((stationId) => {
+      this.pushStationControl(stationId);
+    });
     this.route()?.carriages.forEach((carriage) =>
       this.pushCarriageControl(carriage),
     );
@@ -167,10 +166,11 @@ export class RouteFormComponent implements OnInit {
 
   private pushStationControl(value?: string | number) {
     const initValue = value || '';
-    this.stations.push(this.formBuilder.control(initValue));
+    const control = this.formBuilder.control(initValue);
+    console.log('-station set init value', control.value);
+    this.stations.push(control);
   }
 
-  // TODO: fix
   private minArrayLength(min: number) {
     // the last value is always empty, so check min + 1
     const minRequiredLength = min + 1;
