@@ -4,3 +4,5 @@ export interface StationFormInterface {
   longitude: number;
   relations: number[];
 }
+
+export type StationLocationTuple = [number, number] | [null, null];

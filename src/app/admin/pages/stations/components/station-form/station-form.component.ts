@@ -1,7 +1,21 @@
-import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  effect,
+  input,
+  viewChild,
+} from '@angular/core';
 import { stationFormImports } from './station-form.config';
-import { FormArray, FormBuilder, FormControl, Validators } from '@angular/forms';
+import {
+  FormArray,
+  FormBuilder,
+  FormControl,
+  FormGroupDirective,
+  Validators,
+} from '@angular/forms';
 import { StationStore } from '@admin/store/stations.store';
+import { StationLocationTuple } from '@admin/models/station-form.model';
 
 @Component({
   selector: 'app-station-form',
@@ -12,10 +26,9 @@ import { StationStore } from '@admin/store/stations.store';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class StationFormComponent {
-  private adminStore = inject(StationStore);
-  private formBuilder = inject(FormBuilder);
+  latlng = input.required<StationLocationTuple>();
 
-  stations = computed(() => this.adminStore.stationsEntities());
+  stations = computed(() => this.stationStore.stationsEntities());
 
   stationForm = this.formBuilder.nonNullable.group(
     {
@@ -26,6 +39,19 @@ export class StationFormComponent {
     },
     { updateOn: 'blur' },
   );
+
+  private formViewChild = viewChild.required(FormGroupDirective);
+
+  constructor(
+    private stationStore: StationStore,
+    private formBuilder: FormBuilder,
+  ) {
+    effect(() => {
+      const [lat, lng] = this.latlng();
+      this.latitude.setValue(lat);
+      this.longitude.setValue(lng);
+    });
+  }
 
   get city(): FormControl<string> {
     return this.stationForm.controls?.['city'];
@@ -56,14 +82,16 @@ export class StationFormComponent {
     return (Date.now() * Math.random()).toString(36);
   }
 
-  createStation() {
+  async createStation() {
     const city = this.city.value ?? '';
     const latitude = Number(this.latitude.value ?? 0);
     const longitude = Number(this.longitude.value ?? 0);
-    const relations = (this.relations.value ?? []).map((id) => Number(id));
+    const relations = (this.relations.value ?? []).map(Number);
 
     const body = { city, latitude, longitude, relations };
 
-    this.adminStore.addStation(body);
+    await this.stationStore.addStation(body);
+
+    this.formViewChild().resetForm();
   }
 }
