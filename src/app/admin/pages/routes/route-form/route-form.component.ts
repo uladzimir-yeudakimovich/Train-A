@@ -10,35 +10,17 @@ import {
   output,
   Signal,
 } from '@angular/core';
-import {
-  AbstractControl,
-  FormArray,
-  FormBuilder,
-  FormGroup,
-  ReactiveFormsModule,
-  ValidationErrors,
-} from '@angular/forms';
-import { MatButton, MatIconButton } from '@angular/material/button';
-import { MatOption } from '@angular/material/core';
-import { MatLabel } from '@angular/material/form-field';
-import { MatIcon } from '@angular/material/icon';
-import { MatFormField, MatSelect } from '@angular/material/select';
+import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import { Carriage } from '@shared/models/interfaces/carriage.model';
 import { CarriageStore } from '@shared/store/carriages.store';
+
+import { routeFormImports } from './route-form.config';
+import { minArrayLength } from './route-form.utils';
 
 @Component({
   selector: 'app-route-form',
   standalone: true,
-  imports: [
-    MatFormField,
-    MatLabel,
-    MatOption,
-    MatSelect,
-    MatButton,
-    ReactiveFormsModule,
-    MatIcon,
-    MatIconButton,
-  ],
+  imports: routeFormImports,
   templateUrl: './route-form.component.html',
   styleUrl: './route-form.component.scss',
 })
@@ -49,7 +31,7 @@ export class RouteFormComponent implements OnInit {
 
   routeForm!: FormGroup;
 
-  carriageTypes!: Signal<Partial<Carriage>[]>;
+  carriageOptions!: Signal<Partial<Carriage>[]>;
 
   connectedStationsMap = computed(() => {
     const stationsMap = this.stationStore.stationsEntityMap();
@@ -75,35 +57,25 @@ export class RouteFormComponent implements OnInit {
   constructor(private formBuilder: FormBuilder) {}
 
   ngOnInit(): void {
+    const minStationsNumber = 3;
+    const minCarriagesNumber = 3;
+
     this.carriageStore.getCarriages();
-    this.carriageTypes = this.carriageStore.carriagesEntities;
+    this.carriageOptions = this.carriageStore.carriagesEntities;
 
     this.routeForm = this.formBuilder.group({
-      stations: this.formBuilder.array([], this.minArrayLength(3)),
-      carriages: this.formBuilder.array([], this.minArrayLength(3)),
+      stations: this.formBuilder.array([], minArrayLength(minStationsNumber)),
+      carriages: this.formBuilder.array([], minArrayLength(minCarriagesNumber)),
     });
-    this.route()?.path.forEach((stationId) => {
-      this.pushStationControl(stationId);
-    });
-    this.route()?.carriages.forEach((carriage) =>
-      this.pushCarriageControl(carriage),
-    );
-
-    // Add empty fields at the end
-    this.pushCarriageControl();
-    this.pushStationControl();
-
-    this.enableLastTwoStations();
+    this.initRouteForm();
   }
 
   onSubmit() {
+    // enable disabled fields to get values
     this.stations.enable();
 
-    const newRoute: Partial<RailRoute> = {
-      path: this.stations.value.slice(0, -1).map(Number),
-      carriages: this.carriages.value.slice(0, -1),
-    };
     const isUpdateMode = !!this.route();
+    const newRoute = this.getFormRoute();
 
     if (isUpdateMode) {
       this.routeStore.updateRoute(this.route()!.id, newRoute);
@@ -119,8 +91,8 @@ export class RouteFormComponent implements OnInit {
     this.routeForm.reset();
     this.stations.clear();
     this.carriages.clear();
-    this.pushStationControl();
-    this.pushCarriageControl();
+
+    this.initRouteForm();
     this.enableLastTwoStations();
   }
 
@@ -132,7 +104,8 @@ export class RouteFormComponent implements OnInit {
     const stationsNum = this.stations.length - 1;
     const isLast = idx === stationsNum;
     if (!isLast) return;
-    this.pushStationControl();
+
+    this.addStationControl();
     this.enableLastTwoStations();
   }
 
@@ -141,7 +114,7 @@ export class RouteFormComponent implements OnInit {
     const isLast = idx === carriagesNum;
     if (!isLast) return;
 
-    this.pushCarriageControl();
+    this.addCarriageControl();
   }
 
   onDeleteStation(event: Event, idx: number) {
@@ -163,6 +136,25 @@ export class RouteFormComponent implements OnInit {
     return this.routeForm.get('carriages') as FormArray;
   }
 
+  private getFormRoute(): Partial<RailRoute> {
+    return {
+      path: this.stations.value.slice(0, -1).map(Number), // slice to remove the last empty field
+      carriages: this.carriages.value.slice(0, -1),
+    };
+  }
+
+  private initRouteForm() {
+    if (this.route()) {
+      this.addStationControl(this.route()!.path);
+      this.addCarriageControl(this.route()!.carriages);
+    }
+    // empty fields at the end
+    this.addCarriageControl();
+    this.addStationControl();
+
+    this.enableLastTwoStations();
+  }
+
   private enableLastTwoStations() {
     const stations = this.stations.controls;
     if (stations.length < 2) {
@@ -174,33 +166,21 @@ export class RouteFormComponent implements OnInit {
     stations[stations.length - 2].enable();
   }
 
-  private pushCarriageControl(value?: string) {
-    const initValue = value || '';
-    this.carriages.push(this.formBuilder.control(initValue));
+  private addCarriageControl(initValues?: string[]) {
+    this.addControl(this.carriages, initValues);
   }
 
-  private pushStationControl(value?: string | number) {
-    const initValue = value || '';
-    const control = this.formBuilder.control(initValue);
-    this.stations.push(control);
+  private addStationControl(initValues?: number[]) {
+    this.addControl(this.stations, initValues);
   }
 
-  private minArrayLength(min: number) {
-    // the last value is always empty, so check min + 1
-    const minRequiredLength = min + 1;
-    return (control: AbstractControl): ValidationErrors | null => {
-      if (control instanceof FormArray) {
-        if (control.length >= minRequiredLength) {
-          return null;
-        }
-        return {
-          minArrayLength: {
-            requiredLength: minRequiredLength,
-            actualLength: control.length,
-          },
-        };
-      }
-      return null;
-    };
+  private addControl<T>(controls: FormArray, initValues?: T[]) {
+    if (!initValues) {
+      controls.push(this.formBuilder.control(''));
+      return;
+    }
+    initValues.forEach((value: T) => {
+      controls.push(this.formBuilder.control(value));
+    });
   }
 }

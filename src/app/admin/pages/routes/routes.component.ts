@@ -1,7 +1,8 @@
-import { RouteFormComponent } from '@admin/components/route-form/route-form.component';
-import { RouteListComponent } from '@admin/components/route-list/route-list.component';
 import { Component, signal } from '@angular/core';
 import { MatButton } from '@angular/material/button';
+
+import { RouteFormComponent } from './route-form/route-form.component';
+import { RouteListComponent } from './route-list/route-list.component';
 
 @Component({
   selector: 'app-routes',

@@ -2,7 +2,7 @@
   <div class="form-grid">
     <div class="col" formArrayName="stations">
       @let connectedStations = connectedStationsMap();
-      @for (station of stations.controls; track station; let i = $index) {
+      @for (station of stations.controls; track station.value; let i = $index) {
         <div class="form-field-container">
           <mat-form-field class="form-field">
             <mat-label>City</mat-label>
@@ -36,7 +36,7 @@
       }
     </div>
     <div class="col" formArrayName="carriages">
-      @for (carField of carriages.controls; track carField; let i = $index) {
+      @for (carField of carriages.controls; track $index; let i = $index) {
         <div class="form-field-container">
           <mat-form-field class="form-field">
             <mat-label>Carriage</mat-label>
@@ -44,8 +44,8 @@
               [formControlName]="i"
               (selectionChange)="onSetCarriage(i)"
             >
-              @for (car of carriageTypes(); track $index) {
-                <mat-option [value]="car.code">{{ car.name }}</mat-option>
+              @for (carriage of carriageOptions(); track $index) {
+                <mat-option [value]="carriage.code">{{ carriage.name }}</mat-option>
               }
             </mat-select>
           </mat-form-field>
