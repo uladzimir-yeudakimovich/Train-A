@@ -1,4 +1,4 @@
-import { Route, RouteInformation, Station } from '@admin/interfaces';
+import { Route, RouteInformation, Segment, Station } from '@admin/interfaces';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { catchError, Observable, of, switchMap, throwError } from 'rxjs';
@@ -34,5 +34,9 @@ export class AdminService {
 
   createRide() {}
 
-  updateRide() {}
+  updateRide(routeId: number, rideId: number, segments: Segment[]): Observable<object> {
+    return this.http
+      .put(`route/${routeId}/ride/${rideId}`, { segments })
+      .pipe(catchError((err) => throwError(() => err)));
+  }
 }
