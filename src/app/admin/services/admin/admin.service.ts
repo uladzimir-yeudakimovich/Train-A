@@ -21,7 +21,9 @@ export class AdminService {
   deleteStation(id: number): Promise<Station> {
     return firstValueFrom(
       this.http.delete<Station>(`${ApiPath.Station}/${id}`),
-    );
+    ).catch((error) => {
+      throw error;
+    });
   }
 
   postRoute(route: Partial<RailRoute>): Promise<object> {
@@ -29,16 +31,28 @@ export class AdminService {
       path: route.path,
       carriages: route.carriages,
     };
-    return firstValueFrom(this.http.post(ApiPath.Route, body));
+    return firstValueFrom(this.http.post(ApiPath.Route, body)).catch(
+      (error) => {
+        throw error;
+      },
+    );
   }
 
   updateRoute(id: number, route: Partial<RailRoute>): Promise<object> {
     const body = { ...route };
-    return firstValueFrom(this.http.put(`${ApiPath.Route}/${id}`, body));
+    return firstValueFrom(this.http.put(`${ApiPath.Route}/${id}`, body)).catch(
+      (error) => {
+        throw error;
+      },
+    );
   }
 
   deleteRoute(id: number): Promise<object> {
-    return firstValueFrom(this.http.delete(`${ApiPath.Route}/${id}`));
+    return firstValueFrom(this.http.delete(`${ApiPath.Route}/${id}`)).catch(
+      (error) => {
+        throw error;
+      },
+    );
   }
 
   private createLoader<T>(endpoint: string) {
@@ -48,9 +62,13 @@ export class AdminService {
         return Promise.resolve([] as unknown as T);
       }
       isLoading = true;
-      return firstValueFrom(this.http.get<T>(endpoint)).finally(() => {
-        isLoading = false;
-      });
+      return firstValueFrom(this.http.get<T>(endpoint))
+        .catch((error) => {
+          throw error;
+        })
+        .finally(() => {
+          isLoading = false;
+        });
     };
   }
 }
