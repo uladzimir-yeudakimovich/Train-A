@@ -41,4 +41,17 @@ export class RideCardComponent {
     const date = new Date(isoString);
     return date.toTimeString().slice(0, 5);
   }
+
+  onDepartureDateInput(segmentIndex: number, value: string): void {
+    this.segments()[segmentIndex].time[0] = value;
+  }
+
+  onArrivalDateInput(segmentIndex: number, value: string): void {
+    this.segments()[segmentIndex].time[1] = value;
+  }
+
+  onPriceInput(segmentIndex: number, priceIndex: number, type: string, value: string): void {
+    this.prices()[segmentIndex][priceIndex].value = Number(value);
+    this.segments()[segmentIndex].price[type] = Number(value);
+  }
 }
