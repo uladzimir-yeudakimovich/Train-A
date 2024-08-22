@@ -13,17 +13,19 @@
         <div class="row">
           <div class="dates">
             <div class="date-and-icon">
-              Departure:
+              <div>Departure:</div>
 
-              @if (!edit.departure) {
-                {{ segment.time[0] | date: 'yyyy-MM-dd hh-mm a' }}
-              } @else {
-                <input
-                  type="datetime"
-                  [value]="segment.time[0]"
-                  #departureDate
-                  (input)="onDepartureDateInput(segmentIndex, departureDate.value)" />
-              }
+              <div>
+                @if (!edit.departure) {
+                  {{ segment.time[0] | date: 'yyyy-MM-dd hh-mm a' }}
+                } @else {
+                  <input
+                    type="datetime"
+                    [value]="segment.time[0]"
+                    #departureDate
+                    (input)="onDepartureDateInput(segmentIndex, departureDate.value)" />
+                }
+              </div>
 
               <mat-icon
                 class="icon"
@@ -33,17 +35,19 @@
               </mat-icon>
             </div>
             <div class="date-and-icon">
-              Arrival:
+              <div>Arrival:</div>
 
-              @if (!edit.arrival) {
-                {{ segment.time[1] | date: 'yyyy-MM-dd hh-mm a' }}
-              } @else {
-                <input
-                  type="datetime"
-                  [value]="segment.time[1]"
-                  #arrivalDate
-                  (input)="onArrivalDateInput(segmentIndex, arrivalDate.value)" />
-              }
+              <div>
+                @if (!edit.arrival) {
+                  {{ segment.time[1] | date: 'yyyy-MM-dd hh-mm a' }}
+                } @else {
+                  <input
+                    type="datetime"
+                    [value]="segment.time[1]"
+                    #arrivalDate
+                    (input)="onArrivalDateInput(segmentIndex, arrivalDate.value)" />
+                }
+              </div>
 
               <mat-icon
                 class="icon"
@@ -65,19 +69,21 @@
               </mat-icon>
             </div>
             @for (price of prices()[segmentIndex]; track $index; let priceIndex = $index) {
-              <div>
-                {{ price.type }} -
-                @if (!edit.price) {
-                  ${{ price.value }}
-                } @else {
-                  <input
-                    type="text"
-                    [value]="price.value"
-                    #priceInput
-                    (input)="
-                      onPriceInput(segmentIndex, priceIndex, price.type, priceInput.value)
-                    " />
-                }
+              <div class="price">
+                <div class="price-type">{{ price.type }}</div>
+                <div class="price-value">
+                  @if (!edit.price) {
+                    ${{ price.value }}
+                  } @else {
+                    <input
+                      type="text"
+                      [value]="price.value"
+                      #priceInput
+                      (input)="
+                        onPriceInput(segmentIndex, priceIndex, price.type, priceInput.value)
+                      " />
+                  }
+                </div>
               </div>
             }
           </div>

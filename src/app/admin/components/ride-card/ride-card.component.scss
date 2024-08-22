@@ -39,11 +39,26 @@
   padding-block: 50px;
 }
 
-.date-and-icon,
+.price {
+  display: flex;
+  column-gap: 10px;
+}
+
+.date-and-icon {
+  display: grid;
+  grid-template-columns: max-content max-content 1fr;
+  align-items: center;
+  column-gap: 10px;
+}
+
 .price-and-icon {
   display: flex;
   align-items: center;
   justify-content: space-between;
+}
+
+.icon {
+  justify-self: end;
 }
 
 .icon:hover {
