@@ -28,11 +28,16 @@ export class RideCardComponent {
   });
 
   editMode = computed(() => {
-    return this.segments().map(() => signal({ departure: false, arrival: false, price: false }));
+    return this.segments().map(() =>
+      signal({ departure: false, arrival: false, price: false }),
+    );
   });
 
   toggleEditMode(index: number, type: 'departure' | 'arrival' | 'price'): void {
-    this.editMode()[index].update((value) => ({ ...value, [type]: !value[type] }));
+    this.editMode()[index].update((value) => ({
+      ...value,
+      [type]: !value[type],
+    }));
   }
 
   onDepartureDateInput(segmentIndex: number, value: string): void {
@@ -43,13 +48,20 @@ export class RideCardComponent {
     this.segments()[segmentIndex].time[1] = value;
   }
 
-  onPriceInput(segmentIndex: number, priceIndex: number, type: string, value: string): void {
+  onPriceInput(
+    segmentIndex: number,
+    priceIndex: number,
+    type: string,
+    value: string,
+  ): void {
     this.prices()[segmentIndex][priceIndex].value = Number(value);
     this.segments()[segmentIndex].price[type] = Number(value);
   }
 
   onSave(): void {
-    this.editMode().forEach((edit) => edit.set({ departure: false, arrival: false, price: false }));
+    this.editMode().forEach((edit) =>
+      edit.set({ departure: false, arrival: false, price: false }),
+    );
     this.ridesStore.updateRide(this.rideId());
   }
 }

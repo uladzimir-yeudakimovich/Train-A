@@ -38,9 +38,11 @@ export const RidesStore = signalStore(
       });
     },
     updateRide(rideId: number) {
-      const ride = store.schedule().find((ride) => ride.rideId === rideId);
+      const ride = store.schedule().find((r) => r.rideId === rideId);
       if (ride) {
-        adminService.updateRide(store.routeId(), rideId, ride.segments).subscribe();
+        adminService
+          .updateRide(store.routeId(), rideId, ride.segments)
+          .subscribe();
       }
     },
   })),

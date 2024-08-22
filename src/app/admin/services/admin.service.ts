@@ -19,7 +19,11 @@ export class AdminService {
               routeResponse.path.includes(station.id),
             );
             const stations = stationIndices.map((station) => station.city);
-            return of({ routeId: routeResponse.id, schedule: routeResponse.schedule, stations });
+            return of({
+              routeId: routeResponse.id,
+              schedule: routeResponse.schedule,
+              stations,
+            });
           }),
         );
       }),
@@ -29,12 +33,18 @@ export class AdminService {
 
   // TODO: Temporary method
   getStations(): Observable<Station[]> {
-    return this.http.get<Station[]>('station').pipe(catchError((err) => throwError(() => err)));
+    return this.http
+      .get<Station[]>('station')
+      .pipe(catchError((err) => throwError(() => err)));
   }
 
-  createRide() {}
+  // createRide() {}
 
-  updateRide(routeId: number, rideId: number, segments: Segment[]): Observable<object> {
+  updateRide(
+    routeId: number,
+    rideId: number,
+    segments: Segment[],
+  ): Observable<object> {
     return this.http
       .put(`route/${routeId}/ride/${rideId}`, { segments })
       .pipe(catchError((err) => throwError(() => err)));
