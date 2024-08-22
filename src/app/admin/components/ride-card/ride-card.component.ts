@@ -32,16 +32,6 @@ export class RideCardComponent {
     this.editMode()[index].update((value) => ({ ...value, [type]: !value[type] }));
   }
 
-  getDateFromISO(isoString: string): string {
-    const date = new Date(isoString);
-    return date.toISOString().split('T')[0];
-  }
-
-  getTimeFromISO(isoString: string): string {
-    const date = new Date(isoString);
-    return date.toTimeString().slice(0, 5);
-  }
-
   onDepartureDateInput(segmentIndex: number, value: string): void {
     this.segments()[segmentIndex].time[0] = value;
   }
