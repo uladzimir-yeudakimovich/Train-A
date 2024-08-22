@@ -21,12 +21,12 @@ export class GlobalmapComponent {
   options = {
     layers: [
       tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        maxZoom: 18,
-        attribution: '...',
+        maxZoom: 12,
       }),
     ],
-    zoom: 4,
-    center: latLng(32.766284, -96.760866),
+    zoom: 2,
+
+    center: latLng(52.22779941887071, 21.066284179687504),
   };
 
   latLngOutput = model<StationLocationTuple>();

@@ -6,6 +6,7 @@ import {
   input,
   viewChild,
 } from '@angular/core';
+
 import { stationFormImports } from './station-form.config';
 import {
   FormArray,
@@ -49,7 +50,9 @@ export class StationFormComponent {
     effect(() => {
       const [lat, lng] = this.latlng();
       this.latitude.setValue(lat);
+      this.longitude.markAsTouched();
       this.longitude.setValue(lng);
+      this.longitude.markAsTouched();
     });
   }
 
