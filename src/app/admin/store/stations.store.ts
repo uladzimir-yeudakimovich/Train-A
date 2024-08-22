@@ -28,7 +28,10 @@ export const StationStore = signalStore(
 
   withComputed(({ stationsEntities }) => ({
     locations: computed(() =>
-      stationsEntities().map(({ latitude, longitude }) => [latitude, longitude]),
+      stationsEntities().map(({ city, latitude, longitude }) => ({
+        location: [latitude, longitude],
+        label: city,
+      })),
     ),
   })),
 );
