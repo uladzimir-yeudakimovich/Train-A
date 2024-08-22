@@ -2,7 +2,8 @@ import { RideListComponent } from '@admin/components/ride-list/ride-list.compone
 import { Component } from '@angular/core';
 import { MatButton, MatMiniFabButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { RoutePath } from '@shared/models/enums/route-path.enum';
 
 @Component({
   selector: 'app-rides',
@@ -14,5 +15,12 @@ import { ActivatedRoute } from '@angular/router';
 export class RidesComponent {
   routeId = this.activatedRoute.snapshot.paramMap.get('id');
 
-  constructor(private readonly activatedRoute: ActivatedRoute) {}
+  constructor(
+    private readonly router: Router,
+    private readonly activatedRoute: ActivatedRoute,
+  ) {}
+
+  onBackButtonClick(): void {
+    this.router.navigate([RoutePath.Admin, RoutePath.AdminRoutes]);
+  }
 }
