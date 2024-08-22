@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, OnInit, signal } from '@angular/core';
 import { stationsImports } from './stations.config';
 import { StationStore } from '@admin/store/stations.store';
-import { StationLocationTuple } from '@admin/models/station-form.model';
+import { StationGeoLocation } from '@admin/models/station-form.model';
 
 @Component({
   selector: 'app-stations',
@@ -12,7 +12,7 @@ import { StationLocationTuple } from '@admin/models/station-form.model';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class StationsComponent implements OnInit {
-  location = signal<StationLocationTuple>([null, null]);
+  location = signal<StationGeoLocation>([null, null]);
 
   constructor(private stationStore: StationStore) {}
 

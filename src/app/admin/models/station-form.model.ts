@@ -1,8 +1,8 @@
-export interface StationFormInterface {
+export interface StationFormData {
   city: string;
   latitude: number;
   longitude: number;
   relations: number[];
 }
 
-export type StationLocationTuple = [number, number] | [null, null];
+export type StationGeoLocation = [number, number] | [null, null];

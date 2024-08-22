@@ -1,10 +1,10 @@
-import { StationFormInterface } from '@admin/models/station-form.model';
-import { StationInterface } from '@admin/models/station.model';
+import { StationFormData } from '@admin/models/station-form.model';
+import { StationResponseItem } from '@admin/models/station.model';
 
 export const mapFromIdToStation = (
   { id }: { id: number },
-  { city, latitude, longitude, relations }: StationFormInterface,
-): StationInterface => {
+  { city, latitude, longitude, relations }: StationFormData,
+): StationResponseItem => {
   return {
     id,
     city,

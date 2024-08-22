@@ -2,12 +2,12 @@ import { computed, inject } from '@angular/core';
 import { signalStore, type, patchState, withMethods, withComputed } from '@ngrx/signals';
 import { withEntities, setAllEntities, removeEntity, addEntity } from '@ngrx/signals/entities';
 import { AdminService } from '@admin/services/admin.service';
-import { StationInterface } from './../models/station.model';
-import { StationFormInterface } from '@admin/models/station-form.model';
+import { StationResponseItem } from './../models/station.model';
+import { StationFormData } from '@admin/models/station-form.model';
 
 export const StationStore = signalStore(
   { providedIn: 'root' },
-  withEntities({ entity: type<StationInterface>(), collection: 'stations' }),
+  withEntities({ entity: type<StationResponseItem>(), collection: 'stations' }),
 
   withMethods((store, adminService = inject(AdminService)) => ({
     async getStations(): Promise<void> {
@@ -20,7 +20,7 @@ export const StationStore = signalStore(
       patchState(store, removeEntity(id, { collection: 'stations' }));
     },
 
-    async addStation(body: StationFormInterface): Promise<void> {
+    async addStation(body: StationFormData): Promise<void> {
       const station = await adminService.postStation(body);
       patchState(store, addEntity(station, { collection: 'stations' }));
     },

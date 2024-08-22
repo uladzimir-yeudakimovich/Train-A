@@ -16,7 +16,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { StationStore } from '@admin/store/stations.store';
-import { StationLocationTuple } from '@admin/models/station-form.model';
+import { StationGeoLocation } from '@admin/models/station-form.model';
 
 @Component({
   selector: 'app-station-form',
@@ -27,7 +27,7 @@ import { StationLocationTuple } from '@admin/models/station-form.model';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class StationFormComponent {
-  latlng = input.required<StationLocationTuple>();
+  latlng = input.required<StationGeoLocation>();
 
   stations = computed(() => this.stationStore.stationsEntities());
 

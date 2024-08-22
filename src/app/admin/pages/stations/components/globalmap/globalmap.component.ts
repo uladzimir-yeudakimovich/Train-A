@@ -2,7 +2,7 @@ import { StationStore } from '@admin/store/stations.store';
 import { Component, computed, model } from '@angular/core';
 import { LeafletModule } from '@bluehalo/ngx-leaflet';
 import { latLng, LatLngTuple, LeafletMouseEvent, marker, tileLayer } from 'leaflet';
-import { StationLocationTuple } from '@admin/models/station-form.model';
+import { StationGeoLocation } from '@admin/models/station-form.model';
 
 @Component({
   selector: 'app-globalmap',
@@ -29,12 +29,12 @@ export class GlobalmapComponent {
     center: latLng(52.22779941887071, 21.066284179687504),
   };
 
-  latLngOutput = model<StationLocationTuple>();
+  latLngOutput = model<StationGeoLocation>();
 
   constructor(private stationStore: StationStore) {}
 
   onLeafLetClick({ latlng }: LeafletMouseEvent) {
-    const location: StationLocationTuple = [latlng.lat, latlng.lng];
+    const location: StationGeoLocation = [latlng.lat, latlng.lng];
     this.latLngOutput.set(location);
   }
 }

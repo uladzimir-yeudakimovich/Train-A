@@ -1,20 +1,19 @@
-export interface ConnectedInterface {
+export interface Station {
+  id: number;
+  city: string;
+  latitude: number;
+  longitude: number;
+}
+
+export interface Connected {
   id: number;
   distance?: number;
 }
 
-export interface StationInterface {
-  id: number;
-  city: string;
-  latitude: number;
-  longitude: number;
-  connectedTo: ConnectedInterface[];
+export interface StationResponseItem extends Station {
+  connectedTo: Connected[];
 }
 
-export interface StationCardInterface {
-  id: number;
-  city: string;
-  latitude: number;
-  longitude: number;
+export interface StationCardItem extends Station {
   connected: string;
 }

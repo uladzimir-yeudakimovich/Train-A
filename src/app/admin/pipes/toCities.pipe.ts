@@ -1,4 +1,4 @@
-import { StationCardInterface, StationInterface } from '@admin/models/station.model';
+import { StationCardItem, StationResponseItem } from '@admin/models/station.model';
 import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
@@ -6,7 +6,7 @@ import { Pipe, PipeTransform } from '@angular/core';
   standalone: true,
 })
 export class ToCitiesPipe implements PipeTransform {
-  transform(stations: StationInterface[]): StationCardInterface[] {
+  transform(stations: StationResponseItem[]): StationCardItem[] {
     if (stations.length === 0) {
       return [];
     }
@@ -24,6 +24,6 @@ export class ToCitiesPipe implements PipeTransform {
         connected,
       });
       return acc;
-    }, [] as StationCardInterface[]);
+    }, [] as StationCardItem[]);
   }
 }
