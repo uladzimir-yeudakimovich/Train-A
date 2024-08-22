@@ -1,7 +1,12 @@
 @import '@shared/styles/variables.scss';
 
 :host {
-  .cancel-button,
+  width: 100%;
+
+  .cancel-button {
+    background-color: $cancelButtonColor;
+  }
+  
   .reset-button {
     background-color: $lightGrey;
   }
@@ -24,5 +29,10 @@
     position: absolute;
     right: -1.5rem;
     top: 0;
+  }
+
+  .buttons {
+    display: flex;
+    justify-content: space-around;
   }
 }

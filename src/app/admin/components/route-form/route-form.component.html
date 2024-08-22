@@ -3,13 +3,17 @@
     <div class="col" formArrayName="stations">
       @let connectedStations = connectedStationsMap();
       @for (station of stations.controls; track station; let i = $index) {
-        station.value is {{ station.value }}
         <mat-form-field class="form-field">
           <mat-label>City</mat-label>
           @let prevStationId = i > 0 ? stations.controls[i - 1].value : null;
           <mat-select [formControlName]="i" (selectionChange)="onSetStation(i)">
-            @for (connectedStation of connectedStations(prevStationId); track connectedStation.id) {
-              <mat-option [value]="connectedStation.id">{{ connectedStation.city }}</mat-option>
+            @for (
+              connectedStation of connectedStations(prevStationId);
+              track connectedStation.id
+            ) {
+              <mat-option [value]="connectedStation.id">{{
+                connectedStation.city
+              }}</mat-option>
             }
           </mat-select>
 
@@ -19,7 +23,8 @@
               mat-fab
               type="button"
               class="delete-button"
-              (click)="onDeleteStation($event, i)">
+              (click)="onDeleteStation($event, i)"
+            >
               <mat-icon>delete</mat-icon>
             </button>
           }
@@ -30,7 +35,10 @@
       @for (carField of carriages.controls; track carField; let i = $index) {
         <mat-form-field>
           <mat-label>Carriage</mat-label>
-          <mat-select [formControlName]="i" (selectionChange)="onSetCarriage(i)">
+          <mat-select
+            [formControlName]="i"
+            (selectionChange)="onSetCarriage(i)"
+          >
             @for (car of carriageTypes(); track $index) {
               <mat-option [value]="car.code">{{ car.name }}</mat-option>
             }
@@ -40,7 +48,8 @@
               mat-fab
               type="button"
               class="delete-button"
-              (click)="onDeleteCarriage($event, i)">
+              (click)="onDeleteCarriage($event, i)"
+            >
               <mat-icon>delete</mat-icon>
             </button>
           }
@@ -48,7 +57,25 @@
       }
     </div>
   </div>
-  <button mat-flat-button (click)="onClose()" class="cancel-button" type="button">Cancel</button>
-  <button mat-flat-button (click)="onReset()" class="reset-button" type="button">Reset</button>
-  <button mat-flat-button type="submit" [disabled]="routeForm.invalid">Submit</button>
+  <div class="buttons">
+    <button
+      mat-flat-button
+      (click)="onClose()"
+      class="cancel-button"
+      type="button"
+    >
+      Cancel
+    </button>
+    <button
+      mat-flat-button
+      (click)="onReset()"
+      class="reset-button"
+      type="button"
+    >
+      Reset
+    </button>
+    <button mat-flat-button type="submit" [disabled]="routeForm.invalid">
+      Submit
+    </button>
+  </div>
 </form>
