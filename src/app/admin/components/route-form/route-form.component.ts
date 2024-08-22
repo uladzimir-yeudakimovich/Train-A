@@ -1,4 +1,5 @@
 import { RailRoute } from '@admin/models/route.model';
+import { RouteStore } from '@admin/store/routes/routes.store';
 import { StationStore } from '@admin/store/stations/stations.store';
 import {
   Component,
@@ -69,6 +70,8 @@ export class RouteFormComponent implements OnInit {
 
   private stationStore = inject(StationStore);
 
+  private routeStore = inject(RouteStore);
+
   constructor(private formBuilder: FormBuilder) {}
 
   ngOnInit(): void {
@@ -95,8 +98,20 @@ export class RouteFormComponent implements OnInit {
 
   onSubmit() {
     this.stations.enable();
-    // TODO: implement submit logic
-    console.log('Submitted', this.routeForm.value);
+
+    const newRoute: Partial<RailRoute> = {
+      path: this.stations.value.slice(0, -1).map(Number),
+      carriages: this.carriages.value.slice(0, -1),
+    };
+    const isUpdateMode = !!this.route();
+
+    if (isUpdateMode) {
+      this.routeStore.updateRoute(this.route()!.id, newRoute);
+      this.onClose();
+      return;
+    }
+
+    this.routeStore.postRoute(newRoute);
     this.onReset();
   }
 

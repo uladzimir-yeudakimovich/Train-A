@@ -34,8 +34,7 @@ export class AdminService {
 
   updateRoute(id: number, route: Partial<RailRoute>): Promise<object> {
     const body = { ...route };
-    const params = { id };
-    return firstValueFrom(this.http.put(ApiPath.Route, body, { params }));
+    return firstValueFrom(this.http.put(`${ApiPath.Route}/${id}`, body));
   }
 
   deleteRoute(id: number): Promise<object> {
