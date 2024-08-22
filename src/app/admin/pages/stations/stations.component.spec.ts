@@ -9,12 +9,7 @@ xdescribe('StationsComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [StationsComponent],
-<<<<<<< HEAD
-    })
-      .compileComponents();
-=======
     }).compileComponents();
->>>>>>> 696896e (chore: run prettier)
 
     fixture = TestBed.createComponent(StationsComponent);
     component = fixture.componentInstance;

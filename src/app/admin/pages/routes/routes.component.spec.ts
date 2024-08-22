@@ -9,12 +9,7 @@ xdescribe('RoutesComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [RoutesComponent],
-<<<<<<< HEAD
-    })
-      .compileComponents();
-=======
     }).compileComponents();
->>>>>>> 696896e (chore: run prettier)
 
     fixture = TestBed.createComponent(RoutesComponent);
     component = fixture.componentInstance;

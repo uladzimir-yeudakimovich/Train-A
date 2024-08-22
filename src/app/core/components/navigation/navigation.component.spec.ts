@@ -17,12 +17,7 @@ describe('NavigationComponent', () => {
         { provide: AuthService, useValue: authServiceMock },
         { provide: ProfileService, useValue: profileServiceMock },
       ],
-<<<<<<< HEAD
-    })
-      .compileComponents();
-=======
     }).compileComponents();
->>>>>>> 696896e (chore: run prettier)
 
     fixture = TestBed.createComponent(NavigationComponent);
     component = fixture.componentInstance;

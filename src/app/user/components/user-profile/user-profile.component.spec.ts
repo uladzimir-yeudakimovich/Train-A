@@ -11,7 +11,10 @@ import { Router } from '@angular/router';
 import { AuthService } from '@auth/services/auth.service';
 import { RoutePath } from '@shared/models/enums/route-path.enum';
 import {
-  authServiceMock, matDialogMock, profileServiceMock, routerMock,
+  authServiceMock,
+  matDialogMock,
+  profileServiceMock,
+  routerMock,
 } from '@testing/index';
 import { ProfileService } from '@user/services/profile.service';
 
@@ -45,12 +48,7 @@ describe('UserProfileComponent', () => {
         { provide: MatDialog, useValue: matDialogMock },
         ChangeDetectorRef,
       ],
-<<<<<<< HEAD
-    })
-      .compileComponents();
-=======
     }).compileComponents();
->>>>>>> 696896e (chore: run prettier)
 
     fixture = TestBed.createComponent(UserProfileComponent);
     component = fixture.componentInstance;
@@ -67,11 +65,15 @@ describe('UserProfileComponent', () => {
   it('should initialize the form with user information', () => {
     component.ngOnInit();
     expect(component.userInformationForm.controls.name.value).toBe('John Doe');
-    expect(component.userInformationForm.controls.email.value).toBe('john.doe@example.com');
+    expect(component.userInformationForm.controls.email.value).toBe(
+      'john.doe@example.com',
+    );
   });
 
   it('should return true for invalidEmail if email is invalid', () => {
-    component.userInformationForm.controls.email.setErrors({ invalidEmail: true });
+    component.userInformationForm.controls.email.setErrors({
+      invalidEmail: true,
+    });
     expect(component.invalidEmail).toBe(true);
   });
 
