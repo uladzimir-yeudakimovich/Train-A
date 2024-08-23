@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ApiPath } from '@shared/models/enums/api-path.enum';
 import { Carriage } from '@shared/models/interfaces/carriage.model';
+import { Ride } from '@shared/models/interfaces/ride.model';
 import { firstValueFrom } from 'rxjs';
 
 @Injectable({
@@ -17,6 +18,15 @@ export class AdminService {
   readonly loadCarriages = this.createLoader<Carriage[]>(ApiPath.Carriage);
 
   constructor(private http: HttpClient) {}
+
+  loadRide(id: number): Promise<Ride> {
+    // TODO: fix
+    return firstValueFrom(this.http.get<Ride>(`${ApiPath.Search}/${id}`)).catch(
+      (error) => {
+        throw error;
+      },
+    );
+  }
 
   deleteStation(id: number): Promise<Station> {
     return firstValueFrom(

@@ -1,20 +1,21 @@
-import { Component, OnInit } from '@angular/core';
+import { JsonPipe } from '@angular/common';
+import { Component, computed, inject, OnInit, Signal } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { RoutePath } from '@shared/models/enums/route-path.enum';
+import { Ride } from '@shared/models/interfaces/ride.model';
+import { RideStore } from '@shared/store/ride/ride.store';
 
 @Component({
   selector: 'app-trip',
   standalone: true,
-  imports: [],
+  imports: [JsonPipe],
   templateUrl: './trip.component.html',
   styleUrls: ['./trip.component.scss'],
 })
 export class TripComponent implements OnInit {
-  rideId: string | null = null;
+  ride!: Signal<Ride>;
 
-  fromStationId: string | null = null;
-
-  toStationId: string | null = null;
+  rideStore = inject(RideStore);
 
   constructor(
     private router: Router,
@@ -22,13 +23,17 @@ export class TripComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.rideId = this.activatedRoute.snapshot.paramMap.get('rideId');
-    this.fromStationId = this.activatedRoute.snapshot.queryParamMap.get('from');
-    this.toStationId = this.activatedRoute.snapshot.queryParamMap.get('to');
+    // /trip/:rideId?from=stationId&to=stationId
+    const rideId = this.activatedRoute.snapshot.paramMap.get('rideId');
+    const fromStationId =
+      this.activatedRoute.snapshot.queryParamMap.get('from');
+    const toStationId = this.activatedRoute.snapshot.queryParamMap.get('to');
 
-    if (!(this.rideId && this.fromStationId && this.toStationId)) {
-      // Redirect to not found page
+    if (!(rideId && fromStationId && toStationId)) {
       this.router.navigate([RoutePath.NotFound]);
     }
+
+    this.rideStore.getRide(Number(rideId));
+    this.ride = computed(() => this.rideStore.ridesEntityMap()[Number(rideId)]);
   }
 }

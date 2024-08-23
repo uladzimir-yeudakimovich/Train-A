@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { SeatState } from '@shared/models/enums/seat-state.enum';
 import { Carriage } from '@shared/models/interfaces/carriage.model';
-import { CarriageStore } from '@shared/store/carriages.store';
+import { CarriageStore } from '@shared/store/carriage/carriages.store';
 
 @Injectable()
 export class TrainCarService {
