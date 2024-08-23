@@ -20,12 +20,25 @@ export class AdminService {
   constructor(private http: HttpClient) {}
 
   loadRide(id: number): Promise<Ride> {
-    // TODO: fix
-    return firstValueFrom(this.http.get<Ride>(`${ApiPath.Search}/${id}`)).catch(
-      (error) => {
-        throw error;
-      },
-    );
+    // return firstValueFrom(this.http.get<Ride>(`${ApiPath.Search}/${id}`)).catch(
+    //   (error) => {
+    //     console.error('Error loading ride:', error);
+    //     throw error;
+    //   },
+    // );
+    // TODO: remove this mock
+    return Promise.resolve({
+      rideId: 10,
+      path: [1, 2, 3],
+      carriages: ['carriage1', 'carriage2'],
+      schedule: [
+        {
+          time: ['2024-08-08T22:19:57.708Z', '2024-08-12T03:29:57.708Z'],
+          price: { carriage1: 10.5, carriage2: 20.25 },
+          occuppiedSeats: [1, 2],
+        },
+      ],
+    });
   }
 
   deleteStation(id: number): Promise<Station> {
