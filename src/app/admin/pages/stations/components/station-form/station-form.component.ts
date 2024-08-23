@@ -1,13 +1,4 @@
 import {
-<<<<<<< HEAD
-  ChangeDetectionStrategy,
-  Component,
-  effect,
-  inject,
-  input,
-  viewChild,
-} from '@angular/core';
-=======
   StationFormData,
   StationGeoLocation,
 } from '@admin/models/station-form.model';
@@ -16,6 +7,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   effect,
+  inject,
   input,
   viewChild,
 } from '@angular/core';
@@ -25,7 +17,6 @@ import {
   FormGroupDirective,
   Validators,
 } from '@angular/forms';
->>>>>>> a49111394f8bdce088e31610f124092033db5f35
 
 import { stationFormImports } from './station-form.config';
 
