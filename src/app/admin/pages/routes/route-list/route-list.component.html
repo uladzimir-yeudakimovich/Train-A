@@ -1,3 +1,9 @@
+@if (!routes().length) {
+  <div class="spinner-container">
+    <mat-spinner class="spinner" />
+    <div class="label">Loading the route list</div>
+  </div>
+}
 <div class="list">
   @for (route of routes(); track route.id; let i = $index) {
     <app-route-card [route]="route"></app-route-card>
