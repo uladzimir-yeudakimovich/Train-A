@@ -145,6 +145,18 @@ export class RouteFormComponent implements OnInit {
     }
   }
 
+  getStationsErrorMessage() {
+    return this.stations.hasError('minArrayLength')
+      ? 'At least 3 stations are required'
+      : '';
+  }
+
+  getCarriagesErrorMessage() {
+    return this.carriages.hasError('minArrayLength')
+      ? 'At least 3 carriages are required'
+      : '';
+  }
+
   get stations() {
     return this.routeForm.get('stations') as FormArray;
   }

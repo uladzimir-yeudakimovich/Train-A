@@ -1,7 +1,8 @@
+import { JsonPipe } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatButton, MatIconButton } from '@angular/material/button';
 import { MatOption } from '@angular/material/core';
-import { MatFormField, MatLabel } from '@angular/material/form-field';
+import { MatError, MatFormField, MatLabel } from '@angular/material/form-field';
 import { MatIcon } from '@angular/material/icon';
 import { MatSelect } from '@angular/material/select';
 
@@ -14,4 +15,6 @@ export const routeFormImports = [
   ReactiveFormsModule,
   MatIcon,
   MatIconButton,
+  MatError,
+  JsonPipe,
 ];

@@ -23,9 +23,9 @@
               }
             </mat-select>
           </mat-form-field>
-          @let isLast = i === stations.controls.length - 2;
-          @let isFirst = i === 0;
-          @if (isLast || isFirst) {
+          @let isFirstStation = i === 0 && stations.controls.length > 1;
+          @let isLastStation = i === stations.controls.length - 2;
+          @if (isFirstStation || isLastStation) {
             <button
               mat-icon-button
               type="button"
@@ -36,6 +36,9 @@
             </button>
           }
         </div>
+      }
+      @if (stations.invalid && stations.touched) {
+        <mat-error>{{ getStationsErrorMessage() }}</mat-error>
       }
     </div>
     <div class="col" formArrayName="carriages">
@@ -63,6 +66,9 @@
             </button>
           }
         </div>
+      }
+      @if(carriages.invalid && carriages.touched) {
+        <mat-error>{{ getCarriagesErrorMessage() }}</mat-error>
       }
     </div>
   </div>
