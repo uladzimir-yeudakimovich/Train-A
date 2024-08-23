@@ -90,7 +90,13 @@
           }
         ],
         "class-methods-use-this": "off",
-        "arrow-body-style": "off"
+        "arrow-body-style": "off",
+        "no-restricted-imports": [
+          "error",
+          {
+            "patterns": ["../../*", "./../../*"]
+          }
+        ]
       }
     },
     {
@@ -145,6 +151,12 @@
       "files": ["**/logger/*.ts", "main.ts"],
       "rules": {
         "no-console": "off"
+      }
+    },
+    {
+      "files": ["*.spec.ts"],
+      "rules": {
+        "dot-notation": "off"
       }
     }
   ]

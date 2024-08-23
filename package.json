@@ -25,7 +25,7 @@
     "@angular/router": "^18.2.0",
     "@ngrx/eslint-plugin": "^18.0.2",
     "@ngrx/signals": "^18.0.2",
-    "@planess/train-a-backend": "^0.0.5",
+    "@planess/train-a-backend": "^0.0.6",
     "eslint": "^8.57.0",
     "eslint-plugin-import": "^2.29.1",
     "rxjs": "~7.8.0",

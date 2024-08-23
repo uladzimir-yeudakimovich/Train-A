@@ -8,9 +8,9 @@ import {
   Validators,
 } from '@angular/forms';
 import { Router } from '@angular/router';
+import { AuthService } from '@auth/services/auth.service';
 import { RoutePath } from '@shared/models/enums/route-path.enum';
 
-import { AuthService } from '../../services/auth.service';
 import { formImports } from '../form.config';
 
 @Component({

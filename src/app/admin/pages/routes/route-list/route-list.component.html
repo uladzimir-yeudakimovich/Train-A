@@ -1,0 +1,5 @@
+<div class="list">
+  @for (route of routes(); track route.id; let i = $index) {
+    <app-route-card [route]="route"></app-route-card>
+  }
+</div>

@@ -1,19 +1,31 @@
-import { computed } from '@angular/core';
+import { AdminService } from '@admin/services/admin/admin.service';
+import { computed, inject } from '@angular/core';
 import { patchState, signalStore, withMethods } from '@ngrx/signals';
-import { updateEntity, withEntities } from '@ngrx/signals/entities';
+import {
+  setAllEntities,
+  updateEntity,
+  withEntities,
+} from '@ngrx/signals/entities';
 import { SeatState } from '@shared/models/enums/seat-state.enum';
 import { Carriage, CarSeat } from '@shared/models/interfaces/carriage.model';
 
 import { carriageConfig } from './carriages.config';
 
-export const CarriagesStore = signalStore(
+export const CarriageStore = signalStore(
   { providedIn: 'root' },
 
   withEntities(carriageConfig),
 
-  withMethods((store) => ({
+  withMethods((store, adminService = inject(AdminService)) => ({
     getCarriage: (carriageCode: string) =>
       store.carriagesEntityMap()[carriageCode] ?? null,
+
+    async getCarriages() {
+      if (!store.carriagesIds().length) {
+        const carriages = await adminService.loadCarriages();
+        patchState(store, setAllEntities(carriages, carriageConfig));
+      }
+    },
   })),
 
   withMethods((store) => ({
