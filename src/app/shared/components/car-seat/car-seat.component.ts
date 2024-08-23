@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+import { NgClass } from '@angular/common';
 import { Component, input, output } from '@angular/core';
 import { SeatState } from '@shared/models/enums/seat-state.enum';
 import { CarSeat } from '@shared/models/interfaces/carriage.model';
@@ -6,7 +6,7 @@ import { CarSeat } from '@shared/models/interfaces/carriage.model';
 @Component({
   selector: 'app-car-seat',
   standalone: true,
-  imports: [CommonModule],
+  imports: [NgClass],
   templateUrl: './car-seat.component.html',
   styleUrl: './car-seat.component.scss',
 })

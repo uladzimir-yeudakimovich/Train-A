@@ -69,7 +69,7 @@ export const routes: Routes = [
     children: [
       {
         path: '',
-        redirectTo: RoutePath.AdminStations,
+        redirectTo: RoutePath.AdminRoutes,
         pathMatch: 'full',
         canActivateChild: [AuthGuard, AdminRoleGuard],
       },

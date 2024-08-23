@@ -2,6 +2,7 @@ import { ChangeDetectorRef } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { Router } from '@angular/router';
+import { AuthService } from '@auth/services/auth.service';
 import { RoutePath } from '@shared/models/enums/route-path.enum';
 import { authServiceMock, profileServiceMock, routerMock } from '@testing/index';
 import { ProfileService } from '@user/services/profile.service';
@@ -9,7 +10,6 @@ import { of } from 'rxjs';
 
 import { LoginComponent } from './login.component';
 
-import { AuthService } from '../../services/auth.service';
 import { formImports } from '../form.config';
 
 describe('LoginComponent', () => {

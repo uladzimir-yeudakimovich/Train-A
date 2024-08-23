@@ -101,10 +101,10 @@ describe('UserProfileComponent', () => {
   });
 
   it('should set loading state correctly', () => {
-    component.setLoading(true);
+    component['setLoading'](true);
     expect(component.loading()).toBe(true);
 
-    component.setLoading(false);
+    component['setLoading'](false);
     expect(component.loading()).toBe(false);
   });
 
