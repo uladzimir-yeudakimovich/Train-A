@@ -1,5 +1,5 @@
-import { StationFormData } from '@admin/models/station-form.model';
 import { StationResponseItem } from '@admin/models/station.model';
+import { StationFormData } from '@admin/models/station-form.model';
 
 export const mapFromIdToStation = (
   { id }: { id: number },

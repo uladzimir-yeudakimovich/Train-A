@@ -1,6 +1,7 @@
-import { Component, ChangeDetectionStrategy } from '@angular/core';
-import { stationCardsImports } from './station-cards.config';
 import { StationStore } from '@admin/store/stations.store';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+
+import { stationCardsImports } from './station-cards.config';
 
 @Component({
   selector: 'app-station-cards',

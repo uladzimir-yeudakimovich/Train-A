@@ -12,7 +12,9 @@ import { firstValueFrom } from 'rxjs';
 export class AdminService {
   readonly loadRoutes = this.createLoader<RailRoute[]>(ApiPath.Route);
 
-  readonly loadStations = this.createLoader<StationResponseItem[]>(ApiPath.Station);
+  readonly loadStations = this.createLoader<StationResponseItem[]>(
+    ApiPath.Station,
+  );
 
   readonly loadCarriages = this.createLoader<Carriage[]>(ApiPath.Carriage);
 

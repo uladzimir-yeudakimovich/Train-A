@@ -1,8 +1,14 @@
+import { StationGeoLocation } from '@admin/models/station-form.model';
 import { StationStore } from '@admin/store/stations.store';
 import { Component, computed, model } from '@angular/core';
 import { LeafletModule } from '@bluehalo/ngx-leaflet';
-import { latLng, LatLngTuple, LeafletMouseEvent, marker, tileLayer } from 'leaflet';
-import { StationGeoLocation } from '@admin/models/station-form.model';
+import {
+  latLng,
+  LatLngTuple,
+  LeafletMouseEvent,
+  marker,
+  tileLayer,
+} from 'leaflet';
 
 @Component({
   selector: 'app-globalmap',
@@ -15,7 +21,9 @@ export class GlobalmapComponent {
   markers = computed(() =>
     this.stationStore
       .locations()
-      .map(({ location, label }) => marker(location as LatLngTuple).bindPopup(label)),
+      .map(({ location, label }) =>
+        marker(location as LatLngTuple).bindPopup(label),
+      ),
   );
 
   options = {

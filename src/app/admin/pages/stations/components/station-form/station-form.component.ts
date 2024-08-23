@@ -1,9 +1,23 @@
-import { ChangeDetectionStrategy, Component, effect, input, viewChild } from '@angular/core';
+import {
+  StationFormData,
+  StationGeoLocation,
+} from '@admin/models/station-form.model';
+import { StationStore } from '@admin/store/stations.store';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  effect,
+  input,
+  viewChild,
+} from '@angular/core';
+import {
+  FormArray,
+  FormBuilder,
+  FormGroupDirective,
+  Validators,
+} from '@angular/forms';
 
 import { stationFormImports } from './station-form.config';
-import { FormArray, FormBuilder, FormGroupDirective, Validators } from '@angular/forms';
-import { StationStore } from '@admin/store/stations.store';
-import { StationFormData, StationGeoLocation } from '@admin/models/station-form.model';
 
 @Component({
   selector: 'app-station-form',
@@ -20,10 +34,19 @@ export class StationFormComponent {
 
   stationForm = this.formBuilder.nonNullable.group(
     {
-      city: ['', [Validators.required, Validators.maxLength(15), Validators.minLength(3)]],
+      city: [
+        '',
+        [
+          Validators.required,
+          Validators.maxLength(15),
+          Validators.minLength(3),
+        ],
+      ],
       latitude: [0, [Validators.max(90), Validators.min(-90)]],
       longitude: [0, [Validators.max(180), Validators.min(-180)]],
-      relations: this.formBuilder.array([this.formBuilder.control(0, Validators.required)]),
+      relations: this.formBuilder.array([
+        this.formBuilder.control(0, Validators.required),
+      ]),
     },
     { updateOn: 'blur' },
   );
@@ -123,7 +146,9 @@ export class StationFormComponent {
   }
 
   async createStation() {
-    await this.stationStore.addStation(this.stationForm.value as StationFormData);
+    await this.stationStore.addStation(
+      this.stationForm.value as StationFormData,
+    );
 
     this.formViewChild().resetForm();
   }

@@ -1,7 +1,13 @@
-import { ChangeDetectionStrategy, Component, OnInit, signal } from '@angular/core';
-import { stationsImports } from './stations.config';
-import { StationStore } from '@admin/store/stations.store';
 import { StationGeoLocation } from '@admin/models/station-form.model';
+import { StationStore } from '@admin/store/stations.store';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  OnInit,
+  signal,
+} from '@angular/core';
+
+import { stationsImports } from './stations.config';
 
 @Component({
   selector: 'app-stations',
