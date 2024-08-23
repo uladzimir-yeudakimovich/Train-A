@@ -9,6 +9,7 @@ export interface RidesState extends RouteInformation {
 
 const initialState: RidesState = {
   routeId: 0,
+  carriages: [],
   stations: [],
   schedule: [],
   loading: false,
@@ -25,6 +26,7 @@ export const RidesStore = signalStore(
         next: (response) => {
           patchState(store, {
             routeId: response.routeId,
+            carriages: response.carriages,
             stations: response.stations,
             schedule: response.schedule,
           });

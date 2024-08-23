@@ -15,12 +15,16 @@ export class AdminService {
       switchMap((stationResponse) => {
         return this.http.get<Route>(`route/${routeId}`).pipe(
           switchMap((routeResponse) => {
+            const carriageTypes = [...new Set(routeResponse.carriages)];
+
             const stationIndices = stationResponse.filter((station) =>
               routeResponse.path.includes(station.id),
             );
             const stations = stationIndices.map((station) => station.city);
+
             return of({
               routeId: routeResponse.id,
+              carriages: carriageTypes,
               schedule: routeResponse.schedule,
               stations,
             });

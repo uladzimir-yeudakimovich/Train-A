@@ -26,6 +26,7 @@ export interface Station {
 
 export interface RouteInformation {
   routeId: number;
+  carriages: string[];
   stations: string[];
   schedule: Schedule[];
 }
