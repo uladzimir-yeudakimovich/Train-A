@@ -5,6 +5,12 @@
     </button>
     <h3 class="title">Route {{ routeId }}</h3>
   </div>
-  <button class="btn btn-create-ride" mat-flat-button>Create Ride</button>
+  @if (!formVisible()) {
+    <button class="btn btn-create-ride" mat-flat-button (click)="showForm()">
+      Create Ride
+    </button>
+  } @else {
+    <app-ride-card-form [(formVisible)]="formVisible" />
+  }
   <app-ride-list />
 </div>

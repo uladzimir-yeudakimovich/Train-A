@@ -1,0 +1,52 @@
+.form-like {
+  display: grid;
+  row-gap: 20px;
+  padding: 10px;
+  border: 1px solid gray;
+  border-radius: 5px;
+  margin-bottom: 50px;
+}
+
+.container {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  column-gap: 10px;
+}
+
+.stations {
+  padding-left: 5px;
+  background-color: rgb(255, 244, 226);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border-radius: 4px;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  column-gap: 20px;
+}
+
+.dates {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.prices {
+  padding-block: 50px;
+  display: grid;
+  row-gap: 5px;
+}
+
+.price {
+  display: flex;
+  column-gap: 10px;
+}
+
+.buttons {
+  justify-self: end;
+  display: flex;
+  column-gap: 10px;
+}

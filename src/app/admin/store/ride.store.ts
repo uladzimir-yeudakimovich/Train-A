@@ -1,4 +1,4 @@
-import { RouteInformation } from '@admin/interfaces';
+import { RouteInformation, Segment } from '@admin/interfaces';
 import { AdminService } from '@admin/services/admin.service';
 import { inject } from '@angular/core';
 import { patchState, signalStore, withMethods, withState } from '@ngrx/signals';
@@ -46,6 +46,29 @@ export const RidesStore = signalStore(
           .updateRide(store.routeId(), rideId, ride.segments)
           .subscribe();
       }
+    },
+    createRide(routeId: number, segments: Segment[]) {
+      patchState(store, { loading: true });
+
+      adminService.createRide(routeId, segments).subscribe({
+        next(response) {
+          const ride = { rideId: response.id, segments };
+
+          patchState(store, (state) => {
+            return {
+              ...state,
+              schedule: [ride, ...state.schedule],
+              loading: false,
+            };
+          });
+        },
+        error() {
+          patchState(store, { loading: false });
+        },
+        complete: () => {
+          patchState(store, { loading: false });
+        },
+      });
     },
   })),
 );

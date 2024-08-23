@@ -42,7 +42,11 @@ export class AdminService {
       .pipe(catchError((err) => throwError(() => err)));
   }
 
-  // createRide() {}
+  createRide(routeId: number, segments: Segment[]): Observable<{ id: number }> {
+    return this.http
+      .post<{ id: number }>(`route/${routeId}/ride`, { segments })
+      .pipe(catchError((err) => throwError(() => err)));
+  }
 
   updateRide(
     routeId: number,
