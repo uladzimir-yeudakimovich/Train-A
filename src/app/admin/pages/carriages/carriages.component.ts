@@ -1,22 +1,31 @@
+import { Carriage } from '@admin/pages/carriages/carriage.model';
+import { CarriageService } from '@admin/services/carriage.service';
+import { AsyncPipe, NgIf } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { CarriageService } from '../../services/carriage.service';
 import { MatToolbar } from '@angular/material/toolbar';
+import { Observable } from 'rxjs';
+
 import { CarriageFormComponent } from './carriage-form/carriage-form.component';
 import { CarriageListComponent } from './carriage-list/carriage-list.component';
-import { AsyncPipe, NgIf } from '@angular/common';
-import { Carriage } from '@admin/pages/carriages/carriage.model';
-import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-carriages',
   standalone: true,
-  imports: [NgIf, AsyncPipe, MatToolbar, CarriageFormComponent, CarriageListComponent],
+  imports: [
+    NgIf,
+    AsyncPipe,
+    MatToolbar,
+    CarriageFormComponent,
+    CarriageListComponent,
+  ],
   templateUrl: './carriages.component.html',
   styleUrl: './carriages.component.scss',
 })
 export class CarriagesComponent implements OnInit {
   carriages!: Observable<Carriage[]> | null;
+
   formVisible = false;
+
   selectedCarriage: Carriage | null = null;
 
   constructor(private carriageService: CarriageService) {}
@@ -40,4 +49,3 @@ export class CarriagesComponent implements OnInit {
     this.formVisible = true;
   }
 }
-

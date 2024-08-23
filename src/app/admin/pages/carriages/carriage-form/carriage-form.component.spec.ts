@@ -8,9 +8,9 @@ describe('CarriageFormComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [CarriageFormComponent]
+      imports: [CarriageFormComponent],
     })
-    .compileComponents();
+      .compileComponents();
 
     fixture = TestBed.createComponent(CarriageFormComponent);
     component = fixture.componentInstance;
