@@ -1,4 +1,11 @@
-import { ChangeDetectionStrategy, Component, effect, input, viewChild } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  effect,
+  inject,
+  input,
+  viewChild,
+} from '@angular/core';
 
 import { stationFormImports } from './station-form.config';
 import { FormArray, FormBuilder, FormGroupDirective, Validators } from '@angular/forms';
@@ -14,6 +21,8 @@ import { StationFormData, StationGeoLocation } from '@admin/models/station-form.
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class StationFormComponent {
+  private stationStore = inject(StationStore);
+
   latlng = input.required<StationGeoLocation>();
 
   stations = this.stationStore.stationsEntities;
@@ -30,10 +39,7 @@ export class StationFormComponent {
 
   private formViewChild = viewChild.required(FormGroupDirective);
 
-  constructor(
-    private stationStore: StationStore,
-    private formBuilder: FormBuilder,
-  ) {
+  constructor(private formBuilder: FormBuilder) {
     effect(() => {
       const [lat, lng] = this.latlng();
       this.latitude.setValue(lat);

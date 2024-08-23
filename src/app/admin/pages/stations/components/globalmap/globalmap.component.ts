@@ -1,5 +1,5 @@
 import { StationStore } from '@admin/store/stations.store';
-import { Component, computed, model } from '@angular/core';
+import { Component, computed, inject, model } from '@angular/core';
 import { LeafletModule } from '@bluehalo/ngx-leaflet';
 import { latLng, LatLngTuple, LeafletMouseEvent, marker, tileLayer } from 'leaflet';
 import { StationGeoLocation } from '@admin/models/station-form.model';
@@ -12,6 +12,8 @@ import { StationGeoLocation } from '@admin/models/station-form.model';
   styleUrl: './globalmap.component.scss',
 })
 export class GlobalmapComponent {
+  private stationStore = inject(StationStore);
+
   markers = computed(() =>
     this.stationStore
       .locations()
@@ -30,8 +32,6 @@ export class GlobalmapComponent {
   };
 
   latLngOutput = model<StationGeoLocation>();
-
-  constructor(private stationStore: StationStore) {}
 
   onLeafLetClick({ latlng }: LeafletMouseEvent) {
     const location: StationGeoLocation = [latlng.lat, latlng.lng];

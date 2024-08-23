@@ -2,14 +2,14 @@ import { StationFormData } from '@admin/models/station-form.model';
 import { StationResponseItem } from '@admin/models/station.model';
 
 export const mapFromIdToStation = (
-  { id }: { id: number },
-  { city, latitude, longitude, relations }: StationFormData,
+  response: { id: number },
+  stationData: StationFormData,
 ): StationResponseItem => {
   return {
-    id,
-    city,
-    latitude,
-    longitude,
-    connectedTo: relations.map((id) => ({ id })),
+    id: response.id,
+    city: stationData.city,
+    latitude: stationData.latitude,
+    longitude: stationData.longitude,
+    connectedTo: stationData.relations.map((item) => ({ id: item })),
   };
 };

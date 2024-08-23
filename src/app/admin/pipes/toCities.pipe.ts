@@ -11,17 +11,17 @@ export class ToCitiesPipe implements PipeTransform {
       return [];
     }
 
-    return stations.reduce((acc, { id, city, latitude, longitude, connectedTo }, _, arr) => {
-      const connected = connectedTo
-        .map(({ id }) => arr.find((item) => item.id === id)?.city)
+    return stations.reduce((acc, station, _, arr) => {
+      const connected = station.connectedTo
+        .map((connectedToProps) => arr.find((item) => item.id === connectedToProps.id)?.city)
         .filter((city) => !!city)
         .join(' - ');
 
       acc.push({
-        id,
-        city,
-        latitude,
-        longitude,
+        id: station.id,
+        city: station.city,
+        latitude: station.latitude,
+        longitude: station.longitude,
         connected,
       });
       return acc;

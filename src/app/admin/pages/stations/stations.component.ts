@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnInit, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, OnInit, signal } from '@angular/core';
 import { stationsImports } from './stations.config';
 import { StationStore } from '@admin/store/stations.store';
 import { StationGeoLocation } from '@admin/models/station-form.model';
@@ -12,9 +12,9 @@ import { StationGeoLocation } from '@admin/models/station-form.model';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class StationsComponent implements OnInit {
-  location = signal<StationGeoLocation>([0, 0]);
+  private stationStore = inject(StationStore);
 
-  constructor(private stationStore: StationStore) {}
+  location = signal<StationGeoLocation>([0, 0]);
 
   ngOnInit() {
     this.stationStore.getStations();

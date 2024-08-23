@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
 import { stationCardsImports } from './station-cards.config';
 import { StationStore } from '@admin/store/stations.store';
 
@@ -11,9 +11,9 @@ import { StationStore } from '@admin/store/stations.store';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class StationCardsComponent {
-  stations = this.stationStore.stationsEntities;
+  private stationStore = inject(StationStore);
 
-  constructor(private stationStore: StationStore) {}
+  stations = this.stationStore.stationsEntities;
 
   deleteStation(id: number): void {
     this.stationStore.deleteStation(id);

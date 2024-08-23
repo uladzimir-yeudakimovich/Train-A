@@ -50,5 +50,3 @@ export const StationStore = signalStore(
     ),
   })),
 );
-
-export type StationStore = InstanceType<typeof StationStore>;
