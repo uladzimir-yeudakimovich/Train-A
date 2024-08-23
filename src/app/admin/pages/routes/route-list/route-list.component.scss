@@ -1,7 +1,10 @@
 :host {
-    .list {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: space-between;
-    }
+  display: block;
+  width: 100%;
+
+  .list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
 }

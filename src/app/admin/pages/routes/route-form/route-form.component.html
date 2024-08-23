@@ -4,8 +4,10 @@
       @let connectedStations = connectedStationsMap();
       @for (station of stations.controls; track station.value; let i = $index) {
         <div class="form-field-container">
-          <mat-form-field class="form-field">
-            <mat-label>City</mat-label>
+          <mat-form-field class="form-field"
+          (click)="onStationClick(i)"
+          >
+            <mat-label>Station</mat-label>
             @let prevStationId = i > 0 ? stations.controls[i - 1].value : null;
             <mat-select
               [formControlName]="i"
@@ -21,10 +23,11 @@
               }
             </mat-select>
           </mat-form-field>
-          @let isLastSelected = i === stations.controls.length - 2;
-          @if (isLastSelected) {
+          @let isFirstStation = i === 0 && stations.controls.length > 1;
+          @let isLastStation = i === stations.controls.length - 2;
+          @if (isFirstStation || isLastStation) {
             <button
-            mat-icon-button
+              mat-icon-button
               type="button"
               class="delete-button"
               (click)="onDeleteStation($event, i)"
@@ -33,6 +36,9 @@
             </button>
           }
         </div>
+      }
+      @if (stations.invalid && stations.touched) {
+        <mat-error>{{ getStationsErrorMessage() }}</mat-error>
       }
     </div>
     <div class="col" formArrayName="carriages">
@@ -61,6 +67,9 @@
           }
         </div>
       }
+      @if(carriages.invalid && carriages.touched) {
+        <mat-error>{{ getCarriagesErrorMessage() }}</mat-error>
+      }
     </div>
   </div>
   <div class="buttons">
@@ -80,7 +89,7 @@
     >
       Reset
     </button>
-    <button mat-flat-button type="submit" [disabled]="routeForm.invalid">
+    <button mat-flat-button type="submit" [disabled]="!canSubmit()">
       Submit
     </button>
   </div>
