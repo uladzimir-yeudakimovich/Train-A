@@ -1,1 +1,8 @@
-<p>carriage-list works!</p>
+<mat-list role="list">
+    @for (carriage of carriages(); track carriage.code) {
+        <mat-list-item role="listitem" class="carriage">
+            <app-train-car [carriage]="carriage"></app-train-car>
+        </mat-list-item>
+    }
+  </mat-list>
+  
