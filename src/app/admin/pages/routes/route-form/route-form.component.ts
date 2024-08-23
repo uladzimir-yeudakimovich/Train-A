@@ -11,6 +11,7 @@ import {
   Signal,
 } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { Carriage } from '@shared/models/interfaces/carriage.model';
 import { CarriageStore } from '@shared/store/carriages.store';
 
@@ -54,7 +55,10 @@ export class RouteFormComponent implements OnInit {
 
   private routeStore = inject(RouteStore);
 
-  constructor(private formBuilder: FormBuilder) {}
+  constructor(
+    private formBuilder: FormBuilder,
+    private snackBar: MatSnackBar,
+  ) {}
 
   ngOnInit(): void {
     const minStationsNumber = 3;
@@ -128,6 +132,31 @@ export class RouteFormComponent implements OnInit {
     this.carriages.removeAt(idx);
   }
 
+  onStationClick(idx: number) {
+    const stationControl = this.stations.at(idx);
+    if (stationControl.disabled) {
+      this.snackBar.open(
+        'You cannot change this station as this may break the connection with the next station.',
+        'Close',
+        {
+          duration: 5000,
+        },
+      );
+    }
+  }
+
+  getStationsErrorMessage() {
+    return this.stations.hasError('minArrayLength')
+      ? 'At least 3 stations are required'
+      : '';
+  }
+
+  getCarriagesErrorMessage() {
+    return this.carriages.hasError('minArrayLength')
+      ? 'At least 3 carriages are required'
+      : '';
+  }
+
   get stations() {
     return this.routeForm.get('stations') as FormArray;
   }
@@ -182,5 +211,21 @@ export class RouteFormComponent implements OnInit {
     initValues.forEach((value: T) => {
       controls.push(this.formBuilder.control(value));
     });
+  }
+
+  canSubmit(): boolean {
+    if (!this.route()) {
+      return this.routeForm.valid;
+    }
+    // update form: can sumbit if form is valid and there are changes
+    const route = this.route()!;
+    this.stations.enable();
+    const { path, carriages } = this.getFormRoute();
+    this.enableLastTwoStations();
+
+    const hasChangedFields =
+      path!.join() !== route.path.join() ||
+      carriages!.join() !== route.carriages.join();
+    return this.routeForm.valid && hasChangedFields;
   }
 }

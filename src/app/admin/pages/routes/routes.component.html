@@ -1,11 +1,17 @@
-<div class="route-form">
-  @if (!displayCreateRouteForm()) {
-    <button mat-flat-button class="button-center" (click)="toggleRouteForm()">Create new route</button>
-  } @else {
-    <app-route-form
-    (closeForm)="toggleRouteForm()"
-    ></app-route-form>
-  }
-</div>
-
-<app-route-list></app-route-list>
+@if (!routes().length) {
+  <div class="spinner-container">
+    <mat-spinner class="spinner" />
+    <div class="label">Loading the routes</div>
+  </div>
+} @else {
+  <div class="route-form">
+    @if (!displayCreateRouteForm()) {
+      <button mat-flat-button class="button-center" (click)="toggleRouteForm()">
+        Create new route
+      </button>
+    } @else {
+      <app-route-form (closeForm)="toggleRouteForm()"></app-route-form>
+    }
+  </div>
+  <app-route-list [routes]="routes()"></app-route-list>
+}
