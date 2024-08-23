@@ -1,7 +1,10 @@
-import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { TestBed } from '@angular/core/testing';
+import {
+  mock400Error, mock403Error, mock500Error, mockPassword, mockUser, mockUserWithRole,
+} from '@testing/mock-data';
+
 import { ProfileService } from './profile.service';
-import { mockUser, mockUserWithRole, mockPassword, mock500Error, mock400Error, mock403Error } from '@testing/mock-data';
 
 describe('ProfileService', () => {
   let service: ProfileService;

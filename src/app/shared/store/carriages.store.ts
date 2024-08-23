@@ -1,21 +1,36 @@
+import { AdminService } from '@admin/services/admin/admin.service';
+import { computed, inject } from '@angular/core';
 import { patchState, signalStore, withMethods } from '@ngrx/signals';
-import { updateEntity, withEntities } from '@ngrx/signals/entities';
-import { carriageConfig } from './carriages.config';
+import {
+  setAllEntities,
+  updateEntity,
+  withEntities,
+} from '@ngrx/signals/entities';
 import { SeatState } from '@shared/models/enums/seat-state.enum';
 import { Carriage, CarSeat } from '@shared/models/interfaces/carriage.model';
-import { computed } from '@angular/core';
 
-export const CarriagesStore = signalStore(
+import { carriageConfig } from './carriages.config';
+
+export const CarriageStore = signalStore(
   { providedIn: 'root' },
 
   withEntities(carriageConfig),
 
-  withMethods((store) => ({
-    getCarriage: (carriageCode: string) => store.carriagesEntityMap()[carriageCode] ?? null,
+  withMethods((store, adminService = inject(AdminService)) => ({
+    getCarriage: (carriageCode: string) =>
+      store.carriagesEntityMap()[carriageCode] ?? null,
+
+    async getCarriages() {
+      if (!store.carriagesIds().length) {
+        const carriages = await adminService.loadCarriages();
+        patchState(store, setAllEntities(carriages, carriageConfig));
+      }
+    },
   })),
 
   withMethods((store) => ({
-    getCarriageSignal: (carriageCode: string) => computed(() => store.getCarriage(carriageCode)),
+    getCarriageSignal: (carriageCode: string) =>
+      computed(() => store.getCarriage(carriageCode)),
 
     getSortedSeats: (carriageCode: string) => {
       const carriage = store.getCarriage(carriageCode);
@@ -24,7 +39,8 @@ export const CarriagesStore = signalStore(
 
     getAvailableSeatsNumber: (carriageCode: string) => {
       const carriage = store.getCarriage(carriageCode);
-      return carriage.seats.filter((s) => s.state !== SeatState.Reserved).length;
+      return carriage.seats.filter((s) => s.state !== SeatState.Reserved)
+        .length;
     },
 
     updateSeat: (carriage: Carriage, updatedSeat: CarSeat) => {
@@ -33,10 +49,12 @@ export const CarriagesStore = signalStore(
         updateEntity(
           {
             id: carriage.code,
-            changes: (carriage) => {
-              const seat = carriage.seats.find((s) => s.number === updatedSeat.number)!;
+            changes: (newCar) => {
+              const seat = newCar.seats.find(
+                (s) => s.number === updatedSeat.number,
+              )!;
               seat.state = updatedSeat.state;
-              return carriage;
+              return newCar;
             },
           },
           carriageConfig,

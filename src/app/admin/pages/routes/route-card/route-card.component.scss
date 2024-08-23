@@ -1,0 +1,42 @@
+@import '@shared/styles/variables.scss';
+
+:host {
+  width: 100%;
+  margin: 1rem;
+
+  padding: 1rem 2rem;
+  border-radius: 1rem;
+  box-shadow: 0 0 0.5rem rgba(0, 0, 0, 0.3);
+
+  .mat-toolbar {
+    background-color: $white;
+    padding: 0;
+  }
+
+  .route-name {
+    font-weight: bold;
+  }
+
+  .toolbar-button {
+    margin: 0 1rem;
+
+    .mat-icon {
+      margin: 0;
+    }
+  }
+
+  .toolbar-spacer {
+    flex: 1 1 auto;
+  }
+
+  .cities-list,
+  .carriages-list {
+    margin-left: 1rem;
+  }
+}
+
+@media (min-width: 1200px) {
+  :host {
+    width: calc(50% - 6rem);
+  }
+}

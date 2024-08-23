@@ -1,3 +1,8 @@
+export interface Connection {
+  id: number;
+  distance?: number;
+}
+
 export interface Station {
   id: number;
   city: string;
@@ -5,13 +10,8 @@ export interface Station {
   longitude: number;
 }
 
-export interface Connected {
-  id: number;
-  distance?: number;
-}
-
 export interface StationResponseItem extends Station {
-  connectedTo: Connected[];
+  connectedTo: Connection[];
 }
 
 export interface StationCardItem extends Station {

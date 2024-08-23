@@ -1,19 +1,23 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ChangeDetectorRef } from '@angular/core';
-import { Router } from '@angular/router';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
-import { ProfileService } from '@user/services/profile.service';
+import { MatInputModule } from '@angular/material/input';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { Router } from '@angular/router';
 import { AuthService } from '@auth/services/auth.service';
-import { authServiceMock, matDialogMock, profileServiceMock, routerMock } from '@testing/index';
-import { ChangePasswordComponent } from '../change-password/change-password.component';
-import { UserProfileComponent } from './user-profile.component';
 import { RoutePath } from '@shared/models/enums/route-path.enum';
+import {
+  authServiceMock, matDialogMock, profileServiceMock, routerMock,
+} from '@testing/index';
+import { ProfileService } from '@user/services/profile.service';
+
+import { UserProfileComponent } from './user-profile.component';
+
+import { ChangePasswordComponent } from '../change-password/change-password.component';
 
 describe('UserProfileComponent', () => {
   let component: UserProfileComponent;
@@ -39,10 +43,10 @@ describe('UserProfileComponent', () => {
         { provide: Router, useValue: routerMock },
         { provide: ProfileService, useValue: profileServiceMock },
         { provide: MatDialog, useValue: matDialogMock },
-        ChangeDetectorRef
+        ChangeDetectorRef,
       ],
     })
-    .compileComponents();
+      .compileComponents();
 
     fixture = TestBed.createComponent(UserProfileComponent);
     component = fixture.componentInstance;
