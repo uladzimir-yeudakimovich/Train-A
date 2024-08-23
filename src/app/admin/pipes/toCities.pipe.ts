@@ -1,4 +1,7 @@
-import { StationCardItem, StationResponseItem } from '@admin/models/station.model';
+import {
+  StationCardItem,
+  StationResponseItem,
+} from '@admin/models/station.model';
 import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
@@ -13,7 +16,10 @@ export class ToCitiesPipe implements PipeTransform {
 
     return stations.reduce((acc, station, _, arr) => {
       const connected = station.connectedTo
-        .map((connectedToProps) => arr.find((item) => item.id === connectedToProps.id)?.city)
+        .map(
+          (connectedToProps) =>
+            arr.find((item) => item.id === connectedToProps.id)?.city,
+        )
         .filter((city) => !!city)
         .join(' - ');
 

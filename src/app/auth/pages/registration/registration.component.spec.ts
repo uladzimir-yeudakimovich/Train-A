@@ -1,10 +1,12 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ChangeDetectorRef } from '@angular/core';
-import { Router } from '@angular/router';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { RegistrationComponent } from './registration.component';
-import { AuthService } from '../../services/auth.service';
+import { Router } from '@angular/router';
+import { AuthService } from '@auth/services/auth.service';
 import { authServiceMock, routerMock } from '@testing/index';
+
+import { RegistrationComponent } from './registration.component';
+
 import { formImports } from '../form.config';
 
 describe('RegistrationComponent', () => {
@@ -17,7 +19,7 @@ describe('RegistrationComponent', () => {
       providers: [
         { provide: AuthService, useValue: authServiceMock },
         { provide: Router, useValue: routerMock },
-        ChangeDetectorRef
+        ChangeDetectorRef,
       ],
     }).compileComponents();
 
@@ -34,20 +36,20 @@ describe('RegistrationComponent', () => {
   });
 
   it('should show error message when email is invalid', () => {
-    const emailControl = component.registrationForm.controls['email'];
+    const emailControl = component.registrationForm.controls.email;
     emailControl.setValue('invalid-email');
     expect(component.getEmailErrorMessage()).toBe('The email is invalid');
   });
 
   it('should show error message when password is too short', () => {
-    const passwordControl = component.registrationForm.controls['password'];
+    const passwordControl = component.registrationForm.controls.password;
     passwordControl.setValue('short');
     expect(component.getPasswordErrorMessage()).toBe('Password must be at least 8 characters long');
   });
 
   it('should show error message when passwords do not match', () => {
-    component.registrationForm.controls['password'].setValue('password123');
-    component.registrationForm.controls['confirmPassword'].setValue('password456');
+    component.registrationForm.controls.password.setValue('password123');
+    component.registrationForm.controls.confirmPassword.setValue('password456');
     expect(component.getConfirmPasswordErrorMessage()).toBe('Passwords do not match');
   });
 });

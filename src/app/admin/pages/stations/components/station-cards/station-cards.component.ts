@@ -1,6 +1,12 @@
+<<<<<<< HEAD
 import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
 import { stationCardsImports } from './station-cards.config';
+=======
+>>>>>>> a49111394f8bdce088e31610f124092033db5f35
 import { StationStore } from '@admin/store/stations.store';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+
+import { stationCardsImports } from './station-cards.config';
 
 @Component({
   selector: 'app-station-cards',

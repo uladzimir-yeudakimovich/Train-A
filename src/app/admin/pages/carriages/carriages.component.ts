@@ -5,8 +5,6 @@ import { Component } from '@angular/core';
   standalone: true,
   imports: [],
   templateUrl: './carriages.component.html',
-  styleUrl: './carriages.component.scss'
+  styleUrl: './carriages.component.scss',
 })
-export class CarriagesComponent {
-
-}
+export class CarriagesComponent {}

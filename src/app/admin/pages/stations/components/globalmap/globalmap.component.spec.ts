@@ -8,9 +8,9 @@ describe('GlobalmapComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [GlobalmapComponent]
+      imports: [GlobalmapComponent],
     })
-    .compileComponents();
+      .compileComponents();
 
     fixture = TestBed.createComponent(GlobalmapComponent);
     component = fixture.componentInstance;

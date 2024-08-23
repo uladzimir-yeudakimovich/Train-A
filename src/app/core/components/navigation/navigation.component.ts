@@ -1,10 +1,10 @@
-import { ChangeDetectorRef, Component, effect  } from '@angular/core';
+import { ChangeDetectorRef, Component, effect } from '@angular/core';
+import { MatListItem, MatNavList } from '@angular/material/list';
 import { RouterLink, RouterLinkActive } from '@angular/router';
-import { MatNavList, MatListItem } from '@angular/material/list';
-import { NavigationLink } from '@shared/models/interfaces/navigation.model';
-import { RoutePath } from '@shared/models/enums/route-path.enum';
-import { ProfileService } from '@user/services/profile.service';
 import { AuthService } from '@auth/services/auth.service';
+import { RoutePath } from '@shared/models/enums/route-path.enum';
+import { NavigationLink } from '@shared/models/interfaces/navigation.model';
+import { ProfileService } from '@user/services/profile.service';
 
 @Component({
   selector: 'app-navigation',
@@ -15,6 +15,7 @@ import { AuthService } from '@auth/services/auth.service';
 })
 export class NavigationComponent {
   navItems: NavigationLink[] = [];
+
   authItems: NavigationLink[] = [];
 
   constructor(
@@ -32,8 +33,16 @@ export class NavigationComponent {
     this.navItems = [
       { label: 'Home', link: RoutePath.Search, exact: true, isShow: true },
       { label: 'Profile', link: RoutePath.UserProfile, isShow: isLogin },
-      { label: 'My Orders', link: RoutePath.UserOrders, isShow: isLogin && userRole === 'user' },
-      { label: 'Orders', link: RoutePath.Orders, isShow: userRole === 'manager' },
+      {
+        label: 'My Orders',
+        link: RoutePath.UserOrders,
+        isShow: isLogin && userRole === 'user',
+      },
+      {
+        label: 'Orders',
+        link: RoutePath.Orders,
+        isShow: userRole === 'manager',
+      },
     ];
 
     this.authItems = [

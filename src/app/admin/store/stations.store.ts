@@ -1,15 +1,22 @@
+import { StationFormData } from '@admin/models/station-form.model';
+import { AdminService } from '@admin/services/admin.service';
 import { computed, inject } from '@angular/core';
-import { signalStore, type, patchState, withMethods, withComputed } from '@ngrx/signals';
 import {
-  withEntities,
-  setAllEntities,
-  removeEntity,
+  patchState,
+  signalStore,
+  type,
+  withComputed,
+  withMethods,
+} from '@ngrx/signals';
+import {
   addEntity,
   entityConfig,
+  removeEntity,
+  setAllEntities,
+  withEntities,
 } from '@ngrx/signals/entities';
-import { AdminService } from '@admin/services/admin.service';
-import { StationResponseItem } from './../models/station.model';
-import { StationFormData } from '@admin/models/station-form.model';
+
+import { StationResponseItem } from '../models/station.model';
 
 export const stationConfig = entityConfig({
   entity: type<StationResponseItem>(),
