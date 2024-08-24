@@ -1,6 +1,7 @@
 <div class="head">
   <!-- TODO: add Back and Route button -->
   @let trip = tripInfo();
+  <!-- {{ trip | json }} -->
   <div class="head-back">
     <button mat-icon-button (click)="onBack()">
       <mat-icon>arrow_back</mat-icon>
@@ -8,14 +9,14 @@
   </div>
   <div class="head-info">
     <div class="head-stations">
-      <p>{{ trip.from?.city }} - {{ trip.to?.city }}</p>
+      <p>{{ trip.from.city }} - {{ trip.to.city }}</p>
       <p>
-        {{ trip.dateFrom | date: "MMMM d, HH:mm" }} -
-        {{ trip.dateTo | date: "MMMM d, HH:mm" }}
+        {{ trip.departure | date: "MMMM d, HH:mm" }} -
+        {{ trip.arrival | date: "MMMM d, HH:mm" }}
       </p>
     </div>
     <p>
-      <span>Ride {{ ride()?.rideId }}</span>
+      <!-- <span>Ride {{ ride()?.rideId }}</span> -->
       <button mat-button (click)="onRoute()">
         <mat-icon>keyboard_arrow_down</mat-icon>
         Route
@@ -30,16 +31,17 @@
       mat-stretch-tabs="false"
       mat-align-tabs="start"
     >
-      @for (carItem of carTypes(); track carItem.type) {
+    @let prices = priceMap();
+      @for (carItem of typewWithCarriages(); track $index) {
         <mat-tab>
           <ng-template mat-tab-label>
             <mat-list-item>
               <p matListItemTitle>
                 Carriage type {{ carItem.type }}:
-                {{ getAvailableSeatsNumber(carItem.carriages) }}
+                {{ availableSeatsNumber() }}
               </p>
               <p matListItemLine>
-                {{ getPrice(carItem.type) | currency }}
+                {{ prices[carItem.type] | currency }}
               </p>
             </mat-list-item>
           </ng-template>
@@ -51,9 +53,9 @@
     </mat-tab-group>
   </div>
 
-  <div class="book-modal">
+  <!-- <div class="book-modal">
     <app-book-modal [bookItems]="bookItems()"></app-book-modal>
-  </div>
+  </div> -->
 
   <div class="legend">
     @for (legendSeat of legendSeats; track $index) {

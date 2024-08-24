@@ -1,5 +1,5 @@
 <mat-list role="list">
-    @for (carriage of carriages(); track carriage.code) {
+    @for (carriage of carriages(); track $index) {
         <mat-list-item role="listitem" class="carriage">
             <app-train-car [carriage]="carriage"></app-train-car>
         </mat-list-item>

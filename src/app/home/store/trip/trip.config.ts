@@ -7,6 +7,11 @@ export interface TripState {
 }
 
 export const initState: TripState = {
-  ride: {} as Ride,
+  ride: {
+    rideId: 0,
+    path: [],
+    carriages: [],
+    schedule: [],
+  },
   carriages: [],
 };
