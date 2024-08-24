@@ -33,9 +33,14 @@ export class AdminService {
       carriages: ['carriage1', 'carriage2'],
       schedule: [
         {
-          time: ['2024-08-08T22:19:57.708Z', '2024-08-12T03:29:57.708Z'],
+          time: ['2024-08-08T21:19:57.708Z', '2024-08-09T03:20:10.708Z'],
           price: { carriage1: 10.5, carriage2: 20.25 },
-          occuppiedSeats: [1, 2],
+          occuppiedSeats: [1, 2, 91],
+        },
+        {
+          time: ['2024-08-09T03:30:00.708Z', '2024-08-09T12:00:00.708Z'],
+          price: { carriage1: 100.01, carriage2: 2000.02 },
+          occuppiedSeats: [1, 85, 90],
         },
       ],
     });

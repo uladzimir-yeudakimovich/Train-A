@@ -1,15 +1,16 @@
-@import '@shared/styles/variables.scss';
+@import "@shared/styles/variables.scss";
 
 :host {
   display: flex;
-  justify-content: center;
-
+  .container {
+    margin: 0 auto;
+  }
   .separator {
     width: 1.5rem;
     height: 1.5rem;
 
     &.inline {
-        display: inline-block;
+      display: inline-block;
     }
   }
 
@@ -44,7 +45,7 @@
 
   .schema:before,
   .schema:after {
-    content: '';
+    content: "";
     position: absolute;
     top: 0;
     bottom: 0;

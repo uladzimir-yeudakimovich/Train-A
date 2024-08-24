@@ -36,7 +36,12 @@ export class TripComponent implements OnInit {
 
   carriageStore = inject(CarriageStore);
 
-  tripInfo!: Signal<{ from: Station; to: Station; date: string }>;
+  tripInfo!: Signal<{
+    from: Station;
+    to: Station;
+    dateFrom: string;
+    dateTo: string;
+  }>;
 
   carTypes!: Signal<{ type: string; carriages: Carriage[] }[]>;
 
@@ -75,7 +80,7 @@ export class TripComponent implements OnInit {
       carriages.forEach((carriage) => {
         const type = carriage.name;
         const existing = result.find((r) => r.type === type);
-        // TODO: add occupied seats
+        // TODO: add occupied seats (concat all occupiedSeats from all segments)
         if (existing) {
           existing.carriages.push(carriage);
         } else {
@@ -91,8 +96,10 @@ export class TripComponent implements OnInit {
       const stations = this.stationStore.stationsEntityMap();
       const from = stations[fromStationId];
       const to = stations[toStationId];
-      const date = this.ride()?.schedule[0].time[0];
-      return { from, to, date };
+      const schedules = this.ride()?.schedule;
+      const dateFrom = schedules[0].time[0];
+      const dateTo = schedules[schedules.length - 1].time[1];
+      return { from, to, dateFrom, dateTo };
     });
   }
 
@@ -111,5 +118,20 @@ export class TripComponent implements OnInit {
         seat: { number: 1, state: SeatState.Selected },
       },
     ];
+  }
+
+  getAvailableSeatsNumber(carriages: Carriage[]): number {
+    return carriages.reduce((acc, c) => {
+      return acc + c.seats.filter((s) => s.state !== SeatState.Reserved).length;
+    }, 0);
+  }
+
+  getPrice(carriageType: string): number {
+    const ride = this.ride();
+    const totalPrice = ride.schedule.reduce((acc, s) => {
+      const priceInSegment = s.price[carriageType];
+      return acc + priceInSegment;
+    }, 0);
+    return totalPrice;
   }
 }
