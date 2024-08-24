@@ -1,5 +1,44 @@
+@import "@shared/styles/variables.scss";
+
 :host {
-    .trip {
-        margin: 0 5rem 5rem 5rem;
+    .head {
+        background-color: $primaryBackgroundColor;
+        padding: 1rem 5rem;
+        font-weight: 500;
+
+        .head-stations {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            font-size: 1.2rem;
+        }
+    }
+    .body {
+        margin-top: 1rem;
+        padding: 0 5rem 5rem 5rem;
+    }
+
+    .legend {
+        display: flex;
+        justify-content: center;
+
+        .legend-item {
+            margin-right: 2rem;
+        }
+    }
+
+    .book-modal {
+        width: 20rem;
+
+        @media (max-width: 1199px) {
+            margin: 0 auto;
+        }
+
+        @media (min-width: 1200px) {
+            position: fixed;
+            top: 70%;
+            right: 4rem;
+            transform: translateY(-50%);
+        }
     }
 }

@@ -1,13 +1,19 @@
-<mat-card appearance="outlined">
-  <mat-card-content>
-    @for (bookItem of sortedBookItems(); track $index) {
-      <p>Car {{ bookItem.carId }}, Seat {{ bookItem.seatNumber }}</p>
-    }
-    Total: {{ totalPrice() | currency }}
-  </mat-card-content>
-  <mat-card-footer>
-    <button mat-raised-button color="primary" (click)="onBook()">
-      Book seat
-    </button>
-  </mat-card-footer>
-</mat-card>
+@if (totalPrice()) {
+  <mat-card appearance="outlined" class="card">
+    <mat-card-content class="card-content">
+      @for (bookItem of sortedBookItems(); track $index) {
+        <p class="book-item">
+          Car {{ bookItem.carId }}, Seat {{ bookItem.seatNumber }}
+          <span>{{ bookItem.price | currency }}</span>
+        </p>
+      }
+      <p class="total">Total: {{ totalPrice() | currency }}</p>
+    </mat-card-content>
+    <mat-divider class="divider"></mat-divider>
+    <mat-card-footer class="card-footer">
+      <button mat-flat-button (click)="onBook()" class="book-button">
+        Book seat
+      </button>
+    </mat-card-footer>
+  </mat-card>
+}

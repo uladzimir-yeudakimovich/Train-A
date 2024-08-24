@@ -2,11 +2,19 @@ import { CurrencyPipe } from '@angular/common';
 import { Component, computed, input } from '@angular/core';
 import { MatButton } from '@angular/material/button';
 import { MatCard, MatCardContent, MatCardFooter } from '@angular/material/card';
+import { MatDivider } from '@angular/material/divider';
 
 @Component({
   selector: 'app-book-modal',
   standalone: true,
-  imports: [MatButton, MatCard, MatCardFooter, MatCardContent, CurrencyPipe],
+  imports: [
+    MatButton,
+    MatCard,
+    MatCardFooter,
+    MatCardContent,
+    CurrencyPipe,
+    MatDivider,
+  ],
   templateUrl: './book-modal.component.html',
   styleUrl: './book-modal.component.scss',
 })
@@ -34,12 +42,10 @@ export class BookModalComponent {
       groupedItems[item.carId].push(item);
     });
 
-    // Sort each group by seatNumber
     Object.keys(groupedItems).forEach((carId) => {
       groupedItems[carId].sort((a, b) => a.seatNumber - b.seatNumber);
     });
 
-    // Flatten the grouped and sorted items back into a single array
     return Object.values(groupedItems).flat();
   });
 

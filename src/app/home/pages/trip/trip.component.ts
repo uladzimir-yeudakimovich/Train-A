@@ -1,7 +1,9 @@
 import { Station } from '@admin/models/station.model';
 import { StationStore } from '@admin/store/stations/stations.store';
-import { DatePipe, JsonPipe } from '@angular/common';
+import { CurrencyPipe, DatePipe, JsonPipe } from '@angular/common';
 import { Component, computed, inject, OnInit, Signal } from '@angular/core';
+import { MatIcon } from '@angular/material/icon';
+import { MatListItem } from '@angular/material/list';
 import { MatTabsModule } from '@angular/material/tabs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CarSeatComponent } from '@shared/components/car-seat/car-seat.component';
@@ -25,6 +27,9 @@ import { CarriageListComponent } from './components/carriage-list/carriage-list.
     CarriageListComponent,
     MatTabsModule,
     BookModalComponent,
+    MatIcon,
+    MatListItem,
+    CurrencyPipe,
   ],
   templateUrl: './trip.component.html',
   styleUrls: ['./trip.component.scss'],
