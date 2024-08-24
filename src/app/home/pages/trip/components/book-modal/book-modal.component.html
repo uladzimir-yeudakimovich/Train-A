@@ -1,0 +1,13 @@
+<mat-card appearance="outlined">
+  <mat-card-content>
+    @for (bookItem of sortedBookItems(); track $index) {
+      <p>Car {{ bookItem.carId }}, Seat {{ bookItem.seatNumber }}</p>
+    }
+    Total: {{ totalPrice() | currency }}
+  </mat-card-content>
+  <mat-card-footer>
+    <button mat-raised-button color="primary" (click)="onBook()">
+      Book seat
+    </button>
+  </mat-card-footer>
+</mat-card>

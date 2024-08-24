@@ -1,41 +1,49 @@
 <div class="trip">
-{{ ride() | json }}
+  {{ ride() | json }}
 
-<div class="head">
-  <p>
-    @let trip = tripInfo();
-    {{ trip.from?.city }} -> {{ trip.to?.city }}
-    {{ trip.dateFrom | date: "MMMM d, HH:mm" }} - {{ trip.dateTo | date: "MMMM d, HH:mm" }}
-  </p>
-  <p>Ride {{ ride()?.rideId }}</p>
-</div>
-<div class="body">
-  <div class="carriages">
-    <mat-tab-group animationDuration="0ms" mat-stretch-tabs="false" mat-align-tabs="start">
-      @for (carItem of carTypes(); track carItem.type) {
-        <mat-tab
-        label="Carriage type {{ carItem.type }}: {{
-          getAvailableSeatsNumber(carItem.carriages)
-        }} | {{ getPrice(carItem.type) }}$"
-        >
-        <app-carriage-list
-        [carriages]="carItem.carriages"
-        ></app-carriage-list>
-      </mat-tab>
-    }
-  </mat-tab-group>
-</div>
-
-<div class="legend">
-  <p>Legend</p>
-  @for (legendSeat of legendSeats; track $index) {
-    <app-car-seat
-    [seat]="legendSeat.seat"
-    [direction]="'right'"
-    ></app-car-seat>
-      {{ legendSeat.description }}
-    }
+  <div class="head">
+    <p>
+      @let trip = tripInfo();
+      {{ trip.from?.city }} -> {{ trip.to?.city }}
+      {{ trip.dateFrom | date: "MMMM d, HH:mm" }} -
+      {{ trip.dateTo | date: "MMMM d, HH:mm" }}
+    </p>
+    <p>Ride {{ ride()?.rideId }}</p>
   </div>
-</div>
+  <div class="body">
+    <div class="carriages">
+      <mat-tab-group
+        animationDuration="0ms"
+        mat-stretch-tabs="false"
+        mat-align-tabs="start"
+      >
+        @for (carItem of carTypes(); track carItem.type) {
+          <mat-tab
+            label="Carriage type {{ carItem.type }}: {{
+              getAvailableSeatsNumber(carItem.carriages)
+            }} | {{ getPrice(carItem.type) }}$"
+          >
+            <app-carriage-list
+              [carriages]="carItem.carriages"
+            ></app-carriage-list>
+          </mat-tab>
+        }
+      </mat-tab-group>
+    </div>
 
+    <div class="book">
+      <app-book-modal [bookItems]="bookItems()"></app-book-modal>
+    </div>
+
+    <div class="legend">
+      <p>Legend</p>
+      @for (legendSeat of legendSeats; track $index) {
+        <app-car-seat
+          [seat]="legendSeat.seat"
+          [direction]="'right'"
+        ></app-car-seat>
+        {{ legendSeat.description }}
+      }
+    </div>
+  </div>
 </div>

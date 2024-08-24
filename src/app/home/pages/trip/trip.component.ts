@@ -12,6 +12,7 @@ import { Ride } from '@shared/models/interfaces/ride.model';
 import { CarriageStore } from '@shared/store/carriage/carriages.store';
 import { RideStore } from '@shared/store/ride/ride.store';
 
+import { BookModalComponent } from './components/book-modal/book-modal.component';
 import { CarriageListComponent } from './components/carriage-list/carriage-list.component';
 
 @Component({
@@ -23,6 +24,7 @@ import { CarriageListComponent } from './components/carriage-list/carriage-list.
     DatePipe,
     CarriageListComponent,
     MatTabsModule,
+    BookModalComponent,
   ],
   templateUrl: './trip.component.html',
   styleUrls: ['./trip.component.scss'],
@@ -44,6 +46,30 @@ export class TripComponent implements OnInit {
   }>;
 
   carTypes!: Signal<{ type: string; carriages: Carriage[] }[]>;
+
+  bookItems = computed(() => {
+    const carTypes = this.carTypes();
+    const bookItems: {
+      carId: string;
+      seatNumber: number;
+      price: number;
+    }[] = [];
+    carTypes.forEach((carType) => {
+      carType.carriages.forEach((carriage) => {
+        const selectedSeats = carriage.seats.filter(
+          (s) => s.state === SeatState.Selected,
+        );
+        selectedSeats.forEach((seat) => {
+          bookItems.push({
+            carId: carriage.code,
+            seatNumber: seat.number,
+            price: this.getPrice(carType.type),
+          });
+        });
+      });
+    });
+    return bookItems;
+  });
 
   constructor(
     private router: Router,
