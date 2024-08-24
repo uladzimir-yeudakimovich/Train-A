@@ -29,17 +29,7 @@ export const CarriageStore = signalStore(
             seats: getSeats(c),
           };
         });
-        // TODO: remove
-        const sameCarriages = carriages.map((c) => {
-          return {
-            ...c,
-            code: c.code.concat('copy'),
-          };
-        });
-        patchState(
-          store,
-          setAllEntities([...carriages, ...sameCarriages], carriageConfig),
-        );
+        patchState(store, setAllEntities(carriages, carriageConfig));
       }
     },
   })),

@@ -7,6 +7,7 @@ import { CarriageStore } from '@shared/store/carriage/carriages.store';
 export class TrainCarService {
   private carriageStore = inject(CarriageStore);
 
+  // TODO: remove this method
   toggleSeatState(carriage: Carriage, seatNumber: number): void {
     const seat = carriage.seats.find((s) => s.number === seatNumber)!;
     const isSelected = seat.state === SeatState.Selected;
@@ -20,7 +21,7 @@ export class TrainCarService {
   }
 
   getAvailableSeatsNumber(carriage: Carriage): number {
-    return this.carriageStore.getAvailableSeatsNumber(carriage.code);
+    return carriage.seats.filter((s) => s.state !== SeatState.Reserved).length;
   }
 
   getSeatDirection(

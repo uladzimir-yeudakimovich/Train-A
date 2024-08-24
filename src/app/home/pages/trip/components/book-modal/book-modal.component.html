@@ -1,7 +1,7 @@
 @if (totalPrice()) {
   <mat-card appearance="outlined" class="card">
     <mat-card-content class="card-content">
-      @for (bookItem of sortedBookItems(); track $index) {
+      @for (bookItem of bookItems(); track $index) {
         <p class="book-item">
           Car {{ bookItem.carId }}, Seat {{ bookItem.seatNumber }}
           <span>{{ bookItem.price | currency }}</span>

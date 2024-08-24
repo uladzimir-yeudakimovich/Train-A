@@ -7,7 +7,6 @@ import { CarSeat } from '@shared/models/interfaces/carriage.model';
 
 import { tripImports } from './trip.config';
 
-// TODO: refactor this bullshit
 @Component({
   selector: 'app-trip',
   standalone: true,
@@ -18,13 +17,17 @@ import { tripImports } from './trip.config';
 export class TripComponent implements OnInit {
   tripStore = inject(TripStore);
 
+  ride = this.tripStore.ride;
+
   tripInfo = this.tripStore.getEdgeStationsInfo();
 
   typewWithCarriages = this.tripStore.getCarriageTypeMap();
 
-  availableSeatsNumber = this.tripStore.getAvailableSeats();
+  availableSeatsMap = this.tripStore.getAvailableSeatsMap();
 
   priceMap = this.tripStore.getPriceMap();
+
+  bookItems = this.tripStore.getBookItems();
 
   constructor(
     private router: Router,
@@ -32,7 +35,6 @@ export class TripComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    // /trip/:rideId?from=stationId&to=stationId
     const rideId = this.activatedRoute.snapshot.paramMap.get('rideId');
     const fromId = this.activatedRoute.snapshot.queryParams.from;
     const toId = this.activatedRoute.snapshot.queryParams.to;
@@ -45,7 +47,6 @@ export class TripComponent implements OnInit {
 
   onRoute(): void {
     console.log('Open Route dialog ', this.tripStore.ride());
-    // console.log('Open Route dialog ', this.ride());
     // const dialogRef = this.dialog.open(RouteModalComponent, {
     //   data: {
     //     ride: this.ride()

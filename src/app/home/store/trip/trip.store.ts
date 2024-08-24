@@ -115,9 +115,14 @@ export class TripStore extends signalStore(
         if (!ride?.rideId || !this.carriageStore.carriagesIds().length) {
           return;
         }
-        const tripCarriages = ride.carriages.map((c) => {
-          return { ...carriageMap[c] };
-        });
+        const tripCarriages: Carriage[] = [];
+        for (let i = 0; i < ride.carriages.length; i += 1) {
+          const carriage = carriageMap[ride.carriages[i]];
+          tripCarriages.push({
+            ...carriage,
+            code: (i + 1).toString(),
+          });
+        }
 
         untracked(() => {
           patchState(this, { carriages: tripCarriages });
@@ -128,7 +133,6 @@ export class TripStore extends signalStore(
 
     const addOccupiedSeatsEffectRef = effect(
       () => {
-        // TODO: dependency loop (carriages)
         const tripCarriages = this.carriages();
         const occupiedSeats = this.getOccupiedSeats();
         const seatScopes = this.getSeatScopes();
@@ -153,9 +157,8 @@ export class TripStore extends signalStore(
           };
         });
 
-        console.log('carriagesWithOccupiedSeats', carriagesWithOccupiedSeats);
         untracked(() => {
-          patchState(this, { carriages: carriagesWithOccupiedSeats! });
+          patchState(this, { carriages: carriagesWithOccupiedSeats });
         });
         addOccupiedSeatsEffectRef.destroy();
       },
@@ -163,9 +166,9 @@ export class TripStore extends signalStore(
     );
   }
 
-  toggleSeatState(carIdx: number, seatNumber: number) {
+  toggleSeatState(carCode: string, seatNumber: number) {
     const carriages = this.carriages();
-    const carriage = carriages[carIdx];
+    const carriage = carriages.find((c) => c.code === carCode)!;
     const seat = carriage.seats.find((s) => s.number === seatNumber);
 
     if (seat) {
@@ -173,7 +176,8 @@ export class TripStore extends signalStore(
         seat.state === SeatState.Available
           ? SeatState.Selected
           : SeatState.Available;
-      patchState(this, { carriages });
+
+      patchState(this, { carriages: [...carriages] });
     }
   }
 
@@ -229,24 +233,28 @@ export class TripStore extends signalStore(
     });
   }
 
-  // TODO: map for every carriage type
-  getAvailableSeats(): Signal<number> {
+  getAvailableSeatsMap(): Signal<Record<string, number>> {
     return computed(() => {
-      const carriages = this.carriages();
+      const carriagesMap = this.getCarriageTypeMap();
 
-      if (!carriages?.length) {
-        return 0;
+      if (!carriagesMap().length) {
+        return {};
       }
 
-      let availableSeats = 0;
+      const availableSeats: Record<string, number> = {};
 
-      carriages.forEach((carriage) => {
-        carriage.seats.forEach((seat) => {
-          // Replace with !== Reserved
-          if (seat.state === SeatState.Available) {
-            availableSeats += 1;
-          }
-        });
+      carriagesMap().forEach((typeWithCars) => {
+        const availableSeatsInCarriage = typeWithCars.carriages.reduce(
+          (acc, carriage) => {
+            return (
+              acc +
+              carriage.seats.filter((s) => s.state === SeatState.Available)
+                .length
+            );
+          },
+          0,
+        );
+        availableSeats[typeWithCars.type] = availableSeatsInCarriage;
       });
 
       return availableSeats;
@@ -276,6 +284,41 @@ export class TripStore extends signalStore(
       });
 
       return priceMap;
+    });
+  }
+
+  getBookItems(): Signal<
+    {
+      carId: string;
+      seatNumber: number;
+      price: number;
+    }[]
+    // eslint-disable-next-line
+    > {
+    return computed(() => {
+      const carTypes = this.getCarriageTypeMap();
+      const bookItems: {
+        carId: string;
+        seatNumber: number;
+        price: number;
+      }[] = [];
+
+      carTypes().forEach((carType) => {
+        carType.carriages.forEach((carriage) => {
+          const selectedSeats = carriage.seats.filter(
+            (s) => s.state === SeatState.Selected,
+          );
+          selectedSeats.forEach((seat) => {
+            bookItems.push({
+              carId: carriage.code,
+              seatNumber: seat.number,
+              price: this.getPriceMap()()[carriage.name],
+            });
+          });
+        });
+      });
+
+      return bookItems;
     });
   }
 
