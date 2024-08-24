@@ -1,7 +1,18 @@
 import { Station } from '@admin/models/station.model';
 import { StationStore } from '@admin/store/stations/stations.store';
 import { CurrencyPipe, DatePipe, JsonPipe } from '@angular/common';
-import { Component, computed, inject, OnInit, Signal } from '@angular/core';
+import {
+  Component,
+  computed,
+  effect,
+  inject,
+  Injector,
+  OnInit,
+  Signal,
+  untracked,
+} from '@angular/core';
+import { toObservable } from '@angular/core/rxjs-interop';
+import { MatButton, MatIconButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { MatListItem } from '@angular/material/list';
 import { MatTabsModule } from '@angular/material/tabs';
@@ -14,6 +25,7 @@ import { Ride } from '@shared/models/interfaces/ride.model';
 import { CarriageStore } from '@shared/store/carriage/carriages.store';
 import { RideStore } from '@shared/store/ride/ride.store';
 import { getSeats } from '@shared/utils/carriage.utils';
+import { filter, take } from 'rxjs';
 
 import { BookModalComponent } from './components/book-modal/book-modal.component';
 import { CarriageListComponent } from './components/carriage-list/carriage-list.component';
@@ -32,6 +44,8 @@ import { CarriageListComponent } from './components/carriage-list/carriage-list.
     MatIcon,
     MatListItem,
     CurrencyPipe,
+    MatIconButton,
+    MatButton,
   ],
   templateUrl: './trip.component.html',
   styleUrls: ['./trip.component.scss'],
@@ -78,10 +92,62 @@ export class TripComponent implements OnInit {
     return bookItems;
   });
 
+  private injector = inject(Injector);
+
   constructor(
     private router: Router,
     private activatedRoute: ActivatedRoute,
-  ) {}
+  ) {
+    // Add occupied seats to store when Ride and Carriage store is loaded
+    toObservable(this.carriageStore.carriagesEntityMap, {
+      injector: this.injector,
+    })
+      .pipe(
+        filter((carriages) => Object.keys(carriages).length > 0),
+        take(1),
+      )
+      .subscribe((storeCarriages) => {
+        console.log('Carriages: ', storeCarriages);
+        effect(
+          () => {
+            const ride = this.ride();
+            if (!ride?.rideId) {
+              return;
+            }
+            const occupiedSeats = new Set<number>();
+            ride.schedule.forEach((segment) => {
+              segment.occuppiedSeats.forEach((seat) => {
+                occupiedSeats.add(seat);
+              });
+            });
+            console.log('occupiedSeats', occupiedSeats);
+            const carriages: Carriage[] = [];
+            ride.carriages.forEach((carriageCode) => {
+              const carriage = storeCarriages[carriageCode];
+              if (!carriage) {
+                return;
+              }
+              const { fromSeat, toSeat } = this.getSeatNumbers(
+                carriages,
+                carriage,
+              );
+              const occupiedSeatsInCarriage = Array.from(occupiedSeats.values())
+                .filter((s) => s >= fromSeat && s <= toSeat)
+                .map((s) => s - fromSeat + 1);
+              const carriageWithOccupiedSeats = {
+                ...carriage,
+                seats: getSeats(carriage, occupiedSeatsInCarriage),
+              };
+              untracked(() => {
+                this.carriageStore.updateCarriage(carriageWithOccupiedSeats);
+              });
+              carriages.push(storeCarriages[carriageCode]);
+            });
+          },
+          { injector: this.injector },
+        );
+      });
+  }
 
   ngOnInit(): void {
     // /trip/:rideId?from=stationId&to=stationId
@@ -104,43 +170,21 @@ export class TripComponent implements OnInit {
     const filteredCarriages = computed(() => {
       const storeCarriages = this.carriageStore.carriagesEntityMap();
       const ride = this.ride();
-
       if (!ride?.rideId) {
         return [];
       }
-      const occupiedSeats = new Set<number>();
-      ride.schedule.forEach((segment) => {
-        segment.occuppiedSeats.forEach((seat) => {
-          occupiedSeats.add(seat);
-        });
-      });
-      // return storeCarriages.filter((c) => ride.carriages.includes(c.code));
-      const result: Carriage[] = [];
-      ride.carriages.forEach((carriageCode) => {
-        const carriage = storeCarriages[carriageCode];
-        if (!carriage) {
-          return;
-        }
-        const { fromSeat, toSeat } = this.getSeatNumbers(result, carriage);
-        const occupiedSeatsInCarriage = Array.from(occupiedSeats.values())
-          .filter((s) => s >= fromSeat && s <= toSeat)
-          .map((s) => s - fromSeat + 1);
-        const carriageWithOccupiedSeats = {
-          ...carriage,
-          seats: getSeats(carriage, occupiedSeatsInCarriage),
-        };
-        result.push(carriageWithOccupiedSeats);
-      });
-      return result;
+      return ride.carriages.map((carriageCode) => storeCarriages[carriageCode]);
     });
 
     this.carTypes = computed(() => {
       const carriages = filteredCarriages();
       const result: { type: string; carriages: Carriage[] }[] = [];
       carriages.forEach((carriage) => {
+        if (!carriage) {
+          return;
+        }
         const type = carriage.name;
         const existing = result.find((r) => r.type === type);
-        // TODO: add occupied seats (concat all occupiedSeats from all segments)
         if (existing) {
           existing.carriages.push(carriage);
         } else {
@@ -183,6 +227,21 @@ export class TripComponent implements OnInit {
         seat: { number: 1, state: SeatState.Selected },
       },
     ];
+  }
+
+  onBack(): void {
+    this.router.navigate([RoutePath.Search]);
+  }
+
+  onRoute(): void {
+    console.log('Open Route dialog ', this.ride());
+    // const dialogRef = this.dialog.open(RouteModalComponent, {
+    //   data: {
+    //     ride: this.ride()
+    //     startStationId: this.ride().path[0],
+    //     endStationId: this.route().path[this.route().path.length - 1],
+    //   },
+    // });
   }
 
   getAvailableSeatsNumber(carriages: Carriage[]): number {
