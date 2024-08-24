@@ -43,6 +43,7 @@ export class TrainCarComponent implements OnInit {
     this.isHorizontal.set(window.innerWidth > 992);
   }
 
+  // TODO: remove, it should update the TripStore, not the CarriageStore
   toggleSeatState(seatNumber: number) {
     this.trainCarService.toggleSeatState(this.carriage(), seatNumber);
   }
