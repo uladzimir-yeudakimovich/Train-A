@@ -13,10 +13,12 @@ import { Carriage, CarSeat } from '@shared/models/interfaces/carriage.model';
 import { Ride } from '@shared/models/interfaces/ride.model';
 import { CarriageStore } from '@shared/store/carriage/carriages.store';
 import { RideStore } from '@shared/store/ride/ride.store';
+import { getSeats } from '@shared/utils/carriage.utils';
 
 import { BookModalComponent } from './components/book-modal/book-modal.component';
 import { CarriageListComponent } from './components/carriage-list/carriage-list.component';
 
+// TODO: refactor this bullshit
 @Component({
   selector: 'app-trip',
   standalone: true,
@@ -99,14 +101,41 @@ export class TripComponent implements OnInit {
     this.rideStore.getRide(Number(rideId));
     this.ride = computed(() => this.rideStore.ridesEntityMap()[Number(rideId)]);
 
-    const folteredCarriages = computed(() => {
-      const storeCarriages = this.carriageStore.carriagesEntities();
+    const filteredCarriages = computed(() => {
+      const storeCarriages = this.carriageStore.carriagesEntityMap();
       const ride = this.ride();
-      return storeCarriages.filter((c) => ride.carriages.includes(c.code));
+
+      if (!ride?.rideId) {
+        return [];
+      }
+      const occupiedSeats = new Set<number>();
+      ride.schedule.forEach((segment) => {
+        segment.occuppiedSeats.forEach((seat) => {
+          occupiedSeats.add(seat);
+        });
+      });
+      // return storeCarriages.filter((c) => ride.carriages.includes(c.code));
+      const result: Carriage[] = [];
+      ride.carriages.forEach((carriageCode) => {
+        const carriage = storeCarriages[carriageCode];
+        if (!carriage) {
+          return;
+        }
+        const { fromSeat, toSeat } = this.getSeatNumbers(result, carriage);
+        const occupiedSeatsInCarriage = Array.from(occupiedSeats.values())
+          .filter((s) => s >= fromSeat && s <= toSeat)
+          .map((s) => s - fromSeat + 1);
+        const carriageWithOccupiedSeats = {
+          ...carriage,
+          seats: getSeats(carriage, occupiedSeatsInCarriage),
+        };
+        result.push(carriageWithOccupiedSeats);
+      });
+      return result;
     });
 
     this.carTypes = computed(() => {
-      const carriages = folteredCarriages();
+      const carriages = filteredCarriages();
       const result: { type: string; carriages: Carriage[] }[] = [];
       carriages.forEach((carriage) => {
         const type = carriage.name;
@@ -127,7 +156,12 @@ export class TripComponent implements OnInit {
       const stations = this.stationStore.stationsEntityMap();
       const from = stations[fromStationId];
       const to = stations[toStationId];
-      const schedules = this.ride()?.schedule;
+
+      if (!this.ride()?.rideId) {
+        return { from, to, dateFrom: '', dateTo: '' };
+      }
+
+      const schedules = this.ride().schedule;
       const dateFrom = schedules[0].time[0];
       const dateTo = schedules[schedules.length - 1].time[1];
       return { from, to, dateFrom, dateTo };
@@ -164,5 +198,17 @@ export class TripComponent implements OnInit {
       return acc + priceInSegment;
     }, 0);
     return totalPrice;
+  }
+
+  private getSeatNumbers(
+    carriages: Carriage[],
+    car: Carriage,
+  ): { fromSeat: number; toSeat: number } {
+    let totalSeats = 0;
+    carriages.forEach((c) => {
+      totalSeats += c.seats.length;
+    });
+    const seatsInCarriage = car.seats.length;
+    return { fromSeat: totalSeats + 1, toSeat: totalSeats + seatsInCarriage };
   }
 }

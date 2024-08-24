@@ -54,6 +54,7 @@ export class BookModalComponent {
   });
 
   onBook(): void {
+    // TODO
     console.log('Booked', this.bookItems());
   }
 }
