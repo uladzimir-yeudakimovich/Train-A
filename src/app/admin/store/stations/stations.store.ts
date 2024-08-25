@@ -11,6 +11,7 @@ import {
   removeEntity,
   setAllEntities,
   setEntity,
+  updateAllEntities,
   withEntities,
 } from '@ngrx/signals/entities';
 
@@ -31,11 +32,47 @@ export const StationStore = signalStore(
     async deleteStation(id: number): Promise<void> {
       await adminService.deleteStation(id);
       patchState(store, removeEntity(id, stationConfig));
+      this.deleteStationFromConnected(id);
     },
 
     async addStation(partialStation: Partial<Station>): Promise<void> {
-      const station = await adminService.postStation(partialStation);
-      patchState(store, setEntity(station, stationConfig));
+      const newStation = await adminService.postStation(partialStation);
+      patchState(store, setEntity(newStation, stationConfig));
+      this.addStationToConnected(newStation);
+    },
+
+    deleteStationFromConnected(stationToDeleteId: number): void {
+      const stations = store.stationsEntities();
+      const updatedStations = stations.map((station) => {
+        const connectedTo = station.connectedTo.filter(
+          (connection) => connection.id !== stationToDeleteId,
+        );
+        return { ...station, connectedTo };
+      });
+      patchState(store, setAllEntities(updatedStations, stationConfig));
+    },
+
+    addStationToConnected(stationToConnect: Station): void {
+      const stations = store.stationsEntityMap();
+      const connectedStations = stationToConnect.connectedTo.map(
+        (connection) => stations[connection.id],
+      );
+      const updatedStations = connectedStations.map((connectedStation) => {
+        const connectedTo = [
+          ...connectedStation.connectedTo,
+          { id: stationToConnect.id },
+        ];
+        return { ...connectedStation, connectedTo };
+      });
+      patchState(
+        store,
+        updateAllEntities((station) => {
+          const updatedStation = updatedStations.find(
+            (updated) => updated.id === station.id,
+          );
+          return updatedStation ?? station;
+        }, stationConfig),
+      );
     },
   })),
 
