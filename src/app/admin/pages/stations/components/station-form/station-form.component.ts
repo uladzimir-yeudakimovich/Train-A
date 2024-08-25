@@ -12,9 +12,11 @@ import {
   viewChild,
 } from '@angular/core';
 import {
+  AbstractControl,
   FormArray,
   FormBuilder,
   FormGroupDirective,
+  ValidationErrors,
   Validators,
 } from '@angular/forms';
 
@@ -37,19 +39,13 @@ export class StationFormComponent {
 
   stationForm = this.formBuilder.nonNullable.group(
     {
-      city: [
-        '',
-        [
-          Validators.required,
-          Validators.maxLength(15),
-          Validators.minLength(3),
-        ],
-      ],
+      city: ['', [Validators.required, Validators.maxLength(100)]],
       latitude: [0, [Validators.max(90), Validators.min(-90)]],
       longitude: [0, [Validators.max(180), Validators.min(-180)]],
-      relations: this.formBuilder.array([
-        this.formBuilder.control(0, Validators.required),
-      ]),
+      relations: this.formBuilder.array(
+        [this.formBuilder.control(0, Validators.required)],
+        this.uniqueRelationsValidator,
+      ),
     },
     { updateOn: 'blur' },
   );
@@ -76,11 +72,7 @@ export class StationFormComponent {
     }
 
     if (this.city.hasError('maxlength')) {
-      return 'Max length is 15';
-    }
-
-    if (this.city.hasError('minlength')) {
-      return 'Min length is 3';
+      return 'City name is too long';
     }
 
     return '';
@@ -151,5 +143,16 @@ export class StationFormComponent {
     );
 
     this.formViewChild().resetForm();
+  }
+
+  private uniqueRelationsValidator(
+    control: AbstractControl,
+  ): ValidationErrors | null {
+    const formArray = control as FormArray;
+    const values = formArray.controls.map((c) => c.value);
+    const hasDuplicates = values.some(
+      (value, index) => values.indexOf(value) !== index,
+    );
+    return hasDuplicates ? { nonUnique: true } : null;
   }
 }

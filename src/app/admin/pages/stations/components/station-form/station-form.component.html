@@ -53,6 +53,9 @@
         }
       </mat-form-field>
     }
+    @if (relations.hasError('nonUnique')) {
+      <mat-error>Stations must be unique</mat-error>
+    }
 
     <button class="form-control" mat-raised-button type="button" (click)="addField()">
       add another city
