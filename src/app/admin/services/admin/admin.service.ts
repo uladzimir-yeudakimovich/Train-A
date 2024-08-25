@@ -1,10 +1,10 @@
 import { RailRoute } from '@admin/models/route.model';
-import { Station } from '@admin/models/station.model';
+import { Connection, Station } from '@admin/models/station.model';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ApiPath } from '@shared/models/enums/api-path.enum';
 import { Carriage } from '@shared/models/interfaces/carriage.model';
-import { firstValueFrom } from 'rxjs';
+import { firstValueFrom, map } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -21,6 +21,24 @@ export class AdminService {
   deleteStation(id: number): Promise<Station> {
     return firstValueFrom(
       this.http.delete<Station>(`${ApiPath.Station}/${id}`),
+    ).catch((error) => {
+      throw error;
+    });
+  }
+
+  postStation(station: Partial<Station>): Promise<Station> {
+    const body = {
+      city: station.city,
+      latitude: station.latitude,
+      longitude: station.longitude,
+      relations: station.connectedTo?.map(
+        (connection: Connection) => connection.id,
+      ),
+    };
+    return firstValueFrom(
+      this.http
+        .post<{ id: number }>('station', body)
+        .pipe(map((data) => ({ ...station, id: data.id }) as Station)),
     ).catch((error) => {
       throw error;
     });

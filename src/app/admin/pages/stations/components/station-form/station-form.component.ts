@@ -2,7 +2,8 @@ import {
   StationFormData,
   StationGeoLocation,
 } from '@admin/models/station-form.model';
-import { StationStore } from '@admin/store/stations.store';
+import { StationStore } from '@admin/store/stations/stations.store';
+import { mapFormToStation } from '@admin/utils/mapFormToStation';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -138,9 +139,10 @@ export class StationFormComponent {
   }
 
   async createStation() {
-    await this.stationStore.addStation(
+    const newStation = mapFormToStation(
       this.stationForm.value as StationFormData,
     );
+    await this.stationStore.addStation(newStation);
 
     this.formViewChild().resetForm();
 

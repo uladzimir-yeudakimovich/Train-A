@@ -1,5 +1,5 @@
 import { Station } from '@admin/models/station.model';
-import { StationStore } from '@admin/store/stations.store';
+import { StationStore } from '@admin/store/stations/stations.store';
 import {
   ChangeDetectionStrategy,
   Component,

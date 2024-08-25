@@ -1,12 +1,10 @@
 import { Station } from '@admin/models/station.model';
 import { StationFormData } from '@admin/models/station-form.model';
 
-export const mapFromIdToStation = (
-  response: { id: number },
+export const mapFormToStation = (
   stationData: StationFormData,
-): Station => {
+): Partial<Station> => {
   return {
-    id: response.id,
     city: stationData.city,
     latitude: stationData.latitude,
     longitude: stationData.longitude,

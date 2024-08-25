@@ -1,5 +1,5 @@
 import { StationGeoLocation } from '@admin/models/station-form.model';
-import { StationStore } from '@admin/store/stations.store';
+import { StationStore } from '@admin/store/stations/stations.store';
 import { Component, computed, inject, model } from '@angular/core';
 import { LeafletModule } from '@bluehalo/ngx-leaflet';
 import {
