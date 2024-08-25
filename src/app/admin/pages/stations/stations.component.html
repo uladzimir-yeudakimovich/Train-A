@@ -1,1 +1,3 @@
-<p>stations works!</p>
+<app-globalmap [(latLngOutput)]="location" />
+<app-station-form [latlng]="location()" />
+<app-station-cards />

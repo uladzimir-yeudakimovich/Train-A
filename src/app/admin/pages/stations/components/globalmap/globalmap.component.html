@@ -1,0 +1,6 @@
+<div
+  class="map"
+  leaflet
+  [leafletOptions]="options"
+  [leafletLayers]="markers()"
+  (leafletClick)="onLeafLetClick($event)"></div>

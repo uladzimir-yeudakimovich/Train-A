@@ -1,0 +1,68 @@
+<form class="form" [formGroup]="stationForm" (ngSubmit)="createStation()">
+  <mat-form-field appearance="outline" subscriptSizing="dynamic" floatLabel="always">
+    <mat-label> City </mat-label>
+
+    <input matInput type="text" formControlName="city" name="city" />
+
+    @if (city.invalid) {
+      <mat-error>{{ cityError }}</mat-error>
+    }
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" subscriptSizing="dynamic" floatLabel="always">
+    <mat-label> Latitude </mat-label>
+
+    <input matInput type="number" formControlName="latitude" name="latitude" />
+
+    @if (latitude.invalid) {
+      <mat-error>{{ latError }}</mat-error>
+    }
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" subscriptSizing="dynamic" floatLabel="always">
+    <mat-label> Longitude </mat-label>
+
+    <input matInput type="number" formControlName="longitude" name="longitude" />
+
+    @if (longitude.invalid) {
+      <mat-error>{{ lngError }}</mat-error>
+    }
+  </mat-form-field>
+
+  <ng-container formArrayName="relations">
+    @for (control of relations.controls; track createId()) {
+      <mat-form-field appearance="outline" subscriptSizing="dynamic" floatLabel="always">
+        @if ($index === 0) {
+          <mat-label>Connected</mat-label>
+        }
+
+        <mat-select [formControlName]="$index">
+          @for (station of stations(); track station.id) {
+            <mat-option [value]="station.id">{{ station.city }}</mat-option>
+          }
+        </mat-select>
+
+        @if ($index !== 0) {
+          <button mat-icon-button matSuffix type="button" (click)="removeField($index)">
+            <mat-icon>close</mat-icon>
+          </button>
+        }
+
+        @if (relations.controls.at($index)?.errors?.['required']) {
+          <mat-error>Required</mat-error>
+        }
+      </mat-form-field>
+    }
+    @if (relations.hasError('nonUnique')) {
+      <mat-error>Stations must be unique</mat-error>
+    }
+
+    <button class="form-control" mat-raised-button type="button" (click)="addField()">
+      add another city
+    </button>
+
+    <button class="form-control" mat-raised-button type="submit" [disabled]="stationForm.invalid">
+      save
+    </button>
+  </ng-container>
+</form>
