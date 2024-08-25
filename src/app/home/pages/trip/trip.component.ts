@@ -1,4 +1,5 @@
 import { Component, inject, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TripStore } from '@home/store/trip/trip.store';
 import { RoutePath } from '@shared/models/enums/route-path.enum';
@@ -6,6 +7,7 @@ import { SeatState } from '@shared/models/enums/seat-state.enum';
 import { CarSeat } from '@shared/models/interfaces/carriage.model';
 import { OrderStore } from '@shared/store/orders/orders.store';
 
+import { OrderDialogComponent } from './components/order-dialog/order-dialog.component';
 import { tripImports } from './trip.config';
 
 @Component({
@@ -32,6 +34,8 @@ export class TripComponent implements OnInit {
 
   orderStore = inject(OrderStore);
 
+  readonly dialog = inject(MatDialog);
+
   constructor(
     private router: Router,
     private activatedRoute: ActivatedRoute,
@@ -55,7 +59,12 @@ export class TripComponent implements OnInit {
       this.orderStore.createOrder(rideId, seat, stationStart, stationEnd);
     });
     await orders;
+
     console.log('Orders', this.orderStore.ordersEntities());
+
+    this.dialog.open(OrderDialogComponent, {
+      data: { tripInfo: this.tripInfo() },
+    });
   }
 
   onBack(): void {

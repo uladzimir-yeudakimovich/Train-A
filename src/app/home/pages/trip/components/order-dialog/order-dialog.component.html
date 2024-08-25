@@ -1,0 +1,6 @@
+<h2 mat-dialog-title>Order completed!</h2>
+<mat-dialog-content>You have booked a trip from {{ data.tripInfo.from.city }} to {{ data.tripInfo.to.city }}
+     on {{ data.tripInfo.departure | date: "MMMM d, HH:mm" }}.</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-button mat-dialog-close>Close</button>
+</mat-dialog-actions>
