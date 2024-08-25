@@ -10,12 +10,13 @@ export class ToCitiesPipe implements PipeTransform {
     if (connectedTo.length === 0) {
       return '';
     }
-
-    return connectedTo
+    const cityNames = connectedTo
       .map(
         (connectedToProps) =>
           stations.find((item) => item.id === connectedToProps.id)?.city,
       )
-      .join(' - ');
+      .filter(Boolean);
+
+    return cityNames.join(' - ');
   }
 }
