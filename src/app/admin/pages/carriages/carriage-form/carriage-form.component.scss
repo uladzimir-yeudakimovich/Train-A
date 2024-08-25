@@ -1,0 +1,28 @@
+@import "@shared/styles/variables.scss";
+
+:host {
+
+  .cancel-button {
+    background-color: $cancelButtonColor;
+  }
+
+  .reset-button {
+    background-color: $lightGrey;
+  }
+
+  .form-field-container {
+    position: relative;
+    padding-right: 2rem;
+  }
+
+  .form-actions {
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-around;
+    max-width: 500px;
+
+    .btn {
+      min-width: 25%;
+    }
+  }
+}

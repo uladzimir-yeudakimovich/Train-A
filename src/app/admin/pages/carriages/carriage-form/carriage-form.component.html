@@ -1,1 +1,47 @@
-<p>carriage-form works!</p>
+<div class="carriage-form">
+  <form [formGroup]="carriageForm" (ngSubmit)="onSave()">
+    <mat-form-field class="form-field-container" appearance="fill">
+      <mat-label>Carriage Name</mat-label>
+      <input matInput formControlName="name" placeholder="Enter carriage name">
+      <mat-error *ngIf="carriageForm.get('name')?.invalid && carriageForm.get('name')?.touched">
+        Carriage name is required
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field class="form-field-container" appearance="fill">
+      <mat-label>Rows</mat-label>
+      <input matInput type="number" formControlName="rows" min="1" placeholder="Enter number of rows">
+      <mat-error *ngIf="carriageForm.get('rows')?.invalid && carriageForm.get('rows')?.touched">
+        Number of rows must be at least 1
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field class="form-field-container" appearance="fill">
+      <mat-label>Left Seats</mat-label>
+      <input matInput type="number" formControlName="leftSeats" min="1" placeholder="Enter number of left seats">
+      <mat-error *ngIf="carriageForm.get('leftSeats')?.invalid && carriageForm.get('leftSeats')?.touched">
+        Number of left seats must be at least 1
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field class="form-field-container" appearance="fill">
+      <mat-label>Right Seats</mat-label>
+      <input matInput type="number" formControlName="rightSeats" min="1" placeholder="Enter number of right seats">
+      <mat-error *ngIf="carriageForm.get('rightSeats')?.invalid && carriageForm.get('rightSeats')?.touched">
+        Number of right seats must be at least 1
+      </mat-error>
+    </mat-form-field>
+
+    <div class="form-actions">
+      <button mat-flat-button (click)="onClose()" class="btn cancel-button" type="button">
+        Cancel
+      </button>
+      <button mat-flat-button (click)="onReset()" class="btn reset-button" type="button">
+        Reset
+      </button>
+      <button mat-flat-button type="submit" class="btn" [disabled]="carriageForm.invalid">
+        {{ carriage ? 'Update' : 'Save' }}
+      </button>
+    </div>
+  </form>
+</div>

@@ -1,19 +1,36 @@
 import { CarriageService } from '@admin/services/carriage-management/carriage.service';
+import { NgIf } from '@angular/common';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
+import { MatButton } from '@angular/material/button';
+import { MatError, MatFormField, MatLabel } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 import { Carriage } from '@shared/models/interfaces/carriage.model';
 
 @Component({
   selector: 'app-carriage-form',
   standalone: true,
-  imports: [],
+  imports: [
+    NgIf,
+    MatFormField,
+    MatInputModule,
+    MatLabel,
+    MatError,
+    MatButton,
+    ReactiveFormsModule,
+  ],
   templateUrl: './carriage-form.component.html',
   styleUrl: './carriage-form.component.scss',
 })
 export class CarriageFormComponent implements OnInit {
   @Input() carriage: Carriage | null = null;
 
-  @Output() saveCarriage = new EventEmitter<void>();
+  @Output() closeForm = new EventEmitter<void>();
 
   carriageForm: FormGroup;
 
@@ -35,22 +52,30 @@ export class CarriageFormComponent implements OnInit {
     }
   }
 
-  save() {
+  onSave() {
     if (this.carriageForm.valid) {
       const carriageData = {
         ...this.carriageForm.value,
-        code: this.carriage?.code ?? '',
+        code: this.carriageForm.value.name,
       };
 
       if (this.carriage) {
         this.carriageService
           .updateCarriage(carriageData)
-          .subscribe(() => this.saveCarriage.emit());
+          .subscribe(() => this.closeForm.emit());
       } else {
         this.carriageService
           .addCarriage(carriageData)
-          .subscribe(() => this.saveCarriage.emit());
+          .subscribe(() => this.closeForm.emit());
       }
     }
+  }
+
+  onReset() {
+    this.carriageForm.reset();
+  }
+
+  onClose() {
+    this.closeForm.emit();
   }
 }
