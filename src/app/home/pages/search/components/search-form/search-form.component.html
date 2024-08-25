@@ -1,0 +1,75 @@
+<form class="form" [formGroup]="searchForm" (ngSubmit)="onSubmit()">
+  <mat-form-field class="form-field" appearance="outline">
+    <input
+      matInput
+      formControlName="from"
+      type="text"
+      name="from"
+      placeholder="From"
+      aria-label="From"
+      [matAutocomplete]="auto"
+    />
+
+    <mat-icon matPrefix>radio_button_unchecked</mat-icon>
+    <mat-autocomplete #auto="matAutocomplete"> </mat-autocomplete>
+
+    @if (from.hasError("required")) {
+      <mat-error>Required</mat-error>
+    }
+  </mat-form-field>
+
+  <button
+    class="form-swap"
+    type="button"
+    mat-mini-fab
+    (click)="swapValue()"
+    [disabled]="!from.value && !to.value"
+  >
+    <mat-icon>swap_horiz</mat-icon>
+  </button>
+
+  <mat-form-field class="form-field" appearance="outline">
+    <input
+      matInput
+      formControlName="to"
+      type="text"
+      name="to"
+      placeholder="To"
+      aria-label="To"
+      [matAutocomplete]="auto"
+    />
+
+    <mat-icon matPrefix>radio_button_checked</mat-icon>
+    <mat-autocomplete #auto="matAutocomplete"> </mat-autocomplete>
+
+    @if (to.hasError("required")) {
+      <mat-error>Required</mat-error>
+    }
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <input
+      matInput
+      [matDatepicker]="picker"
+      formControlName="time"
+      name="time"
+    />
+
+    <mat-datepicker-toggle matPrefix [for]="picker" />
+
+    <mat-datepicker #picker />
+
+    @if (time.invalid) {
+      <mat-error>{{ timeErrorMessage }}</mat-error>
+    }
+  </mat-form-field>
+
+  <button
+    class="form-control"
+    mat-flat-button
+    type="submit"
+    [disabled]="searchForm.invalid"
+  >
+    Search
+  </button>
+</form>

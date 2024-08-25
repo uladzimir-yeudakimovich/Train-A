@@ -41,8 +41,11 @@ export class StationFormComponent {
   stationForm = this.formBuilder.nonNullable.group(
     {
       city: ['', [Validators.required, Validators.maxLength(100)]],
+
       latitude: [0, [Validators.max(90), Validators.min(-90)]],
+
       longitude: [0, [Validators.max(180), Validators.min(-180)]],
+
       relations: this.formBuilder.array(
         [this.formBuilder.control<number | null>(null, Validators.required)],
         this.uniqueRelationsValidator,
@@ -56,8 +59,10 @@ export class StationFormComponent {
   constructor(private formBuilder: FormBuilder) {
     effect(() => {
       const [lat, lng] = this.latlng();
+
       this.latitude.setValue(lat);
       this.latitude.markAsTouched();
+
       this.longitude.setValue(lng);
       this.longitude.markAsTouched();
     });
@@ -142,11 +147,13 @@ export class StationFormComponent {
     const newStation = mapFormToStation(
       this.stationForm.value as StationFormData,
     );
+
     await this.stationStore.addStation(newStation);
 
     this.formViewChild().resetForm();
 
     this.relations.clear();
+
     this.addField();
   }
 
@@ -154,10 +161,13 @@ export class StationFormComponent {
     control: AbstractControl,
   ): ValidationErrors | null {
     const formArray = control as FormArray;
+
     const values = formArray.controls.map((c) => c.value);
+
     const hasDuplicates = values.some(
       (value, index) => !!value && values.indexOf(value) !== index,
     );
+
     return hasDuplicates ? { nonUnique: true } : null;
   }
 }

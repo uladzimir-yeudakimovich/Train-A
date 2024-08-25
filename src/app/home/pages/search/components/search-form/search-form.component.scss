@@ -1,0 +1,21 @@
+.form {
+  position: relative;
+  width: 50rem;
+  display: flex;
+  align-items: center;
+  gap: 1.3rem;
+  margin-block-start: 1rem;
+  margin-inline: auto;
+
+  &-control {
+    border-radius: 0.5rem;
+    transform: translateY(-25%);
+  }
+
+  &-swap {
+    position: absolute;
+    z-index: 1;
+    top: 0.5rem;
+    left: 13rem;
+  }
+}
