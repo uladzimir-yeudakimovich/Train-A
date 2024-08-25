@@ -17,9 +17,8 @@ export const OrderStore = signalStore(
       stationStart: number,
       stationEnd: number,
     ) {
-      // TODO: FIX: unreal ID -> request fails
       await adminService.postOrder(rideId, seat, stationStart, stationEnd);
-      // get updated orders
+
       const orders = await adminService.loadOrders();
       patchState(store, setAllEntities(orders, orderConfig));
     },

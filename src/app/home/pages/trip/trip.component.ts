@@ -20,19 +20,11 @@ import { tripImports } from './trip.config';
 export class TripComponent implements OnInit {
   tripStore = inject(TripStore);
 
-  ride = this.tripStore.ride;
+  orderStore = inject(OrderStore);
 
   tripInfo = this.tripStore.getEdgeStationsInfo();
 
-  typewWithCarriages = this.tripStore.getCarriageTypeMap();
-
-  availableSeatsMap = this.tripStore.getAvailableSeatsMap();
-
-  priceMap = this.tripStore.getPriceMap();
-
   bookItems = this.tripStore.getBookItems();
-
-  orderStore = inject(OrderStore);
 
   readonly dialog = inject(MatDialog);
 
@@ -49,11 +41,12 @@ export class TripComponent implements OnInit {
   }
 
   async onBook() {
-    const { rideId } = this.ride();
+    // TODO: add message if user already booked some seat
+    const { rideId } = this.tripInfo();
     const bookItems = this.bookItems().map((item) => {
       return {
         seat: item.seatNumber,
-        carIdx: Number(item.carId),
+        carCode: item.carId,
       };
     });
     const stationStart = this.tripInfo().from.id;
@@ -61,14 +54,12 @@ export class TripComponent implements OnInit {
     const seatScopes = this.tripStore.getSeatScopes();
 
     this.tripStore.selectedToReserved();
-    const orders = bookItems.forEach(({ seat, carIdx }) => {
+    const orders = bookItems.forEach(({ seat, carCode }) => {
       // map seat number to api format
-      const seatNumber = seatScopes[carIdx].from + seat - 1;
+      const seatNumber = seatScopes[carCode].from + seat - 1;
       this.orderStore.createOrder(rideId, seatNumber, stationStart, stationEnd);
     });
     await orders;
-
-    console.log('Orders', this.orderStore.ordersEntities());
 
     this.dialog.open(OrderDialogComponent, {
       data: { tripInfo: this.tripInfo() },

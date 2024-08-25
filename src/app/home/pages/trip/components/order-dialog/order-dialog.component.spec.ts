@@ -8,9 +8,9 @@ describe('OrderDialogComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [OrderDialogComponent]
+      imports: [OrderDialogComponent],
     })
-    .compileComponents();
+      .compileComponents();
 
     fixture = TestBed.createComponent(OrderDialogComponent);
     component = fixture.componentInstance;

@@ -1,26 +1,12 @@
-import { DatePipe } from '@angular/common';
 import { Component, inject } from '@angular/core';
-import { MatButton } from '@angular/material/button';
-import {
-  MAT_DIALOG_DATA,
-  MatDialogActions,
-  MatDialogClose,
-  MatDialogContent,
-  MatDialogRef,
-  MatDialogTitle,
-} from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+
+import { orderDialogImports } from './order-dialog.config';
 
 @Component({
   selector: 'app-order-dialog',
   standalone: true,
-  imports: [
-    MatDialogActions,
-    MatDialogContent,
-    DatePipe,
-    MatButton,
-    MatDialogClose,
-    MatDialogTitle,
-  ],
+  imports: orderDialogImports,
   templateUrl: './order-dialog.component.html',
   styleUrl: './order-dialog.component.scss',
 })

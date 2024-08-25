@@ -10,6 +10,7 @@ import {
   signal,
   untracked,
 } from '@angular/core';
+import { BookItem, TripInfo } from '@home/models/trip.models';
 import { patchState, signalStore, withState } from '@ngrx/signals';
 import { SeatState } from '@shared/models/enums/seat-state.enum';
 import { Carriage } from '@shared/models/interfaces/carriage.model';
@@ -39,128 +40,18 @@ export class TripStore extends signalStore(
 
   private rideSegments!: Signal<Segment[]>;
 
-  constructor() {
-    super();
-    // TODO: remove from constructor?
-    this.carriageStore.getCarriages();
-    this.stationStore.getStations();
-  }
-
   private injector = inject(Injector);
 
   initStore(rideId: number, fromId: number, toId: number) {
+    this.carriageStore.getCarriages();
+    this.stationStore.getStations();
     this.rideStore.getRide(rideId);
 
-    effect(
-      () => {
-        const rideMap = this.rideStore.ridesEntityMap();
-        if (!this.rideStore.ridesIds().length) {
-          return;
-        }
-        untracked(() => {
-          patchState(this, { ride: rideMap[rideId] });
-        });
-      },
-      { injector: this.injector },
-    );
-
-    this.rideSegments = computed(() => {
-      const ride = this.ride();
-      if (!ride?.rideId) {
-        return [];
-      }
-      // TODO: path has different order than segments (wtf?)
-      const schedule: Segment[] = [];
-      const fromStationIdx = ride.path.indexOf(fromId);
-      const toStationIdx = ride.path.indexOf(toId);
-      for (let i = fromStationIdx; i < toStationIdx; i += 1) {
-        schedule.push(ride.schedule.segments[i]);
-      }
-      return schedule;
-    });
-
-    effect(
-      () => {
-        const stations = this.stationStore.stationsEntityMap();
-
-        if (!this.stationStore.stationsIds().length) {
-          return;
-        }
-        untracked(() => {
-          this.fromStation.set(stations[fromId]);
-          this.toStation.set(stations[toId]);
-        });
-      },
-      { injector: this.injector },
-    );
-
-    effect(
-      () => {
-        const rideMap = this.rideStore.ridesEntityMap();
-
-        if (!this.rideStore.ridesIds().length) {
-          return;
-        }
-        untracked(() => {
-          patchState(this, { ride: rideMap[rideId] });
-        });
-      },
-      { injector: this.injector },
-    );
-
-    effect(
-      () => {
-        const ride = this.ride();
-        const carriageMap = this.carriageStore.carriagesEntityMap();
-
-        if (!ride?.rideId || !this.carriageStore.carriagesIds().length) {
-          return;
-        }
-        const tripCarriages: Carriage[] = [];
-        for (let i = 0; i < ride.carriages.length; i += 1) {
-          const carriage = carriageMap[ride.carriages[i]];
-          tripCarriages.push({
-            ...carriage,
-            code: (i + 1).toString(),
-          });
-        }
-
-        untracked(() => {
-          patchState(this, { carriages: tripCarriages });
-        });
-      },
-      { injector: this.injector },
-    );
-
-    const addOccupiedSeatsEffectRef = effect(
-      () => {
-        const tripCarriages = this.carriages();
-        const occupiedSeats = this.getOccupiedSeats();
-        const seatScopes = this.getSeatScopes();
-
-        if (!tripCarriages?.length || !seatScopes?.length) {
-          return;
-        }
-
-        const carriagesWithOccupiedSeats = tripCarriages.map((carriage) => {
-          const carIdx = tripCarriages.indexOf(carriage);
-          const { from, to } = seatScopes[carIdx];
-          const occupiedSeatsInCarriage = occupiedSeats
-            .filter((s) => s >= from && s <= to)
-            .map((s) => s - from + 1);
-          return {
-            ...carriage,
-            seats: getSeats(carriage, occupiedSeatsInCarriage),
-          };
-        });
-
-        untracked(() => {
-          patchState(this, { carriages: carriagesWithOccupiedSeats });
-        });
-        addOccupiedSeatsEffectRef.destroy();
-      },
-      { injector: this.injector, manualCleanup: true },
-    );
+    this.initRideEffect(rideId);
+    this.initRideSegments(fromId, toId);
+    this.initEdgeStationsEffect(fromId, toId);
+    this.createTripCarriagesEffect();
+    this.initTripCarriages();
   }
 
   selectedToReserved() {
@@ -190,7 +81,7 @@ export class TripStore extends signalStore(
     }
   }
 
-  getCarriageTypeMap(): Signal<{ type: string; carriages: Carriage[] }[]> {
+  getGroupedCarriages(): Signal<{ type: string; carriages: Carriage[] }[]> {
     return computed(() => {
       const carriages = this.carriages();
 
@@ -215,25 +106,22 @@ export class TripStore extends signalStore(
     });
   }
 
-  getEdgeStationsInfo(): Signal<{
-    from: Station;
-    to: Station;
-    departure: string;
-    arrival: string;
-  }> {
+  getEdgeStationsInfo(): Signal<TripInfo> {
     return computed(() => {
       const rideSegments = this.rideSegments();
 
       if (!rideSegments?.length || !this.fromStation() || !this.toStation()) {
         return {
-          from: this.fromStation(),
-          to: this.toStation(),
+          rideId: 0,
+          from: {} as Station,
+          to: {} as Station,
           departure: '',
           arrival: '',
         };
       }
 
       return {
+        rideId: this.ride().rideId,
         from: this.fromStation(),
         to: this.toStation(),
         departure: rideSegments[0].time[0],
@@ -244,20 +132,20 @@ export class TripStore extends signalStore(
 
   getAvailableSeatsMap(): Signal<Record<string, number>> {
     return computed(() => {
-      const carriagesMap = this.getCarriageTypeMap();
+      const groupedCarriages = this.getGroupedCarriages();
 
-      if (!carriagesMap().length) {
+      if (!groupedCarriages().length) {
         return {};
       }
 
       const availableSeats: Record<string, number> = {};
 
-      carriagesMap().forEach((typeWithCars) => {
+      groupedCarriages().forEach((typeWithCars) => {
         const availableSeatsInCarriage = typeWithCars.carriages.reduce(
           (acc, carriage) => {
             return (
               acc +
-              carriage.seats.filter((s) => s.state === SeatState.Available)
+              carriage.seats.filter((s) => s.state !== SeatState.Reserved)
                 .length
             );
           },
@@ -295,21 +183,10 @@ export class TripStore extends signalStore(
     });
   }
 
-  getBookItems(): Signal<
-    {
-      carId: string;
-      seatNumber: number;
-      price: number;
-    }[]
-    // eslint-disable-next-line
-  > {
+  getBookItems(): Signal<BookItem[]> {
     return computed(() => {
-      const carTypes = this.getCarriageTypeMap();
-      const bookItems: {
-        carId: string;
-        seatNumber: number;
-        price: number;
-      }[] = [];
+      const carTypes = this.getGroupedCarriages();
+      const bookItems: BookItem[] = [];
 
       carTypes().forEach((carType) => {
         carType.carriages.forEach((carriage) => {
@@ -330,20 +207,19 @@ export class TripStore extends signalStore(
     });
   }
 
-  getSeatScopes(): { from: number; to: number }[] {
+  getSeatScopes(): Record<string, { from: number; to: number }> {
     const carriages = this.carriages();
 
     if (!carriages?.length) {
-      return [];
+      return {};
     }
 
-    const seatScopes: { from: number; to: number }[] = [];
+    const seatScopes: Record<string, { from: number; to: number }> = {};
 
     let fromSeat = 1;
     carriages.forEach((carriage) => {
       const toSeat = fromSeat + carriage.seats.length - 1;
-      const carIdx = carriages.indexOf(carriage);
-      seatScopes[carIdx] = { from: fromSeat, to: toSeat };
+      seatScopes[carriage.code] = { from: fromSeat, to: toSeat };
       fromSeat = toSeat + 1;
     });
 
@@ -359,5 +235,111 @@ export class TripStore extends signalStore(
       });
     });
     return Array.from(occupiedSeats.values());
+  }
+
+  private initRideEffect(rideId: number) {
+    return effect(
+      () => {
+        const rideMap = this.rideStore.ridesEntityMap();
+        if (!this.rideStore.ridesIds().length) {
+          return;
+        }
+        untracked(() => {
+          patchState(this, { ride: rideMap[rideId] });
+        });
+      },
+      { injector: this.injector },
+    );
+  }
+
+  private initRideSegments(fromId: number, toId: number) {
+    this.rideSegments = computed(() => {
+      const ride = this.ride();
+      if (!ride?.rideId) {
+        return [];
+      }
+      // TODO: path has different order than segments (wtf?)
+      const schedule: Segment[] = [];
+      const fromStationIdx = ride.path.indexOf(fromId);
+      const toStationIdx = ride.path.indexOf(toId);
+      for (let i = fromStationIdx; i < toStationIdx; i += 1) {
+        schedule.push(ride.schedule.segments[i]);
+      }
+      return schedule;
+    });
+  }
+
+  private initEdgeStationsEffect(fromId: number, toId: number) {
+    return effect(
+      () => {
+        const stations = this.stationStore.stationsEntityMap();
+
+        if (!this.stationStore.stationsIds().length) {
+          return;
+        }
+        untracked(() => {
+          this.fromStation.set(stations[fromId]);
+          this.toStation.set(stations[toId]);
+        });
+      },
+      { injector: this.injector },
+    );
+  }
+
+  private createTripCarriagesEffect() {
+    return effect(
+      () => {
+        const ride = this.ride();
+        const carriageMap = this.carriageStore.carriagesEntityMap();
+
+        if (!ride?.rideId || !this.carriageStore.carriagesIds().length) {
+          return;
+        }
+        const tripCarriages: Carriage[] = [];
+        for (let i = 0; i < ride.carriages.length; i += 1) {
+          const carriage = carriageMap[ride.carriages[i]];
+          tripCarriages.push({
+            ...carriage,
+            code: (i + 1).toString(),
+          });
+        }
+
+        untracked(() => {
+          patchState(this, { carriages: tripCarriages });
+        });
+      },
+      { injector: this.injector },
+    );
+  }
+
+  private initTripCarriages() {
+    const addOccupiedSeatsEffectRef = effect(
+      () => {
+        const tripCarriages = this.carriages();
+        const occupiedSeats = this.getOccupiedSeats();
+        const seatScopes = this.getSeatScopes();
+
+        if (!tripCarriages?.length || JSON.stringify(seatScopes) === '{}') {
+          return;
+        }
+
+        const carriagesWithOccupiedSeats = tripCarriages.map((carriage) => {
+          const { from, to } = seatScopes[carriage.code];
+          const occupiedSeatsInCarriage = occupiedSeats
+            .filter((s) => s >= from && s <= to)
+            .map((s) => s - from + 1);
+          return {
+            ...carriage,
+            seats: getSeats(carriage, occupiedSeatsInCarriage),
+          };
+        });
+
+        untracked(() => {
+          patchState(this, { carriages: carriagesWithOccupiedSeats });
+        });
+        addOccupiedSeatsEffectRef.destroy();
+      },
+      { injector: this.injector, manualCleanup: true },
+    );
   }
 }
