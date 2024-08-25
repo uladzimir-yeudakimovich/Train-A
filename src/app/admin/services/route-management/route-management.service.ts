@@ -1,4 +1,4 @@
-import { StationResponseItem } from '@admin/models/station.model';
+import { Station } from '@admin/models/station.model';
 import { StationStore } from '@admin/store/stations/stations.store';
 import { inject, Injectable } from '@angular/core';
 
@@ -8,12 +8,12 @@ import { inject, Injectable } from '@angular/core';
 export class RouteManagementService {
   private stationStore = inject(StationStore);
 
-  getStationsByIds(stationIds: number[]): StationResponseItem[] {
+  getStationsByIds(stationIds: number[]): Station[] {
     const stationsMap = this.stationStore.stationsEntityMap();
     return stationIds.map((id) => stationsMap[id]);
   }
 
-  getConnectedStations(stationId: number): StationResponseItem[] {
+  getConnectedStations(stationId: number): Station[] {
     const stations = this.stationStore.stationsEntityMap();
     const fromStation = stations[stationId];
 

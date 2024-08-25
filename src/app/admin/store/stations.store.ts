@@ -16,10 +16,10 @@ import {
   withEntities,
 } from '@ngrx/signals/entities';
 
-import { StationResponseItem } from '../models/station.model';
+import { Station } from '../models/station.model';
 
 export const stationConfig = entityConfig({
-  entity: type<StationResponseItem>(),
+  entity: type<Station>(),
   collection: 'stations',
   selectId: (station) => station.id,
 });

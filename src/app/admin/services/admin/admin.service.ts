@@ -1,5 +1,5 @@
 import { RailRoute } from '@admin/models/route.model';
-import { StationResponseItem } from '@admin/models/station.model';
+import { Station } from '@admin/models/station.model';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ApiPath } from '@shared/models/enums/api-path.enum';
@@ -12,17 +12,15 @@ import { firstValueFrom } from 'rxjs';
 export class AdminService {
   readonly loadRoutes = this.createLoader<RailRoute[]>(ApiPath.Route);
 
-  readonly loadStations = this.createLoader<StationResponseItem[]>(
-    ApiPath.Station,
-  );
+  readonly loadStations = this.createLoader<Station[]>(ApiPath.Station);
 
   readonly loadCarriages = this.createLoader<Carriage[]>(ApiPath.Carriage);
 
   constructor(private http: HttpClient) {}
 
-  deleteStation(id: number): Promise<StationResponseItem> {
+  deleteStation(id: number): Promise<Station> {
     return firstValueFrom(
-      this.http.delete<StationResponseItem>(`${ApiPath.Station}/${id}`),
+      this.http.delete<Station>(`${ApiPath.Station}/${id}`),
     ).catch((error) => {
       throw error;
     });
