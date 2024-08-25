@@ -1,0 +1,19 @@
+:host {
+  grid-column: 2/3;
+  grid-row: 1/3;
+  min-width: 15rem;
+  max-width: 20rem;
+}
+
+.form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-self: stretch;
+  gap: 1rem;
+
+  &-control {
+    text-transform: uppercase;
+    border-radius: 0.25rem;
+  }
+}
