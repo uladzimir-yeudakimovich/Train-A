@@ -7,7 +7,7 @@ import {
   Signal,
 } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { OrderStatus } from '@shared/store/orders/orders.config';
+import { OrderStatus } from '@shared/models/interfaces/order.model';
 import { OrderStore } from '@shared/store/orders/orders.store';
 
 import { stationCardsImports } from './station-cards.config';

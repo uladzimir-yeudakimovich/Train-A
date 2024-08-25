@@ -53,7 +53,7 @@
   </div>
 
   <div class="book-modal">
-    <app-book-modal [bookItems]="bookItems()"></app-book-modal>
+    <app-book-modal [bookItems]="bookItems()" (bookClick)="onBook()"></app-book-modal>
   </div>
 
   <div class="legend">

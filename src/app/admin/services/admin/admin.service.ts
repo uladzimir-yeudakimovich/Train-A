@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ApiPath } from '@shared/models/enums/api-path.enum';
 import { Carriage } from '@shared/models/interfaces/carriage.model';
+import { Order } from '@shared/models/interfaces/order.model';
 import { Ride } from '@shared/models/interfaces/ride.model';
 import { firstValueFrom, map } from 'rxjs';
 
@@ -16,6 +17,8 @@ export class AdminService {
   readonly loadStations = this.createLoader<Station[]>(ApiPath.Station);
 
   readonly loadCarriages = this.createLoader<Carriage[]>(ApiPath.Carriage);
+
+  readonly loadOrders = this.createLoader<Order[]>(ApiPath.Order);
 
   constructor(private http: HttpClient) {}
 
@@ -76,6 +79,25 @@ export class AdminService {
     ).catch((error) => {
       throw error;
     });
+  }
+
+  postOrder(
+    rideId: number,
+    seat: number,
+    stationStart: number,
+    stationEnd: number,
+  ): Promise<object> {
+    const body = {
+      rideId,
+      seat,
+      stationStart,
+      stationEnd,
+    };
+    return firstValueFrom(this.http.post(ApiPath.Order, body)).catch(
+      (error) => {
+        throw error;
+      },
+    );
   }
 
   postRoute(route: Partial<RailRoute>): Promise<object> {

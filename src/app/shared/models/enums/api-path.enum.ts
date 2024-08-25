@@ -3,4 +3,5 @@ export enum ApiPath {
   Route = 'route',
   Carriage = 'carriage',
   Search = 'search',
+  Order = 'order',
 }

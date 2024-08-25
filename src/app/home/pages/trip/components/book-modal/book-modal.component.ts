@@ -1,5 +1,5 @@
 import { CurrencyPipe } from '@angular/common';
-import { Component, computed, input } from '@angular/core';
+import { Component, computed, input, output } from '@angular/core';
 import { MatButton } from '@angular/material/button';
 import { MatCard, MatCardContent, MatCardFooter } from '@angular/material/card';
 import { MatDivider } from '@angular/material/divider';
@@ -27,34 +27,14 @@ export class BookModalComponent {
     }[]
   >();
 
-  sortedBookItems = computed(() => {
-    const items = this.bookItems();
-    const groupedItems: Record<
-      string,
-      { carId: string; seatNumber: number; price: number }[]
-    > = {};
-
-    // Group items by carId
-    items.forEach((item) => {
-      if (!groupedItems[item.carId]) {
-        groupedItems[item.carId] = [];
-      }
-      groupedItems[item.carId].push(item);
-    });
-
-    Object.keys(groupedItems).forEach((carId) => {
-      groupedItems[carId].sort((a, b) => a.seatNumber - b.seatNumber);
-    });
-
-    return Object.values(groupedItems).flat();
-  });
-
   totalPrice = computed(() => {
     return this.bookItems().reduce((acc, item) => acc + item.price, 0);
   });
 
+  bookClick = output<boolean>();
+
   onBook(): void {
-    // TODO
-    console.log('Booked', this.bookItems());
+    console.log('Book clicked', this.bookItems());
+    this.bookClick.emit(true);
   }
 }

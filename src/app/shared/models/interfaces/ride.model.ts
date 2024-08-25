@@ -1,7 +1,7 @@
 export interface Segment {
   time: [string, string];
   price: Record<string, number>;
-  occuppiedSeats: number[];
+  occuppiedSeats?: number[];
 }
 
 export interface Ride {

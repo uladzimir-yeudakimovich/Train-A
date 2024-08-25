@@ -166,6 +166,20 @@ export class TripStore extends signalStore(
     );
   }
 
+  selectedToReserved() {
+    const carriages = this.carriages();
+    const updatedCarriages = carriages.map((carriage) => {
+      const updatedSeats = carriage.seats.map((seat) => {
+        if (seat.state === SeatState.Selected) {
+          return { ...seat, state: SeatState.Reserved };
+        }
+        return seat;
+      });
+      return { ...carriage, seats: updatedSeats };
+    });
+    patchState(this, { carriages: updatedCarriages });
+  }
+
   toggleSeatState(carCode: string, seatNumber: number) {
     const carriages = this.carriages();
     const carriage = carriages.find((c) => c.code === carCode)!;
@@ -294,7 +308,7 @@ export class TripStore extends signalStore(
       price: number;
     }[]
     // eslint-disable-next-line
-    > {
+  > {
     return computed(() => {
       const carTypes = this.getCarriageTypeMap();
       const bookItems: {
@@ -327,7 +341,7 @@ export class TripStore extends signalStore(
     const occupiedSeats = new Set<number>();
 
     rideSegments.forEach((segment) => {
-      segment.occuppiedSeats.forEach((seat) => {
+      segment.occuppiedSeats?.forEach((seat) => {
         occupiedSeats.add(seat);
       });
     });

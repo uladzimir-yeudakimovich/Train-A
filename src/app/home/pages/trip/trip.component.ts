@@ -4,6 +4,7 @@ import { TripStore } from '@home/store/trip/trip.store';
 import { RoutePath } from '@shared/models/enums/route-path.enum';
 import { SeatState } from '@shared/models/enums/seat-state.enum';
 import { CarSeat } from '@shared/models/interfaces/carriage.model';
+import { OrderStore } from '@shared/store/orders/orders.store';
 
 import { tripImports } from './trip.config';
 
@@ -29,6 +30,8 @@ export class TripComponent implements OnInit {
 
   bookItems = this.tripStore.getBookItems();
 
+  orderStore = inject(OrderStore);
+
   constructor(
     private router: Router,
     private activatedRoute: ActivatedRoute,
@@ -39,6 +42,20 @@ export class TripComponent implements OnInit {
     const fromId = this.activatedRoute.snapshot.queryParams.from;
     const toId = this.activatedRoute.snapshot.queryParams.to;
     this.tripStore.initStore(Number(rideId), Number(fromId), Number(toId));
+  }
+
+  async onBook() {
+    const { rideId } = this.ride();
+    const seats = this.bookItems().map((item) => item.seatNumber);
+    const stationStart = this.tripInfo().from.id;
+    const stationEnd = this.tripInfo().to.id;
+
+    this.tripStore.selectedToReserved();
+    const orders = seats.forEach((seat) => {
+      this.orderStore.createOrder(rideId, seat, stationStart, stationEnd);
+    });
+    await orders;
+    console.log('Orders', this.orderStore.ordersEntities());
   }
 
   onBack(): void {
