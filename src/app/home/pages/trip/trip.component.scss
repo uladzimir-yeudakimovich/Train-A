@@ -39,9 +39,9 @@
       margin: 0 auto;
     }
 
-    // TODO: sometimes not clickable
     @media (min-width: 1200px) {
       position: fixed;
+      z-index: 1;
       top: 70%;
       right: 4rem;
       transform: translateY(-50%);

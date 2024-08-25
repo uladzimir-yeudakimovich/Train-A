@@ -14,7 +14,7 @@ import { patchState, signalStore, withState } from '@ngrx/signals';
 import { SeatState } from '@shared/models/enums/seat-state.enum';
 import { Carriage } from '@shared/models/interfaces/carriage.model';
 import { Segment } from '@shared/models/interfaces/ride.model';
-import { CarriageStore } from '@shared/store/carriage/carriages.store';
+import { CarriageStore } from '@shared/store/carriages/carriages.store';
 import { RideStore } from '@shared/store/ride/ride.store';
 import { getSeats } from '@shared/utils/carriage.utils';
 

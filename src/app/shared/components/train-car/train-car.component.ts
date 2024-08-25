@@ -32,9 +32,9 @@ export class TrainCarComponent implements OnInit {
     if (this.isHorizontal()) {
       return carriage.seats;
     }
-    // TODO: fix for TripStore; e.g give sort function to input
+    return [...carriage.seats].sort((a, b) => a.number - b.number);
+    // FIX: fix for TripStore; e.g give sort function to input
     // return this.trainCarService.getSortedSeats(carriage);
-    return carriage.seats;
   });
 
   constructor(private trainCarService: TrainCarService) {}
