@@ -22,7 +22,14 @@ export const CarriageStore = signalStore(
 
     async getCarriages() {
       if (!store.carriagesIds().length) {
-        const carriages = await adminService.loadCarriages();
+        const carriages = (await adminService.loadCarriages()).map(el => {
+          if (!el.seats) {
+            const { code, name, rows, leftSeats, rightSeats } = el;
+            return new Carriage(code, name, rows,leftSeats,rightSeats);
+          }
+          return el;
+        });
+
         patchState(store, setAllEntities(carriages, carriageConfig));
       }
     },

@@ -1,9 +1,7 @@
-<mat-list *ngIf="carriages">
-  <mat-list-item *ngFor="let carriage of carriages">
-    <div mat-line>{{ carriage.name }}</div>
-
-    <app-train-car [carriage]="store.getCarriageSignal(carriage.code)()"></app-train-car>
-    
-    <button mat-button (click)="onUpdate(carriage)">Update</button>
-  </mat-list-item>
-</mat-list>
+<div class="list">
+  @for (carriage of carriages(); track carriage.code; let i = $index) {
+    <div class="card">
+      <app-train-car [carriage]="getCarriage(carriage.code)()"></app-train-car>
+    </div>
+  }
+</div>

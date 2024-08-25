@@ -1,0 +1,41 @@
+:host {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  width: 85%;
+  margin: 0 auto;
+
+  .carriage-form {
+    margin-top: 1rem;
+
+    .button-center {
+      margin: 0 auto;
+    }
+  }
+
+  .spinner-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+
+    .spinner {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    .label {
+      position: absolute;
+      font-size: 1.5rem;
+      top: calc(50% - 6rem);
+      left: 50%;
+      transform: translateX(-50%);
+    }
+  }
+}

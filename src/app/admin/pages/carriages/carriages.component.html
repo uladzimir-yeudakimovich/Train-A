@@ -1,15 +1,17 @@
-<mat-toolbar>
-  <button mat-button (click)="showCreateForm()">Create</button>
-</mat-toolbar>
-
-<div *ngIf="formVisible">
-  <app-carriage-form
-    [carriage]="selectedCarriage"
-    (saveCarriage)="saveCarriage()">
-  </app-carriage-form>
-</div>
-
-<app-carriage-list
-  [carriages]="carriages | async"
-  (updateCarriage)="updateCarriage($event)">
-</app-carriage-list>
+@if (!carriages().length) {
+  <div class="spinner-container">
+    <mat-spinner class="spinner" />
+    <div class="label">Loading the carriages</div>
+  </div>
+} @else {
+  <div class="carriage-form">
+    @if (!formVisible()) {
+      <button mat-flat-button class="button-center" (click)="showCreateForm()">
+        Create new carriage
+      </button>
+    } @else {
+      <app-carriage-form (closeForm)="showCreateForm()"></app-carriage-form>
+    }
+  </div>
+  <app-carriage-list [carriages]="carriages()"></app-carriage-list>
+}

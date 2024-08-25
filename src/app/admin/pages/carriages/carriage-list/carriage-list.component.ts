@@ -1,11 +1,11 @@
 import { NgFor, NgIf } from '@angular/common';
-import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
+import { Component, inject, input } from '@angular/core';
 import { MatButton } from '@angular/material/button';
 import { MatList, MatListItem } from '@angular/material/list';
 import { TrainCarComponent } from '@shared/components/train-car/train-car.component';
 import { CarriageStore } from '@shared/store/carriages.store';
 
-import { Carriage } from '../carriage.model';
+import { Carriage } from '@shared/models/interfaces/carriage.model';
 
 @Component({
   selector: 'app-carriage-list',
@@ -15,13 +15,11 @@ import { Carriage } from '../carriage.model';
   styleUrl: './carriage-list.component.scss',
 })
 export class CarriageListComponent {
-  @Input() carriages!: Carriage[] | null;
-
-  @Output() updateCarriage = new EventEmitter<Carriage>();
+  carriages = input.required<Carriage[]>();
 
   store = inject(CarriageStore);
 
-  onUpdate(carriage: Carriage) {
-    this.updateCarriage.emit(carriage);
+  getCarriage(code: string) {
+    return this.store.getCarriageSignal(code);
   }
 }

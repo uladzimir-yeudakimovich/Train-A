@@ -1,51 +1,37 @@
-import { Carriage } from '@admin/pages/carriages/carriage.model';
-import { CarriageService } from '@admin/services/carriage.service';
-import { AsyncPipe, NgIf } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
-import { MatToolbar } from '@angular/material/toolbar';
-import { Observable } from 'rxjs';
+import { Component, inject, OnInit, signal, Signal } from '@angular/core';
 
 import { CarriageFormComponent } from './carriage-form/carriage-form.component';
 import { CarriageListComponent } from './carriage-list/carriage-list.component';
+import { CarriageStore } from '@shared/store/carriages.store';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import { Carriage } from '@shared/models/interfaces/carriage.model';
+import { MatButton } from '@angular/material/button';
 
 @Component({
   selector: 'app-carriages',
   standalone: true,
   imports: [
-    NgIf,
-    AsyncPipe,
-    MatToolbar,
+    MatButton,
     CarriageFormComponent,
     CarriageListComponent,
+    MatProgressSpinner,
   ],
   templateUrl: './carriages.component.html',
   styleUrl: './carriages.component.scss',
 })
 export class CarriagesComponent implements OnInit {
-  carriages!: Observable<Carriage[]> | null;
+  formVisible = signal<boolean>(false);
 
-  formVisible = false;
+  carriages!: Signal<Carriage[]>;
 
-  selectedCarriage: Carriage | null = null;
-
-  constructor(private carriageService: CarriageService) {}
+  private carriageStore = inject(CarriageStore);
 
   ngOnInit(): void {
-    this.carriages = this.carriageService.loadCarriages();
+    this.carriageStore.getCarriages();
+    this.carriages = this.carriageStore.carriagesEntities;
   }
 
   showCreateForm() {
-    this.selectedCarriage = null;
-    this.formVisible = true;
-  }
-
-  saveCarriage() {
-    this.formVisible = false;
-    this.selectedCarriage = null;
-  }
-
-  updateCarriage(carriage: Carriage) {
-    this.selectedCarriage = carriage;
-    this.formVisible = true;
+    this.formVisible.update((value) => !value);
   }
 }

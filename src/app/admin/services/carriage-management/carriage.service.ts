@@ -1,6 +1,6 @@
-import { Carriage } from '@admin/pages/carriages/carriage.model';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Carriage } from '@shared/models/interfaces/carriage.model';
 import { Observable } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 
@@ -11,10 +11,6 @@ export class CarriageService {
   private baseUrl = 'carriage';
 
   constructor(private http: HttpClient) {}
-
-  loadCarriages(): Observable<Carriage[]> {
-    return this.http.get<Carriage[]>(this.baseUrl);
-  }
 
   addCarriage(carriage: Carriage): Observable<Carriage> {
     return this.http.post<Carriage>(this.baseUrl, carriage).pipe(

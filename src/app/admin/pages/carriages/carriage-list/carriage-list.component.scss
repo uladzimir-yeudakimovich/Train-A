@@ -1,0 +1,14 @@
+:host {
+  display: block;
+  width: 100%;
+
+  .list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+
+    .card {
+      margin: 20px;
+    }
+  }
+}

@@ -1,7 +1,7 @@
-import { Carriage } from '@admin/pages/carriages/carriage.model';
-import { CarriageService } from '@admin/services/carriage.service';
+import { CarriageService } from '@admin/services/carriage-management/carriage.service';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Carriage } from '@shared/models/interfaces/carriage.model';
 
 @Component({
   selector: 'app-carriage-form',
