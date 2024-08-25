@@ -1,11 +1,11 @@
-import { Component, inject, OnInit, signal, Signal } from '@angular/core';
+import { Component, inject, OnInit, Signal, signal } from '@angular/core';
+import { MatButton } from '@angular/material/button';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import { Carriage } from '@shared/models/interfaces/carriage.model';
+import { CarriageStore } from '@shared/store/carriages/carriages.store';
 
 import { CarriageFormComponent } from './carriage-form/carriage-form.component';
 import { CarriageListComponent } from './carriage-list/carriage-list.component';
-import { CarriageStore } from '@shared/store/carriages.store';
-import { MatProgressSpinner } from '@angular/material/progress-spinner';
-import { Carriage } from '@shared/models/interfaces/carriage.model';
-import { MatButton } from '@angular/material/button';
 
 @Component({
   selector: 'app-carriages',

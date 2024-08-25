@@ -3,9 +3,8 @@ import { Component, inject, input } from '@angular/core';
 import { MatButton } from '@angular/material/button';
 import { MatList, MatListItem } from '@angular/material/list';
 import { TrainCarComponent } from '@shared/components/train-car/train-car.component';
-import { CarriageStore } from '@shared/store/carriages.store';
-
 import { Carriage } from '@shared/models/interfaces/carriage.model';
+import { CarriageStore } from '@shared/store/carriages/carriages.store';
 
 @Component({
   selector: 'app-carriage-list',
