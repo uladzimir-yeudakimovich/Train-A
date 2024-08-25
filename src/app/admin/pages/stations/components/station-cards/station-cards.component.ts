@@ -39,13 +39,9 @@ export class StationCardsComponent {
     );
 
     if (hasActiveOrder) {
-      this.snackBar.open(
-        'You cannot delete station with active orders',
-        'Close',
-        {
-          duration: 5000,
-        },
-      );
+      this.snackBar.open('Cannot delete station with active rides', 'Close', {
+        duration: 5000,
+      });
     } else {
       this.stationStore.deleteStation(id);
     }
