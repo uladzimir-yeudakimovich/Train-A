@@ -31,6 +31,7 @@
       "@shared/*": ["./src/app/shared/*"],
       "@testing/*": ["./src/app/testing/*"],
       "@orders/*": ["./src/app/orders/*"],
+      "@environments/*": ["./src/environments/*"],
       "@user/*": ["./src/app/user/*"]
     },
   },

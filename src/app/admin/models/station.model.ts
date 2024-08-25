@@ -1,6 +1,6 @@
 export interface Connection {
   id: number;
-  distance: number;
+  distance?: number;
 }
 
 export interface Station {
