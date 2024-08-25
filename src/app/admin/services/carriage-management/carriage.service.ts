@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { ApiPath } from '@shared/models/enums/api-path.enum';
 import { Carriage } from '@shared/models/interfaces/carriage.model';
 import { Observable } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
@@ -8,12 +9,11 @@ import { catchError, map } from 'rxjs/operators';
   providedIn: 'root',
 })
 export class CarriageService {
-  private baseUrl = 'carriage';
 
   constructor(private http: HttpClient) {}
 
   addCarriage(carriage: Carriage): Observable<Carriage> {
-    return this.http.post<Carriage>(this.baseUrl, carriage).pipe(
+    return this.http.post<Carriage>(ApiPath.Carriage, carriage).pipe(
       map((newCarriage) => {
         return newCarriage;
       }),
@@ -25,7 +25,7 @@ export class CarriageService {
 
   updateCarriage(carriage: Carriage): Observable<Carriage> {
     return this.http
-      .put<Carriage>(`${this.baseUrl}/${carriage.code}`, carriage)
+      .put<Carriage>(`${ApiPath.Carriage}/${carriage.code}`, carriage)
       .pipe(
         map((updatedCarriage) => {
           return updatedCarriage;
