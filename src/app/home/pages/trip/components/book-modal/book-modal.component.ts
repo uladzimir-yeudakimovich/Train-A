@@ -1,4 +1,5 @@
 import { Component, computed, input, output } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { BookItem } from '@home/models/trip.models';
 
 import { bookModalImports } from './book-modal.config';
@@ -19,8 +20,15 @@ export class BookModalComponent {
 
   bookClick = output<boolean>();
 
+  constructor(private snackBar: MatSnackBar) {}
+
   onBook(): void {
-    // TODO: add message about only 1 seat
+    if (this.bookItems().length !== 1) {
+      this.snackBar.open('Please select only one seat', 'Close', {
+        duration: 5000,
+      });
+      return;
+    }
     this.bookClick.emit(true);
   }
 }

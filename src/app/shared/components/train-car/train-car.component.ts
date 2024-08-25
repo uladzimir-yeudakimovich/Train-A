@@ -33,8 +33,6 @@ export class TrainCarComponent implements OnInit {
       return carriage.seats;
     }
     return [...carriage.seats].sort((a, b) => a.number - b.number);
-    // FIX: fix for TripStore; e.g give sort function to input
-    // return this.trainCarService.getSortedSeats(carriage);
   });
 
   constructor(private trainCarService: TrainCarService) {}

@@ -18,9 +18,15 @@ export const OrderStore = signalStore(
       stationEnd: number,
     ) {
       await adminService.postOrder(rideId, seat, stationStart, stationEnd);
-
       const orders = await adminService.loadOrders();
       patchState(store, setAllEntities(orders, orderConfig));
+    },
+
+    // TODO: load all orders
+    hasOrder(userId: number, rideId: number): boolean {
+      return !!store
+        .ordersEntities()
+        .find((order) => order.userId === userId && order.rideId === rideId);
     },
   })),
 );

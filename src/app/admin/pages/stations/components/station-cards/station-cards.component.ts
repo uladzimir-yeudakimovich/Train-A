@@ -32,7 +32,6 @@ export class StationCardsComponent {
   }
 
   deleteStation(id: number): void {
-    // TODO: check it when OrderStore will be implemented
     const orders = this.orderStore.ordersEntities();
     const hasActiveOrder = orders.some(
       (order) => order.status === OrderStatus.Active && order.path.includes(id),

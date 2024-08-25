@@ -258,7 +258,6 @@ export class TripStore extends signalStore(
       if (!ride?.rideId) {
         return [];
       }
-      // TODO: path has different order than segments (wtf?)
       const schedule: Segment[] = [];
       const fromStationIdx = ride.path.indexOf(fromId);
       const toStationIdx = ride.path.indexOf(toId);
