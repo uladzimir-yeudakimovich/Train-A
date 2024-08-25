@@ -13,7 +13,7 @@ import {
 import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Carriage } from '@shared/models/interfaces/carriage.model';
-import { CarriageStore } from '@shared/store/carriages.store';
+import { CarriageStore } from '@shared/store/carriages/carriages.store';
 
 import { routeFormImports } from './route-form.config';
 import { minArrayLength } from './route-form.utils';

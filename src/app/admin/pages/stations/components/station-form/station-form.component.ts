@@ -143,6 +143,9 @@ export class StationFormComponent {
     );
 
     this.formViewChild().resetForm();
+
+    this.relations.clear();
+    this.addField();
   }
 
   private uniqueRelationsValidator(
