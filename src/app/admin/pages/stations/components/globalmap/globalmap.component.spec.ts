@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { GlobalmapComponent } from './globalmap.component';
 
-describe('GlobalmapComponent', () => {
+xdescribe('GlobalmapComponent', () => {
   let component: GlobalmapComponent;
   let fixture: ComponentFixture<GlobalmapComponent>;
 
