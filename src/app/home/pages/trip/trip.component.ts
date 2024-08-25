@@ -50,13 +50,21 @@ export class TripComponent implements OnInit {
 
   async onBook() {
     const { rideId } = this.ride();
-    const seats = this.bookItems().map((item) => item.seatNumber);
+    const bookItems = this.bookItems().map((item) => {
+      return {
+        seat: item.seatNumber,
+        carIdx: Number(item.carId),
+      };
+    });
     const stationStart = this.tripInfo().from.id;
     const stationEnd = this.tripInfo().to.id;
+    const seatScopes = this.tripStore.getSeatScopes();
 
     this.tripStore.selectedToReserved();
-    const orders = seats.forEach((seat) => {
-      this.orderStore.createOrder(rideId, seat, stationStart, stationEnd);
+    const orders = bookItems.forEach(({ seat, carIdx }) => {
+      // map seat number to api format
+      const seatNumber = seatScopes[carIdx].from + seat - 1;
+      this.orderStore.createOrder(rideId, seatNumber, stationStart, stationEnd);
     });
     await orders;
 
@@ -73,6 +81,7 @@ export class TripComponent implements OnInit {
 
   onRoute(): void {
     console.log('Open Route dialog ', this.tripStore.ride());
+    // TODO: implement route dialog
     // const dialogRef = this.dialog.open(RouteModalComponent, {
     //   data: {
     //     ride: this.ride()

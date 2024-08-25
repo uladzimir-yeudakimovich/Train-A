@@ -69,11 +69,12 @@ export class TripStore extends signalStore(
       if (!ride?.rideId) {
         return [];
       }
+      // TODO: path has different order than segments (wtf?)
       const schedule: Segment[] = [];
       const fromStationIdx = ride.path.indexOf(fromId);
       const toStationIdx = ride.path.indexOf(toId);
       for (let i = fromStationIdx; i < toStationIdx; i += 1) {
-        schedule.push(ride.schedule[i]);
+        schedule.push(ride.schedule.segments[i]);
       }
       return schedule;
     });
@@ -137,11 +138,7 @@ export class TripStore extends signalStore(
         const occupiedSeats = this.getOccupiedSeats();
         const seatScopes = this.getSeatScopes();
 
-        if (
-          !tripCarriages?.length ||
-          !occupiedSeats?.length ||
-          !seatScopes?.length
-        ) {
+        if (!tripCarriages?.length || !seatScopes?.length) {
           return;
         }
 
@@ -184,13 +181,11 @@ export class TripStore extends signalStore(
     const carriages = this.carriages();
     const carriage = carriages.find((c) => c.code === carCode)!;
     const seat = carriage.seats.find((s) => s.number === seatNumber);
-
     if (seat) {
       seat.state =
         seat.state === SeatState.Available
           ? SeatState.Selected
           : SeatState.Available;
-
       patchState(this, { carriages: [...carriages] });
     }
   }
@@ -283,7 +278,6 @@ export class TripStore extends signalStore(
       if (!carriages?.length || !segments?.length) {
         return {};
       }
-
       const priceMap: Record<string, number> = {};
       // carriage name -> price (sum of all segments)
       carriages.forEach((carriage) => {
@@ -336,19 +330,7 @@ export class TripStore extends signalStore(
     });
   }
 
-  private getOccupiedSeats(): number[] {
-    const rideSegments = this.rideSegments();
-    const occupiedSeats = new Set<number>();
-
-    rideSegments.forEach((segment) => {
-      segment.occuppiedSeats?.forEach((seat) => {
-        occupiedSeats.add(seat);
-      });
-    });
-    return Array.from(occupiedSeats.values());
-  }
-
-  private getSeatScopes(): { from: number; to: number }[] {
+  getSeatScopes(): { from: number; to: number }[] {
     const carriages = this.carriages();
 
     if (!carriages?.length) {
@@ -366,5 +348,16 @@ export class TripStore extends signalStore(
     });
 
     return seatScopes;
+  }
+
+  private getOccupiedSeats(): number[] {
+    const rideSegments = this.rideSegments();
+    const occupiedSeats = new Set<number>();
+    rideSegments.forEach((segment) => {
+      segment.occupiedSeats?.forEach((seat) => {
+        occupiedSeats.add(seat);
+      });
+    });
+    return Array.from(occupiedSeats.values());
   }
 }

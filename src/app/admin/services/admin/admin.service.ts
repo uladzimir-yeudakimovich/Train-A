@@ -23,36 +23,12 @@ export class AdminService {
   constructor(private http: HttpClient) {}
 
   loadRide(id: number): Promise<Ride> {
-    // return firstValueFrom(this.http.get<Ride>(`${ApiPath.Search}/${id}`)).catch(
-    //   (error) => {
-    //     console.error('Error loading ride:', error);
-    //     throw error;
-    //   },
-    // );
-    // TODO: remove this mock
-    return Promise.resolve({
-      rideId: 10,
-      path: [1, 2, 3],
-      carriages: [
-        'carriage1',
-        'carriage2',
-        'carriage2',
-        'carriage1',
-        'carriage2',
-      ],
-      schedule: [
-        {
-          time: ['2024-08-08T21:19:57.708Z', '2024-08-09T03:20:10.708Z'],
-          price: { carriage1: 10.5, carriage2: 20.25 },
-          occuppiedSeats: [1, 84, 85, 117, 151, 234],
-        },
-        {
-          time: ['2024-08-09T03:30:00.708Z', '2024-08-09T12:00:00.708Z'],
-          price: { carriage1: 100.01, carriage2: 2000.02 },
-          occuppiedSeats: [118, 150, 235, 267],
-        },
-      ],
-    });
+    return firstValueFrom(this.http.get<Ride>(`${ApiPath.Search}/${id}`)).catch(
+      (error) => {
+        console.error('Error loading ride:', error);
+        throw error;
+      },
+    );
   }
 
   deleteStation(id: number): Promise<Station> {

@@ -1,12 +1,14 @@
 export interface Segment {
   time: [string, string];
   price: Record<string, number>;
-  occuppiedSeats?: number[];
+  occupiedSeats?: number[];
 }
 
 export interface Ride {
   rideId: number;
   path: number[];
   carriages: string[];
-  schedule: Segment[];
+  schedule: {
+    segments: Segment[];
+  };
 }

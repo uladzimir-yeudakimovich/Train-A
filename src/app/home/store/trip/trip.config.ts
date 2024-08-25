@@ -11,7 +11,7 @@ export const initState: TripState = {
     rideId: 0,
     path: [],
     carriages: [],
-    schedule: [],
+    schedule: { segments: [] },
   },
   carriages: [],
 };
