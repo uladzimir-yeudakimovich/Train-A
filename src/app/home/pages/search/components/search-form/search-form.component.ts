@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Station } from '@admin/models/station.model';
+import { Component, input } from '@angular/core';
 import {
   AbstractControl,
   FormBuilder,
@@ -6,6 +7,8 @@ import {
   Validators,
 } from '@angular/forms';
 import { provideNativeDateAdapter } from '@angular/material/core';
+import { SearchParams } from '@home/models/search-params.model';
+import { SearchService } from '@home/services/search.service';
 import { getTomorrow } from '@home/utils/getTomorrow.util';
 
 import { searchFormImports } from './search-form.config';
@@ -19,6 +22,8 @@ import { searchFormImports } from './search-form.config';
   providers: [provideNativeDateAdapter()],
 })
 export class SearchFormComponent {
+  stations = input.required<Station[]>();
+
   private noFutureValidator = (
     control: AbstractControl,
   ): ValidationErrors | null => {
@@ -33,16 +38,16 @@ export class SearchFormComponent {
     return noFuture ? { noFuture: true } : null;
   };
 
-  searchForm = this.formBuilder.nonNullable.group(
-    {
-      from: ['', [Validators.required]],
-      to: ['', [Validators.required]],
-      time: [getTomorrow(), [Validators.required, this.noFutureValidator]],
-    },
-    { updateOn: 'blur' },
-  );
+  searchForm = this.formBuilder.nonNullable.group({
+    from: ['', [Validators.required]],
+    to: ['', [Validators.required]],
+    time: [getTomorrow(), [Validators.required, this.noFutureValidator]],
+  });
 
-  constructor(private formBuilder: FormBuilder) {}
+  constructor(
+    private formBuilder: FormBuilder,
+    private searchService: SearchService,
+  ) {}
 
   get from(): AbstractControl<string> {
     return this.searchForm.get('from')!;
@@ -72,5 +77,23 @@ export class SearchFormComponent {
     this.searchForm.patchValue({ from: this.to.value, to: this.from.value });
   }
 
-  onSubmit(): void {}
+  onSubmit(): void {
+    const fromStation = this.stations().find(
+      ({ city }) => city === this.from.value,
+    ) as Station;
+
+    const toStation = this.stations().find(
+      ({ city }) => city === this.to.value,
+    ) as Station;
+
+    const searchParams: SearchParams = {
+      fromLatitude: fromStation.latitude,
+      fromLongitude: fromStation.longitude,
+      toLatitude: toStation.latitude,
+      toLongitude: toStation.longitude,
+      time: this.time.value.getTime(),
+    };
+
+    this.searchService.getAvailableRoutes(searchParams).subscribe(console.log);
+  }
 }

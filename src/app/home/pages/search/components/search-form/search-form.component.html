@@ -7,11 +7,16 @@
       name="from"
       placeholder="From"
       aria-label="From"
-      [matAutocomplete]="auto"
+      [matAutocomplete]="autoFrom"
     />
 
     <mat-icon matPrefix>radio_button_unchecked</mat-icon>
-    <mat-autocomplete #auto="matAutocomplete"> </mat-autocomplete>
+
+    <mat-autocomplete #autoFrom="matAutocomplete">
+      @for (station of stations(); track station.id) {
+        <mat-option [value]="station.city">{{ station.city }}</mat-option>
+      }
+    </mat-autocomplete>
 
     @if (from.hasError("required")) {
       <mat-error>Required</mat-error>
@@ -36,11 +41,16 @@
       name="to"
       placeholder="To"
       aria-label="To"
-      [matAutocomplete]="auto"
+      [matAutocomplete]="autoTo"
     />
 
     <mat-icon matPrefix>radio_button_checked</mat-icon>
-    <mat-autocomplete #auto="matAutocomplete"> </mat-autocomplete>
+
+    <mat-autocomplete #autoTo="matAutocomplete">
+      @for (station of stations(); track station.id) {
+        <mat-option [value]="station.city">{{ station.city }}</mat-option>
+      }
+    </mat-autocomplete>
 
     @if (to.hasError("required")) {
       <mat-error>Required</mat-error>
