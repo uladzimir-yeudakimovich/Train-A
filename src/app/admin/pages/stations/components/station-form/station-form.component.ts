@@ -43,7 +43,7 @@ export class StationFormComponent {
       latitude: [0, [Validators.max(90), Validators.min(-90)]],
       longitude: [0, [Validators.max(180), Validators.min(-180)]],
       relations: this.formBuilder.array(
-        [this.formBuilder.control(0, Validators.required)],
+        [this.formBuilder.control<number | null>(null, Validators.required)],
         this.uniqueRelationsValidator,
       ),
     },
@@ -125,7 +125,7 @@ export class StationFormComponent {
   }
 
   addField(): void {
-    const city = this.formBuilder.control(0, Validators.required);
+    const city = this.formBuilder.control(null, Validators.required);
     this.relations.push(city);
   }
 
@@ -154,7 +154,7 @@ export class StationFormComponent {
     const formArray = control as FormArray;
     const values = formArray.controls.map((c) => c.value);
     const hasDuplicates = values.some(
-      (value, index) => values.indexOf(value) !== index,
+      (value, index) => !!value && values.indexOf(value) !== index,
     );
     return hasDuplicates ? { nonUnique: true } : null;
   }
