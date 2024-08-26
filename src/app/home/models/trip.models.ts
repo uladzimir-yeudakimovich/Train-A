@@ -13,3 +13,16 @@ export interface BookItem {
   seatNumber: number;
   price: number;
 }
+
+export interface RouteModalData {
+  rideId: number;
+  from: number;
+  to: number;
+}
+
+export interface RouteStop {
+  station: Station;
+  arrival?: string;
+  departure?: string;
+  dwellTime?: number;
+}
