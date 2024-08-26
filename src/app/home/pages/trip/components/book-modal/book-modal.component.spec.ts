@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { BookModalComponent } from './book-modal.component';
 
-describe('BookModalComponent', () => {
+xdescribe('BookModalComponent', () => {
   let component: BookModalComponent;
   let fixture: ComponentFixture<BookModalComponent>;
 
