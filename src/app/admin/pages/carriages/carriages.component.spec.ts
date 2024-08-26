@@ -36,12 +36,12 @@ describe('CarriagesComponent', () => {
     expect(component.carriages).toBe(mockCarriageStore.carriagesEntities);
   });
 
-  it('should toggle formVisible when showCreateForm is called', () => {
+  it('should toggle formVisible when isShowForm is called', () => {
     const initialValue = component.formVisible();
-    component.showCreateForm();
+    component.isShowForm();
     expect(component.formVisible()).toBe(!initialValue);
 
-    component.showCreateForm();
+    component.isShowForm();
     expect(component.formVisible()).toBe(initialValue);
   });
 });
