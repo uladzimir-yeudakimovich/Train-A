@@ -24,8 +24,9 @@ export class AdminService {
 
   loadRide(id: number): Promise<Ride> {
     return firstValueFrom(this.http.get<Ride>(`${ApiPath.Search}/${id}`)).catch(
-      (error) => {
-        throw error;
+      () => {
+        // Ride not found
+        return {} as Ride;
       },
     );
   }

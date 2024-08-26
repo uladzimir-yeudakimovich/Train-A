@@ -52,16 +52,17 @@ export class TripComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    const rideId = this.activatedRoute.snapshot.paramMap.get('rideId');
-    const fromId = this.activatedRoute.snapshot.queryParams.from;
-    const toId = this.activatedRoute.snapshot.queryParams.to;
+    const rideId = Number(this.activatedRoute.snapshot.paramMap.get('rideId'));
+    const fromId = Number(this.activatedRoute.snapshot.queryParams.from);
+    const toId = Number(this.activatedRoute.snapshot.queryParams.to);
 
     if (!rideId || !fromId || !toId) {
       this.router.navigate(['/404']);
       return;
     }
+
     this.bookItems = this.tripService.getBookItems();
-    this.initStore(Number(rideId), Number(fromId), Number(toId));
+    this.initStore(rideId, fromId, toId);
   }
 
   private async initStore(rideId: number, fromId: number, toId: number) {
