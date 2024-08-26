@@ -17,35 +17,42 @@
       @for (stop of routeData(); track $index) {
         @let arrival = stop.arrival | date: "HH:mm";
         @let departure = stop.departure | date: "HH:mm";
+        @let isStart = stop.station.id === data.from;
+        @let isEnd = stop.station.id === data.to;
 
-        <div class="station">
-          <mat-step completed="false">
-            <ng-template matStepLabel>
-              <div class="step-label">
-                {{ stop.city }}
-                <span class="spacer"></span>
-                <span>
-                  @if ($first) {
-                    {{ routeData()[0].departure | date: "MMMM d, HH:mm" }}
-                  } @else if ($last) {
-                    {{ routeData()[routeData().length - 1].arrival | date: "MMMM d, HH:mm" }}
-                  } @else {
-                    {{ stop.dwellTime }} min
-                  }
-                </span>
-              </div>
-            </ng-template>
+        <mat-step completed="false">
+          <ng-template matStepLabel>
+            <div class="step-label">
+              {{ stop.station.city }}
 
-            <div class="schedule">
-              @if (arrival) {
-                <p>Arrival: {{ stop.arrival | date: "HH:mm" }}</p>
-              }
-              @if (departure) {
-                <p>Departure: {{ stop.departure | date: "HH:mm" }}</p>
-              }
+              <span class="spacer"></span>
+              <span class="dwell">
+                @if (isStart) {
+                  <mat-icon>person_pin_circle</mat-icon>
+                  {{ stop.departure | date: "MMMM d, HH:mm" }}
+                } @else if (isEnd) {
+                  <mat-icon>location_on</mat-icon>
+                  {{ stop.arrival | date: "MMMM d, HH:mm" }}
+                } @else if ($first) {
+                  {{ stop.departure | date: "MMMM d, HH:mm" }}
+                } @else if ($last) {
+                  {{ stop.arrival | date: "MMMM d, HH:mm" }}
+                } @else {
+                  {{ stop.dwellTime }} min
+                }
+              </span>
             </div>
-          </mat-step>
-        </div>
+          </ng-template>
+
+          <div class="schedule">
+            @if (arrival) {
+              <p>Arrival: {{ stop.arrival | date: "HH:mm" }}</p>
+            }
+            @if (departure) {
+              <p>Departure: {{ stop.departure | date: "HH:mm" }}</p>
+            }
+          </div>
+        </mat-step>
       }
     </mat-stepper>
   }

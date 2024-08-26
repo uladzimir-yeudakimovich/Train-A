@@ -21,7 +21,7 @@ export interface RouteModalData {
 }
 
 export interface RouteStop {
-  city: string;
+  station: Station;
   arrival?: string;
   departure?: string;
   dwellTime?: number;
