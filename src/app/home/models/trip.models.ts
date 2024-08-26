@@ -13,3 +13,9 @@ export interface BookItem {
   seatNumber: number;
   price: number;
 }
+
+export interface RouteModalData {
+  rideId: number;
+  from: number;
+  to: number;
+}

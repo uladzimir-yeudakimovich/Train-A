@@ -3,6 +3,7 @@ import { Component, inject, OnInit, Signal, signal } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
+import { RouteModalComponent } from '@home/components/route-modal/route-modal.component';
 import { BookItem, TripInfo } from '@home/models/trip.models';
 import { TripService } from '@home/services/trip/trip.service';
 import { TripStore } from '@home/store/trip/trip.store';
@@ -119,16 +120,13 @@ export class TripComponent implements OnInit {
   }
 
   onRoute(): void {
-    // TODO: open dialog (RouteModalComponent) when implemented]
-    const ride = this.tripStore.ride();
-    console.log(
-      'Open Route dialog: ride = ',
-      ride,
-      ', start = ',
-      ride.path[0],
-      ', end =',
-      ride.path[ride.path.length - 1],
-    );
+    this.dialog.open(RouteModalComponent, {
+      data: {
+        rideId: this.tripInfo.rideId,
+        from: this.tripInfo.from.id,
+        to: this.tripInfo.to.id,
+      },
+    });
   }
 
   get legendSeats(): { description: string; seat: CarSeat }[] {
