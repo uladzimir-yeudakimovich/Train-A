@@ -1,9 +1,10 @@
 import { StationStore } from '@admin/store/stations/stations.store';
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, inject, OnInit, Signal, signal } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
-import { TripInfo } from '@home/models/trip.models';
+import { BookItem, TripInfo } from '@home/models/trip.models';
+import { TripService } from '@home/services/trip/trip.service';
 import { TripStore } from '@home/store/trip/trip.store';
 import { RoutePath } from '@shared/models/enums/route-path.enum';
 import { SeatState } from '@shared/models/enums/seat-state.enum';
@@ -35,9 +36,11 @@ export class TripComponent implements OnInit {
 
   tripInfo: TripInfo = {} as TripInfo;
 
-  bookItems = this.tripStore.getBookItems();
+  bookItems!: Signal<BookItem[]>;
 
   isLoading = signal<boolean>(true);
+
+  priceMap: Record<string, number> = {};
 
   readonly dialog = inject(MatDialog);
 
@@ -45,6 +48,7 @@ export class TripComponent implements OnInit {
     private router: Router,
     private activatedRoute: ActivatedRoute,
     private snackBar: MatSnackBar,
+    private tripService: TripService,
   ) {}
 
   ngOnInit(): void {
@@ -56,21 +60,22 @@ export class TripComponent implements OnInit {
       this.router.navigate(['/404']);
       return;
     }
-
+    this.bookItems = this.tripService.getBookItems();
     this.initStore(Number(rideId), Number(fromId), Number(toId));
   }
 
   private async initStore(rideId: number, fromId: number, toId: number) {
     this.isLoading.set(true);
-    await this.tripStore.initStore(rideId, fromId, toId);
+    await this.tripService.initStore(rideId, fromId, toId);
 
-    const connectionsExists = this.tripStore.rideSegments.length > 0;
+    const connectionsExists = this.tripService.rideSegments.length > 0;
     if (!connectionsExists) {
       this.router.navigate(['/404']);
       return;
     }
 
-    this.tripInfo = this.tripStore.getEdgeStationsInfo();
+    this.priceMap = this.tripService.getPriceMap();
+    this.tripInfo = this.tripService.getEdgeStationsInfo();
     this.isLoading.set(false);
   }
 
