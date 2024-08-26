@@ -4,6 +4,8 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ApiPath } from '@shared/models/enums/api-path.enum';
 import { Carriage } from '@shared/models/interfaces/carriage.model';
+import { Order } from '@shared/models/interfaces/order.model';
+import { Ride } from '@shared/models/interfaces/ride.model';
 import { firstValueFrom, map } from 'rxjs';
 
 @Injectable({
@@ -16,7 +18,18 @@ export class AdminService {
 
   readonly loadCarriages = this.createLoader<Carriage[]>(ApiPath.Carriage);
 
+  readonly loadOrders = this.createLoader<Order[]>(ApiPath.Order);
+
   constructor(private http: HttpClient) {}
+
+  loadRide(id: number): Promise<Ride> {
+    return firstValueFrom(this.http.get<Ride>(`${ApiPath.Search}/${id}`)).catch(
+      () => {
+        // Ride not found
+        return {} as Ride;
+      },
+    );
+  }
 
   deleteStation(id: number): Promise<Station> {
     return firstValueFrom(
@@ -42,6 +55,25 @@ export class AdminService {
     ).catch((error) => {
       throw error;
     });
+  }
+
+  postOrder(
+    rideId: number,
+    seat: number,
+    stationStart: number,
+    stationEnd: number,
+  ): Promise<object> {
+    const body = {
+      rideId,
+      seat,
+      stationStart,
+      stationEnd,
+    };
+    return firstValueFrom(this.http.post(ApiPath.Order, body)).catch(
+      (error) => {
+        throw error;
+      },
+    );
   }
 
   postRoute(route: Partial<RailRoute>): Promise<object> {

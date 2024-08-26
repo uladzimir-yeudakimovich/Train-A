@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { TripComponent } from './trip.component';
+import { CarriageListComponent } from './carriage-list.component';
 
-xdescribe('TripComponent', () => {
-  let component: TripComponent;
-  let fixture: ComponentFixture<TripComponent>;
+xdescribe('CarriageListComponent', () => {
+  let component: CarriageListComponent;
+  let fixture: ComponentFixture<CarriageListComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [TripComponent],
+      imports: [CarriageListComponent],
     })
       .compileComponents();
 
-    fixture = TestBed.createComponent(TripComponent);
+    fixture = TestBed.createComponent(CarriageListComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
