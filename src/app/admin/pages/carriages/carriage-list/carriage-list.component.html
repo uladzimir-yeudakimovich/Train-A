@@ -1,7 +1,22 @@
 <div class="list">
   @for (carriage of carriages(); track carriage.code; let i = $index) {
+    <div class="update-form">
+      @if (formVisible()) {
+        <h4>Update {{carriage.name}}</h4>
+        <app-carriage-form
+          (updateCarriage)="updateCarriage($event)"
+          (closeForm)="isShowForm()"
+          [carriage]="carriage"
+        >
+        </app-carriage-form>
+      }
+    </div>
     <div class="card">
-      <app-train-car [carriage]="getCarriage(carriage.code)()"></app-train-car>
+      <app-train-car
+        [carriage]="carriage"
+        [visible]="headerVisible()"
+        (updateCarriage)="isShowForm()"
+      ></app-train-car>
     </div>
   }
 </div>

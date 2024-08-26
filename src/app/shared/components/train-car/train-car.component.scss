@@ -7,7 +7,7 @@
     padding-top: 0.2rem;
     margin: 0 auto;
   }
-  
+
   .separator {
     width: 1.5rem;
     height: 1.5rem;
@@ -29,6 +29,14 @@
     border-width: 1px;
     border-style: solid;
     border-color: $lightGrey;
+  }
+
+  .update-button {
+    margin: 0 1rem;
+
+    .mat-icon {
+      margin: 0;
+    }
   }
 
   .schema {

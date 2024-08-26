@@ -39,7 +39,7 @@
       <button mat-flat-button (click)="onReset()" class="btn reset-button" type="button">
         Reset
       </button>
-      <button mat-flat-button type="submit" class="btn" [disabled]="carriageForm.invalid">
+      <button mat-flat-button type="submit" class="btn" [disabled]="isUpdateDisabled()">
         {{ carriage ? 'Update' : 'Save' }}
       </button>
     </div>

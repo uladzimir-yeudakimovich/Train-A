@@ -1,4 +1,3 @@
-import { CarriageService } from '@admin/services/carriage-management/carriage.service';
 import { NgIf } from '@angular/common';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import {
@@ -29,15 +28,13 @@ import { Carriage } from '@shared/models/interfaces/carriage.model';
 })
 export class CarriageFormComponent implements OnInit {
   @Input() carriage: Carriage | null = null;
-
+  @Output() addCarriage = new EventEmitter<Carriage>();
+  @Output() updateCarriage = new EventEmitter<Carriage>();
   @Output() closeForm = new EventEmitter<void>();
 
   carriageForm: FormGroup;
 
-  constructor(
-    private fb: FormBuilder,
-    private carriageService: CarriageService,
-  ) {
+  constructor(private fb: FormBuilder) {
     this.carriageForm = this.fb.group({
       name: ['', Validators.required],
       rows: [0, [Validators.required, Validators.min(1)]],
@@ -53,20 +50,16 @@ export class CarriageFormComponent implements OnInit {
   }
 
   onSave() {
-    if (this.carriageForm.valid) {
-      const carriageData = {
+    if (this.carriageForm.valid && !this.carriageForm.pristine) {
+      const newCarriage = {
+        code: this.carriage ? this.carriage.code : '',
         ...this.carriageForm.value,
-        code: this.carriageForm.value.name,
       };
 
-      if (this.carriage) {
-        this.carriageService
-          .updateCarriage(carriageData)
-          .subscribe(() => this.closeForm.emit());
+      if (!this.carriage) {
+        this.addCarriage.emit(newCarriage);
       } else {
-        this.carriageService
-          .addCarriage(carriageData)
-          .subscribe(() => this.closeForm.emit());
+        this.updateCarriage.emit(newCarriage);
       }
     }
   }
@@ -77,5 +70,9 @@ export class CarriageFormComponent implements OnInit {
 
   onClose() {
     this.closeForm.emit();
+  }
+
+  isUpdateDisabled(): boolean {
+    return this.carriageForm.pristine || !this.carriageForm.valid;
   }
 }

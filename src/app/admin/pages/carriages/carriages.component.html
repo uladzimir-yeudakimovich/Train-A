@@ -6,11 +6,15 @@
 } @else {
   <div class="carriage-form">
     @if (!formVisible()) {
-      <button mat-flat-button class="button-center" (click)="showCreateForm()">
+      <button mat-flat-button class="button-center" (click)="isShowForm()">
         Create new carriage
       </button>
     } @else {
-      <app-carriage-form (closeForm)="showCreateForm()"></app-carriage-form>
+      <app-carriage-form
+        (addCarriage)="addCarriage($event)"
+        (closeForm)="isShowForm()"
+      >
+      </app-carriage-form>
     }
   </div>
   <app-carriage-list [carriages]="carriages()"></app-carriage-list>

@@ -11,19 +11,25 @@ import { Carriage } from '@shared/models/interfaces/carriage.model';
 import { TrainCarService } from '@shared/services/train-car/train-car.service';
 
 import { CarSeatComponent } from '../car-seat/car-seat.component';
+import { MatIcon } from '@angular/material/icon';
+import { MatButton } from '@angular/material/button';
 
 @Component({
   selector: 'app-train-car',
   standalone: true,
-  imports: [CarSeatComponent],
+  imports: [CarSeatComponent, MatButton, MatIcon],
   providers: [TrainCarService],
   templateUrl: './train-car.component.html',
   styleUrl: './train-car.component.scss',
 })
 export class TrainCarComponent implements OnInit {
+  visible = input<boolean>(true);
+
   carriage = input.required<Carriage>();
 
   toggleSeat = output<number>();
+
+  updateCarriage = output<Carriage>();
 
   isHorizontal = signal<boolean>(false);
 
@@ -48,6 +54,10 @@ export class TrainCarComponent implements OnInit {
 
   toggleSeatState(seatNumber: number) {
     this.toggleSeat.emit(seatNumber);
+  }
+
+  onUpdateCarriage(carriage: Carriage): void {
+    this.updateCarriage.emit(carriage);
   }
 
   getSeatDirection(seatNumber: number): string {

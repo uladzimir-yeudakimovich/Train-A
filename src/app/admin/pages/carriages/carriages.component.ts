@@ -31,7 +31,12 @@ export class CarriagesComponent implements OnInit {
     this.carriages = this.carriageStore.carriagesEntities;
   }
 
-  showCreateForm() {
+  isShowForm() {
     this.formVisible.update((value) => !value);
+  }
+
+  addCarriage(newCarriage: Carriage): void {
+    this.formVisible.set(false);
+    this.carriageStore.addCarriage(newCarriage);
   }
 }
