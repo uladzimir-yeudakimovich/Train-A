@@ -1,4 +1,5 @@
 import { AdminService } from '@admin/services/admin/admin.service';
+import { CarriageService } from '@admin/services/carriage-management/carriage.service';
 import { computed, inject } from '@angular/core';
 import { patchState, signalStore, withMethods } from '@ngrx/signals';
 import {
@@ -12,7 +13,6 @@ import { Carriage, CarSeat } from '@shared/models/interfaces/carriage.model';
 import { getSeats } from '@shared/utils/carriage.utils';
 
 import { carriageConfig } from './carriages.config';
-import { CarriageService } from '@admin/services/carriage-management/carriage.service';
 
 export const CarriageStore = signalStore(
   { providedIn: 'root' },
@@ -97,7 +97,11 @@ export const CarriageStore = signalStore(
         const { code } = response;
         const { name, leftSeats, rightSeats, rows } = carriage;
         const newCarriage = {
-          code, name, leftSeats, rightSeats, rows,
+          code,
+          name,
+          leftSeats,
+          rightSeats,
+          rows,
           seats: getSeats(carriage as Carriage),
         } as Carriage;
         patchState(store, addEntity(newCarriage, carriageConfig));

@@ -7,12 +7,12 @@ import {
   output,
   signal,
 } from '@angular/core';
+import { MatButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
 import { Carriage } from '@shared/models/interfaces/carriage.model';
 import { TrainCarService } from '@shared/services/train-car/train-car.service';
 
 import { CarSeatComponent } from '../car-seat/car-seat.component';
-import { MatIcon } from '@angular/material/icon';
-import { MatButton } from '@angular/material/button';
 
 @Component({
   selector: 'app-train-car',

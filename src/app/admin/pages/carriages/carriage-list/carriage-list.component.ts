@@ -5,12 +5,21 @@ import { MatList, MatListItem } from '@angular/material/list';
 import { TrainCarComponent } from '@shared/components/train-car/train-car.component';
 import { Carriage } from '@shared/models/interfaces/carriage.model';
 import { CarriageStore } from '@shared/store/carriages/carriages.store';
+
 import { CarriageFormComponent } from '../carriage-form/carriage-form.component';
 
 @Component({
   selector: 'app-carriage-list',
   standalone: true,
-  imports: [NgIf, NgFor, MatList, MatListItem, MatButton, TrainCarComponent, CarriageFormComponent],
+  imports: [
+    NgIf,
+    NgFor,
+    MatList,
+    MatListItem,
+    MatButton,
+    TrainCarComponent,
+    CarriageFormComponent,
+  ],
   templateUrl: './carriage-list.component.html',
   styleUrl: './carriage-list.component.scss',
 })

@@ -28,8 +28,11 @@ import { Carriage } from '@shared/models/interfaces/carriage.model';
 })
 export class CarriageFormComponent implements OnInit {
   @Input() carriage: Carriage | null = null;
+
   @Output() addCarriage = new EventEmitter<Carriage>();
+
   @Output() updateCarriage = new EventEmitter<Carriage>();
+
   @Output() closeForm = new EventEmitter<void>();
 
   carriageForm: FormGroup;

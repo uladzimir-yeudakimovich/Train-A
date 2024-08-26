@@ -8,10 +8,9 @@ import { firstValueFrom } from 'rxjs';
   providedIn: 'root',
 })
 export class CarriageService {
-
   constructor(private http: HttpClient) {}
 
-  addCarriage(carriage: Carriage): Promise<Object> {
+  addCarriage(carriage: Carriage): Promise<object> {
     return firstValueFrom(this.http.post(ApiPath.Carriage, carriage)).catch(
       (error) => {
         throw error;
@@ -19,11 +18,11 @@ export class CarriageService {
     );
   }
 
-  updateCarriage(carriage: Carriage): Promise<Object> {
-    return firstValueFrom(this.http.put(`${ApiPath.Carriage}/${carriage.code}`, carriage)).catch(
-      (error) => {
-        throw error;
-      },
-    );
+  updateCarriage(carriage: Carriage): Promise<object> {
+    return firstValueFrom(
+      this.http.put(`${ApiPath.Carriage}/${carriage.code}`, carriage),
+    ).catch((error) => {
+      throw error;
+    });
   }
 }
