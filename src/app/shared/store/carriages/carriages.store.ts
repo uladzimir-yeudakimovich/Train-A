@@ -8,6 +8,7 @@ import {
 } from '@ngrx/signals/entities';
 import { SeatState } from '@shared/models/enums/seat-state.enum';
 import { Carriage, CarSeat } from '@shared/models/interfaces/carriage.model';
+import { getSeats } from '@shared/utils/carriage.utils';
 
 import { carriageConfig } from './carriages.config';
 
@@ -22,7 +23,12 @@ export const CarriageStore = signalStore(
 
     async getCarriages() {
       if (!store.carriagesIds().length) {
-        const carriages = await adminService.loadCarriages();
+        const carriages = (await adminService.loadCarriages()).map((c) => {
+          return {
+            ...c,
+            seats: getSeats(c),
+          };
+        });
         patchState(store, setAllEntities(carriages, carriageConfig));
       }
     },

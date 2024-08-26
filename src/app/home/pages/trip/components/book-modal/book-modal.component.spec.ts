@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { StationCardsComponent } from './station-cards.component';
+import { BookModalComponent } from './book-modal.component';
 
-xdescribe('StationCardComponent', () => {
-  let component: StationCardsComponent;
-  let fixture: ComponentFixture<StationCardsComponent>;
+xdescribe('BookModalComponent', () => {
+  let component: BookModalComponent;
+  let fixture: ComponentFixture<BookModalComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [StationCardsComponent],
+      imports: [BookModalComponent],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(StationCardsComponent);
+    fixture = TestBed.createComponent(BookModalComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

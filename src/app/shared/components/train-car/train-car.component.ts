@@ -4,6 +4,7 @@ import {
   HostListener,
   input,
   OnInit,
+  output,
   signal,
 } from '@angular/core';
 import { Carriage } from '@shared/models/interfaces/carriage.model';
@@ -22,6 +23,8 @@ import { CarSeatComponent } from '../car-seat/car-seat.component';
 export class TrainCarComponent implements OnInit {
   carriage = input.required<Carriage>();
 
+  toggleSeat = output<number>();
+
   isHorizontal = signal<boolean>(false);
 
   seats = computed(() => {
@@ -29,7 +32,7 @@ export class TrainCarComponent implements OnInit {
     if (this.isHorizontal()) {
       return carriage.seats;
     }
-    return this.trainCarService.getSortedSeats(carriage);
+    return [...carriage.seats].sort((a, b) => a.number - b.number);
   });
 
   constructor(private trainCarService: TrainCarService) {}
@@ -44,7 +47,7 @@ export class TrainCarComponent implements OnInit {
   }
 
   toggleSeatState(seatNumber: number) {
-    this.trainCarService.toggleSeatState(this.carriage(), seatNumber);
+    this.toggleSeat.emit(seatNumber);
   }
 
   getSeatDirection(seatNumber: number): string {

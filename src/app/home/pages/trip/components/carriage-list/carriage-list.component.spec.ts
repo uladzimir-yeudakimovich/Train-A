@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { GlobalmapComponent } from './globalmap.component';
+import { CarriageListComponent } from './carriage-list.component';
 
-xdescribe('GlobalmapComponent', () => {
-  let component: GlobalmapComponent;
-  let fixture: ComponentFixture<GlobalmapComponent>;
+xdescribe('CarriageListComponent', () => {
+  let component: CarriageListComponent;
+  let fixture: ComponentFixture<CarriageListComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [GlobalmapComponent],
+      imports: [CarriageListComponent],
     })
       .compileComponents();
 
-    fixture = TestBed.createComponent(GlobalmapComponent);
+    fixture = TestBed.createComponent(CarriageListComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

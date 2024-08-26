@@ -1,17 +1,6 @@
 import { type } from '@ngrx/signals';
 import { entityConfig } from '@ngrx/signals/entities';
-
-// TODO: remove/replace this temporary enum
-export enum OrderStatus {
-  Active = 'active',
-}
-
-// TODO: remove/replace this temporary interface
-export interface Order {
-  id: number;
-  status: OrderStatus;
-  path: number[];
-}
+import { Order } from '@shared/models/interfaces/order.model';
 
 export const orderConfig = entityConfig({
   entity: type<Order>(),

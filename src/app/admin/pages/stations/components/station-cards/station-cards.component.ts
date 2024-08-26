@@ -7,7 +7,7 @@ import {
   Signal,
 } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { OrderStatus } from '@shared/store/orders/orders.config';
+import { OrderStatus } from '@shared/models/interfaces/order.model';
 import { OrderStore } from '@shared/store/orders/orders.store';
 
 import { stationCardsImports } from './station-cards.config';
@@ -32,7 +32,6 @@ export class StationCardsComponent {
   }
 
   deleteStation(id: number): void {
-    // TODO: check it when OrderStore will be implemented
     const orders = this.orderStore.ordersEntities();
     const hasActiveOrder = orders.some(
       (order) => order.status === OrderStatus.Active && order.path.includes(id),
