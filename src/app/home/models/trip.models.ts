@@ -24,5 +24,5 @@ export interface RouteStop {
   city: string;
   arrival?: string;
   departure?: string;
-  duration?: number;
+  dwellTime?: number;
 }

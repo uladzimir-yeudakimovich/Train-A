@@ -13,6 +13,7 @@ import {
 import { MatDivider } from '@angular/material/divider';
 import { MatIcon } from '@angular/material/icon';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import { MatStepperModule } from '@angular/material/stepper';
 import { RouteModalData, RouteStop } from '@home/models/trip.models';
 import { RideStore } from '@shared/store/ride/ride.store';
 
@@ -30,6 +31,7 @@ import { RideStore } from '@shared/store/ride/ride.store';
     DatePipe,
     MatProgressSpinner,
     JsonPipe,
+    MatStepperModule,
   ],
   templateUrl: './route-modal.component.html',
   styleUrl: './route-modal.component.scss',
@@ -72,7 +74,7 @@ export class RouteModalComponent implements OnInit {
         city: station.city,
         arrival: arrivalTime,
         departure: departureTime,
-        duration: this.getTimeDifference(arrivalTime, departureTime),
+        dwellTime: this.getTimeDifference(arrivalTime, departureTime),
       });
     });
 
