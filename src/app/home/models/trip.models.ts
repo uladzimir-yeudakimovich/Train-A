@@ -19,3 +19,10 @@ export interface RouteModalData {
   from: number;
   to: number;
 }
+
+export interface RouteStop {
+  city: string;
+  arrival?: string;
+  departure?: string;
+  duration?: number;
+}

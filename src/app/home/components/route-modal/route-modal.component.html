@@ -6,7 +6,42 @@
   </button>
 </h2>
 <mat-divider></mat-divider>
-<mat-dialog-content
-  >This dialog showcases the title, close, content and actions
-  elements.</mat-dialog-content
->
+<mat-dialog-content>
+  @if (isLoading()) {
+    <div class="spinner-container">
+      <mat-spinner class="spinner" />
+      <div class="label">Loading the trip info</div>
+    </div>
+  } @else {
+    @for (stop of routeData(); track $index) {
+      @let arrival = stop.arrival | date: "HH:mm";
+      @let departure = stop.departure | date: "HH:mm";
+
+      <div class="stop">
+        <div class="stop-number">{{ $index + 1 }}</div>
+        <div class="stop-info">
+          <p>City: {{ stop.city }}</p>
+          <!-- time in format HH:MM -->
+          @if (arrival) {
+            <p>Arrival: {{ stop.arrival | date: "HH:mm" }}</p>
+          }
+          @if (departure) {
+            <p>Departure: {{ stop.departure | date: "HH:mm" }}</p>
+          }
+          <p>
+            Stop Duration:
+            @if ($first) {
+              First station
+            }
+            @else if ($last) {
+              Last station
+            }
+            @else {
+              {{ stop.duration }} minutes
+            }
+          </p>
+        </div>
+      </div>
+    }
+  }
+</mat-dialog-content>
