@@ -1,0 +1,38 @@
+@import "@shared/styles/variables.scss";
+
+:host {
+  .carriage-card {
+    padding: 15px;
+    background-color: $primaryBackgroundColor;
+
+    .carriage-form {
+      margin: 0 auto;
+      
+      .form-field-container {
+        &:not(:nth-child(4)) {
+          position: relative;
+          padding-right: 1rem;
+        }
+      }
+
+      .form-actions {
+        margin: 1rem auto 0;
+        display: flex;
+        justify-content: space-around;
+        max-width: 500px;
+
+        .btn {
+          min-width: 25%;
+        }
+
+        .cancel-button {
+          background-color: $cancelButtonColor;
+        }
+
+        .reset-button {
+          background-color: $lightGrey;
+        }
+      }
+    }
+  }
+}
