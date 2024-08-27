@@ -1,4 +1,5 @@
 import { inject, Injectable } from '@angular/core';
+import { AdminRoleGuard } from '@core/guards/admin.guard';
 import { OrderStore } from '@shared/store/orders/orders.store';
 import { UserStore } from '@shared/store/users/users.store';
 
@@ -10,8 +11,10 @@ export class OrderService {
 
   userStore = inject(UserStore);
 
+  constructor(private adminGuard: AdminRoleGuard) {}
+
   async initStore() {
-    const isManager = localStorage.getItem('role') === 'manager';
+    const isManager = this.adminGuard.canActivate();
     await this.orderStore.getOrders();
     if (isManager) {
       await this.userStore.getUsers();
