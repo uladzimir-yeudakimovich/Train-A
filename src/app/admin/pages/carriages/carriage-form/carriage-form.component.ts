@@ -16,6 +16,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { MatButton } from '@angular/material/button';
+import { MatCard } from '@angular/material/card';
 import { MatError, MatFormField, MatLabel } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { TrainCarComponent } from '@shared/components/train-car/train-car.component';
@@ -34,6 +35,7 @@ import { getSeats } from '@shared/utils/carriage.utils';
     MatButton,
     ReactiveFormsModule,
     TrainCarComponent,
+    MatCard,
   ],
   templateUrl: './carriage-form.component.html',
   styleUrl: './carriage-form.component.scss',

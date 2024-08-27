@@ -1,6 +1,7 @@
 import { NgFor, NgIf } from '@angular/common';
 import { Component, inject, input, signal } from '@angular/core';
 import { MatButton } from '@angular/material/button';
+import { MatCard } from '@angular/material/card';
 import { MatList, MatListItem } from '@angular/material/list';
 import { TrainCarComponent } from '@shared/components/train-car/train-car.component';
 import { Carriage } from '@shared/models/interfaces/carriage.model';
@@ -19,6 +20,7 @@ import { CarriageFormComponent } from '../carriage-form/carriage-form.component'
     MatButton,
     TrainCarComponent,
     CarriageFormComponent,
+    MatCard,
   ],
   templateUrl: './carriage-list.component.html',
   styleUrl: './carriage-list.component.scss',
@@ -26,20 +28,21 @@ import { CarriageFormComponent } from '../carriage-form/carriage-form.component'
 export class CarriageListComponent {
   carriages = input.required<Carriage[]>();
 
-  formVisible = signal<boolean>(false);
+  selectedCarriageCode = signal<string | null>(null);
 
   headerVisible = signal<boolean>(true);
 
   store = inject(CarriageStore);
 
-  isShowForm() {
-    this.formVisible.update((value) => !value);
+  isShowForm(carriageCode: string) {
+    const isSameCarriage = this.selectedCarriageCode() === carriageCode;
+    this.selectedCarriageCode.set(isSameCarriage ? null : carriageCode);
     this.headerVisible.update((value) => !value);
   }
 
   updateCarriage(newCarriage: Carriage): void {
-    this.formVisible.set(false);
+    this.selectedCarriageCode.set(null);
     this.store.updateCarriage(newCarriage);
-    this.headerVisible.update((value) => !value);
+    this.headerVisible.set(true);
   }
 }

@@ -1,5 +1,5 @@
-<div class="carriage-form">
-  <form [formGroup]="carriageForm" (ngSubmit)="onSave()">
+<mat-card class="carriage-card">
+  <form class="carriage-form" [formGroup]="carriageForm" (ngSubmit)="onSave()">
     <mat-form-field class="form-field-container" appearance="fill">
       <mat-label>Carriage Name</mat-label>
       <input matInput formControlName="name" placeholder="Enter carriage name">
@@ -52,4 +52,4 @@
       </button>
     </div>
   </form>
-</div>
+</mat-card>
