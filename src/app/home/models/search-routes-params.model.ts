@@ -1,4 +1,4 @@
-export interface SearchParams {
+export interface SearchRoutesParams {
   fromLatitude: number;
   fromLongitude: number;
   toLatitude: number;

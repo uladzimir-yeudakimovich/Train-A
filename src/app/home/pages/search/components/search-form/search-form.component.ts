@@ -1,5 +1,5 @@
 import { Station } from '@admin/models/station.model';
-import { Component, input } from '@angular/core';
+import { Component, inject, input } from '@angular/core';
 import {
   AbstractControl,
   FormBuilder,
@@ -7,8 +7,8 @@ import {
   Validators,
 } from '@angular/forms';
 import { provideNativeDateAdapter } from '@angular/material/core';
-import { SearchParams } from '@home/models/search-params.model';
-import { SearchService } from '@home/services/search.service';
+import { SearchRoutesParams } from '@home/models/search-routes-params.model';
+import { HomeStore } from '@home/store/home.store';
 import { getTomorrow } from '@home/utils/getTomorrow.util';
 
 import { searchFormImports } from './search-form.config';
@@ -23,6 +23,10 @@ import { searchFormImports } from './search-form.config';
 })
 export class SearchFormComponent {
   stations = input.required<Station[]>();
+
+  private homeStore = inject(HomeStore);
+
+  private formBuilder = inject(FormBuilder);
 
   private noFutureValidator = (
     control: AbstractControl,
@@ -43,11 +47,6 @@ export class SearchFormComponent {
     to: ['', Validators.required],
     time: [getTomorrow(), [Validators.required, this.noFutureValidator]],
   });
-
-  constructor(
-    private formBuilder: FormBuilder,
-    private searchService: SearchService,
-  ) {}
 
   get from(): AbstractControl<string> {
     return this.searchForm.get('from')!;
@@ -77,7 +76,7 @@ export class SearchFormComponent {
     this.searchForm.patchValue({ from: this.to.value, to: this.from.value });
   }
 
-  onSubmit(): void {
+  async onSubmit(): Promise<void> {
     const fromStation = this.stations().find(
       ({ city }) => city === this.from.value,
     ) as Station;
@@ -86,7 +85,7 @@ export class SearchFormComponent {
       ({ city }) => city === this.to.value,
     ) as Station;
 
-    const searchParams: SearchParams = {
+    const searchRoutesParams: SearchRoutesParams = {
       fromLatitude: fromStation.latitude,
       fromLongitude: fromStation.longitude,
       toLatitude: toStation.latitude,
@@ -94,6 +93,6 @@ export class SearchFormComponent {
       time: 0,
     };
 
-    this.searchService.getAvailableRoutes(searchParams).subscribe(console.log);
+    await this.homeStore.searchRoutes(searchRoutesParams);
   }
 }

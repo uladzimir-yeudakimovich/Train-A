@@ -1,9 +1,9 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { SearchFormValue } from '@home/models/search-form.model';
-import { SearchParams } from '@home/models/search-params.model';
+import { SearchResponse } from '@home/models/search-response.model';
+import { SearchRoutesParams } from '@home/models/search-routes-params.model';
 import { ApiPath } from '@shared/models/enums/api-path.enum';
-import { Observable } from 'rxjs';
+import { firstValueFrom } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -12,10 +12,12 @@ export class SearchService {
   constructor(private http: HttpClient) {}
 
   getAvailableRoutes(
-    searchParams: SearchParams,
-  ): Observable<SearchFormValue[]> {
-    const params = new HttpParams({ fromObject: { ...searchParams } });
+    searchRoutesParams: SearchRoutesParams,
+  ): Promise<SearchResponse> {
+    const params = new HttpParams({ fromObject: { ...searchRoutesParams } });
 
-    return this.http.get<SearchFormValue[]>(ApiPath.Search, { params });
+    return firstValueFrom(
+      this.http.get<SearchResponse>(ApiPath.Search, { params }),
+    );
   }
 }
