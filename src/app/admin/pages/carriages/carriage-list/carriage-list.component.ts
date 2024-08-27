@@ -32,8 +32,6 @@ export class CarriageListComponent {
 
   selectedCarriageCode = signal<string | null>(null);
 
-  // btnUpdateVisible = signal<boolean>(true);
-
   store = inject(CarriageStore);
 
   toggleForm(carriageCode: string) {
@@ -51,16 +49,4 @@ export class CarriageListComponent {
   closeForm() {
     this.selectedCarriageCode.set(null);
   }
-
-  // isShowForm(carriageCode: string) {
-  //   const isSameCarriage = this.selectedCarriageCode() === carriageCode;
-  //   this.selectedCarriageCode.set(isSameCarriage ? null : carriageCode);
-  //   // this.btnUpdateVisible.update((value) => !value);
-  // }
-
-  // updateCarriage(newCarriage: Carriage): void {
-  //   this.selectedCarriageCode.set(null);
-  //   this.store.updateCarriage(newCarriage);
-  //   // this.btnUpdateVisible.set(true);
-  // }
 }
