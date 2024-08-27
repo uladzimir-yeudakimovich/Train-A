@@ -1,5 +1,14 @@
 import { NgIf } from '@angular/common';
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {
+  Component,
+  DestroyRef,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  signal,
+} from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import {
   FormBuilder,
   FormGroup,
@@ -9,7 +18,9 @@ import {
 import { MatButton } from '@angular/material/button';
 import { MatError, MatFormField, MatLabel } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { TrainCarComponent } from '@shared/components/train-car/train-car.component';
 import { Carriage } from '@shared/models/interfaces/carriage.model';
+import { getSeats } from '@shared/utils/carriage.utils';
 
 @Component({
   selector: 'app-carriage-form',
@@ -22,6 +33,7 @@ import { Carriage } from '@shared/models/interfaces/carriage.model';
     MatError,
     MatButton,
     ReactiveFormsModule,
+    TrainCarComponent,
   ],
   templateUrl: './carriage-form.component.html',
   styleUrl: './carriage-form.component.scss',
@@ -37,7 +49,19 @@ export class CarriageFormComponent implements OnInit {
 
   carriageForm: FormGroup;
 
-  constructor(private fb: FormBuilder) {
+  prototypeCarriage = signal<Carriage>({
+    name: '',
+    rows: 0,
+    leftSeats: 0,
+    rightSeats: 0,
+    code: '',
+    seats: [],
+  });
+
+  constructor(
+    private fb: FormBuilder,
+    private destroyRef: DestroyRef,
+  ) {
     this.carriageForm = this.fb.group({
       name: ['', Validators.required],
       rows: [0, [Validators.required, Validators.min(1)]],
@@ -50,6 +74,16 @@ export class CarriageFormComponent implements OnInit {
     if (this.carriage) {
       this.carriageForm.patchValue(this.carriage);
     }
+
+    this.carriageForm.valueChanges
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((formValue) => {
+        this.prototypeCarriage.update((prev) => ({
+          ...prev,
+          ...formValue,
+          seats: getSeats({ ...prev, ...formValue } as Carriage),
+        }));
+      });
   }
 
   onSave() {
