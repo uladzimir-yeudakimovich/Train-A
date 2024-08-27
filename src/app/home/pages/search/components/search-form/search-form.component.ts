@@ -39,8 +39,8 @@ export class SearchFormComponent {
   };
 
   searchForm = this.formBuilder.nonNullable.group({
-    from: ['', [Validators.required]],
-    to: ['', [Validators.required]],
+    from: ['', Validators.required],
+    to: ['', Validators.required],
     time: [getTomorrow(), [Validators.required, this.noFutureValidator]],
   });
 
@@ -91,7 +91,7 @@ export class SearchFormComponent {
       fromLongitude: fromStation.longitude,
       toLatitude: toStation.latitude,
       toLongitude: toStation.longitude,
-      time: this.time.value.getTime(),
+      time: 0,
     };
 
     this.searchService.getAvailableRoutes(searchParams).subscribe(console.log);
