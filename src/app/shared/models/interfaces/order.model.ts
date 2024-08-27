@@ -16,5 +16,21 @@ export interface Order {
   status: OrderStatus;
   path: number[];
   carriages: string[];
-  schedule: Segment[];
+  schedule: {
+    segments: Segment[];
+  };
+}
+
+export interface OrderView {
+  id: number;
+  status: OrderStatus;
+  startStation: string;
+  startTime: string;
+  endStation: string;
+  endTime: string;
+  tripDuration: string;
+  carType: string;
+  carNumber: number;
+  seatNumber: number;
+  price: number;
 }

@@ -1,7 +1,7 @@
-import { Component, OnInit, Signal } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import { MatSortModule, Sort } from '@angular/material/sort';
 import { OrderService } from '@home/services/orders/order.service';
-import { Order } from '@shared/models/interfaces/order.model';
+import { Order, OrderView } from '@shared/models/interfaces/order.model';
 
 import { sortOrders } from './orders.utils';
 
@@ -13,15 +13,15 @@ import { sortOrders } from './orders.utils';
   styleUrl: './orders.component.scss',
 })
 export class OrdersComponent implements OnInit {
-  orders!: Signal<Order[]>;
+  orderViews = signal<OrderView[]>([]);
 
   sortedOrders: Order[] = [];
 
   constructor(private orderService: OrderService) {}
 
-  ngOnInit(): void {
-    this.orderService.initStore();
-    this.orders = this.orderService.orderStore.ordersEntities;
+  async ngOnInit() {
+    const orders = await this.orderService.getOrderViews();
+    this.orderViews.set(orders);
   }
 
   onCancelOrder(orderId: number) {
@@ -30,6 +30,6 @@ export class OrdersComponent implements OnInit {
   }
 
   sortOrders(sort: Sort) {
-    return sortOrders(sort, this.orders());
+    return sortOrders(sort, this.orderViews());
   }
 }
