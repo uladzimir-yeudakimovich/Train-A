@@ -6,6 +6,8 @@
     background-color: $primaryBackgroundColor;
 
     .carriage-form {
+      margin: 0 auto;
+      
       .form-field-container {
         &:not(:nth-child(4)) {
           position: relative;

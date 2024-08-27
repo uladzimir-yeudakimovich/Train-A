@@ -75,6 +75,7 @@ export class CarriageFormComponent implements OnInit {
   ngOnInit(): void {
     if (this.carriage) {
       this.carriageForm.patchValue(this.carriage);
+      this.prototypeCarriage.set(this.carriage);
     }
 
     this.carriageForm.valueChanges

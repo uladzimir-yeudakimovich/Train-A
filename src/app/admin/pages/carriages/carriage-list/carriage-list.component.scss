@@ -15,6 +15,10 @@
       background-color: $primaryBackgroundColor;
       width: 100%;
 
+      .text-center {
+        text-align: center;
+      }
+
       .update-form {
         margin: 1rem;
       }
