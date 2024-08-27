@@ -79,17 +79,17 @@ export class SearchFormComponent {
   async onSubmit(): Promise<void> {
     const fromStation = this.stations().find(
       ({ city }) => city === this.from.value,
-    ) as Station;
+    );
 
     const toStation = this.stations().find(
       ({ city }) => city === this.to.value,
-    ) as Station;
+    );
 
     const searchRoutesParams: SearchRoutesParams = {
-      fromLatitude: fromStation.latitude,
-      fromLongitude: fromStation.longitude,
-      toLatitude: toStation.latitude,
-      toLongitude: toStation.longitude,
+      fromLatitude: fromStation?.latitude ?? 0,
+      fromLongitude: fromStation?.longitude ?? 0,
+      toLatitude: toStation?.latitude ?? 0,
+      toLongitude: toStation?.longitude ?? 0,
       time: 0,
     };
 

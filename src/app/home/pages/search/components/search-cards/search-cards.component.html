@@ -1,0 +1,16 @@
+@for (route of routes(); track route.id) {
+  <mat-card>
+    <mat-card-content>
+      <div>
+        <mat-card-subtitle>
+          {{ from()?.city ?? "" }}
+        </mat-card-subtitle>
+        <mat-card-subtitle>
+          {{ to()?.city ?? "" }}
+        </mat-card-subtitle>
+      </div>
+    </mat-card-content>
+  </mat-card>
+} @empty {
+  <div>empty</div>
+}
