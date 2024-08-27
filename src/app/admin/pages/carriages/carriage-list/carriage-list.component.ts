@@ -2,6 +2,7 @@ import { NgFor, NgIf } from '@angular/common';
 import { Component, inject, input, signal } from '@angular/core';
 import { MatButton } from '@angular/material/button';
 import { MatCard } from '@angular/material/card';
+import { MatIcon } from '@angular/material/icon';
 import { MatList, MatListItem } from '@angular/material/list';
 import { TrainCarComponent } from '@shared/components/train-car/train-car.component';
 import { Carriage } from '@shared/models/interfaces/carriage.model';
@@ -21,6 +22,7 @@ import { CarriageFormComponent } from '../carriage-form/carriage-form.component'
     TrainCarComponent,
     CarriageFormComponent,
     MatCard,
+    MatIcon,
   ],
   templateUrl: './carriage-list.component.html',
   styleUrl: './carriage-list.component.scss',
@@ -30,19 +32,35 @@ export class CarriageListComponent {
 
   selectedCarriageCode = signal<string | null>(null);
 
-  headerVisible = signal<boolean>(true);
+  // btnUpdateVisible = signal<boolean>(true);
 
   store = inject(CarriageStore);
 
-  isShowForm(carriageCode: string) {
-    const isSameCarriage = this.selectedCarriageCode() === carriageCode;
-    this.selectedCarriageCode.set(isSameCarriage ? null : carriageCode);
-    this.headerVisible.update((value) => !value);
+  toggleForm(carriageCode: string) {
+    const currentSelection = this.selectedCarriageCode();
+    this.selectedCarriageCode.set(
+      currentSelection === carriageCode ? null : carriageCode,
+    );
   }
 
-  updateCarriage(newCarriage: Carriage): void {
+  updateCarriage(updatedCarriage: Carriage): void {
+    this.store.updateCarriage(updatedCarriage);
     this.selectedCarriageCode.set(null);
-    this.store.updateCarriage(newCarriage);
-    this.headerVisible.set(true);
   }
+
+  closeForm() {
+    this.selectedCarriageCode.set(null);
+  }
+
+  // isShowForm(carriageCode: string) {
+  //   const isSameCarriage = this.selectedCarriageCode() === carriageCode;
+  //   this.selectedCarriageCode.set(isSameCarriage ? null : carriageCode);
+  //   // this.btnUpdateVisible.update((value) => !value);
+  // }
+
+  // updateCarriage(newCarriage: Carriage): void {
+  //   this.selectedCarriageCode.set(null);
+  //   this.store.updateCarriage(newCarriage);
+  //   // this.btnUpdateVisible.set(true);
+  // }
 }

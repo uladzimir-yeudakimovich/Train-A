@@ -23,8 +23,6 @@ import { CarSeatComponent } from '../car-seat/car-seat.component';
   styleUrl: './train-car.component.scss',
 })
 export class TrainCarComponent implements OnInit {
-  visible = input<boolean>(true);
-
   carriage = input.required<Carriage>();
 
   toggleSeat = output<number>();
@@ -54,10 +52,6 @@ export class TrainCarComponent implements OnInit {
 
   toggleSeatState(seatNumber: number) {
     this.toggleSeat.emit(seatNumber);
-  }
-
-  onUpdateCarriage(carriage: Carriage): void {
-    this.updateCarriage.emit(carriage);
   }
 
   getSeatDirection(seatNumber: number): string {

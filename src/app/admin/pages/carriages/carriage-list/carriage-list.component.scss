@@ -19,8 +19,13 @@
         text-align: center;
       }
 
-      .update-form {
-        margin: 1rem;
+      .update-button {
+        position: absolute;
+        right: 1rem;
+
+        .mat-icon {
+          margin: 0;
+        }
       }
     }
   }

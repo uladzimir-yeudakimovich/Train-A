@@ -1,19 +1,26 @@
 <mat-list class="list">
-  @for (carriage of carriages(); track carriage.code; let i = $index) {
+  @for (carriage of carriages(); track carriage.code) {
     <mat-card class="card">
       @if (selectedCarriageCode() === carriage.code) {
-        <h6 class="text-center">Update {{carriage.name}}</h6>
+        <h6 class="text-center">Update {{ carriage.name }}</h6>
         <app-carriage-form
-          (updateCarriage)="updateCarriage($event)"
-          (closeForm)="isShowForm(carriage.code)"
           [carriage]="carriage"
-        >
-        </app-carriage-form>
+          (updateCarriage)="updateCarriage($event)"
+          (closeForm)="closeForm()"
+        ></app-carriage-form>
       } @else {
+        <button
+          mat-raised-button
+          class="update-button"
+          (click)="toggleForm(carriage.code)"
+        >
+          <mat-icon id="update" aria-hidden="false" aria-label="Update route"
+            >edit_square</mat-icon
+          >
+          <label for="edit">Update</label>
+        </button>
         <app-train-car
           [carriage]="carriage"
-          [visible]="headerVisible()"
-          (updateCarriage)="isShowForm(carriage.code)"
         ></app-train-car>
       }
     </mat-card>
