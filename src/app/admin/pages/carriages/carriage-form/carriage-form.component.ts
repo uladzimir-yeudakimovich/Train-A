@@ -87,11 +87,13 @@ export class CarriageFormComponent implements OnInit {
     this.carriageForm.valueChanges
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((formValue) => {
-        this.prototypeCarriage.update((prev) => ({
-          ...prev,
-          ...formValue,
-          seats: getSeats({ ...prev, ...formValue } as Carriage),
-        }));
+        if (this.carriageForm.valid) {
+          this.prototypeCarriage.update((prev) => ({
+            ...prev,
+            ...formValue,
+            seats: getSeats({ ...prev, ...formValue } as Carriage),
+          }));
+        }
       });
   }
 
