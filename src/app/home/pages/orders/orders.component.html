@@ -1,1 +1,15 @@
-<p>orders works!</p>
+<table matSort (matSortChange)="sortOrders($event)">
+  <tr>
+    <th mat-sort-header="id">Order id</th>
+    <th mat-sort-header="userId">User id</th>
+    <th mat-sort-header="status">Status</th>
+  </tr>
+
+  @for (order of sortedOrders; track order.id) {
+    <tr>
+      <td>{{ order.id }}</td>
+      <td>{{ order.userId }}</td>
+      <td>{{ order.status }}</td>
+    </tr>
+  }
+</table>

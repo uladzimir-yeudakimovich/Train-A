@@ -3,6 +3,7 @@ import { Connection, Station } from '@admin/models/station.model';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { User } from '@auth/models/auth.model';
+import { AdminRoleGuard } from '@core/guards/admin.guard';
 import { ApiPath } from '@shared/models/enums/api-path.enum';
 import { Carriage } from '@shared/models/interfaces/carriage.model';
 import { Order } from '@shared/models/interfaces/order.model';
@@ -21,7 +22,10 @@ export class AdminService {
 
   readonly loadUsers = this.createLoader<User[]>(ApiPath.Users);
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private adminGuard: AdminRoleGuard,
+  ) {}
 
   loadRide(id: number): Promise<Ride> {
     return firstValueFrom(this.http.get<Ride>(`${ApiPath.Search}/${id}`)).catch(
@@ -33,7 +37,7 @@ export class AdminService {
   }
 
   loadOrders(): Promise<Order[]> {
-    const isManager = localStorage.getItem('role') === 'manager';
+    const isManager = this.adminGuard.canActivate();
     const attr = isManager ? 'all=true' : '';
 
     return firstValueFrom(
