@@ -66,9 +66,9 @@ export class CarriageFormComponent implements OnInit {
   ) {
     this.carriageForm = this.fb.group({
       name: ['', Validators.required],
-      rows: [0, [Validators.required, Validators.min(1)]],
-      leftSeats: [0, [Validators.required, Validators.min(1)]],
-      rightSeats: [0, [Validators.required, Validators.min(1)]],
+      rows: [0, [Validators.required, Validators.min(1), Validators.max(50)]],
+      leftSeats: [0, [Validators.required, Validators.min(1), Validators.max(5)]],
+      rightSeats: [0, [Validators.required, Validators.min(1), Validators.max(5)]],
     });
   }
 
