@@ -83,8 +83,7 @@ export class TripComponent implements OnInit {
 
   async onBook() {
     const { rideId } = this.tripInfo;
-    const userId = this.userStore.getCurrentUser()?.id ?? 0;
-    if (this.orderStore.hasOrder(userId, rideId)) {
+    if (this.orderStore.hasOrder(rideId)) {
       this.snackBar.open('You have already booked this trip', 'Close', {
         duration: 5000,
       });

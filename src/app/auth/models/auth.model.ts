@@ -18,3 +18,7 @@ export interface UserInfo {
 export interface UserRole extends UserInfo {
   role: 'manager' | 'user';
 }
+
+export interface User extends UserRole {
+  id: number;
+}
