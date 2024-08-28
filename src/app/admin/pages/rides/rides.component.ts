@@ -1,4 +1,5 @@
 import { RidesStore } from '@admin/store/ride.store';
+import { StationStore } from '@admin/store/stations/stations.store';
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { MatButton, MatMiniFabButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
@@ -24,6 +25,8 @@ import { RideListComponent } from './components/ride-list/ride-list.component';
 export class RidesComponent implements OnInit {
   routeId = this.activatedRoute.snapshot.paramMap.get('id');
 
+  private stationsStore = inject(StationStore);
+
   ridesStore = inject(RidesStore);
 
   formVisible = signal(false);
@@ -33,7 +36,8 @@ export class RidesComponent implements OnInit {
     private readonly activatedRoute: ActivatedRoute,
   ) {}
 
-  ngOnInit(): void {
+  async ngOnInit() {
+    await this.stationsStore.getStations();
     this.ridesStore.prepareStore(+this.routeId!);
   }
 
