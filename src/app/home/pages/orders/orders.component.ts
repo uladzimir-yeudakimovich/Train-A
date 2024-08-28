@@ -10,6 +10,7 @@ import {
 } from '@angular/core';
 import { MatButton } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { AdminRoleGuard } from '@core/guards/admin.guard';
@@ -27,11 +28,14 @@ import { OrderStatus, OrderView } from '@shared/models/interfaces/order.model';
     DatePipe,
     CurrencyPipe,
     TimePipe,
+    MatProgressSpinner,
   ],
   templateUrl: './orders.component.html',
   styleUrl: './orders.component.scss',
 })
 export class OrdersComponent {
+  isLoading = signal<boolean>(true);
+
   orderViews = signal<OrderView[]>([]);
 
   displayedColumns: string[] = [
@@ -59,7 +63,9 @@ export class OrdersComponent {
   ) {
     effect(async () => {
       const orderViews = await this.orderService.orderViews();
+      console.log('orderViews', orderViews);
       untracked(() => {
+        this.isLoading.set(false);
         this.orderViews.set(orderViews);
         this.dataSource.set(new MatTableDataSource(orderViews));
         this.dataSource().sort = this.sort;
@@ -83,8 +89,6 @@ export class OrdersComponent {
     });
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
-        // TODO: Implement cancel logic
-        console.log('Cancel order', orderId);
         this.orderService.orderStore.cancelOrder(orderId);
       }
     });

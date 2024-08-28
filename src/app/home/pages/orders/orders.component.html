@@ -1,57 +1,75 @@
-<div class="order-table">
-  <table mat-table [dataSource]="dataSource()" matSort class="mat-elevation-z8">
-    <ng-container matColumnDef="startStation">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>
-        Departure station
-      </th>
-      <td mat-cell *matCellDef="let order">{{ order.startStation }}</td>
-    </ng-container>
-    <ng-container matColumnDef="startTime">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>Departure time</th>
-      <td mat-cell *matCellDef="let order">
-        {{ order.startTime | date: "MMMM dd HH:mm" }}
-      </td>
-    </ng-container>
-    <ng-container matColumnDef="endStation">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>Arrival station</th>
-      <td mat-cell *matCellDef="let order">{{ order.endStation }}</td>
-    </ng-container>
-    <ng-container matColumnDef="endTime">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>Arrival time</th>
-      <td mat-cell *matCellDef="let order">
-        {{ order.endTime | date: "MMMM dd HH:mm" }}
-      </td>
-    </ng-container>
-    <ng-container matColumnDef="tripDuration">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>Duration</th>
-      <td mat-cell *matCellDef="let order">{{ order.tripDuration | time }}</td>
-    </ng-container>
-    <ng-container matColumnDef="carType">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>Car type</th>
-      <td mat-cell *matCellDef="let order">{{ order.carType }}</td>
-    </ng-container>
-    <ng-container matColumnDef="carNumber">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>Car number</th>
-      <td mat-cell *matCellDef="let order">{{ order.carNumber }}</td>
-    </ng-container>
-    <ng-container matColumnDef="seatNumber">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>Seat number</th>
-      <td mat-cell *matCellDef="let order">{{ order.seatNumber }}</td>
-    </ng-container>
-    <ng-container matColumnDef="price">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>Price</th>
-      <td mat-cell *matCellDef="let order">{{ order.price | currency }}</td>
-    </ng-container>
-    <ng-container matColumnDef="actions">
-      <th mat-header-cell *matHeaderCellDef>Actions</th>
-      <td mat-cell *matCellDef="let order">
-        @if (order.status === orderStatus.Active) {
-          <button mat-button (click)="onCancelOrder(order.id)">Cancel</button>
-        }
-      </td>
-    </ng-container>
+@if (isLoading()) {
+  <div class="spinner-container">
+    <mat-spinner class="spinner" />
+    <div class="label">Loading orders</div>
+  </div>
+} @else {
+  <div class="order-table">
+    <table
+      mat-table
+      [dataSource]="dataSource()"
+      matSort
+      class="mat-elevation-z8"
+    >
+      <ng-container matColumnDef="startStation">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+          Departure station
+        </th>
+        <td mat-cell *matCellDef="let order">{{ order.startStation }}</td>
+      </ng-container>
+      <ng-container matColumnDef="startTime">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+          Departure time
+        </th>
+        <td mat-cell *matCellDef="let order">
+          {{ order.startTime | date: "MMMM dd HH:mm" }}
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="endStation">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+          Arrival station
+        </th>
+        <td mat-cell *matCellDef="let order">{{ order.endStation }}</td>
+      </ng-container>
+      <ng-container matColumnDef="endTime">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Arrival time</th>
+        <td mat-cell *matCellDef="let order">
+          {{ order.endTime | date: "MMMM dd HH:mm" }}
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="tripDuration">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Duration</th>
+        <td mat-cell *matCellDef="let order">
+          {{ order.tripDuration | time }}
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="carType">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Car type</th>
+        <td mat-cell *matCellDef="let order">{{ order.carType }}</td>
+      </ng-container>
+      <ng-container matColumnDef="carNumber">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Car number</th>
+        <td mat-cell *matCellDef="let order">{{ order.carNumber }}</td>
+      </ng-container>
+      <ng-container matColumnDef="seatNumber">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Seat number</th>
+        <td mat-cell *matCellDef="let order">{{ order.seatNumber }}</td>
+      </ng-container>
+      <ng-container matColumnDef="price">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Price</th>
+        <td mat-cell *matCellDef="let order">{{ order.price | currency }}</td>
+      </ng-container>
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef>Actions</th>
+        <td mat-cell *matCellDef="let order">
+          @if (order.status === orderStatus.Active) {
+            <button mat-button (click)="onCancelOrder(order.id)">Cancel</button>
+          }
+        </td>
+      </ng-container>
 
-    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-  </table>
-</div>
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    </table>
+  </div>
+}

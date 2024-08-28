@@ -18,8 +18,7 @@ export const OrderStore = signalStore(
   withMethods((store, adminService = inject(AdminService)) => ({
     async getOrders() {
       if (!store.ordersEntities().length) {
-        const orders = await adminService.loadOrders();
-        patchState(store, setAllEntities(orders, orderConfig));
+        this.loadActualOrders();
       }
     },
 
@@ -30,7 +29,7 @@ export const OrderStore = signalStore(
       stationEnd: number,
     ) {
       await adminService.postOrder(rideId, seat, stationStart, stationEnd);
-      await this.getOrders();
+      await this.loadActualOrders();
     },
 
     async cancelOrder(orderId: number) {
@@ -42,10 +41,17 @@ export const OrderStore = signalStore(
     },
 
     hasOrder(rideId: number): boolean {
-      return !!store.ordersEntities().find(
-        (order) =>
-          order.rideId === rideId && order.status !== OrderStatus.Active, // TODO: fix
-      );
+      return !!store
+        .ordersEntities()
+        .find(
+          (order) =>
+            order.rideId === rideId && order.status === OrderStatus.Active,
+        );
+    },
+
+    async loadActualOrders() {
+      const orders = await adminService.loadOrders();
+      patchState(store, setAllEntities(orders, orderConfig));
     },
   })),
 );
