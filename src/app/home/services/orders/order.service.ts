@@ -1,5 +1,7 @@
+import { DeleteDialogComponent } from '@admin/components/delete-dialog/delete-dialog.component';
 import { StationStore } from '@admin/store/stations/stations.store';
 import { computed, inject, Injectable } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { AdminRoleGuard } from '@core/guards/admin.guard';
 import { Order, OrderView } from '@shared/models/interfaces/order.model';
 import { Segment } from '@shared/models/interfaces/ride.model';
@@ -17,6 +19,8 @@ export class OrderService {
 
   orderViews = computed(() => this.getOrderViews());
 
+  readonly dialog = inject(MatDialog);
+
   private stationStore = inject(StationStore);
 
   private carriageStore = inject(CarriageStore);
@@ -33,8 +37,28 @@ export class OrderService {
     }
   }
 
-  private async getOrderViews(): Promise<OrderView[]> {
-    await this.initStore();
+  cancelOrder(orderId: number) {
+    let title = `Cancel Order ${orderId}`;
+    if (this.adminGuard.canActivate()) {
+      const order = this.orderStore.ordersEntityMap()[orderId];
+      const user = this.userStore.usersEntityMap()[order.userId];
+      title = `Cancel ${user.email}'s Order ${orderId}`;
+    }
+
+    const dialogRef = this.dialog.open(DeleteDialogComponent, {
+      data: {
+        title,
+        message: 'Are you sure you want to cancel this order?',
+      },
+    });
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.orderStore.cancelOrder(orderId);
+      }
+    });
+  }
+
+  private getOrderViews(): OrderView[] {
     const orders = this.orderStore.ordersEntities();
     const stationsMap = this.stationStore.stationsEntityMap();
 

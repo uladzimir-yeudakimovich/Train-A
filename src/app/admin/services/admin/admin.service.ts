@@ -38,10 +38,10 @@ export class AdminService {
 
   loadOrders(): Promise<Order[]> {
     const isManager = this.adminGuard.canActivate();
-    const attr = isManager ? 'all=true' : '';
+    const attr = isManager ? '?all=true' : '';
 
     return firstValueFrom(
-      this.http.get<Order[]>(`${ApiPath.Order}?${attr}`),
+      this.http.get<Order[]>(`${ApiPath.Order}${attr}`),
     ).catch((error) => {
       throw error;
     });
