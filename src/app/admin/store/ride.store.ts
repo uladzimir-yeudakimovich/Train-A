@@ -1,5 +1,5 @@
 import { RouteInformation, Segment } from '@admin/models/rides.model';
-import { AdminService } from '@admin/services/admin.service';
+import { RidesManagementService } from '@admin/services/rides-management/rides-management.service';
 import { inject } from '@angular/core';
 import { patchState, signalStore, withMethods, withState } from '@ngrx/signals';
 
@@ -18,11 +18,11 @@ const initialState: RidesState = {
 export const RidesStore = signalStore(
   { providedIn: 'root' },
   withState(initialState),
-  withMethods((store, adminService = inject(AdminService)) => ({
+  withMethods((store, ridesService = inject(RidesManagementService)) => ({
     prepareStore(routeID: number) {
       patchState(store, { loading: true });
 
-      adminService.getRouteInformation(routeID).subscribe({
+      ridesService.getRouteInformation(routeID).subscribe({
         next: (response) => {
           patchState(store, {
             routeId: response.routeId,
@@ -42,7 +42,7 @@ export const RidesStore = signalStore(
     updateRide(rideId: number) {
       const ride = store.schedule().find((r) => r.rideId === rideId);
       if (ride) {
-        adminService
+        ridesService
           .updateRide(store.routeId(), rideId, ride.segments)
           .subscribe();
       }
@@ -50,7 +50,7 @@ export const RidesStore = signalStore(
     createRide(routeId: number, segments: Segment[]) {
       patchState(store, { loading: true });
 
-      adminService.createRide(routeId, segments).subscribe({
+      ridesService.createRide(routeId, segments).subscribe({
         next(response) {
           const ride = { rideId: response.id, segments };
 

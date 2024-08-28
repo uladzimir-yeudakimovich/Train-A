@@ -11,7 +11,7 @@ import { catchError, Observable, of, switchMap, throwError } from 'rxjs';
 @Injectable({
   providedIn: 'root',
 })
-export class AdminService {
+export class RidesManagementService {
   constructor(private readonly http: HttpClient) {}
 
   getRouteInformation(routeId: number): Observable<RouteInformation> {
