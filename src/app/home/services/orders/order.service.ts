@@ -11,9 +11,9 @@ import { UserStore } from '@shared/store/users/users.store';
   providedIn: 'root',
 })
 export class OrderService {
-  private orderStore = inject(OrderStore);
+  orderStore = inject(OrderStore);
 
-  private userStore = inject(UserStore);
+  userStore = inject(UserStore);
 
   private stationStore = inject(StationStore);
 
