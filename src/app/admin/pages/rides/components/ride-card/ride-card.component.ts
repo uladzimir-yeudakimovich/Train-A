@@ -1,4 +1,4 @@
-import { Segment } from '@admin/interfaces';
+import { Segment } from '@admin/models/rides.model';
 import { RidesStore } from '@admin/store/ride.store';
 import { DatePipe } from '@angular/common';
 import { Component, computed, inject, input, signal } from '@angular/core';

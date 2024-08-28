@@ -1,4 +1,9 @@
-import { Route, RouteInformation, Segment, Station } from '@admin/interfaces';
+import {
+  RideRoute,
+  RouteInformation,
+  Segment,
+} from '@admin/models/rides.model';
+import { Station } from '@admin/models/station.model';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { catchError, Observable, of, switchMap, throwError } from 'rxjs';
@@ -13,7 +18,7 @@ export class AdminService {
     // TODO: Temporary implementation
     return this.getStations().pipe(
       switchMap((stationResponse) => {
-        return this.http.get<Route>(`route/${routeId}`).pipe(
+        return this.http.get<RideRoute>(`route/${routeId}`).pipe(
           switchMap((routeResponse) => {
             const carriageTypes = [...new Set(routeResponse.carriages)];
 

@@ -1,4 +1,4 @@
-import { RouteInformation, Segment } from '@admin/interfaces';
+import { RouteInformation, Segment } from '@admin/models/rides.model';
 import { AdminService } from '@admin/services/admin.service';
 import { inject } from '@angular/core';
 import { patchState, signalStore, withMethods, withState } from '@ngrx/signals';
