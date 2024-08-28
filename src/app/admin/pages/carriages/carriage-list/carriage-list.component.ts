@@ -1,4 +1,3 @@
-import { NgFor, NgIf } from '@angular/common';
 import { Component, inject, input, signal } from '@angular/core';
 import { MatButton } from '@angular/material/button';
 import { MatCard } from '@angular/material/card';
@@ -14,8 +13,6 @@ import { CarriageFormComponent } from '../carriage-form/carriage-form.component'
   selector: 'app-carriage-list',
   standalone: true,
   imports: [
-    NgIf,
-    NgFor,
     MatList,
     MatListItem,
     MatButton,
