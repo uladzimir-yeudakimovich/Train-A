@@ -1,4 +1,4 @@
-import { RidesStore } from '@admin/store/ride.store';
+import { RidesStore } from '@admin/store/rides/ride.store';
 import { StationStore } from '@admin/store/stations/stations.store';
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { MatButton, MatMiniFabButton } from '@angular/material/button';

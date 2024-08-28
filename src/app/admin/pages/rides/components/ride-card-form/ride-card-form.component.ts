@@ -1,4 +1,4 @@
-import { RidesStore } from '@admin/store/ride.store';
+import { RidesStore } from '@admin/store/rides/ride.store';
 import { Component, computed, inject, model } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatButton } from '@angular/material/button';
