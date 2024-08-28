@@ -17,8 +17,10 @@ export const OrderStore = signalStore(
 
   withMethods((store, adminService = inject(AdminService)) => ({
     async getOrders() {
-      const orders = await adminService.loadOrders();
-      patchState(store, setAllEntities(orders, orderConfig));
+      if (!store.ordersEntities().length) {
+        const orders = await adminService.loadOrders();
+        patchState(store, setAllEntities(orders, orderConfig));
+      }
     },
 
     async createOrder(
