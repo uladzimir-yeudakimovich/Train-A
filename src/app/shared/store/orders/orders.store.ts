@@ -42,7 +42,10 @@ export const OrderStore = signalStore(
     },
 
     hasOrder(rideId: number): boolean {
-      return !!store.ordersEntities().find((order) => order.rideId === rideId);
+      return !!store.ordersEntities().find(
+        (order) =>
+          order.rideId === rideId && order.status !== OrderStatus.Active, // TODO: fix
+      );
     },
   })),
 );

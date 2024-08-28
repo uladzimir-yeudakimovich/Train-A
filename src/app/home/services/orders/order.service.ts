@@ -1,5 +1,5 @@
 import { StationStore } from '@admin/store/stations/stations.store';
-import { inject, Injectable } from '@angular/core';
+import { computed, inject, Injectable } from '@angular/core';
 import { AdminRoleGuard } from '@core/guards/admin.guard';
 import { Order, OrderView } from '@shared/models/interfaces/order.model';
 import { Segment } from '@shared/models/interfaces/ride.model';
@@ -14,6 +14,8 @@ export class OrderService {
   orderStore = inject(OrderStore);
 
   userStore = inject(UserStore);
+
+  orderViews = computed(() => this.getOrderViews());
 
   private stationStore = inject(StationStore);
 
@@ -31,7 +33,7 @@ export class OrderService {
     }
   }
 
-  async getOrderViews(): Promise<OrderView[]> {
+  private async getOrderViews(): Promise<OrderView[]> {
     await this.initStore();
     const orders = this.orderStore.ordersEntities();
     const stationsMap = this.stationStore.stationsEntityMap();

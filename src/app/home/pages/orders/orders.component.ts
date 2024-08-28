@@ -4,7 +4,6 @@ import {
   Component,
   effect,
   inject,
-  OnInit,
   signal,
   untracked,
   ViewChild,
@@ -32,7 +31,7 @@ import { OrderStatus, OrderView } from '@shared/models/interfaces/order.model';
   templateUrl: './orders.component.html',
   styleUrl: './orders.component.scss',
 })
-export class OrdersComponent implements OnInit {
+export class OrdersComponent {
   orderViews = signal<OrderView[]>([]);
 
   displayedColumns: string[] = [
@@ -58,18 +57,14 @@ export class OrdersComponent implements OnInit {
     private orderService: OrderService,
     private adminGuard: AdminRoleGuard,
   ) {
-    effect(() => {
-      const orderViews = this.orderViews();
+    effect(async () => {
+      const orderViews = await this.orderService.orderViews();
       untracked(() => {
+        this.orderViews.set(orderViews);
         this.dataSource.set(new MatTableDataSource(orderViews));
         this.dataSource().sort = this.sort;
       });
     });
-  }
-
-  async ngOnInit() {
-    const orders = await this.orderService.getOrderViews();
-    this.orderViews.set(orders);
   }
 
   onCancelOrder(orderId: number) {
@@ -90,6 +85,7 @@ export class OrdersComponent implements OnInit {
       if (result) {
         // TODO: Implement cancel logic
         console.log('Cancel order', orderId);
+        this.orderService.orderStore.cancelOrder(orderId);
       }
     });
   }
