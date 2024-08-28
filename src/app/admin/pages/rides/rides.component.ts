@@ -1,11 +1,12 @@
-import { RideCardFormComponent } from '@admin/components/ride-card-form/ride-card-form.component';
-import { RideListComponent } from '@admin/components/ride-list/ride-list.component';
 import { RidesStore } from '@admin/store/ride.store';
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { MatButton, MatMiniFabButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { ActivatedRoute, Router } from '@angular/router';
 import { RoutePath } from '@shared/models/enums/route-path.enum';
+
+import { RideCardFormComponent } from './components/ride-card-form/ride-card-form.component';
+import { RideListComponent } from './components/ride-list/ride-list.component';
 
 @Component({
   selector: 'app-rides',
