@@ -7,6 +7,8 @@ import {
   output,
   signal,
 } from '@angular/core';
+import { MatButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
 import { Carriage } from '@shared/models/interfaces/carriage.model';
 import { TrainCarService } from '@shared/services/train-car/train-car.service';
 
@@ -15,7 +17,7 @@ import { CarSeatComponent } from '../car-seat/car-seat.component';
 @Component({
   selector: 'app-train-car',
   standalone: true,
-  imports: [CarSeatComponent],
+  imports: [CarSeatComponent, MatButton, MatIcon],
   providers: [TrainCarService],
   templateUrl: './train-car.component.html',
   styleUrl: './train-car.component.scss',
@@ -24,6 +26,8 @@ export class TrainCarComponent implements OnInit {
   carriage = input.required<Carriage>();
 
   toggleSeat = output<number>();
+
+  updateCarriage = output<Carriage>();
 
   isHorizontal = signal<boolean>(false);
 

@@ -1,0 +1,32 @@
+@import "@shared/styles/variables.scss";
+
+:host {
+  display: block;
+  width: 100%;
+
+  .list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 2rem;
+
+    .card {
+      padding: 15px;
+      background-color: $primaryBackgroundColor;
+      width: 100%;
+
+      .text-center {
+        text-align: center;
+      }
+
+      .update-button {
+        position: absolute;
+        right: 1rem;
+
+        .mat-icon {
+          margin: 0;
+        }
+      }
+    }
+  }
+}

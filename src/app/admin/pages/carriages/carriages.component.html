@@ -1,1 +1,21 @@
-<p>carriages works!</p>
+@if (!carriages().length) {
+  <div class="spinner-container">
+    <mat-spinner class="spinner" />
+    <div class="label">Loading the carriages</div>
+  </div>
+} @else {
+  <div class="carriage-form">
+    @if (!formVisible()) {
+      <button mat-flat-button class="button-center" (click)="isShowForm()">
+        Create new carriage
+      </button>
+    } @else {
+      <app-carriage-form
+        (addCarriage)="addCarriage($event)"
+        (closeForm)="isShowForm()"
+      >
+      </app-carriage-form>
+    }
+  </div>
+  <app-carriage-list [carriages]="carriages()"></app-carriage-list>
+}

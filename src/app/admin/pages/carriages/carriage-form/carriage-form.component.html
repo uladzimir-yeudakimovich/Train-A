@@ -1,0 +1,55 @@
+<mat-card class="carriage-card">
+  <form class="carriage-form" [formGroup]="carriageForm" (ngSubmit)="onSave()">
+    <mat-form-field class="form-field-container" appearance="fill">
+      <mat-label>Carriage Name</mat-label>
+      <input matInput formControlName="name" placeholder="Enter carriage name">
+      @if(carriageForm.get('name')?.invalid && carriageForm.get('name')?.touched) {
+        <mat-error>Carriage name is required</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field class="form-field-container" appearance="fill">
+      <mat-label>Rows</mat-label>
+      <input matInput type="number" formControlName="rows" min="1" max="50" placeholder="Enter number of rows">
+      @if(carriageForm.get('rows')?.invalid && carriageForm.get('rows')?.touched) {
+        <mat-error>Number of rows must be at least 1</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field class="form-field-container" appearance="fill">
+      <mat-label>Left Seats</mat-label>
+      <input matInput type="number" formControlName="leftSeats" min="1" max="5" placeholder="Enter number of left seats">
+      @if(carriageForm.get('leftSeats')?.invalid && carriageForm.get('leftSeats')?.touched) {
+        <mat-error>Number of left seats must be at least 1</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field class="form-field-container" appearance="fill">
+      <mat-label>Right Seats</mat-label>
+      <input matInput type="number" formControlName="rightSeats" min="1" max="5" placeholder="Enter number of right seats">
+      @if(carriageForm.get('rightSeats')?.invalid && carriageForm.get('rightSeats')?.touched) {
+        <mat-error>Number of right seats must be at least 1</mat-error>
+      }
+    </mat-form-field>
+
+    <div>
+      @if(prototypeCarriage().seats.length) {
+        <app-train-car
+          [carriage]="prototypeCarriage()"
+        ></app-train-car>
+      }
+    </div>
+
+    <div class="form-actions">
+      <button mat-flat-button (click)="onClose()" class="btn cancel-button" type="button">
+        Cancel
+      </button>
+      <button mat-flat-button (click)="onReset()" class="btn reset-button" type="button">
+        Reset
+      </button>
+      <button mat-flat-button type="submit" class="btn" [disabled]="isUpdateDisabled()">
+        {{ carriage ? 'Update' : 'Save' }}
+      </button>
+    </div>
+  </form>
+</mat-card>
