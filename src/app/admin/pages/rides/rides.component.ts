@@ -23,7 +23,7 @@ import { RideListComponent } from './components/ride-list/ride-list.component';
   styleUrl: './rides.component.scss',
 })
 export class RidesComponent implements OnInit {
-  routeId = this.activatedRoute.snapshot.paramMap.get('id');
+  routeId: number | null = null;
 
   private stationsStore = inject(StationStore);
 
@@ -37,8 +37,18 @@ export class RidesComponent implements OnInit {
   ) {}
 
   async ngOnInit() {
+    const id = this.activatedRoute.snapshot.paramMap.get('id');
+
+    if (!id || Number.isNaN(Number(id))) {
+      this.router.navigate([RoutePath.Admin, RoutePath.AdminRoutes]);
+      return;
+    }
+
+    this.routeId = Number(id);
+
     await this.stationsStore.getStations();
-    this.ridesStore.prepareStore(+this.routeId!);
+
+    this.ridesStore.prepareStore(this.routeId);
   }
 
   onBackButtonClick(): void {
