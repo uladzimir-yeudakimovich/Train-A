@@ -1,10 +1,10 @@
-@for (card of cards(); track $index) {
+@for (card of cards(); track card.rideId) {
   <mat-card>
     <mat-card-content class="card-content">
       <div class="card-time">
         <div class="card-time__span">
           <mat-card-title>
-            {{ card.fromCityTime | date: "hh:mm" }}
+            {{ card.rideFrom.time | date: "hh:mm" }}
           </mat-card-title>
           <span class="card-time__span-body">
             <mat-icon fontSet="material-icons-outlined">
@@ -12,36 +12,36 @@
             </mat-icon>
             <mat-divider class="card-time__span-divider" />
             <span>
-              {{ card.timeSpan }}
+              {{ card.rideTime | toTime }}
             </span>
             <mat-divider class="card-time__span-divider" />
             <mat-icon> fiber_manual_record </mat-icon>
           </span>
 
           <mat-card-title>
-            {{ card.toCityTime | date: "hh:mm" }}
+            {{ card.rideTo.time | date: "hh:mm" }}
           </mat-card-title>
         </div>
         <div class="card-time__date">
           <mat-card-subtitle>
-            {{ card.fromCityTime | date: "MMMM dd" }}
+            {{ card.rideFrom.time | date: "MMMM dd" }}
           </mat-card-subtitle>
           <mat-card-subtitle>
-            {{ card.toCityTime | date: "MMMM dd" }}
+            {{ card.rideTo.time | date: "MMMM dd" }}
           </mat-card-subtitle>
         </div>
         <div class="card-time__city">
           <mat-card-subtitle>
-            {{ card.fromCityName }}
+            {{ card.rideFrom.city }}
           </mat-card-subtitle>
           <mat-card-subtitle>
-            {{ card.toCityName }}
+            {{ card.rideTo.city }}
           </mat-card-subtitle>
         </div>
       </div>
 
       <ul class="card-price__list">
-        @for (price of card.price; track price[0]) {
+        @for (price of card.ridePrice; track price[0]) {
           <li class="card-price__item">
             <mat-divider vertical />
             <div class="card-price__carriage">

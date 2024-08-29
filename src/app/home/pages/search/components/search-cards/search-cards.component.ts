@@ -1,5 +1,5 @@
-import { Component, effect, inject } from '@angular/core';
-import { HomeStore } from '@home/store/home.store';
+import { Component, input } from '@angular/core';
+import { SearchCard } from '@home/models/search-card.model';
 
 import { searchCardsImports } from './search-cards.config';
 
@@ -11,13 +11,5 @@ import { searchCardsImports } from './search-cards.config';
   styleUrl: './search-cards.component.scss',
 })
 export class SearchCardsComponent {
-  private homeStore = inject(HomeStore);
-
-  cards = this.homeStore.searchResult;
-
-  constructor() {
-    effect(() => {
-      console.log('cards', this.cards());
-    });
-  }
+  cards = input.required<SearchCard[]>();
 }

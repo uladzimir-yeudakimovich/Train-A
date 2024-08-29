@@ -2,33 +2,8 @@ import { RideStation, SearchCard } from '@home/models/search-card.model';
 import { SearchResponse } from '@home/models/search-response.model';
 import { SearchRide } from '@home/models/search-route.model';
 
-const getRideTime = (startTime: Date, endTime: Date): string => {
-  const milliseconds =
-    new Date(endTime).getTime() - new Date(startTime).getTime();
-
-  const millisecondsInSecond = 1000;
-  const secondsInMinute = 60;
-  const minutesInHour = 60;
-  const hoursInDay = 24;
-
-  const days = Math.floor(
-    milliseconds /
-      (millisecondsInSecond * secondsInMinute * minutesInHour * hoursInDay),
-  );
-
-  const hours = Math.floor(
-    (milliseconds %
-      (millisecondsInSecond * secondsInMinute * minutesInHour * hoursInDay)) /
-      (millisecondsInSecond * secondsInMinute * minutesInHour),
-  );
-
-  const minutes = Math.floor(
-    (milliseconds % (millisecondsInSecond * secondsInMinute * minutesInHour)) /
-      (millisecondsInSecond * secondsInMinute),
-  );
-
-  return days > 0 ? `${days}d ${hours}h ${minutes}m` : `${hours}h ${minutes}m`;
-};
+const getRideTime = (startTime: Date, endTime: Date): number =>
+  new Date(endTime).getTime() - new Date(startTime).getTime();
 
 const getRidePrice = (rides: SearchRide[]) => {
   const prices = rides.map((ride) => ride.price);
@@ -51,7 +26,7 @@ const getRidePrice = (rides: SearchRide[]) => {
   return Object.entries(totalPrice);
 };
 
-const getRidePath = (path: number[], rides: SearchRide[]): RideStation[] => {
+const getRideRoute = (path: number[], rides: SearchRide[]): RideStation[] => {
   return path.map((stationId, index) => {
     const rideStation: RideStation = { stationId };
 
@@ -95,13 +70,13 @@ export const toSearchResult = (response: SearchResponse): SearchCard[] => {
 
       const rideTime = getRideTime(fromTime, toTime);
 
-      const ridePath = getRidePath(path, segments);
+      const rideRoute = getRideRoute(path, segments);
 
       const ridePrice = getRidePrice(segmentsChunk);
 
       return {
         rideId,
-        ridePath,
+        rideRoute,
         rideTime,
         ridePrice,
 

@@ -8,7 +8,7 @@ import {
 } from '@angular/forms';
 import { provideNativeDateAdapter } from '@angular/material/core';
 import { SearchRoutesParams } from '@home/models/search-routes-params.model';
-import { HomeStore } from '@home/store/home.store';
+import { SearchStore } from '@home/store/search.store';
 import { getTomorrow } from '@home/utils/getTomorrow.util';
 
 import { searchFormImports } from './search-form.config';
@@ -24,7 +24,7 @@ import { searchFormImports } from './search-form.config';
 export class SearchFormComponent {
   stations = input.required<Station[]>();
 
-  private homeStore = inject(HomeStore);
+  private searchStore = inject(SearchStore);
 
   private formBuilder = inject(FormBuilder);
 
@@ -93,6 +93,6 @@ export class SearchFormComponent {
       time: 0,
     };
 
-    await this.homeStore.searchRoutes(searchRoutesParams);
+    await this.searchStore.searchRoutes(searchRoutesParams);
   }
 }

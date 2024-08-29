@@ -7,6 +7,7 @@ import {
 } from '@angular/material/card';
 import { MatDivider } from '@angular/material/divider';
 import { MatIcon } from '@angular/material/icon';
+import { ToTimePipe } from '@home/pipes/toTime.pipe';
 
 export const searchCardsImports = [
   MatCard,
@@ -17,4 +18,5 @@ export const searchCardsImports = [
   MatDivider,
   DatePipe,
   CurrencyPipe,
+  ToTimePipe,
 ];
