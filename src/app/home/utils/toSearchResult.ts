@@ -1,7 +1,8 @@
+import { RideStation, SearchCard } from '@home/models/search-card.model';
 import { SearchRide, SearchRoute } from '@home/models/search-route.model';
 import { SearchStation } from '@home/models/search-station.model';
 
-const toHoursAndMinutes = (startTime: Date, endTime: Date): string => {
+const getRideTime = (startTime: Date, endTime: Date): string => {
   const milliseconds =
     new Date(endTime).getTime() - new Date(startTime).getTime();
 
@@ -29,7 +30,7 @@ const toHoursAndMinutes = (startTime: Date, endTime: Date): string => {
   return days > 0 ? `${days}d ${hours}h ${minutes}m` : `${hours}h ${minutes}m`;
 };
 
-const calculatePrice = (rides: SearchRide[]) => {
+const getRidePrice = (rides: SearchRide[]) => {
   const prices = rides.map((ride) => ride.price);
 
   const totalPrice = prices.reduce(
@@ -50,46 +51,76 @@ const calculatePrice = (rides: SearchRide[]) => {
   return Object.entries(totalPrice);
 };
 
-export const toSearchResult = (
-  fromStation: SearchStation | null,
-  toStation: SearchStation | null,
-  routes: SearchRoute[],
-) => {
-  if (!fromStation || !toStation) {
-    return [];
-  }
+const getRidePath = (path: number[], rides: SearchRide[]): RideStation[] => {
+  return path.map((stationId, index) => {
+    const rideStation: RideStation = { stationId };
 
+    switch (true) {
+      case index === 0: {
+        const [startTime] = rides[index].time;
+        rideStation.startTime = startTime;
+        break;
+      }
+      case index === rides.length: {
+        const [, endTime] = rides[index - 1].time;
+        rideStation.startTime = endTime;
+        break;
+      }
+      default: {
+        const [, endTime] = rides[index - 1].time;
+        const [startTime] = rides[index].time;
+        rideStation.startTime = endTime;
+        rideStation.endTime = startTime;
+      }
+    }
+
+    return rideStation;
+  });
+};
+
+export const toSearchResult = (
+  fromStation: SearchStation,
+  toStation: SearchStation,
+  routes: SearchRoute[],
+): SearchCard[] => {
   return routes.flatMap(({ path, schedule }) => {
     const fromIdIndex =
       path.findIndex((point) => point === fromStation.stationId) - 1;
     const toIdIndex =
       path.findIndex((point) => point === toStation.stationId) - 1;
 
-    return schedule.map(({ segments }) => {
+    return schedule.map(({ rideId, segments }) => {
       const segmentsChunk = segments.slice(
         fromIdIndex < 0 ? 0 : fromIdIndex,
         toIdIndex,
       );
 
-      const prevPoint = segmentsChunk.at(0)!;
-      const nextPoint = segmentsChunk.at(-1)!;
+      const fromTime = segmentsChunk.at(0)!.time[0];
+      const toTime = segmentsChunk.at(-1)!.time[0];
 
-      const fromCityTime = prevPoint.time[0];
-      const toCityTime = nextPoint.time[0];
+      const rideTime = getRideTime(fromTime, toTime);
 
-      const timeSpan = toHoursAndMinutes(fromCityTime, toCityTime);
+      const ridePath = getRidePath(path, segments);
 
-      const price = calculatePrice(segmentsChunk);
+      const ridePrice = getRidePrice(segmentsChunk);
 
       return {
-        fromCityName: fromStation.city,
-        toCityName: toStation.city,
-        startPointPath: path.at(0)!,
-        finishPointPath: path.at(-1)!,
-        fromCityTime,
-        toCityTime,
-        timeSpan,
-        price,
+        rideId,
+        ridePath,
+        rideTime,
+        ridePrice,
+
+        from: {
+          id: fromStation.stationId,
+          city: fromStation.city,
+          time: fromTime,
+        },
+
+        to: {
+          id: toStation.stationId,
+          city: toStation.city,
+          time: toTime,
+        },
       };
     });
   });
