@@ -33,7 +33,6 @@ export const OrderStore = signalStore(
     },
 
     async cancelOrder(orderId: number) {
-      // TODO: handle errors
       const order = store.ordersEntityMap()[orderId];
       await adminService.cancelOrder(orderId);
       const cancelledOrder = { ...order, status: OrderStatus.Canceled };
