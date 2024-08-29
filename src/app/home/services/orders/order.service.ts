@@ -2,6 +2,7 @@ import { DeleteDialogComponent } from '@admin/components/delete-dialog/delete-di
 import { StationStore } from '@admin/store/stations/stations.store';
 import { computed, inject, Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { AdminRoleGuard } from '@core/guards/admin.guard';
 import { Order, OrderView } from '@shared/models/interfaces/order.model';
 import { Segment } from '@shared/models/interfaces/ride.model';
@@ -25,7 +26,10 @@ export class OrderService {
 
   private carriageStore = inject(CarriageStore);
 
-  constructor(private adminGuard: AdminRoleGuard) {}
+  constructor(
+    private adminGuard: AdminRoleGuard,
+    private snackBar: MatSnackBar,
+  ) {}
 
   async initStore() {
     const isManager = this.adminGuard.canActivate();
@@ -51,9 +55,25 @@ export class OrderService {
         message: 'Are you sure you want to cancel this order?',
       },
     });
-    dialogRef.afterClosed().subscribe((result) => {
+    dialogRef.afterClosed().subscribe(async (result) => {
       if (result) {
-        this.orderStore.cancelOrder(orderId);
+        try {
+          await this.orderStore.cancelOrder(orderId);
+          this.snackBar.open('Order has been successfully canceled.', 'Close', {
+            duration: 5000,
+          });
+          // eslint-disable-next-line
+        } catch (error: any) {
+          if (error.status === 400 && error.error && error.error.message) {
+            this.snackBar.open(error.error.message, 'Close', {
+              duration: 5000,
+            });
+          } else {
+            this.snackBar.open('An unexpected error occurred.', 'Close', {
+              duration: 5000,
+            });
+          }
+        }
       }
     });
   }
