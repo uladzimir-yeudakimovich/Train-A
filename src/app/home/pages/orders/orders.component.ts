@@ -1,12 +1,9 @@
 import {
+  AfterViewInit,
   Component,
   effect,
-  inject,
-  Injector,
   OnInit,
-  Signal,
   signal,
-  untracked,
   ViewChild,
 } from '@angular/core';
 import { MatSort } from '@angular/material/sort';
@@ -23,37 +20,30 @@ import { displayedColumns, ordersImports } from './orders.config';
   templateUrl: './orders.component.html',
   styleUrl: './orders.component.scss',
 })
-export class OrdersComponent implements OnInit {
+export class OrdersComponent implements OnInit, AfterViewInit {
   isLoading = signal<boolean>(true);
-
-  orderViews!: Signal<OrderView[]>;
 
   displayedColumns: string[] = displayedColumns;
 
-  dataSource = signal<MatTableDataSource<OrderView>>(new MatTableDataSource());
+  dataSource = new MatTableDataSource<OrderView>();
 
   @ViewChild(MatSort) sort!: MatSort;
 
-  private injector = inject(Injector);
-
-  constructor(private orderService: OrderService) {}
+  constructor(private orderService: OrderService) {
+    effect(() => {
+      const orderViews = this.orderService.orderViews();
+      this.dataSource.data = orderViews;
+    });
+  }
 
   async ngOnInit() {
     await this.orderService.initStore();
-    this.orderViews = this.orderService.orderViews;
-    // TODO: fix sort
-    const effectRef = effect(
-      () => {
-        const orderViews = this.orderViews();
-        untracked(() => {
-          this.isLoading.set(false);
-          this.dataSource.set(new MatTableDataSource(orderViews));
-          this.dataSource().sort = this.sort;
-        });
-        effectRef.destroy();
-      },
-      { injector: this.injector },
-    );
+    this.isLoading.set(false);
+  }
+
+  async ngAfterViewInit() {
+    await this.orderService.initStore(); // sort is undefined without it
+    this.dataSource.sort = this.sort;
   }
 
   onCancelOrder(orderId: number) {

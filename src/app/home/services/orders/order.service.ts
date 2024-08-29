@@ -59,34 +59,38 @@ export class OrderService {
   }
 
   private getOrderViews(): OrderView[] {
-    const orders = this.orderStore.ordersEntities();
-    const stationsMap = this.stationStore.stationsEntityMap();
+    try {
+      const orders = this.orderStore.ordersEntities();
+      const stationsMap = this.stationStore.stationsEntityMap();
 
-    return orders.map((order) => {
-      const tripSegments = this.getTripSegments(order);
+      return orders.map((order) => {
+        const tripSegments = this.getTripSegments(order);
 
-      const startStation = stationsMap[order.stationStart].city;
-      const startTime = tripSegments[0].time[0];
-      const endStation = stationsMap[order.stationEnd].city;
-      const endTime = tripSegments[tripSegments.length - 1].time[1];
-      const tripDuration = this.getTripDuration(tripSegments);
-      const { carType, carNumber, seatNumber } = this.getCarInfo(order);
-      const price = this.getTripPrice(tripSegments, carType);
+        const startStation = stationsMap[order.stationStart].city;
+        const startTime = tripSegments[0].time[0];
+        const endStation = stationsMap[order.stationEnd].city;
+        const endTime = tripSegments[tripSegments.length - 1].time[1];
+        const tripDuration = this.getTripDuration(tripSegments);
+        const { carType, carNumber, seatNumber } = this.getCarInfo(order);
+        const price = this.getTripPrice(tripSegments, carType);
 
-      return {
-        id: order.id,
-        status: order.status,
-        startStation,
-        startTime,
-        endStation,
-        endTime,
-        tripDuration,
-        carType,
-        carNumber,
-        seatNumber,
-        price,
-      };
-    });
+        return {
+          id: order.id,
+          status: order.status,
+          startStation,
+          startTime,
+          endStation,
+          endTime,
+          tripDuration,
+          carType,
+          carNumber,
+          seatNumber,
+          price,
+        };
+      });
+    } catch {
+      return [];
+    }
   }
 
   private getTripDuration(segments: Segment[]) {
