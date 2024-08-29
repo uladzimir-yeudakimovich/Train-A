@@ -5,6 +5,7 @@ import { patchState, signalStore, withMethods, withState } from '@ngrx/signals';
 
 export interface RidesState extends RouteInformation {
   loading: boolean;
+  error: null | { message: string; reason: string };
 }
 
 const initialState: RidesState = {
@@ -13,6 +14,7 @@ const initialState: RidesState = {
   stations: [],
   schedule: [],
   loading: false,
+  error: null,
 };
 
 export const RidesStore = signalStore(
@@ -31,8 +33,8 @@ export const RidesStore = signalStore(
             schedule: response.schedule,
           });
         },
-        error: () => {
-          patchState(store, { loading: false });
+        error: (error) => {
+          patchState(store, { loading: false, error });
         },
         complete: () => {
           patchState(store, { loading: false });
@@ -44,7 +46,11 @@ export const RidesStore = signalStore(
       if (ride) {
         ridesService
           .updateRide(store.routeId(), rideId, ride.segments)
-          .subscribe();
+          .subscribe({
+            error(error) {
+              patchState(store, { error });
+            },
+          });
       }
     },
     createRide(routeId: number, segments: Segment[]) {
@@ -62,8 +68,8 @@ export const RidesStore = signalStore(
             };
           });
         },
-        error() {
-          patchState(store, { loading: false });
+        error(error) {
+          patchState(store, { loading: false, error });
         },
         complete: () => {
           patchState(store, { loading: false });

@@ -32,14 +32,14 @@ export class RidesManagementService {
           schedule: response.schedule,
         });
       }),
-      catchError((err) => throwError(() => err)),
+      catchError((err) => throwError(() => err.error)),
     );
   }
 
   createRide(routeId: number, segments: Segment[]): Observable<{ id: number }> {
     return this.http
       .post<{ id: number }>(`route/${routeId}/ride`, { segments })
-      .pipe(catchError((err) => throwError(() => err)));
+      .pipe(catchError((err) => throwError(() => err.error)));
   }
 
   updateRide(
@@ -49,6 +49,6 @@ export class RidesManagementService {
   ): Observable<object> {
     return this.http
       .put(`route/${routeId}/ride/${rideId}`, { segments })
-      .pipe(catchError((err) => throwError(() => err)));
+      .pipe(catchError((err) => throwError(() => err.error)));
   }
 }
