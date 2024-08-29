@@ -26,6 +26,7 @@ import {
 export class DeleteDialogComponent {
   readonly dialogRef = inject(MatDialogRef<DeleteDialogComponent>);
 
+  // TODO: interface for date
   data = inject<{ title?: string; message?: string } | null>(MAT_DIALOG_DATA);
 
   onNoClick(): void {

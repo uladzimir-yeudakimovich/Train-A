@@ -38,6 +38,7 @@ export class TripService {
     };
   }
 
+  // TODO: refactor - move to util?
   getPriceMap(): Record<string, number> {
     const carriages = this.tripStore.carriages();
     const segments = this.rideSegments;
@@ -93,6 +94,7 @@ export class TripService {
     return Array.from(occupiedSeats.values());
   }
 
+  // TODO: refactor - move to util?
   private initRideSegments(fromId: number, toId: number) {
     const ride = this.tripStore.ride();
 

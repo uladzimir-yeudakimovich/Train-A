@@ -36,6 +36,7 @@ export class OrdersComponent implements OnInit, AfterViewInit {
     });
   }
 
+  // TODO: async hooks
   async ngOnInit() {
     await this.orderService.initStore();
     this.isLoading.set(false);

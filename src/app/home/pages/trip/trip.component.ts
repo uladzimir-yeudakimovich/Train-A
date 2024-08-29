@@ -25,6 +25,7 @@ import { tripImports } from './trip.config';
   styleUrls: ['./trip.component.scss'],
 })
 export class TripComponent implements OnInit {
+  // TODO: refactor whole component
   tripStore = inject(TripStore);
 
   orderStore = inject(OrderStore);

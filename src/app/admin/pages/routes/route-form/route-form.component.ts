@@ -35,6 +35,7 @@ export class RouteFormComponent implements OnInit {
   carriageOptions!: Signal<Partial<Carriage>[]>;
 
   connectedStationsMap = computed(() => {
+    // TODO: refactor
     const stationsMap = this.stationStore.stationsEntityMap();
 
     return (stationId: number) => {
@@ -67,6 +68,7 @@ export class RouteFormComponent implements OnInit {
     this.carriageStore.getCarriages();
     this.carriageOptions = this.carriageStore.carriagesEntities;
 
+    // TODO: add max length?
     this.routeForm = this.formBuilder.group({
       stations: this.formBuilder.array([], minArrayLength(minStationsNumber)),
       carriages: this.formBuilder.array([], minArrayLength(minCarriagesNumber)),
@@ -135,6 +137,7 @@ export class RouteFormComponent implements OnInit {
   onStationClick(idx: number) {
     const stationControl = this.stations.at(idx);
     if (stationControl.disabled) {
+      // TODO: snackbar service?
       this.snackBar.open(
         'You cannot change this station as this may break the connection with the next station.',
         'Close',
@@ -203,6 +206,7 @@ export class RouteFormComponent implements OnInit {
     this.addControl(this.stations, initValues);
   }
 
+  // TODO: refactor - move to util?
   private addControl<T>(controls: FormArray, initValues?: T[]) {
     if (!initValues) {
       controls.push(this.formBuilder.control(''));
@@ -218,6 +222,7 @@ export class RouteFormComponent implements OnInit {
       return this.routeForm.valid;
     }
     // update form: can sumbit if form is valid and there are changes
+    // TODO: refactor
     const route = this.route()!;
     this.stations.enable();
     const { path, carriages } = this.getFormRoute();

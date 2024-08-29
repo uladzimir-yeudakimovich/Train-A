@@ -27,6 +27,7 @@ export class RouteModalComponent implements OnInit {
 
   private stationStore = inject(StationStore);
 
+  // TODO: refactor - async hook
   async ngOnInit() {
     this.isLoading.set(true);
     await this.rideStore.getRide(this.data.rideId);
@@ -36,6 +37,7 @@ export class RouteModalComponent implements OnInit {
     this.isLoading.set(false);
   }
 
+  // TODO: move to another file
   private initRouteData() {
     const ride = this.rideStore.ridesEntityMap()[this.data.rideId];
     const stationsMap = this.stationStore.stationsEntityMap();

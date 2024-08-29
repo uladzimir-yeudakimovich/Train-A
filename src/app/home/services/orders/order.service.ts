@@ -84,8 +84,8 @@ export class OrderService {
       const stationsMap = this.stationStore.stationsEntityMap();
 
       return orders.map((order) => {
+        // TODO: refactor
         const tripSegments = this.getTripSegments(order);
-
         const startStation = stationsMap[order.stationStart].city;
         const startTime = tripSegments[0].time[0];
         const endStation = stationsMap[order.stationEnd].city;

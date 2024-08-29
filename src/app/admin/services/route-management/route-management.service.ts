@@ -8,6 +8,7 @@ import { inject, Injectable } from '@angular/core';
 export class RouteManagementService {
   private stationStore = inject(StationStore);
 
+  // TODO: refactor - move to util?
   getStationsByIds(stationIds: number[]): Station[] {
     const stationsMap = this.stationStore.stationsEntityMap();
     return stationIds.map((id) => stationsMap[id]);

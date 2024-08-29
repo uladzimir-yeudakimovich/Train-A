@@ -27,6 +27,7 @@ export class AdminService {
     private adminGuard: AdminRoleGuard,
   ) {}
 
+  // TODO: refactor - move to another file (not related to admin)
   loadRide(id: number): Promise<Ride> {
     return firstValueFrom(this.http.get<Ride>(`${ApiPath.Search}/${id}`)).catch(
       () => {
@@ -36,6 +37,7 @@ export class AdminService {
     );
   }
 
+  // TODO: refactor - move to another file
   loadOrders(): Promise<Order[]> {
     const isManager = this.adminGuard.canActivate();
     const attr = isManager ? '?all=true' : '';
@@ -121,6 +123,7 @@ export class AdminService {
     );
   }
 
+  // TODO: refactor - move to another file
   cancelOrder(orderId: number): Promise<object> {
     return firstValueFrom(
       this.http.delete(`${ApiPath.Order}/${orderId}`),
@@ -129,6 +132,7 @@ export class AdminService {
     });
   }
 
+  // TODO: refactor - move to util?
   private createLoader<T>(endpoint: string) {
     let isLoading = false;
     return (): Promise<T> => {

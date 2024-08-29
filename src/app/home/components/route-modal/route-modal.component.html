@@ -27,6 +27,7 @@
 
               <span class="spacer"></span>
               <span class="dwell">
+                <!-- TODO: refactor -->
                 @if (isStart) {
                   <mat-icon>person_pin_circle</mat-icon>
                   {{ stop.departure | date: "MMMM d, HH:mm" }}
@@ -45,6 +46,7 @@
           </ng-template>
 
           <div class="schedule">
+            <!-- TODO: display date? -->
             @if (arrival) {
               <p>Arrival: {{ stop.arrival | date: "HH:mm" }}</p>
             }

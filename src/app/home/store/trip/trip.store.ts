@@ -9,6 +9,7 @@ import { getSeats } from '@shared/utils/carriage.utils';
 
 import { initState } from './trip.config';
 
+// TODO: do not use protectedState: false
 @Injectable({
   providedIn: 'root',
 })
