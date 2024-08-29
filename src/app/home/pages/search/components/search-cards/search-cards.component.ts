@@ -13,9 +13,5 @@ import { searchCardsImports } from './search-cards.config';
 export class SearchCardsComponent {
   private homeStore = inject(HomeStore);
 
-  routes = this.homeStore.routes;
-
-  to = this.homeStore.to;
-
-  from = this.homeStore.from;
+  cards = this.homeStore.searchResult;
 }

@@ -1,13 +1,41 @@
-@for (route of routes(); track route.id) {
+@for (card of cards(); track $index) {
   <mat-card>
-    <mat-card-content>
-      <div>
-        <mat-card-subtitle>
-          {{ from()?.city ?? "" }}
-        </mat-card-subtitle>
-        <mat-card-subtitle>
-          {{ to()?.city ?? "" }}
-        </mat-card-subtitle>
+    <mat-card-content class="card-content">
+      <div class="card-time">
+        <div class="card-time__span">
+          <mat-card-title>
+            {{ card.fromCityTime | date: "hh:mm" }}
+          </mat-card-title>
+          <span class="card-time__span-body">
+            <mat-icon fontSet="material-icons-outlined"
+              >fiber_manual_record</mat-icon
+            >
+            <mat-divider class="card-time__span-divider" />
+            <span>{{ card.timeSpan }}</span>
+            <mat-divider class="card-time__span-divider" />
+            <mat-icon>fiber_manual_record</mat-icon>
+          </span>
+
+          <mat-card-title>
+            {{ card.toCityTime | date: "hh:mm" }}
+          </mat-card-title>
+        </div>
+        <div class="card-time__date">
+          <mat-card-subtitle>
+            {{ card.fromCityTime | date: "MMMM dd" }}
+          </mat-card-subtitle>
+          <mat-card-subtitle>
+            {{ card.toCityTime | date: "MMMM dd" }}
+          </mat-card-subtitle>
+        </div>
+        <div class="card-time__city">
+          <mat-card-subtitle>
+            {{ card.fromCityName }}
+          </mat-card-subtitle>
+          <mat-card-subtitle>
+            {{ card.toCityName }}
+          </mat-card-subtitle>
+        </div>
       </div>
     </mat-card-content>
   </mat-card>

@@ -10,7 +10,9 @@
       [matAutocomplete]="autoFrom"
     />
 
-    <mat-icon matPrefix>radio_button_unchecked</mat-icon>
+    <mat-icon matPrefix fontSet="material-icons-outlined">
+      fiber_manual_record
+    </mat-icon>
 
     <mat-autocomplete #autoFrom="matAutocomplete">
       @for (station of stations(); track station.id) {
@@ -44,7 +46,7 @@
       [matAutocomplete]="autoTo"
     />
 
-    <mat-icon matPrefix>radio_button_checked</mat-icon>
+    <mat-icon matPrefix> fiber_manual_record </mat-icon>
 
     <mat-autocomplete #autoTo="matAutocomplete">
       @for (station of stations(); track station.id) {

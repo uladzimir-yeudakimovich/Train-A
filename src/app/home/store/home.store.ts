@@ -1,8 +1,15 @@
-import { inject } from '@angular/core';
+import { computed, inject } from '@angular/core';
 import { SearchResponse } from '@home/models/search-response.model';
 import { SearchRoutesParams } from '@home/models/search-routes-params.model';
 import { SearchService } from '@home/services/search.service';
-import { patchState, signalStore, withMethods, withState } from '@ngrx/signals';
+import { toSearchResult } from '@home/utils/toSearchResult';
+import {
+  patchState,
+  signalStore,
+  withComputed,
+  withMethods,
+  withState,
+} from '@ngrx/signals';
 
 const initialState: SearchResponse = {
   from: null,
@@ -21,5 +28,11 @@ export const HomeStore = signalStore(
 
       patchState(store, response);
     },
+  })),
+
+  withComputed(({ from, to, routes }) => ({
+    searchResult: computed(() => {
+      return toSearchResult(from(), to(), routes());
+    }),
   })),
 );

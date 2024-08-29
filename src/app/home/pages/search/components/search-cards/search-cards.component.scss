@@ -4,3 +4,43 @@
   padding-inline: 2rem;
   gap: 1rem;
 }
+
+.card {
+  // &-content {
+  //   display: flex;
+  //   justify-content: space-between;
+  // }
+
+  &-time {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+
+    & > div {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    &__span {
+      gap: 1rem;
+
+      &-body {
+        flex-grow: 1;
+        display: flex;
+        align-items: center;
+
+        span {
+          margin-inline: 0.5rem;
+        }
+      }
+
+      &-divider {
+        flex-grow: 1;
+      }
+    }
+
+    &__city {
+      text-transform: capitalize;
+    }
+  }
+}
