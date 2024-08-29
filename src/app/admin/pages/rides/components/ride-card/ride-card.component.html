@@ -17,21 +17,29 @@
 
               <div>
                 @if (!edit.departure) {
-                  {{ segment.time[0] | date: 'yyyy-MM-dd hh-mm a' }}
+                  {{ segment.time[0] | date: "yyyy-MM-dd hh-mm a" }}
                 } @else {
                   <input
-                    type="datetime"
-                    [value]="segment.time[0]"
+                    type="date"
+                    [value]="segment.time[0].split('T')[0]"
                     #departureDate
-                    (input)="onDepartureDateInput(segmentIndex, departureDate.value)" />
+                    (input)="
+                      onDepartureDateInput(segmentIndex, departureDate.value)
+                    "
+                  />
                 }
               </div>
 
               <mat-icon
                 class="icon"
                 color="primary"
-                (click)="edit.departure ? onSave() : toggleEditMode(segmentIndex, 'departure')">
-                {{ edit.departure ? 'save' : 'edit' }}
+                (click)="
+                  edit.departure
+                    ? onSave()
+                    : toggleEditMode(segmentIndex, 'departure')
+                "
+              >
+                {{ edit.departure ? "save" : "edit" }}
               </mat-icon>
             </div>
             <div class="date-and-icon">
@@ -39,21 +47,29 @@
 
               <div>
                 @if (!edit.arrival) {
-                  {{ segment.time[1] | date: 'yyyy-MM-dd hh-mm a' }}
+                  {{ segment.time[1] | date: "yyyy-MM-dd hh-mm a" }}
                 } @else {
                   <input
-                    type="datetime"
+                    type="date"
                     [value]="segment.time[1]"
                     #arrivalDate
-                    (input)="onArrivalDateInput(segmentIndex, arrivalDate.value)" />
+                    (input)="
+                      onArrivalDateInput(segmentIndex, arrivalDate.value)
+                    "
+                  />
                 }
               </div>
 
               <mat-icon
                 class="icon"
                 color="primary"
-                (click)="edit.arrival ? onSave() : toggleEditMode(segmentIndex, 'arrival')">
-                {{ edit.arrival ? 'save' : 'edit' }}
+                (click)="
+                  edit.arrival
+                    ? onSave()
+                    : toggleEditMode(segmentIndex, 'arrival')
+                "
+              >
+                {{ edit.arrival ? "save" : "edit" }}
               </mat-icon>
             </div>
           </div>
@@ -64,11 +80,18 @@
               <mat-icon
                 class="icon"
                 color="primary"
-                (click)="edit.price ? onSave() : toggleEditMode($index, 'price')">
-                {{ edit.price ? 'save' : 'edit' }}
+                (click)="
+                  edit.price ? onSave() : toggleEditMode($index, 'price')
+                "
+              >
+                {{ edit.price ? "save" : "edit" }}
               </mat-icon>
             </div>
-            @for (price of prices()[segmentIndex]; track $index; let priceIndex = $index) {
+            @for (
+              price of prices()[segmentIndex];
+              track $index;
+              let priceIndex = $index
+            ) {
               <div class="price">
                 <div class="price-type">{{ price.type }}</div>
                 <div class="price-value">
@@ -80,8 +103,14 @@
                       [value]="price.value"
                       #priceInput
                       (input)="
-                        onPriceInput(segmentIndex, priceIndex, price.type, priceInput.value)
-                      " />
+                        onPriceInput(
+                          segmentIndex,
+                          priceIndex,
+                          price.type,
+                          priceInput.value
+                        )
+                      "
+                    />
                   }
                 </div>
               </div>

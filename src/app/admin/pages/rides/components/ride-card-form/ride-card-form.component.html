@@ -19,8 +19,7 @@
               <div>
                 Departure:
                 <input
-                  type="text"
-                  placeholder="yyyy-mm-dd, hh:mm"
+                  type="date"
                   #departureDate
                   (change)="
                     onDepartureDateChange(segmentIndex, departureDate.value)
@@ -30,8 +29,7 @@
               <div>
                 Arrival:
                 <input
-                  type="text"
-                  placeholder="yyyy-mm-dd, hh:mm"
+                  type="date"
                   #arrivalDate
                   (change)="
                     onArrivalDateChange(segmentIndex, arrivalDate.value)
