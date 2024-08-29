@@ -4,4 +4,5 @@ export enum ApiPath {
   Carriage = 'carriage',
   Search = 'search',
   Order = 'order',
+  Users = 'users',
 }

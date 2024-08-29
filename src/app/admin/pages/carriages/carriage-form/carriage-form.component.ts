@@ -1,4 +1,3 @@
-import { NgIf } from '@angular/common';
 import {
   Component,
   DestroyRef,
@@ -27,7 +26,6 @@ import { getSeats } from '@shared/utils/carriage.utils';
   selector: 'app-carriage-form',
   standalone: true,
   imports: [
-    NgIf,
     MatFormField,
     MatInputModule,
     MatLabel,

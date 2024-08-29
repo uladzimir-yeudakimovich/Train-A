@@ -69,6 +69,7 @@ export class TripComponent implements OnInit {
   private async initStore(rideId: number, fromId: number, toId: number) {
     this.isLoading.set(true);
     await this.tripService.initStore(rideId, fromId, toId);
+    await this.orderStore.getOrders();
 
     const connectionsExists = this.tripService.rideSegments.length > 0;
     if (!connectionsExists) {
@@ -83,8 +84,7 @@ export class TripComponent implements OnInit {
 
   async onBook() {
     const { rideId } = this.tripInfo;
-    const userId = this.userStore.getCurrentUser()?.id ?? 0;
-    if (this.orderStore.hasOrder(userId, rideId)) {
+    if (this.orderStore.hasOrder(rideId)) {
       this.snackBar.open('You have already booked this trip', 'Close', {
         duration: 5000,
       });

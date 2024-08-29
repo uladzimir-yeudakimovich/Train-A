@@ -25,6 +25,8 @@ import { CarSeatComponent } from '../car-seat/car-seat.component';
 export class TrainCarComponent implements OnInit {
   carriage = input.required<Carriage>();
 
+  title = input<string>();
+
   toggleSeat = output<number>();
 
   updateCarriage = output<Carriage>();

@@ -2,6 +2,8 @@ import { RailRoute } from '@admin/models/route.model';
 import { Connection, Station } from '@admin/models/station.model';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { User } from '@auth/models/auth.model';
+import { AdminRoleGuard } from '@core/guards/admin.guard';
 import { ApiPath } from '@shared/models/enums/api-path.enum';
 import { Carriage } from '@shared/models/interfaces/carriage.model';
 import { Order } from '@shared/models/interfaces/order.model';
@@ -18,9 +20,12 @@ export class AdminService {
 
   readonly loadCarriages = this.createLoader<Carriage[]>(ApiPath.Carriage);
 
-  readonly loadOrders = this.createLoader<Order[]>(ApiPath.Order);
+  readonly loadUsers = this.createLoader<User[]>(ApiPath.Users);
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private adminGuard: AdminRoleGuard,
+  ) {}
 
   loadRide(id: number): Promise<Ride> {
     return firstValueFrom(this.http.get<Ride>(`${ApiPath.Search}/${id}`)).catch(
@@ -29,6 +34,17 @@ export class AdminService {
         return {} as Ride;
       },
     );
+  }
+
+  loadOrders(): Promise<Order[]> {
+    const isManager = this.adminGuard.canActivate();
+    const attr = isManager ? '?all=true' : '';
+
+    return firstValueFrom(
+      this.http.get<Order[]>(`${ApiPath.Order}${attr}`),
+    ).catch((error) => {
+      throw error;
+    });
   }
 
   deleteStation(id: number): Promise<Station> {
@@ -103,6 +119,14 @@ export class AdminService {
         throw error;
       },
     );
+  }
+
+  cancelOrder(orderId: number): Promise<object> {
+    return firstValueFrom(
+      this.http.delete(`${ApiPath.Order}/${orderId}`),
+    ).catch((error) => {
+      throw error;
+    });
   }
 
   private createLoader<T>(endpoint: string) {
