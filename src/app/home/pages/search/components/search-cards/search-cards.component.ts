@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, effect, inject } from '@angular/core';
 import { HomeStore } from '@home/store/home.store';
 
 import { searchCardsImports } from './search-cards.config';
@@ -14,4 +14,10 @@ export class SearchCardsComponent {
   private homeStore = inject(HomeStore);
 
   cards = this.homeStore.searchResult;
+
+  constructor() {
+    effect(() => {
+      console.log('cards', this.cards());
+    });
+  }
 }

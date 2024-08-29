@@ -7,13 +7,15 @@
             {{ card.fromCityTime | date: "hh:mm" }}
           </mat-card-title>
           <span class="card-time__span-body">
-            <mat-icon fontSet="material-icons-outlined"
-              >fiber_manual_record</mat-icon
-            >
+            <mat-icon fontSet="material-icons-outlined">
+              fiber_manual_record
+            </mat-icon>
             <mat-divider class="card-time__span-divider" />
-            <span>{{ card.timeSpan }}</span>
+            <span>
+              {{ card.timeSpan }}
+            </span>
             <mat-divider class="card-time__span-divider" />
-            <mat-icon>fiber_manual_record</mat-icon>
+            <mat-icon> fiber_manual_record </mat-icon>
           </span>
 
           <mat-card-title>
@@ -37,6 +39,35 @@
           </mat-card-subtitle>
         </div>
       </div>
+
+      <ul class="card-price__list">
+        @for (price of card.price; track price[0]) {
+          <li class="card-price__item">
+            <mat-divider vertical />
+            <div class="card-price__carriage">
+              <mat-card-subtitle>
+                Carriage type
+                @if (price[0].endsWith("1")) {
+                  1st
+                }
+                @if (price[0].endsWith("2")) {
+                  2nd
+                }
+                @if (price[0].endsWith("3")) {
+                  3rd
+                }
+                class
+              </mat-card-subtitle>
+
+              <mat-card-title>
+                {{
+                  price[1] | currency: "USD" : "symbol" : "1.0-0"
+                }}</mat-card-title
+              >
+            </div>
+          </li>
+        }
+      </ul>
     </mat-card-content>
   </mat-card>
 } @empty {

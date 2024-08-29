@@ -1,10 +1,10 @@
-interface SearchRide {
+export interface SearchRide {
   occupiedSeats: number[];
-  price: { carriage1: number; carriage2: number; carriage3: number };
+  price: Record<string, number>;
   time: Date[];
 }
 
-interface SearchSchedule {
+export interface SearchSchedule {
   rideId: number;
   segments: SearchRide[];
 }

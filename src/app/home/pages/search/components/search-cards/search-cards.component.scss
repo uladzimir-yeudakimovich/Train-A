@@ -6,15 +6,17 @@
 }
 
 .card {
-  // &-content {
-  //   display: flex;
-  //   justify-content: space-between;
-  // }
+  &-content {
+    display: flex;
+    justify-content: space-between;
+  }
 
   &-time {
+    min-width: 20rem;
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
+    flex-basis: 30rem;
 
     & > div {
       display: flex;
@@ -41,6 +43,29 @@
 
     &__city {
       text-transform: capitalize;
+    }
+  }
+
+  &-price {
+    &__list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      gap: 1rem;
+    }
+
+    &__item {
+      display: flex;
+      gap: 1rem;
+    }
+
+    &__carriage {
+      width: 7rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
     }
   }
 }
