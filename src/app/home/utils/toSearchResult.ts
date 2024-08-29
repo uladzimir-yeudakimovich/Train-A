@@ -1,6 +1,6 @@
 import { RideStation, SearchCard } from '@home/models/search-card.model';
-import { SearchRide, SearchRoute } from '@home/models/search-route.model';
-import { SearchStation } from '@home/models/search-station.model';
+import { SearchResponse } from '@home/models/search-response.model';
+import { SearchRide } from '@home/models/search-route.model';
 
 const getRideTime = (startTime: Date, endTime: Date): string => {
   const milliseconds =
@@ -78,16 +78,11 @@ const getRidePath = (path: number[], rides: SearchRide[]): RideStation[] => {
   });
 };
 
-export const toSearchResult = (
-  fromStation: SearchStation,
-  toStation: SearchStation,
-  routes: SearchRoute[],
-): SearchCard[] => {
+export const toSearchResult = (response: SearchResponse): SearchCard[] => {
+  const { from, to, routes } = response;
   return routes.flatMap(({ path, schedule }) => {
-    const fromIdIndex =
-      path.findIndex((point) => point === fromStation.stationId) - 1;
-    const toIdIndex =
-      path.findIndex((point) => point === toStation.stationId) - 1;
+    const fromIdIndex = path.findIndex((point) => point === from.stationId) - 1;
+    const toIdIndex = path.findIndex((point) => point === to.stationId) - 1;
 
     return schedule.map(({ rideId, segments }) => {
       const segmentsChunk = segments.slice(
@@ -110,15 +105,15 @@ export const toSearchResult = (
         rideTime,
         ridePrice,
 
-        from: {
-          id: fromStation.stationId,
-          city: fromStation.city,
+        rideFrom: {
+          id: from.stationId,
+          city: from.city,
           time: fromTime,
         },
 
-        to: {
-          id: toStation.stationId,
-          city: toStation.city,
+        rideTo: {
+          id: to.stationId,
+          city: to.city,
           time: toTime,
         },
       };

@@ -15,6 +15,6 @@ export interface SearchCard {
   ridePath: RideStation[];
   rideTime: string;
   ridePrice: [string, number][];
-  from: RidePoint;
-  to: RidePoint;
+  rideFrom: RidePoint;
+  rideTo: RidePoint;
 }
