@@ -5,6 +5,7 @@ import { BookItem } from '@home/models/trip.models';
 import { TripStore } from '@home/store/trip/trip.store';
 import { SeatState } from '@shared/models/enums/seat-state.enum';
 import { Segment } from '@shared/models/interfaces/ride.model';
+import { getPriceMap } from '@shared/utils/ride.utils';
 
 @Injectable({
   providedIn: 'root',
@@ -38,43 +39,25 @@ export class TripService {
     };
   }
 
-  // TODO: refactor - move to util?
   getPriceMap(): Record<string, number> {
-    const carriages = this.tripStore.carriages();
     const segments = this.rideSegments;
-
-    const priceMap: Record<string, number> = {};
-    // carriage name -> price (sum of all segments)
-    carriages.forEach((carriage) => {
-      if (priceMap[carriage.name]) {
-        return;
-      }
-      const totalPrice = segments.reduce((acc, s) => {
-        const priceInSegment = s.price[carriage.name];
-        return acc + priceInSegment;
-      }, 0);
-      priceMap[carriage.name] = totalPrice;
-    });
-
-    return priceMap;
+    return getPriceMap(segments);
   }
 
   getBookItems(): Signal<BookItem[]> {
     return computed(() => {
-      const carTypes = this.tripStore.getGroupedCarriages();
+      const carriages = this.tripStore.carriages();
       const bookItems: BookItem[] = [];
 
-      carTypes().forEach((carType) => {
-        carType.carriages.forEach((carriage) => {
-          const selectedSeats = carriage.seats.filter(
-            (s) => s.state === SeatState.Selected,
-          );
-          selectedSeats.forEach((seat) => {
-            bookItems.push({
-              carId: carriage.code,
-              seatNumber: seat.number,
-              price: this.getPriceMap()[carriage.name],
-            });
+      carriages.forEach((carriage) => {
+        const selectedSeats = carriage.seats.filter(
+          (s) => s.state === SeatState.Selected,
+        );
+        selectedSeats.forEach((seat) => {
+          bookItems.push({
+            carId: carriage.code,
+            seatNumber: seat.number,
+            price: this.getPriceMap()[carriage.name],
           });
         });
       });

@@ -9,10 +9,11 @@ import { TripService } from '@home/services/trip/trip.service';
 import { TripStore } from '@home/store/trip/trip.store';
 import { RoutePath } from '@shared/models/enums/route-path.enum';
 import { SeatState } from '@shared/models/enums/seat-state.enum';
-import { CarSeat } from '@shared/models/interfaces/carriage.model';
+import { Carriage, CarSeat } from '@shared/models/interfaces/carriage.model';
 import { OrderStore } from '@shared/store/orders/orders.store';
 import { RideStore } from '@shared/store/ride/ride.store';
 import { UserStore } from '@shared/store/users/users.store';
+import { recordToKeyValueList } from '@shared/utils/ride.utils';
 
 import { OrderDialogComponent } from './components/order-dialog/order-dialog.component';
 import { tripImports } from './trip.config';
@@ -145,5 +146,11 @@ export class TripComponent implements OnInit {
         seat: { number: 1, state: SeatState.Selected },
       },
     ];
+  }
+
+  // TODO: computed?
+  typesWithCarriages(): { key: string; value: Carriage[] }[] {
+    const groupedCarriages = this.tripStore.getGroupedCarriages();
+    return recordToKeyValueList(groupedCarriages());
   }
 }

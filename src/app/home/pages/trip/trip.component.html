@@ -1,5 +1,4 @@
 <!-- TODO: refactor -->
-@let typesWithCarriages = tripStore.getGroupedCarriages();
 @let availableSeatsMap = tripStore.getAvailableSeatsMap();
 
 @if (isLoading()) {
@@ -43,16 +42,16 @@
             <ng-template mat-tab-label>
               <mat-list-item>
                 <p matListItemTitle>
-                  Carriage type {{ carItem.type }}:
-                  {{ availableSeatsMap()[carItem.type] }}
+                  Carriage type {{ carItem.key }}:
+                  {{ availableSeatsMap()[carItem.key] }}
                 </p>
                 <p matListItemLine>
-                  {{ priceMap[carItem.type] | currency }}
+                  {{ priceMap[carItem.key] | currency }}
                 </p>
               </mat-list-item>
             </ng-template>
             <app-carriage-list
-              [carriages]="carItem.carriages"
+              [carriages]="carItem.value"
             ></app-carriage-list>
           </mat-tab>
         }

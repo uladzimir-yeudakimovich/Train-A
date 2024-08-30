@@ -6,6 +6,7 @@ import { Carriage } from '@shared/models/interfaces/carriage.model';
 import { CarriageStore } from '@shared/store/carriages/carriages.store';
 import { RideStore } from '@shared/store/ride/ride.store';
 import { getSeats } from '@shared/utils/carriage.utils';
+import { getCarriageTypeMap } from '@shared/utils/ride.utils';
 
 import { initState } from './trip.config';
 
@@ -61,23 +62,10 @@ export const TripStore = signalStore(
         }
       },
 
-      getGroupedCarriages(): Signal<{ type: string; carriages: Carriage[] }[]> {
+      getGroupedCarriages(): Signal<Record<string, Carriage[]>> {
         return computed(() => {
           const carriages = store.carriages();
-          const typesWithCars: { type: string; carriages: Carriage[] }[] = [];
-
-          carriages.forEach((carriage) => {
-            const type = carriage.name;
-            const existing = typesWithCars.find((r) => r.type === type);
-
-            if (existing) {
-              existing.carriages.push(carriage);
-            } else {
-              typesWithCars.push({ type, carriages: [carriage] });
-            }
-          });
-
-          return typesWithCars;
+          return getCarriageTypeMap(carriages);
         });
       },
 
@@ -86,8 +74,8 @@ export const TripStore = signalStore(
           const groupedCarriages = this.getGroupedCarriages();
           const availableSeats: Record<string, number> = {};
 
-          groupedCarriages().forEach((typeWithCars) => {
-            const availableSeatsInCarriage = typeWithCars.carriages.reduce(
+          Object.entries(groupedCarriages()).forEach(([type, carriages]) => {
+            const availableSeatsInCarriage = carriages.reduce(
               (acc, carriage) => {
                 return (
                   acc +
@@ -97,7 +85,7 @@ export const TripStore = signalStore(
               },
               0,
             );
-            availableSeats[typeWithCars.type] = availableSeatsInCarriage;
+            availableSeats[type] = availableSeatsInCarriage;
           });
 
           return availableSeats;
