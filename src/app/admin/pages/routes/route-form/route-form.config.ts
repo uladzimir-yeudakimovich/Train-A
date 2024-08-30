@@ -16,3 +16,9 @@ export const routeFormImports = [
   MatIconButton,
   MatError,
 ];
+
+export const minStationsNumber = 3;
+export const minCarriagesNumber = 3;
+// avoid crashing the app
+export const maxStationsNumber = 512;
+export const maxCarriagesNumber = 512;

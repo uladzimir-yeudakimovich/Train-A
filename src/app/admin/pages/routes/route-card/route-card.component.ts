@@ -1,5 +1,4 @@
 import { RailRoute } from '@admin/models/route.model';
-import { RouteManagementService } from '@admin/services/route-management/route-management.service';
 import { RouteStore } from '@admin/store/routes/routes.store';
 import { StationStore } from '@admin/store/stations/stations.store';
 import {
@@ -29,7 +28,10 @@ export class RouteCardComponent implements OnInit {
   displayUpdateForm = signal<boolean>(false);
 
   cities = computed(() => {
-    return this.routeService.getStationCities(this.route().path);
+    const stationIds = this.route().path;
+    return this.stationStore
+      .getStationsByIds()(stationIds)
+      .map((station) => station?.city);
   });
 
   readonly dialog = inject(MatDialog);
@@ -39,7 +41,6 @@ export class RouteCardComponent implements OnInit {
   private stationStore = inject(StationStore);
 
   constructor(
-    private routeService: RouteManagementService,
     private router: Router,
     private activatedRoute: ActivatedRoute,
   ) {}
