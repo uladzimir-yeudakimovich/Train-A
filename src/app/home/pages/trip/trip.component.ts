@@ -1,19 +1,15 @@
-import { StationStore } from '@admin/store/stations/stations.store';
 import { Component, inject, OnInit, Signal, signal } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { RouteModalComponent } from '@home/components/route-modal/route-modal.component';
-import { BookItem, TripInfo } from '@home/models/trip.models';
+import { BookItem, TripView } from '@home/models/trip.models';
 import { TripService } from '@home/services/trip/trip.service';
 import { TripStore } from '@home/store/trip/trip.store';
 import { RoutePath } from '@shared/models/enums/route-path.enum';
 import { SeatState } from '@shared/models/enums/seat-state.enum';
-import { Carriage, CarSeat } from '@shared/models/interfaces/carriage.model';
+import { CarSeat } from '@shared/models/interfaces/carriage.model';
 import { OrderStore } from '@shared/store/orders/orders.store';
-import { RideStore } from '@shared/store/ride/ride.store';
-import { UserStore } from '@shared/store/users/users.store';
-import { recordToKeyValueList } from '@shared/utils/ride.utils';
 
 import { OrderDialogComponent } from './components/order-dialog/order-dialog.component';
 import { tripImports } from './trip.config';
@@ -27,25 +23,17 @@ import { tripImports } from './trip.config';
 })
 export class TripComponent implements OnInit {
   // TODO: refactor whole component
-  tripStore = inject(TripStore);
-
-  orderStore = inject(OrderStore);
-
-  userStore = inject(UserStore);
-
-  rideStore = inject(RideStore);
-
-  stationStore = inject(StationStore);
-
-  tripInfo: TripInfo = {} as TripInfo;
+  tripView!: Signal<TripView>;
 
   bookItems!: Signal<BookItem[]>;
 
   isLoading = signal<boolean>(true);
 
-  priceMap: Record<string, number> = {};
-
   readonly dialog = inject(MatDialog);
+
+  private tripStore = inject(TripStore);
+
+  private orderStore = inject(OrderStore);
 
   constructor(
     private router: Router,
@@ -73,19 +61,17 @@ export class TripComponent implements OnInit {
     await this.tripService.initStore(rideId, fromId, toId);
     await this.orderStore.getOrders();
 
-    const connectionsExists = this.tripService.rideSegments.length > 0;
+    const connectionsExists = this.tripService.segments.length > 0;
     if (!connectionsExists) {
       this.router.navigate(['/404']);
       return;
     }
-
-    this.priceMap = this.tripService.getPriceMap();
-    this.tripInfo = this.tripService.getEdgeStationsInfo();
+    this.tripView = this.tripService.getTripView();
     this.isLoading.set(false);
   }
 
   async onBook() {
-    const { rideId } = this.tripInfo;
+    const { rideId } = this.tripView();
     if (this.orderStore.hasOrder(rideId)) {
       this.snackBar.open('You have already booked this trip', 'Close', {
         duration: 5000,
@@ -99,9 +85,9 @@ export class TripComponent implements OnInit {
         carCode: item.carId,
       };
     });
-    const stationStart = this.tripInfo.from.id;
-    const stationEnd = this.tripInfo.to.id;
-    const seatScopes = this.tripStore.getSeatScopes();
+    const stationStart = this.tripView().from.id;
+    const stationEnd = this.tripView().to.id;
+    const seatScopes = this.tripStore.seatScopes();
 
     this.tripStore.selectedToReserved();
 
@@ -113,7 +99,7 @@ export class TripComponent implements OnInit {
     await orders;
 
     this.dialog.open(OrderDialogComponent, {
-      data: { tripInfo: this.tripInfo },
+      data: { tripInfo: this.tripView() },
     });
   }
 
@@ -124,9 +110,9 @@ export class TripComponent implements OnInit {
   onRoute(): void {
     this.dialog.open(RouteModalComponent, {
       data: {
-        rideId: this.tripInfo.rideId,
-        from: this.tripInfo.from.id,
-        to: this.tripInfo.to.id,
+        rideId: this.tripView().rideId,
+        from: this.tripView().from.id,
+        to: this.tripView().to.id,
       },
     });
   }
@@ -146,10 +132,5 @@ export class TripComponent implements OnInit {
         seat: { number: 1, state: SeatState.Selected },
       },
     ];
-  }
-
-  typesWithCarriages(): { key: string; value: Carriage[] }[] {
-    const groupedCarriages = this.tripStore.getGroupedCarriages();
-    return recordToKeyValueList(groupedCarriages());
   }
 }

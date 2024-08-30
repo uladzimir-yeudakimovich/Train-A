@@ -1,6 +1,3 @@
-<!-- TODO: refactor -->
-@let availableSeatsMap = tripStore.getAvailableSeatsMap();
-
 @if (isLoading()) {
   <div class="spinner-container">
     <mat-spinner class="spinner" />
@@ -15,14 +12,14 @@
     </div>
     <div class="head-info">
       <div class="head-stations">
-        <p>{{ tripInfo.from.city }} - {{ tripInfo.to.city }}</p>
+        <p>{{ tripView().from.city }} - {{ tripView().to.city }}</p>
         <p>
-          {{ tripInfo.departure | date: "MMMM d, HH:mm" }} -
-          {{ tripInfo.arrival | date: "MMMM d, HH:mm" }}
+          {{ tripView().departure | date: "MMMM d, HH:mm" }} -
+          {{ tripView().arrival | date: "MMMM d, HH:mm" }}
         </p>
       </div>
       <p>
-        <span>Ride {{ tripInfo.rideId }}</span>
+        <span>Ride {{ tripView().rideId }}</span>
         <button mat-button (click)="onRoute()">
           <mat-icon>keyboard_arrow_down</mat-icon>
           Route
@@ -37,21 +34,22 @@
         mat-stretch-tabs="false"
         mat-align-tabs="start"
       >
-        @for (carItem of typesWithCarriages(); track $index) {
+        @for (trainClass of tripView().trainClasses; track $index) {
+
           <mat-tab>
             <ng-template mat-tab-label>
               <mat-list-item>
                 <p matListItemTitle>
-                  Carriage type {{ carItem.key }}:
-                  {{ availableSeatsMap()[carItem.key] }}
+                  Carriage type {{ trainClass.name }}:
+                  {{ trainClass.availableSeats }}
                 </p>
                 <p matListItemLine>
-                  {{ priceMap[carItem.key] | currency }}
+                  {{ trainClass.price| currency }}
                 </p>
               </mat-list-item>
             </ng-template>
             <app-carriage-list
-              [carriages]="carItem.value"
+              [carriages]="trainClass.carriages"
             ></app-carriage-list>
           </mat-tab>
         }

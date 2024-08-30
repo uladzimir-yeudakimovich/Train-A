@@ -114,3 +114,18 @@ export function getAvailableSeatsNumberMap(
 
   return availableSeatsMap;
 }
+
+export function getSeatScopes(
+  carriages: Carriage[],
+): Record<string, { from: number; to: number }> {
+  const seatScopes: Record<string, { from: number; to: number }> = {};
+
+  let fromSeat = 1;
+  carriages.forEach((carriage) => {
+    const toSeat = fromSeat + carriage.seats.length - 1;
+    seatScopes[carriage.code] = { from: fromSeat, to: toSeat };
+    fromSeat = toSeat + 1;
+  });
+
+  return seatScopes;
+}

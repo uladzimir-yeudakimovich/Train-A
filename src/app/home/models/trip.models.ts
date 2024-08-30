@@ -1,4 +1,5 @@
 import { Station } from '@admin/models/station.model';
+import { Carriage } from '@shared/models/interfaces/carriage.model';
 
 export interface TripInfo {
   rideId: number;
@@ -6,6 +7,15 @@ export interface TripInfo {
   to: Station;
   departure: string;
   arrival: string;
+}
+
+export interface TripView extends TripInfo {
+  trainClasses: {
+    name: string;
+    carriages: Carriage[];
+    price: number;
+    availableSeats: number;
+  }[];
 }
 
 export interface BookItem {

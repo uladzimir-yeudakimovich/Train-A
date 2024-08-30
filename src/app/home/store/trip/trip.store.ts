@@ -1,6 +1,12 @@
 import { StationStore } from '@admin/store/stations/stations.store';
-import { computed, inject, Signal } from '@angular/core';
-import { patchState, signalStore, withMethods, withState } from '@ngrx/signals';
+import { computed, inject } from '@angular/core';
+import {
+  patchState,
+  signalStore,
+  withComputed,
+  withMethods,
+  withState,
+} from '@ngrx/signals';
 import { SeatState } from '@shared/models/enums/seat-state.enum';
 import { Carriage } from '@shared/models/interfaces/carriage.model';
 import { CarriageStore } from '@shared/store/carriages/carriages.store';
@@ -9,6 +15,7 @@ import { getSeats } from '@shared/utils/carriage.utils';
 import {
   getAvailableSeatsNumberMap,
   getCarriageTypeMap,
+  getSeatScopes,
 } from '@shared/utils/ride.utils';
 
 import { initState } from './trip.config';
@@ -16,6 +23,15 @@ import { initState } from './trip.config';
 export const TripStore = signalStore(
   { providedIn: 'root' },
   withState(initState),
+
+  withComputed(({ carriages }) => ({
+    availableSeatsMap: computed(() => getAvailableSeatsNumberMap(carriages())),
+
+    seatScopes: computed(() => getSeatScopes(carriages())),
+
+    carriagesByTypeMap: computed(() => getCarriageTypeMap(carriages())),
+  })),
+
   withMethods(
     (
       store,
@@ -65,37 +81,9 @@ export const TripStore = signalStore(
         }
       },
 
-      getGroupedCarriages(): Signal<Record<string, Carriage[]>> {
-        return computed(() => {
-          const carriages = store.carriages();
-          return getCarriageTypeMap(carriages);
-        });
-      },
-
-      getAvailableSeatsMap(): Signal<Record<string, number>> {
-        return computed(() => {
-          const carriages = store.carriages();
-          return getAvailableSeatsNumberMap(carriages);
-        });
-      },
-
-      getSeatScopes(): Record<string, { from: number; to: number }> {
-        const carriages = store.carriages();
-        const seatScopes: Record<string, { from: number; to: number }> = {};
-
-        let fromSeat = 1;
-        carriages.forEach((carriage) => {
-          const toSeat = fromSeat + carriage.seats.length - 1;
-          seatScopes[carriage.code] = { from: fromSeat, to: toSeat };
-          fromSeat = toSeat + 1;
-        });
-
-        return seatScopes;
-      },
-
       initOccupiedSeats(occupiedSeats: number[]) {
         const tripCarriages = store.carriages();
-        const seatScopes = this.getSeatScopes();
+        const seatScopes = store.seatScopes();
 
         const carriagesWithOccupiedSeats = tripCarriages.map((carriage) => {
           const { from, to } = seatScopes[carriage.code];

@@ -1,7 +1,7 @@
 import { Station } from '@admin/models/station.model';
 import { StationStore } from '@admin/store/stations/stations.store';
 import { computed, inject, Injectable, Signal } from '@angular/core';
-import { BookItem } from '@home/models/trip.models';
+import { BookItem, TripView } from '@home/models/trip.models';
 import { TripStore } from '@home/store/trip/trip.store';
 import { SeatState } from '@shared/models/enums/seat-state.enum';
 import { Segment } from '@shared/models/interfaces/ride.model';
@@ -11,7 +11,7 @@ import { extractRideSegments, getPriceMap } from '@shared/utils/ride.utils';
   providedIn: 'root',
 })
 export class TripService {
-  rideSegments: Segment[] = [];
+  private rideSegments: Segment[] = [];
 
   private fromStation: Station = {} as Station;
 
@@ -28,20 +28,35 @@ export class TripService {
     this.initEdgeStations(fromId, toId);
   }
 
-  getEdgeStationsInfo() {
-    const ride = this.tripStore.ride();
-    return {
-      rideId: ride.rideId,
-      from: this.fromStation,
-      to: this.toStation,
-      departure: this.rideSegments[0].time[0],
-      arrival: this.rideSegments.slice(-1)[0].time[1],
-    };
-  }
+  getTripView(): Signal<TripView> {
+    return computed(() => {
+      const ride = this.tripStore.ride();
+      const availableSeatsMap = this.tripStore.availableSeatsMap();
+      const carriagesByTypeMap = this.tripStore.carriagesByTypeMap();
 
-  getPriceMap(): Record<string, number> {
-    const segments = this.rideSegments;
-    return getPriceMap(segments);
+      const trainClasses = Object.entries(carriagesByTypeMap).map(
+        ([name, carriages]) => {
+          const price = this.priceMap[name];
+          const availableSeats = availableSeatsMap[name] ?? 0;
+
+          return {
+            name,
+            carriages,
+            price,
+            availableSeats,
+          };
+        },
+      );
+
+      return {
+        rideId: ride.rideId,
+        from: this.fromStation,
+        to: this.toStation,
+        departure: this.rideSegments[0].time[0],
+        arrival: this.rideSegments.slice(-1)[0].time[1],
+        trainClasses,
+      };
+    });
   }
 
   getBookItems(): Signal<BookItem[]> {
@@ -57,13 +72,17 @@ export class TripService {
           bookItems.push({
             carId: carriage.code,
             seatNumber: seat.number,
-            price: this.getPriceMap()[carriage.name],
+            price: this.priceMap[carriage.name],
           });
         });
       });
 
       return bookItems;
     });
+  }
+
+  get segments(): Segment[] {
+    return this.rideSegments;
   }
 
   private getOccupiedSeats(): number[] {
@@ -86,5 +105,9 @@ export class TripService {
     const stations = this.stationStore.stationsEntityMap();
     this.fromStation = stations[fromId];
     this.toStation = stations[toId];
+  }
+
+  private get priceMap(): Record<string, number> {
+    return getPriceMap(this.rideSegments);
   }
 }
