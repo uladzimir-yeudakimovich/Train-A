@@ -1,4 +1,6 @@
 import { Station } from '@admin/models/station.model';
+import { getDiffInMinutes } from '@home/components/route-modal/route-modal.utils';
+import { RouteStop } from '@home/models/trip.models';
 import { EntityMap } from '@ngrx/signals/entities';
 import { SeatState } from '@shared/models/enums/seat-state.enum';
 import { Carriage } from '@shared/models/interfaces/carriage.model';
@@ -278,4 +280,32 @@ export function transformOrderToView(
     seatNumber,
     price,
   };
+}
+
+/*
+ * Returns a list of route stops with arrival, departure and dwell time.
+ *
+ * @param {Station[]} stations - The list of stations of the trip.
+ * @param {Segment[]} segments - The list of segments of the trip.
+ * @returns {RouteStop[]} - The list of route stops with arrival, departure and dwell time.
+ */
+export function getRouteStops(
+  stations: Station[],
+  segments: Segment[],
+): RouteStop[] {
+  const routeStops: RouteStop[] = [];
+  stations.forEach((station, idx) => {
+    const arrival = idx > 0 ? segments[idx - 1].time[1] : '';
+    const departure = idx < segments.length ? segments[idx].time[0] : '';
+    const dwellTime = getDiffInMinutes(arrival, departure);
+
+    routeStops.push({
+      station,
+      arrival,
+      departure,
+      dwellTime,
+    });
+  });
+
+  return routeStops;
 }

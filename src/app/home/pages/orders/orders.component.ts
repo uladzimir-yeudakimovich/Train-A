@@ -1,7 +1,6 @@
 import {
   AfterViewInit,
   Component,
-  effect,
   OnInit,
   signal,
   ViewChild,
@@ -29,22 +28,19 @@ export class OrdersComponent implements OnInit, AfterViewInit {
 
   @ViewChild(MatSort) sort!: MatSort;
 
-  constructor(private orderService: OrderService) {
-    effect(() => {
-      const orderViews = this.orderService.orderViews();
-      this.dataSource.data = orderViews;
+  constructor(private orderService: OrderService) {}
+
+  ngOnInit() {
+    this.orderService.initStore().then(() => {
+      this.isLoading.set(false);
     });
   }
 
-  // TODO: async hooks
-  async ngOnInit() {
-    await this.orderService.initStore();
-    this.isLoading.set(false);
-  }
-
-  async ngAfterViewInit() {
-    await this.orderService.initStore(); // sort is undefined without it
-    this.dataSource.sort = this.sort;
+  ngAfterViewInit() {
+    this.orderService.initStore().then(() => {
+      this.dataSource.data = this.orderService.orderViews();
+      this.dataSource.sort = this.sort;
+    });
   }
 
   onCancelOrder(orderId: number) {
