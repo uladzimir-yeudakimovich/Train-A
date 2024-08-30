@@ -14,7 +14,6 @@ export const SearchStore = signalStore(
     async searchRoutes(searchRoutesParams: SearchRoutesParams) {
       const response =
         await searchService.getAvailableRoutes(searchRoutesParams);
-      console.log('response', response);
 
       patchState(store, setAllEntities(response, searchConfig));
     },

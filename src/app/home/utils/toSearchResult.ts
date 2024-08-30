@@ -46,6 +46,10 @@ const getRideRoute = (path: number[], rides: SearchRide[]): RideStation[] => {
         const [startTime] = rides[index].time;
         rideStation.startTime = endTime;
         rideStation.endTime = startTime;
+        rideStation.timeSpan = getRideTime(
+          rideStation.startTime,
+          rideStation.endTime,
+        );
       }
     }
 

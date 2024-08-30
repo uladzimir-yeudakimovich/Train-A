@@ -2,6 +2,7 @@ import { CurrencyPipe, DatePipe } from '@angular/common';
 import {
   MatCard,
   MatCardContent,
+  MatCardImage,
   MatCardSubtitle,
   MatCardTitle,
 } from '@angular/material/card';
@@ -12,6 +13,7 @@ import { ToTimePipe } from '@home/pipes/toTime.pipe';
 export const searchCardsImports = [
   MatCard,
   MatCardContent,
+  MatCardImage,
   MatCardTitle,
   MatCardSubtitle,
   MatIcon,

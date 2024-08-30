@@ -2,6 +2,7 @@ export interface RideStation {
   stationId: number;
   startTime?: Date;
   endTime?: Date;
+  timeSpan?: number;
 }
 
 export interface RidePoint {

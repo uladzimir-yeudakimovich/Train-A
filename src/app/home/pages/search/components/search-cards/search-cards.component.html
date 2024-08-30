@@ -47,23 +47,17 @@
             <div class="card-price__carriage">
               <mat-card-subtitle>
                 Carriage type
-                @if (price[0].endsWith("1")) {
-                  1st
-                }
-                @if (price[0].endsWith("2")) {
-                  2nd
-                }
-                @if (price[0].endsWith("3")) {
-                  3rd
-                }
-                class
+                {{ price[0] }}
+              </mat-card-subtitle>
+
+              <mat-card-subtitle>
+                Carriage type
+                {{ price[0] }}
               </mat-card-subtitle>
 
               <mat-card-title>
-                {{
-                  price[1] | currency: "USD" : "symbol" : "1.0-0"
-                }}</mat-card-title
-              >
+                {{ price[1] | currency: "USD" : "symbol" : "1.0-0" }}
+              </mat-card-title>
             </div>
           </li>
         }
@@ -71,5 +65,16 @@
     </mat-card-content>
   </mat-card>
 } @empty {
-  <div>empty</div>
+  <mat-card class="card-empty">
+    <img mat-card-image src="noresults.jpg" alt="no results" />
+    <mat-card-content>
+      <mat-card-title class="card-empty__title">
+        No direct trains found
+      </mat-card-title>
+      <mat-card-subtitle class="card-empty__subtitle">
+        No seats on direct trains are available right now, but there's always
+        hope. Try again later on travel with a transfer.
+      </mat-card-subtitle>
+    </mat-card-content>
+  </mat-card>
 }
