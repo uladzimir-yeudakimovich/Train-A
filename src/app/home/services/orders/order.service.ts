@@ -1,4 +1,5 @@
 import { StationStore } from '@admin/store/stations/stations.store';
+import { HttpErrorResponse } from '@angular/common/http';
 import { computed, inject, Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -62,8 +63,8 @@ export class OrderService {
           this.snackBar.open('Order has been successfully canceled.', 'Close', {
             duration: 5000,
           });
-          // eslint-disable-next-line
-        } catch (error: any) {
+        } catch (e) {
+          const error = e as HttpErrorResponse;
           if (error.status === 400 && error.error && error.error.message) {
             this.snackBar.open(error.error.message, 'Close', {
               duration: 5000,

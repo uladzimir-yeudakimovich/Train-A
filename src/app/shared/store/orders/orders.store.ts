@@ -1,5 +1,5 @@
-import { AdminService } from '@admin/services/admin/admin.service';
 import { inject } from '@angular/core';
+import { SearchService } from '@home/services/search/search.service';
 import { patchState, signalStore, withMethods } from '@ngrx/signals';
 import {
   setAllEntities,
@@ -15,7 +15,7 @@ export const OrderStore = signalStore(
 
   withEntities(orderConfig),
 
-  withMethods((store, adminService = inject(AdminService)) => ({
+  withMethods((store, searchService = inject(SearchService)) => ({
     async getOrders() {
       if (!store.ordersEntities().length) {
         this.loadActualOrders();
@@ -28,13 +28,13 @@ export const OrderStore = signalStore(
       stationStart: number,
       stationEnd: number,
     ) {
-      await adminService.postOrder(rideId, seat, stationStart, stationEnd);
+      await searchService.postOrder(rideId, seat, stationStart, stationEnd);
       await this.loadActualOrders();
     },
 
     async cancelOrder(orderId: number) {
       const order = store.ordersEntityMap()[orderId];
-      await adminService.cancelOrder(orderId);
+      await searchService.cancelOrder(orderId);
       const cancelledOrder = { ...order, status: OrderStatus.Canceled };
       patchState(store, setEntity(cancelledOrder, orderConfig));
     },
@@ -49,7 +49,7 @@ export const OrderStore = signalStore(
     },
 
     async loadActualOrders() {
-      const orders = await adminService.loadOrders();
+      const orders = await searchService.loadOrders();
       patchState(store, setAllEntities(orders, orderConfig));
     },
   })),
