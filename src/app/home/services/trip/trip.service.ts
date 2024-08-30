@@ -1,11 +1,16 @@
 import { Station } from '@admin/models/station.model';
 import { StationStore } from '@admin/store/stations/stations.store';
 import { computed, inject, Injectable, Signal } from '@angular/core';
-import { BookItem, TripView } from '@home/models/trip.models';
+import { BookItem, TrainClass, TripView } from '@home/models/trip.models';
 import { TripStore } from '@home/store/trip/trip.store';
 import { SeatState } from '@shared/models/enums/seat-state.enum';
 import { Segment } from '@shared/models/interfaces/ride.model';
-import { extractRideSegments, getPriceMap } from '@shared/utils/ride.utils';
+import { OrderStore } from '@shared/store/orders/orders.store';
+import {
+  convertCarIndexWithSeatNumberToSeatIndex,
+  extractRideSegments,
+  getPriceMap,
+} from '@shared/utils/ride.utils';
 
 @Injectable({
   providedIn: 'root',
@@ -21,8 +26,11 @@ export class TripService {
 
   private stationStore = inject(StationStore);
 
+  private orderStore = inject(OrderStore);
+
   async initStore(rideId: number, fromId: number, toId: number) {
     await this.tripStore.initStore(rideId);
+    await this.orderStore.getOrders();
     this.initRideSegments(fromId, toId);
     this.tripStore.initOccupiedSeats(this.getOccupiedSeats());
     this.initEdgeStations(fromId, toId);
@@ -31,29 +39,15 @@ export class TripService {
   getTripView(): Signal<TripView> {
     return computed(() => {
       const ride = this.tripStore.ride();
-      const availableSeatsMap = this.tripStore.availableSeatsMap();
-      const carriagesByTypeMap = this.tripStore.carriagesByTypeMap();
-
-      const trainClasses = Object.entries(carriagesByTypeMap).map(
-        ([name, carriages]) => {
-          const price = this.priceMap[name];
-          const availableSeats = availableSeatsMap[name] ?? 0;
-
-          return {
-            name,
-            carriages,
-            price,
-            availableSeats,
-          };
-        },
-      );
+      const trainClasses = this.getTrainClasses();
+      const lastSegment = this.rideSegments.slice(-1)[0];
 
       return {
         rideId: ride.rideId,
         from: this.fromStation,
         to: this.toStation,
         departure: this.rideSegments[0].time[0],
-        arrival: this.rideSegments.slice(-1)[0].time[1],
+        arrival: lastSegment.time[1],
         trainClasses,
       };
     });
@@ -81,8 +75,45 @@ export class TripService {
     });
   }
 
+  createOrder(bookItems: BookItem[]) {
+    const tripView = this.getTripView()();
+    const { rideId } = tripView;
+    const stationStart = tripView.from.id;
+    const stationEnd = tripView.to.id;
+    const carriages = this.tripStore.carriages();
+
+    bookItems.forEach((bookItem) => {
+      const { seatNumber, carId } = bookItem;
+      const carIndex = carriages.findIndex((c) => c.code === carId);
+      const seatIdx = convertCarIndexWithSeatNumberToSeatIndex(
+        carriages,
+        carIndex,
+        seatNumber,
+      );
+      this.orderStore.createOrder(rideId, seatIdx, stationStart, stationEnd);
+    });
+    this.tripStore.selectedToReserved();
+  }
+
   get segments(): Segment[] {
     return this.rideSegments;
+  }
+
+  private getTrainClasses(): TrainClass[] {
+    const carriagesByTypeMap = this.tripStore.carriagesByTypeMap();
+    const availableSeatsMap = this.tripStore.availableSeatsMap();
+
+    return Object.entries(carriagesByTypeMap).map(([name, carriages]) => {
+      const price = this.priceMap[name];
+      const availableSeats = availableSeatsMap[name];
+
+      return {
+        name,
+        carriages,
+        price,
+        availableSeats,
+      };
+    });
   }
 
   private getOccupiedSeats(): number[] {

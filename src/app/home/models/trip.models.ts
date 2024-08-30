@@ -9,13 +9,15 @@ export interface TripInfo {
   arrival: string;
 }
 
+export interface TrainClass {
+  name: string;
+  carriages: Carriage[];
+  price: number;
+  availableSeats: number;
+}
+
 export interface TripView extends TripInfo {
-  trainClasses: {
-    name: string;
-    carriages: Carriage[];
-    price: number;
-    availableSeats: number;
-  }[];
+  trainClasses: TrainClass[];
 }
 
 export interface BookItem {

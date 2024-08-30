@@ -4,6 +4,7 @@
     <div class="label">Loading the trip</div>
   </div>
 } @else {
+  @let trip = tripView();
   <div class="head">
     <div class="head-back">
       <button mat-icon-button (click)="onBack()">
@@ -12,10 +13,10 @@
     </div>
     <div class="head-info">
       <div class="head-stations">
-        <p>{{ tripView().from.city }} - {{ tripView().to.city }}</p>
+        <p>{{ trip.from.city }} - {{ trip.to.city }}</p>
         <p>
-          {{ tripView().departure | date: "MMMM d, HH:mm" }} -
-          {{ tripView().arrival | date: "MMMM d, HH:mm" }}
+          {{ trip.departure | date: "MMMM d, HH:mm" }} -
+          {{ trip.arrival | date: "MMMM d, HH:mm" }}
         </p>
       </div>
       <p>
@@ -34,7 +35,7 @@
         mat-stretch-tabs="false"
         mat-align-tabs="start"
       >
-        @for (trainClass of tripView().trainClasses; track $index) {
+        @for (trainClass of trip.trainClasses; track $index) {
 
           <mat-tab>
             <ng-template mat-tab-label>

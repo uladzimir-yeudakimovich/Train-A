@@ -115,6 +115,12 @@ export function getAvailableSeatsNumberMap(
   return availableSeatsMap;
 }
 
+/*
+ * Returns a map of carriage codes and their seat scopes (indexes of seats).
+ *
+ * @param {Carriage[]} carriages - The list of carriages to calculate the seat scopes for.
+ * @returns {Record<string, { from: number; to: number }>} - carriage codes and their seat scopes.
+ */
 export function getSeatScopes(
   carriages: Carriage[],
 ): Record<string, { from: number; to: number }> {
@@ -128,4 +134,30 @@ export function getSeatScopes(
   });
 
   return seatScopes;
+}
+
+export function convertSeatIndexToCarIndexWithSitNumber(
+  carriages: Carriage[],
+  seatIdx: number,
+): { carIdx: number; seatNumber: number } {
+  const seatScopes = getSeatScopes(carriages);
+  const carCode = Object.keys(seatScopes).find((code) => {
+    const { from, to } = seatScopes[code];
+    return seatIdx >= from && seatIdx <= to;
+  })!;
+  const { from } = seatScopes[carCode];
+  const seatNumber = seatIdx - from + 1;
+  const carIdx = carriages.findIndex((c) => c.code === carCode);
+  return { carIdx, seatNumber };
+}
+
+export function convertCarIndexWithSeatNumberToSeatIndex(
+  carriages: Carriage[],
+  carIdx: number,
+  seatNumber: number,
+): number {
+  const carCode = carriages[carIdx].code;
+  const seatScopes = getSeatScopes(carriages);
+  const seatIdx = seatScopes[carCode].from + seatNumber - 1;
+  return seatIdx;
 }
