@@ -9,10 +9,17 @@ import {
   MatDialogTitle,
 } from '@angular/material/dialog';
 
+interface DialogData {
+  title?: string;
+  message?: string;
+  confirmText?: string;
+  cancelText?: string;
+}
+
 @Component({
-  selector: 'app-deletedialog',
-  templateUrl: './delete-dialog.component.html',
-  styleUrl: './delete-dialog.component.scss',
+  selector: 'app-confirmation-dialog',
+  templateUrl: './confirmation-dialog.component.html',
+  styleUrl: './confirmation-dialog.component.scss',
   standalone: true,
   imports: [
     MatButtonModule,
@@ -23,11 +30,10 @@ import {
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DeleteDialogComponent {
-  readonly dialogRef = inject(MatDialogRef<DeleteDialogComponent>);
+export class ConfirmationDialogComponent {
+  data = inject<DialogData>(MAT_DIALOG_DATA);
 
-  // TODO: interface for date
-  data = inject<{ title?: string; message?: string } | null>(MAT_DIALOG_DATA);
+  readonly dialogRef = inject(MatDialogRef<ConfirmationDialogComponent>);
 
   onNoClick(): void {
     this.dialogRef.close(false);

@@ -1,4 +1,3 @@
-import { DeleteDialogComponent } from '@admin/components/delete-dialog/delete-dialog.component';
 import { RailRoute } from '@admin/models/route.model';
 import { RouteManagementService } from '@admin/services/route-management/route-management.service';
 import { RouteStore } from '@admin/store/routes/routes.store';
@@ -13,6 +12,7 @@ import {
 } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
+import { ConfirmationDialogComponent } from '@shared/components/delete-dialog/confirmation-dialog.component';
 
 import { routeCardImports } from './route-card.config';
 
@@ -49,7 +49,7 @@ export class RouteCardComponent implements OnInit {
   }
 
   openDialog() {
-    const dialogRef = this.dialog.open(DeleteDialogComponent, {
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
       data: {
         title: `Delete Route ${this.route().id}`,
         message: 'Are you sure you want to delete this route?',

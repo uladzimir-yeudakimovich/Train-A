@@ -1,9 +1,9 @@
-import { DeleteDialogComponent } from '@admin/components/delete-dialog/delete-dialog.component';
 import { StationStore } from '@admin/store/stations/stations.store';
 import { computed, inject, Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AdminRoleGuard } from '@core/guards/admin.guard';
+import { ConfirmationDialogComponent } from '@shared/components/delete-dialog/confirmation-dialog.component';
 import { Order, OrderView } from '@shared/models/interfaces/order.model';
 import { Segment } from '@shared/models/interfaces/ride.model';
 import { CarriageStore } from '@shared/store/carriages/carriages.store';
@@ -49,7 +49,7 @@ export class OrderService {
       title = `Cancel ${user.email}'s Order ${orderId}`;
     }
 
-    const dialogRef = this.dialog.open(DeleteDialogComponent, {
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
       data: {
         title,
         message: 'Are you sure you want to cancel this order?',
