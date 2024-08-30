@@ -37,5 +37,5 @@ export interface RouteInformation {
   routeId: number;
   carriages: string[];
   stations: string[];
-  schedule: Ride[];
+  schedule: RideUI[];
 }

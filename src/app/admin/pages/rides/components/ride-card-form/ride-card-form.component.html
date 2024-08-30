@@ -25,6 +25,13 @@
                     onDepartureDateChange(segmentIndex, departureDate.value)
                   "
                 />
+                <input
+                  type="time"
+                  #departureTime
+                  (change)="
+                    onDepartureTimeChange(segmentIndex, departureTime.value)
+                  "
+                />
               </div>
               <div>
                 Arrival:
@@ -33,6 +40,13 @@
                   #arrivalDate
                   (change)="
                     onArrivalDateChange(segmentIndex, arrivalDate.value)
+                  "
+                />
+                <input
+                  type="time"
+                  #arrivalTime
+                  (change)="
+                    onArrivalTimeChange(segmentIndex, arrivalTime.value)
                   "
                 />
               </div>
@@ -66,7 +80,7 @@
       </button>
       <button
         mat-flat-button
-        [disabled]="!areAllInputsFilled()"
+        [disabled]="!areAllFieldsFilled()"
         (click)="onCreateButtonClick()"
       >
         Create

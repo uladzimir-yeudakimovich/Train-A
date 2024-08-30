@@ -1,4 +1,4 @@
-import { Segment } from '@admin/models/rides.model';
+import { SegmentUI } from '@admin/models/rides.model';
 import { RidesStore } from '@admin/store/rides/ride.store';
 import { DatePipe } from '@angular/common';
 import { Component, computed, inject, input, signal } from '@angular/core';
@@ -19,7 +19,7 @@ export class RideCardComponent {
 
   stations = input.required<string[]>();
 
-  segments = input.required<Segment[]>();
+  segments = input.required<SegmentUI[]>();
 
   prices = computed(() => {
     return this.segments().map((segment) =>
@@ -41,11 +41,19 @@ export class RideCardComponent {
   }
 
   onDepartureDateInput(segmentIndex: number, value: string): void {
-    this.segments()[segmentIndex].time[0] = value;
+    this.segments()[segmentIndex].time.departure.date = value;
+  }
+
+  onDepartureTimeInput(segmentIndex: number, value: string): void {
+    this.segments()[segmentIndex].time.departure.time = value;
   }
 
   onArrivalDateInput(segmentIndex: number, value: string): void {
-    this.segments()[segmentIndex].time[1] = value;
+    this.segments()[segmentIndex].time.arrival.date = value;
+  }
+
+  onArrivalTimeInput(segmentIndex: number, value: string): void {
+    this.segments()[segmentIndex].time.arrival.time = value;
   }
 
   onPriceInput(

@@ -1,8 +1,9 @@
 import {
   RideRoute,
   RouteInformation,
-  Segment,
+  SegmentUI,
 } from '@admin/models/rides.model';
+import { mapRidesToUI, mapSegmentsToBE } from '@admin/utils/mapRides';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { catchError, Observable, of, switchMap, throwError } from 'rxjs';
@@ -25,30 +26,39 @@ export class RidesManagementService {
 
         const stations = this.routeService.getStationCities(response.path);
 
+        const schedule = mapRidesToUI(response.schedule);
+
         return of({
           routeId: response.id,
           carriages,
           stations,
-          schedule: response.schedule,
+          schedule,
         });
       }),
       catchError((err) => throwError(() => err.error)),
     );
   }
 
-  createRide(routeId: number, segments: Segment[]): Observable<{ id: number }> {
+  createRide(
+    routeId: number,
+    segments: SegmentUI[],
+  ): Observable<{ id: number }> {
+    const s = mapSegmentsToBE(segments);
+
     return this.http
-      .post<{ id: number }>(`route/${routeId}/ride`, { segments })
+      .post<{ id: number }>(`route/${routeId}/ride`, { segments: s })
       .pipe(catchError((err) => throwError(() => err.error)));
   }
 
   updateRide(
     routeId: number,
     rideId: number,
-    segments: Segment[],
+    segments: SegmentUI[],
   ): Observable<object> {
+    const s = mapSegmentsToBE(segments);
+
     return this.http
-      .put(`route/${routeId}/ride/${rideId}`, { segments })
+      .put(`route/${routeId}/ride/${rideId}`, { segments: s })
       .pipe(catchError((err) => throwError(() => err.error)));
   }
 }

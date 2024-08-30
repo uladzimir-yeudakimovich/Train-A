@@ -17,14 +17,27 @@
 
               <div>
                 @if (!edit.departure) {
-                  {{ segment.time[0] | date: "yyyy-MM-dd hh-mm a" }}
+                  {{ segment.time.departure.date }}
+                  {{
+                    segment.time.departure.date +
+                      "T" +
+                      segment.time.departure.time | date: "hh:mm a"
+                  }}
                 } @else {
                   <input
                     type="date"
-                    [value]="segment.time[0].split('T')[0]"
+                    [value]="segment.time.departure.date"
                     #departureDate
                     (input)="
                       onDepartureDateInput(segmentIndex, departureDate.value)
+                    "
+                  />
+                  <input
+                    type="time"
+                    [value]="segment.time.departure.time"
+                    #departureTime
+                    (input)="
+                      onDepartureTimeInput(segmentIndex, departureTime.value)
                     "
                   />
                 }
@@ -47,14 +60,26 @@
 
               <div>
                 @if (!edit.arrival) {
-                  {{ segment.time[1] | date: "yyyy-MM-dd hh-mm a" }}
+                  {{ segment.time.arrival.date }}
+                  {{
+                    segment.time.arrival.date + "T" + segment.time.arrival.time
+                      | date: "hh:mm a"
+                  }}
                 } @else {
                   <input
                     type="date"
-                    [value]="segment.time[1]"
+                    [value]="segment.time.arrival.date"
                     #arrivalDate
                     (input)="
                       onArrivalDateInput(segmentIndex, arrivalDate.value)
+                    "
+                  />
+                  <input
+                    type="time"
+                    [value]="segment.time.arrival.time"
+                    #arrivalTime
+                    (input)="
+                      onArrivalTimeInput(segmentIndex, arrivalTime.value)
                     "
                   />
                 }

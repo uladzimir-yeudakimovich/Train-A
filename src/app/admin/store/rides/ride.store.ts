@@ -1,4 +1,4 @@
-import { RouteInformation, Segment } from '@admin/models/rides.model';
+import { RouteInformation, SegmentUI } from '@admin/models/rides.model';
 import { RidesManagementService } from '@admin/services/rides-management/rides-management.service';
 import { inject } from '@angular/core';
 import { patchState, signalStore, withMethods, withState } from '@ngrx/signals';
@@ -53,7 +53,7 @@ export const RidesStore = signalStore(
           });
       }
     },
-    createRide(routeId: number, segments: Segment[]) {
+    createRide(routeId: number, segments: SegmentUI[]) {
       patchState(store, { loading: true });
 
       ridesService.createRide(routeId, segments).subscribe({
