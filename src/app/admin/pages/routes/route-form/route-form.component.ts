@@ -160,21 +160,8 @@ export class RouteFormComponent implements OnInit {
       : '';
   }
 
-  canSubmit(): boolean {
-    if (!this.route()) {
-      return this.routeForm.valid;
-    }
-    // update form: can sumbit if form is valid and there are changes
-    // TODO: refactor
-    const route = this.route()!;
-    this.stations.enable();
-    const { path, carriages } = this.getFormRoute();
-    this.enableLastTwoStations();
-
-    const hasChangedFields =
-      path!.join() !== route.path.join() ||
-      carriages!.join() !== route.carriages.join();
-    return this.routeForm.valid && hasChangedFields;
+  isSaveeDisabled(): boolean {
+    return this.routeForm.pristine || !this.routeForm.valid;
   }
 
   get stations() {
@@ -195,7 +182,6 @@ export class RouteFormComponent implements OnInit {
   private initRouteForm() {
     const route = this.route();
     if (route) {
-      // TODO: use patch
       route.path.forEach((stationId) => {
         this.stations.push(this.formBuilder.control(stationId));
       });

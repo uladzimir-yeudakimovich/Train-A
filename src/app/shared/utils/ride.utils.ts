@@ -207,6 +207,14 @@ export function calculateTripPrice(
   }, 0);
 }
 
+/*
+ * Returns the car type, car number and seat number by the seat index.
+ *
+ * @param {Order} order - The order object.
+ * @param {Carriage[]} carriages - The list of carriage types.
+ * @returns {{ carType: string; carNumber: number; seatNumber: number }}
+ *  - The car type (Carriage.name), carNumber (index + 1), seatNumber (relative to the car).
+ */
 export function getCarInfo(
   order: Order,
   carriages: Carriage[],
@@ -231,6 +239,14 @@ export function getCarInfo(
   return { carType: '', carNumber: 0, seatNumber: 0 };
 }
 
+/*
+ * Transforms the order object to the order view object.
+ *
+ * @param {EntityMap<Station>} stationsMap - The map of stations (from the StationStore).
+ * @param {Order} order - The order object to transform.
+ * @param {Carriage[]} carriages - The list of carriage types (from the CarriageStore).
+ * @returns {OrderView} - The order view object to display in the UI.
+ */
 export function transformOrderToView(
   stationsMap: EntityMap<Station>,
   order: Order,
