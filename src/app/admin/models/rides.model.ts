@@ -5,9 +5,28 @@ export interface Segment {
   price: Record<string, number>;
 }
 
+export interface SegmentUI {
+  time: {
+    departure: {
+      date: string;
+      time: string;
+    };
+    arrival: {
+      date: string;
+      time: string;
+    };
+  };
+  price: Record<string, number>;
+}
+
 export interface Ride {
   rideId: number;
   segments: Segment[];
+}
+
+export interface RideUI {
+  rideId: number;
+  segments: SegmentUI[];
 }
 
 export interface RideRoute extends RailRoute {
