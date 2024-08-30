@@ -57,7 +57,7 @@ export class RouteCardComponent implements OnInit {
     });
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
-        this.onDeleteClick();
+        this.routeStore.deleteRoute(this.route().id);
       }
     });
   }
@@ -73,7 +73,23 @@ export class RouteCardComponent implements OnInit {
     this.displayUpdateForm.update((value) => !value);
   }
 
-  private onDeleteClick() {
-    this.routeStore.deleteRoute(this.route().id);
+  get toolbarButtons() {
+    return [
+      {
+        label: 'Update',
+        icon: 'edit_square',
+        click: () => this.toggleUpdateForm(),
+      },
+      {
+        label: 'Assign ride',
+        icon: 'train',
+        click: () => this.onAssignRideClick(),
+      },
+      {
+        label: '',
+        icon: 'delete',
+        click: () => this.openDialog(),
+      },
+    ];
   }
 }

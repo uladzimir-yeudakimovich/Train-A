@@ -3,32 +3,20 @@
     <span class="route-name">Route {{ route().id }}</span>
     <span class="toolbar-spacer"></span>
     @if (!displayUpdateForm()) {
-      <!-- TODO: refactor - use @for? -->
-      <button
-        mat-raised-button
-        class="toolbar-button"
-        (click)="toggleUpdateForm()"
-      >
-        <mat-icon id="update" aria-hidden="false" aria-label="Update route"
-          >edit_square</mat-icon
+      @for(button of toolbarButtons; track $index) {
+        <button
+          mat-raised-button
+          class="toolbar-button"
+          (click)="button.click()"
         >
-        <label for="edit">Update</label>
-      </button>
-      <button
-        mat-raised-button
-        class="toolbar-button"
-        (click)="onAssignRideClick()"
-      >
-        <mat-icon id="ride" aria-hidden="false" aria-label="Assign ride"
-          >train</mat-icon
-        >
-        <label for="ride">Assign ride</label>
-      </button>
-      <button mat-raised-button class="toolbar-button" (click)="openDialog()">
-        <mat-icon aria-hidden="false" aria-label="Delete route"
-          >delete</mat-icon
-        >
-      </button>
+          <mat-icon
+            [id]="button.icon"
+            aria-hidden="false"
+            >{{ button.icon }}</mat-icon
+          >
+          <label [for]="button.icon">{{ button.label }}</label>
+        </button>
+      }
     }
   </mat-toolbar-row>
 </mat-toolbar>
