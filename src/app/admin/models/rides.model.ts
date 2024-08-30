@@ -5,18 +5,18 @@ export interface Segment {
   price: Record<string, number>;
 }
 
-export interface Schedule {
+export interface Ride {
   rideId: number;
   segments: Segment[];
 }
 
 export interface RideRoute extends RailRoute {
-  schedule: Schedule[];
+  schedule: Ride[];
 }
 
 export interface RouteInformation {
   routeId: number;
   carriages: string[];
   stations: string[];
-  schedule: Schedule[];
+  schedule: Ride[];
 }
