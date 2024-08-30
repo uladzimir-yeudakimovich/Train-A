@@ -148,7 +148,6 @@ export class TripComponent implements OnInit {
     ];
   }
 
-  // TODO: computed?
   typesWithCarriages(): { key: string; value: Carriage[] }[] {
     const groupedCarriages = this.tripStore.getGroupedCarriages();
     return recordToKeyValueList(groupedCarriages());

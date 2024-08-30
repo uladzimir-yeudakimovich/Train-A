@@ -1,5 +1,6 @@
+import { SeatState } from '@shared/models/enums/seat-state.enum';
 import { Carriage } from '@shared/models/interfaces/carriage.model';
-import { Segment } from '@shared/models/interfaces/ride.model';
+import { Ride, Segment } from '@shared/models/interfaces/ride.model';
 
 /*
  * Returns a map of carriage types and their total price for the given segments.
@@ -60,4 +61,56 @@ export function recordToKeyValueList<K extends string | number | symbol, V>(
     key: key as K,
     value: value as V,
   }));
+}
+
+/*
+ * Returns a list of segments between the given stations.
+ *
+ * @param {Ride} ride - The ride to extract segments from.
+ * @param {number} fromId - The id of the station to start from.
+ * @param {number} toId - The id of the station to end at.
+ * @returns {Segment[]} - The list of segments between the given stations.
+ */
+export function extractRideSegments(
+  ride: Ride,
+  fromId: number,
+  toId: number,
+): Segment[] {
+  const schedule: Segment[] = [];
+  const fromStationIdx = ride.path.indexOf(fromId);
+  const toStationIdx = ride.path.indexOf(toId);
+
+  if (fromStationIdx === -1 || toStationIdx === -1) {
+    return [];
+  }
+
+  for (let i = fromStationIdx; i < toStationIdx; i += 1) {
+    schedule.push(ride.schedule.segments[i]);
+  }
+  return schedule;
+}
+
+/*
+ * Returns a map of carriage types and their available seats number.
+ *
+ * @param {Carriage[]} carriages - The list of carriages to calculate the available seats for.
+ * @returns {Record<string, number>} - The map of carriage types and their available seats number.
+ */
+export function getAvailableSeatsNumberMap(
+  carriages: Carriage[],
+): Record<string, number> {
+  const groupedCarriages = getCarriageTypeMap(carriages);
+  const availableSeatsMap: Record<string, number> = {};
+
+  Object.entries(groupedCarriages).forEach(([type, typeCars]) => {
+    const availableSeatsInCarriage = typeCars.reduce((acc, carriage) => {
+      return (
+        acc +
+        carriage.seats.filter((s) => s.state !== SeatState.Reserved).length
+      );
+    }, 0);
+    availableSeatsMap[type] = availableSeatsInCarriage;
+  });
+
+  return availableSeatsMap;
 }

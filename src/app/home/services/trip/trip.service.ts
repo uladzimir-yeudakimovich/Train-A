@@ -5,7 +5,7 @@ import { BookItem } from '@home/models/trip.models';
 import { TripStore } from '@home/store/trip/trip.store';
 import { SeatState } from '@shared/models/enums/seat-state.enum';
 import { Segment } from '@shared/models/interfaces/ride.model';
-import { getPriceMap } from '@shared/utils/ride.utils';
+import { extractRideSegments, getPriceMap } from '@shared/utils/ride.utils';
 
 @Injectable({
   providedIn: 'root',
@@ -77,23 +77,9 @@ export class TripService {
     return Array.from(occupiedSeats.values());
   }
 
-  // TODO: refactor - move to util?
   private initRideSegments(fromId: number, toId: number) {
     const ride = this.tripStore.ride();
-
-    const schedule: Segment[] = [];
-    const fromStationIdx = ride.path.indexOf(fromId);
-    const toStationIdx = ride.path.indexOf(toId);
-
-    if (fromStationIdx === -1 || toStationIdx === -1) {
-      this.rideSegments = [];
-      return;
-    }
-
-    for (let i = fromStationIdx; i < toStationIdx; i += 1) {
-      schedule.push(ride.schedule.segments[i]);
-    }
-    this.rideSegments = schedule;
+    this.rideSegments = extractRideSegments(ride, fromId, toId);
   }
 
   private initEdgeStations(fromId: number, toId: number) {

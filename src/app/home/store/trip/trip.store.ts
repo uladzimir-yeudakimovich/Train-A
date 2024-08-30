@@ -6,7 +6,10 @@ import { Carriage } from '@shared/models/interfaces/carriage.model';
 import { CarriageStore } from '@shared/store/carriages/carriages.store';
 import { RideStore } from '@shared/store/ride/ride.store';
 import { getSeats } from '@shared/utils/carriage.utils';
-import { getCarriageTypeMap } from '@shared/utils/ride.utils';
+import {
+  getAvailableSeatsNumberMap,
+  getCarriageTypeMap,
+} from '@shared/utils/ride.utils';
 
 import { initState } from './trip.config';
 
@@ -71,24 +74,8 @@ export const TripStore = signalStore(
 
       getAvailableSeatsMap(): Signal<Record<string, number>> {
         return computed(() => {
-          const groupedCarriages = this.getGroupedCarriages();
-          const availableSeats: Record<string, number> = {};
-
-          Object.entries(groupedCarriages()).forEach(([type, carriages]) => {
-            const availableSeatsInCarriage = carriages.reduce(
-              (acc, carriage) => {
-                return (
-                  acc +
-                  carriage.seats.filter((s) => s.state !== SeatState.Reserved)
-                    .length
-                );
-              },
-              0,
-            );
-            availableSeats[type] = availableSeatsInCarriage;
-          });
-
-          return availableSeats;
+          const carriages = store.carriages();
+          return getAvailableSeatsNumberMap(carriages);
         });
       },
 
