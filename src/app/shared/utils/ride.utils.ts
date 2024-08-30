@@ -1,6 +1,9 @@
+import { Station } from '@admin/models/station.model';
+import { EntityMap } from '@ngrx/signals/entities';
 import { SeatState } from '@shared/models/enums/seat-state.enum';
 import { Carriage } from '@shared/models/interfaces/carriage.model';
-import { Ride, Segment } from '@shared/models/interfaces/ride.model';
+import { Order } from '@shared/models/interfaces/order.model';
+import { Segment } from '@shared/models/interfaces/ride.model';
 
 /*
  * Returns a map of carriage types and their total price for the given segments.
@@ -9,7 +12,9 @@ import { Ride, Segment } from '@shared/models/interfaces/ride.model';
  * @param {Segment[]} segments - The list of segments to calculate the price for.
  * @returns {Record<string, number>} - The map of carriage types and their total price.
  */
-export function getPriceMap(segments: Segment[]): Record<string, number> {
+export function calculateTotalPriceByCarriageType(
+  segments: Segment[],
+): Record<string, number> {
   const priceMap: Record<string, number> = {};
 
   if (segments.length === 0) {
@@ -35,7 +40,7 @@ export function getPriceMap(segments: Segment[]): Record<string, number> {
  * @param {Carriage[]} carriages - The list of carriages to group by type.
  * @returns {Record<string, Carriage[]>} - The map of carriage types and their carriages.
  */
-export function getCarriageTypeMap(
+export function groupCarriagesByType(
   carriages: Carriage[],
 ): Record<string, Carriage[]> {
   const typesWithCars: Record<string, Carriage[]> = {};
@@ -54,9 +59,10 @@ export function getCarriageTypeMap(
   return typesWithCars;
 }
 
-export function recordToKeyValueList<K extends string | number | symbol, V>(
-  record: Record<K, V>,
-): { key: K; value: V }[] {
+export function convertRecordToKeyValueList<
+  K extends string | number | symbol,
+  V,
+>(record: Record<K, V>): { key: K; value: V }[] {
   return Object.entries(record).map(([key, value]) => ({
     key: key as K,
     value: value as V,
@@ -66,13 +72,13 @@ export function recordToKeyValueList<K extends string | number | symbol, V>(
 /*
  * Returns a list of segments between the given stations.
  *
- * @param {Ride} ride - The ride to extract segments from.
+ * @param {path, schedule} ride - The ride with path and schedule.
  * @param {number} fromId - The id of the station to start from.
  * @param {number} toId - The id of the station to end at.
  * @returns {Segment[]} - The list of segments between the given stations.
  */
-export function extractRideSegments(
-  ride: Ride,
+export function getRideSegments(
+  ride: { path: number[]; schedule: { segments: Segment[] } },
   fromId: number,
   toId: number,
 ): Segment[] {
@@ -96,10 +102,10 @@ export function extractRideSegments(
  * @param {Carriage[]} carriages - The list of carriages to calculate the available seats for.
  * @returns {Record<string, number>} - The map of carriage types and their available seats number.
  */
-export function getAvailableSeatsNumberMap(
+export function calculateAvailableSeatsByCarriageType(
   carriages: Carriage[],
 ): Record<string, number> {
-  const groupedCarriages = getCarriageTypeMap(carriages);
+  const groupedCarriages = groupCarriagesByType(carriages);
   const availableSeatsMap: Record<string, number> = {};
 
   Object.entries(groupedCarriages).forEach(([type, typeCars]) => {
@@ -116,48 +122,144 @@ export function getAvailableSeatsNumberMap(
 }
 
 /*
- * Returns a map of carriage codes and their seat scopes (indexes of seats).
+ * Returns a list of carriage seat numbers scopes.
  *
- * @param {Carriage[]} carriages - The list of carriages to calculate the seat scopes for.
- * @returns {Record<string, { from: number; to: number }>} - carriage codes and their seat scopes.
+ * @param {Carriage[]} carriages - The list of carriage objects.
+ * @param {string[]} trainCarriages - The list of carriage types in the train.
+ * If not provided, carriages will be used as a source.
+ * @returns {{ from: number; to: number }[]} - The list of carriage seat numbers scopes.
  */
 export function getSeatScopes(
   carriages: Carriage[],
-): Record<string, { from: number; to: number }> {
-  const seatScopes: Record<string, { from: number; to: number }> = {};
-
+  trainCarriages?: string[],
+): { from: number; to: number }[] {
+  const seatScopes: { from: number; to: number }[] = [];
   let fromSeat = 1;
-  carriages.forEach((carriage) => {
-    const toSeat = fromSeat + carriage.seats.length - 1;
-    seatScopes[carriage.code] = { from: fromSeat, to: toSeat };
-    fromSeat = toSeat + 1;
+
+  const tripCarriages = trainCarriages || carriages.map((c) => c.name);
+
+  tripCarriages.forEach((carType) => {
+    const carriage = carriages.find((c) => c.name === carType);
+    if (carriage) {
+      const toSeat = fromSeat + carriage.seats.length - 1;
+      seatScopes.push({ from: fromSeat, to: toSeat });
+      fromSeat = toSeat + 1;
+    }
   });
 
   return seatScopes;
 }
 
-export function convertSeatIndexToCarIndexWithSitNumber(
+/*
+ * Returns a car index and seat number by the seat index.
+ *
+ * @param {Carriage[]} carriages - The list of carriage objects.
+ * @param {number} seatIdx - The seat index (from API).
+ * @param {string[]} trainCarriages - The list of carriage types in the train.
+ * If not provided, carriages will be used as a source.
+ * @returns {{ carIdx: number; seatNumber: number }} - The car index and seat number.
+ */
+export function convertSeatIndexToCarInfo(
   carriages: Carriage[],
   seatIdx: number,
+  trainCarriages?: string[],
 ): { carIdx: number; seatNumber: number } {
-  const seatScopes = getSeatScopes(carriages);
-  const carCode = Object.keys(seatScopes).find((code) => {
-    const { from, to } = seatScopes[code];
-    return seatIdx >= from && seatIdx <= to;
-  })!;
-  const { from } = seatScopes[carCode];
+  const tripCarriages = trainCarriages || carriages.map((c) => c.name);
+
+  const seatScopes = getSeatScopes(carriages, tripCarriages);
+  let carIdx = 0;
+  while (seatIdx > seatScopes[carIdx].to) {
+    carIdx += 1;
+  }
+  const { from } = seatScopes[carIdx];
   const seatNumber = seatIdx - from + 1;
-  const carIdx = carriages.findIndex((c) => c.code === carCode);
   return { carIdx, seatNumber };
 }
 
-export function convertCarIndexWithSeatNumberToSeatIndex(
+export function convertCarInfoToSeatIndex(
   carriages: Carriage[],
   carIdx: number,
   seatNumber: number,
+  trainCarriages?: string[],
 ): number {
-  const carCode = carriages[carIdx].code;
-  const seatScopes = getSeatScopes(carriages);
-  const seatIdx = seatScopes[carCode].from + seatNumber - 1;
+  const tripCarriages = trainCarriages || carriages.map((c) => c.name);
+  const seatScopes = getSeatScopes(carriages, tripCarriages);
+  const seatIdx = seatScopes[carIdx].from + seatNumber - 1;
   return seatIdx;
+}
+
+export function calculateTripDuration(segments: Segment[]) {
+  const startTime = segments[0].time[0];
+  const endTime = segments[segments.length - 1].time[1];
+  const start = new Date(startTime);
+  const end = new Date(endTime);
+  const diff = end.getTime() - start.getTime();
+
+  return diff;
+}
+
+export function calculateTripPrice(
+  tripSegments: Segment[],
+  carType: string,
+): number {
+  return tripSegments.reduce((acc, segment) => {
+    return acc + segment.price[carType];
+  }, 0);
+}
+
+export function getCarInfo(
+  order: Order,
+  carriages: Carriage[],
+): {
+  carType: string;
+  carNumber: number;
+  seatNumber: number;
+} {
+  const seatNumber = order.seatId;
+  const seatScopes = getSeatScopes(carriages, order.carriages);
+
+  for (let i = 0; i < order.carriages.length; i += 1) {
+    const { from, to } = seatScopes[i];
+    if (seatNumber >= from && seatNumber <= to) {
+      return {
+        carType: order.carriages[i],
+        carNumber: i + 1,
+        seatNumber: seatNumber - from + 1,
+      };
+    }
+  }
+  return { carType: '', carNumber: 0, seatNumber: 0 };
+}
+
+export function transformOrderToView(
+  stationsMap: EntityMap<Station>,
+  order: Order,
+  carriages: Carriage[],
+) {
+  const tripSegments = getRideSegments(
+    order,
+    order.stationStart,
+    order.stationEnd,
+  );
+  const startStation = stationsMap[order.stationStart].city;
+  const startTime = tripSegments[0].time[0];
+  const endStation = stationsMap[order.stationEnd].city;
+  const endTime = tripSegments[tripSegments.length - 1].time[1];
+  const tripDuration = calculateTripDuration(tripSegments);
+  const { carType, carNumber, seatNumber } = getCarInfo(order, carriages);
+  const price = calculateTripPrice(tripSegments, carType);
+
+  return {
+    id: order.id,
+    status: order.status,
+    startStation,
+    startTime,
+    endStation,
+    endTime,
+    tripDuration,
+    carType,
+    carNumber,
+    seatNumber,
+    price,
+  };
 }

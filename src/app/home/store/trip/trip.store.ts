@@ -13,9 +13,9 @@ import { CarriageStore } from '@shared/store/carriages/carriages.store';
 import { RideStore } from '@shared/store/ride/ride.store';
 import { getSeats } from '@shared/utils/carriage.utils';
 import {
-  getAvailableSeatsNumberMap,
-  getCarriageTypeMap,
+  calculateAvailableSeatsByCarriageType,
   getSeatScopes,
+  groupCarriagesByType,
 } from '@shared/utils/ride.utils';
 
 import { initState } from './trip.config';
@@ -25,11 +25,13 @@ export const TripStore = signalStore(
   withState(initState),
 
   withComputed(({ carriages }) => ({
-    availableSeatsMap: computed(() => getAvailableSeatsNumberMap(carriages())),
+    availableSeatsMap: computed(() =>
+      calculateAvailableSeatsByCarriageType(carriages()),
+    ),
 
     seatScopes: computed(() => getSeatScopes(carriages())),
 
-    carriagesByTypeMap: computed(() => getCarriageTypeMap(carriages())),
+    carriagesByTypeMap: computed(() => groupCarriagesByType(carriages())),
   })),
 
   withMethods(
@@ -85,16 +87,18 @@ export const TripStore = signalStore(
         const tripCarriages = store.carriages();
         const seatScopes = store.seatScopes();
 
-        const carriagesWithOccupiedSeats = tripCarriages.map((carriage) => {
-          const { from, to } = seatScopes[carriage.code];
-          const occupiedSeatsInCarriage = occupiedSeats
-            .filter((s) => s >= from && s <= to)
-            .map((s) => s - from + 1);
-          return {
-            ...carriage,
-            seats: getSeats(carriage, occupiedSeatsInCarriage),
-          };
-        });
+        const carriagesWithOccupiedSeats = tripCarriages.map(
+          (carriage, idx) => {
+            const { from, to } = seatScopes[idx];
+            const occupiedSeatsInCarriage = occupiedSeats
+              .filter((s) => s >= from && s <= to)
+              .map((s) => s - from + 1);
+            return {
+              ...carriage,
+              seats: getSeats(carriage, occupiedSeatsInCarriage),
+            };
+          },
+        );
 
         patchState(store, { carriages: carriagesWithOccupiedSeats });
       },

@@ -7,9 +7,9 @@ import { SeatState } from '@shared/models/enums/seat-state.enum';
 import { Segment } from '@shared/models/interfaces/ride.model';
 import { OrderStore } from '@shared/store/orders/orders.store';
 import {
-  convertCarIndexWithSeatNumberToSeatIndex,
-  extractRideSegments,
-  getPriceMap,
+  calculateTotalPriceByCarriageType,
+  convertCarInfoToSeatIndex,
+  getRideSegments,
 } from '@shared/utils/ride.utils';
 
 @Injectable({
@@ -85,7 +85,7 @@ export class TripService {
     bookItems.forEach((bookItem) => {
       const { seatNumber, carId } = bookItem;
       const carIndex = carriages.findIndex((c) => c.code === carId);
-      const seatIdx = convertCarIndexWithSeatNumberToSeatIndex(
+      const seatIdx = convertCarInfoToSeatIndex(
         carriages,
         carIndex,
         seatNumber,
@@ -129,7 +129,7 @@ export class TripService {
 
   private initRideSegments(fromId: number, toId: number) {
     const ride = this.tripStore.ride();
-    this.rideSegments = extractRideSegments(ride, fromId, toId);
+    this.rideSegments = getRideSegments(ride, fromId, toId);
   }
 
   private initEdgeStations(fromId: number, toId: number) {
@@ -139,6 +139,6 @@ export class TripService {
   }
 
   private get priceMap(): Record<string, number> {
-    return getPriceMap(this.rideSegments);
+    return calculateTotalPriceByCarriageType(this.rideSegments);
   }
 }
