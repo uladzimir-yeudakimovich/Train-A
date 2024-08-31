@@ -58,23 +58,20 @@ export class OrderService {
     });
     dialogRef.afterClosed().subscribe(async (result) => {
       if (result) {
-        try {
-          await this.orderStore.cancelOrder(orderId);
-          this.snackBar.open('Order has been successfully canceled.', 'Close', {
-            duration: 5000,
+        await this.orderStore
+          .cancelOrder(orderId)
+          .then(() => {
+            this.snackBar.open(
+              'Order has been successfully canceled.',
+              'Close',
+              {
+                duration: 5000,
+              },
+            );
+          })
+          .catch((error) => {
+            this.errorSnackBar(error);
           });
-        } catch (e) {
-          const error = e as HttpErrorResponse;
-          if (error.status === 400 && error.error && error.error.message) {
-            this.snackBar.open(error.error.message, 'Close', {
-              duration: 5000,
-            });
-          } else {
-            this.snackBar.open('An unexpected error occurred.', 'Close', {
-              duration: 5000,
-            });
-          }
-        }
       }
     });
   }
@@ -89,6 +86,37 @@ export class OrderService {
       );
     } catch {
       return [];
+    }
+  }
+
+  private errorSnackBar(error: HttpErrorResponse) {
+    if (error.status === 400 && error.error.reason === 'orderNotFound') {
+      this.snackBar.open(
+        'Order is not found. Try to refresh the page.',
+        'Close',
+        {
+          duration: 5000,
+        },
+      );
+    } else if (
+      error.status === 400 &&
+      error.error.reason === 'orderNotActive'
+    ) {
+      this.snackBar.open(
+        'Order is not active. Try to refresh the page.',
+        'Close',
+        {
+          duration: 5000,
+        },
+      );
+    } else {
+      this.snackBar.open(
+        'An unexpected error occurred. Refresh the page.',
+        'Close',
+        {
+          duration: 5000,
+        },
+      );
     }
   }
 }
