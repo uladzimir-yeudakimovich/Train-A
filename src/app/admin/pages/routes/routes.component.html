@@ -1,4 +1,4 @@
-@if (!routes().length) {
+@if (isLoading()) {
   <div class="spinner-container">
     <mat-spinner class="spinner" />
     <div class="label">Loading the routes</div>

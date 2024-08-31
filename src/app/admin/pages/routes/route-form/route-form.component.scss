@@ -1,15 +1,14 @@
 @import "@shared/styles/variables.scss";
 
 :host {
-  
   .cancel-button {
     background-color: $cancelButtonColor;
   }
-  
+
   .reset-button {
     background-color: $lightGrey;
   }
-  
+
   .form-grid {
     display: flex;
 
@@ -39,7 +38,6 @@
         margin: 0;
       }
     }
-
   }
 
   .buttons {
@@ -50,6 +48,27 @@
 
     button {
       min-width: 25%;
+    }
+  }
+
+  .spinner-container {
+    width: 400px;
+    height: 200px;
+    position: relative;
+
+    .spinner {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    .label {
+      position: absolute;
+      font-size: 1.2rem;
+      top: calc(50% - 6rem);
+      left: 50%;
+      transform: translateX(-50%);
     }
   }
 }

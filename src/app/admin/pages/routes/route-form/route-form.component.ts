@@ -2,6 +2,7 @@ import { RailRoute } from '@admin/models/route.model';
 import { Station } from '@admin/models/station.model';
 import { RouteStore } from '@admin/store/routes/routes.store';
 import { StationStore } from '@admin/store/stations/stations.store';
+import { HttpErrorResponse } from '@angular/common/http';
 import {
   Component,
   inject,
@@ -9,6 +10,7 @@ import {
   OnInit,
   output,
   Signal,
+  signal,
 } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -42,6 +44,8 @@ export class RouteFormComponent implements OnInit {
 
   connectedStationsMap!: Signal<(stationId: number) => Station[]>;
 
+  isLoading = signal<boolean>(false);
+
   private carriageStore = inject(CarriageStore);
 
   private stationStore = inject(StationStore);
@@ -55,7 +59,6 @@ export class RouteFormComponent implements OnInit {
 
   ngOnInit(): void {
     this.connectedStationsMap = this.stationStore.getConnectedStations;
-    this.carriageStore.getCarriages();
     this.carriageOptions = this.carriageStore.carriagesEntities;
 
     this.routeForm = this.formBuilder.group({
@@ -84,14 +87,33 @@ export class RouteFormComponent implements OnInit {
     const isUpdateMode = !!this.route();
     const newRoute = this.getFormRoute();
 
+    this.isLoading.set(true);
     if (isUpdateMode) {
-      this.routeStore.updateRoute(this.route()!.id, newRoute);
-      this.onClose();
+      this.routeStore
+        .updateRoute(this.route()!.id, newRoute)
+        .then(() => {
+          this.onClose();
+        })
+        .catch((error) => {
+          this.errorSnackBar(error);
+        })
+        .finally(() => {
+          this.isLoading.set(false);
+        });
       return;
     }
 
-    this.routeStore.postRoute(newRoute);
-    this.onReset();
+    this.routeStore
+      .postRoute(newRoute)
+      .then(() => {
+        this.onReset();
+      })
+      .catch((error) => {
+        this.errorSnackBar(error);
+      })
+      .finally(() => {
+        this.isLoading.set(false);
+      });
   }
 
   onReset() {
@@ -128,11 +150,13 @@ export class RouteFormComponent implements OnInit {
     event.stopPropagation();
     this.stations.removeAt(idx);
     this.enableLastTwoStations();
+    this.routeForm.markAsDirty();
   }
 
   onDeleteCarriage(event: Event, idx: number) {
     event.stopPropagation();
     this.carriages.removeAt(idx);
+    this.routeForm.markAsDirty();
   }
 
   onStationClick(idx: number) {
@@ -160,8 +184,8 @@ export class RouteFormComponent implements OnInit {
       : '';
   }
 
-  isSaveeDisabled(): boolean {
-    return this.routeForm.pristine || !this.routeForm.valid;
+  isSaveDisabled(): boolean {
+    return !this.routeForm.valid || this.routeForm.pristine;
   }
 
   get stations() {
@@ -202,7 +226,7 @@ export class RouteFormComponent implements OnInit {
       this.stations.enable();
       return;
     }
-    this.stations.disable();
+    this.stations.disable({ emitEvent: false, onlySelf: true });
     stations[stations.length - 1].enable();
     stations[stations.length - 2].enable();
   }
@@ -213,5 +237,21 @@ export class RouteFormComponent implements OnInit {
 
   private addStationControl() {
     this.stations.push(this.formBuilder.control(null));
+  }
+
+  private errorSnackBar(error: HttpErrorResponse) {
+    if (error.status === 401 && error.error.reason === 'invalidAccessToken') {
+      this.snackBar.open(
+        'You cannot perform this action. Please try to login again.',
+        'Close',
+        {
+          duration: 5000,
+        },
+      );
+    } else {
+      this.snackBar.open('An unexpected error occurred.', 'Close', {
+        duration: 5000,
+      });
+    }
   }
 }

@@ -1,15 +1,10 @@
 import { RailRoute } from '@admin/models/route.model';
 import { RouteStore } from '@admin/store/routes/routes.store';
 import { StationStore } from '@admin/store/stations/stations.store';
-import {
-  Component,
-  computed,
-  inject,
-  input,
-  OnInit,
-  signal,
-} from '@angular/core';
+import { HttpErrorResponse } from '@angular/common/http';
+import { Component, computed, inject, input, signal } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ConfirmationDialogComponent } from '@shared/components/delete-dialog/confirmation-dialog.component';
 
@@ -22,10 +17,12 @@ import { routeCardImports } from './route-card.config';
   templateUrl: './route-card.component.html',
   styleUrl: './route-card.component.scss',
 })
-export class RouteCardComponent implements OnInit {
+export class RouteCardComponent {
   route = input.required<RailRoute>();
 
   displayUpdateForm = signal<boolean>(false);
+
+  isLoading = signal<boolean>(false);
 
   cities = computed(() => {
     const stationIds = this.route().path;
@@ -43,11 +40,8 @@ export class RouteCardComponent implements OnInit {
   constructor(
     private router: Router,
     private activatedRoute: ActivatedRoute,
+    private snackBar: MatSnackBar,
   ) {}
-
-  ngOnInit() {
-    this.stationStore.getStations();
-  }
 
   openDialog() {
     const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
@@ -58,7 +52,15 @@ export class RouteCardComponent implements OnInit {
     });
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
-        this.routeStore.deleteRoute(this.route().id);
+        this.isLoading.set(true);
+        this.routeStore
+          .deleteRoute(this.route().id)
+          .catch((error) => {
+            this.errorSnackBar(error);
+          })
+          .finally(() => {
+            this.isLoading.set(false);
+          });
       }
     });
   }
@@ -92,5 +94,21 @@ export class RouteCardComponent implements OnInit {
         click: () => this.openDialog(),
       },
     ];
+  }
+
+  private errorSnackBar(error: HttpErrorResponse) {
+    if (error.status === 401 && error.error.reason === 'invalidAccessToken') {
+      this.snackBar.open(
+        'You cannot perform this action. Please try to login again.',
+        'Close',
+        {
+          duration: 5000,
+        },
+      );
+    } else {
+      this.snackBar.open('An unexpected error occurred.', 'Close', {
+        duration: 5000,
+      });
+    }
   }
 }

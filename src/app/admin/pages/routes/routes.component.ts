@@ -1,8 +1,10 @@
 import { RailRoute } from '@admin/models/route.model';
 import { RouteStore } from '@admin/store/routes/routes.store';
+import { StationStore } from '@admin/store/stations/stations.store';
 import { Component, inject, OnInit, Signal, signal } from '@angular/core';
 import { MatButton } from '@angular/material/button';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import { CarriageStore } from '@shared/store/carriages/carriages.store';
 
 import { RouteFormComponent } from './route-form/route-form.component';
 import { RouteListComponent } from './route-list/route-list.component';
@@ -24,10 +26,22 @@ export class RoutesComponent implements OnInit {
 
   routes!: Signal<RailRoute[]>;
 
+  isLoading = signal<boolean>(true);
+
   private routeStore = inject(RouteStore);
 
+  private stationStore = inject(StationStore);
+
+  private carriageStore = inject(CarriageStore);
+
   ngOnInit() {
-    this.routeStore.getRoutes();
+    Promise.all([
+      this.carriageStore.getCarriages(),
+      this.stationStore.getStations(),
+      this.routeStore.getRoutes(),
+    ]).then(() => {
+      this.isLoading.set(false);
+    });
     this.routes = this.routeStore.routesEntities;
   }
 
