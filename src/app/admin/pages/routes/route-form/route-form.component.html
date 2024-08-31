@@ -42,7 +42,7 @@
       }
     </div>
     <div class="col" formArrayName="carriages">
-      @for (carField of carriages.controls; track $index; let i = $index) {
+      @for (carField of carriages.controls; track carField; let i = $index) {
         <div class="form-field-container">
           <mat-form-field class="form-field">
             <mat-label>Carriage</mat-label>
