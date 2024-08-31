@@ -33,19 +33,27 @@ const getRideRoute = (path: number[], rides: SearchRide[]): RideStation[] => {
     switch (true) {
       case index === 0: {
         const [startTime] = rides[index].time;
+
         rideStation.startTime = startTime;
+
         break;
       }
       case index === rides.length: {
         const [, endTime] = rides[index - 1].time;
+
         rideStation.startTime = endTime;
+
         break;
       }
       default: {
         const [, endTime] = rides[index - 1].time;
+
         const [startTime] = rides[index].time;
+
         rideStation.startTime = endTime;
+
         rideStation.endTime = startTime;
+
         rideStation.timeSpan = getRideTime(
           rideStation.startTime,
           rideStation.endTime,
@@ -59,8 +67,12 @@ const getRideRoute = (path: number[], rides: SearchRide[]): RideStation[] => {
 
 export const toSearchResult = (response: SearchResponse): SearchCard[] => {
   const { from, to, routes } = response;
+
+  // console.log('routes', routes);
+
   return routes.flatMap(({ path, schedule }) => {
     const fromIdIndex = path.findIndex((point) => point === from.stationId) - 1;
+
     const toIdIndex = path.findIndex((point) => point === to.stationId) - 1;
 
     return schedule.map(({ rideId, segments }) => {

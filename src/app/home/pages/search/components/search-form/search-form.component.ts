@@ -1,5 +1,10 @@
 import { Station } from '@admin/models/station.model';
-import { Component, inject, input } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  input,
+} from '@angular/core';
 import {
   AbstractControl,
   FormBuilder,
@@ -20,6 +25,7 @@ import { searchFormImports } from './search-form.config';
   templateUrl: './search-form.component.html',
   styleUrl: './search-form.component.scss',
   providers: [provideNativeDateAdapter()],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SearchFormComponent {
   stations = input.required<Station[]>();

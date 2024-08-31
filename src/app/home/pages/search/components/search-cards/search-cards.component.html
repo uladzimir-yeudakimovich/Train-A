@@ -38,6 +38,18 @@
             {{ card.rideTo.city }}
           </mat-card-subtitle>
         </div>
+        <div>
+          <button mat-stroked-button disabled>
+            <mat-icon>directions_subway</mat-icon>
+            {{ card.rideRoute.at(0)?.stationName }}
+            &rArr;
+            {{ card.rideRoute.at(-1)?.stationName }}
+          </button>
+
+          <button mat-button>
+            Route <mat-icon iconPositionEnd>keyboard_arrow_down</mat-icon>
+          </button>
+        </div>
       </div>
 
       <ul class="card-price__list">
@@ -50,11 +62,7 @@
                 {{ price[0] }}
               </mat-card-subtitle>
 
-              <mat-card-subtitle>
-                Carriage type
-                {{ price[0] }}
-              </mat-card-subtitle>
-
+              <mat-card-subtitle> </mat-card-subtitle>
               <mat-card-title>
                 {{ price[1] | currency: "USD" : "symbol" : "1.0-0" }}
               </mat-card-title>

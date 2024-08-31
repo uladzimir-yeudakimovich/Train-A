@@ -1,5 +1,6 @@
 export interface RideStation {
   stationId: number;
+  stationName?: string;
   startTime?: Date;
   endTime?: Date;
   timeSpan?: number;

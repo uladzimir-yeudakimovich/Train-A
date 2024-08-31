@@ -1,4 +1,5 @@
 import { CurrencyPipe, DatePipe } from '@angular/common';
+import { MatButton } from '@angular/material/button';
 import {
   MatCard,
   MatCardContent,
@@ -16,6 +17,7 @@ export const searchCardsImports = [
   MatCardImage,
   MatCardTitle,
   MatCardSubtitle,
+  MatButton,
   MatIcon,
   MatDivider,
   DatePipe,
