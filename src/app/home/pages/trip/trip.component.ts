@@ -1,3 +1,4 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, inject, OnInit, Signal, signal } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -61,10 +62,14 @@ export class TripComponent implements OnInit {
       return;
     }
 
-    this.tripService.createOrder(this.bookItems());
-    this.dialog.open(OrderDialogComponent, {
-      data: { tripInfo: this.tripView() },
-    });
+    this.tripService
+      .createOrder(this.bookItems())
+      .then(() => {
+        this.dialog.open(OrderDialogComponent, {
+          data: { tripInfo: this.tripView() },
+        });
+      })
+      .catch((error) => this.errorSnackBar(error));
   }
 
   onBack(): void {
@@ -110,5 +115,39 @@ export class TripComponent implements OnInit {
 
     this.tripView = this.tripService.getTripView();
     this.isLoading.set(false);
+  }
+
+  private errorSnackBar(error: HttpErrorResponse) {
+    if (error.status === 400) {
+      switch (error.error.reason) {
+        case 'rideNotFound':
+          this.snackBar.open('Ride not found. Refresh the page.', 'Close', {
+            duration: 5000,
+          });
+          break;
+        case 'invalidStations':
+          this.snackBar.open('The ride does not exist.', 'Close', {
+            duration: 5000,
+          });
+          break;
+        case 'alreadyBooked':
+          this.snackBar.open(
+            'You have already booked this trip. Cancel it in your Orders list.',
+            'Close',
+            {
+              duration: 5000,
+            },
+          );
+          break;
+        default:
+          this.snackBar.open('Something went wrong', 'Close', {
+            duration: 5000,
+          });
+      }
+    } else {
+      this.snackBar.open('Something went wrong', 'Close', {
+        duration: 5000,
+      });
+    }
   }
 }

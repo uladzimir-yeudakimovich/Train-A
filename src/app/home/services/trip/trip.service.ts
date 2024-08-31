@@ -75,14 +75,14 @@ export class TripService {
     });
   }
 
-  createOrder(bookItems: BookItem[]) {
+  async createOrder(bookItems: BookItem[]) {
     const tripView = this.getTripView()();
     const { rideId } = tripView;
     const stationStart = tripView.from.id;
     const stationEnd = tripView.to.id;
     const carriages = this.tripStore.carriages();
 
-    bookItems.forEach((bookItem) => {
+    const orderPromises = bookItems.map(async (bookItem) => {
       const { seatNumber, carId } = bookItem;
       const carIndex = carriages.findIndex((c) => c.code === carId);
       const seatIdx = convertCarInfoToSeatIndex(
@@ -90,8 +90,14 @@ export class TripService {
         carIndex,
         seatNumber,
       );
-      this.orderStore.createOrder(rideId, seatIdx, stationStart, stationEnd);
+      return this.orderStore.createOrder(
+        rideId,
+        seatIdx,
+        stationStart,
+        stationEnd,
+      );
     });
+    await Promise.all(orderPromises);
     this.tripStore.selectedToReserved();
   }
 

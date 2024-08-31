@@ -34,9 +34,9 @@ export const OrderStore = signalStore(
 
     async cancelOrder(orderId: number) {
       const order = store.ordersEntityMap()[orderId];
-      await searchService.cancelOrder(orderId);
       const cancelledOrder = { ...order, status: OrderStatus.Canceled };
       patchState(store, setEntity(cancelledOrder, orderConfig));
+      await searchService.cancelOrder(orderId);
     },
 
     hasOrder(rideId: number): boolean {
