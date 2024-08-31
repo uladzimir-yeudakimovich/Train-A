@@ -4,6 +4,7 @@ import { RouteStore } from '@admin/store/routes/routes.store';
 import { StationStore } from '@admin/store/stations/stations.store';
 import { HttpErrorResponse } from '@angular/common/http';
 import {
+  ChangeDetectionStrategy,
   Component,
   inject,
   input,
@@ -34,6 +35,7 @@ import { minArrayLength } from './route-form.utils';
   imports: routeFormImports,
   templateUrl: './route-form.component.html',
   styleUrl: './route-form.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RouteFormComponent implements OnInit {
   route = input<RailRoute>();

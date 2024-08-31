@@ -1,4 +1,5 @@
 import {
+  ChangeDetectionStrategy,
   Component,
   computed,
   HostListener,
@@ -21,6 +22,7 @@ import { CarSeatComponent } from '../car-seat/car-seat.component';
   providers: [TrainCarService],
   templateUrl: './train-car.component.html',
   styleUrl: './train-car.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TrainCarComponent implements OnInit {
   carriage = input.required<Carriage>();

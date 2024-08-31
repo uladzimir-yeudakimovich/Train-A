@@ -1,5 +1,10 @@
 import { NgClass } from '@angular/common';
-import { Component, input, output } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  input,
+  output,
+} from '@angular/core';
 import { SeatState } from '@shared/models/enums/seat-state.enum';
 import { CarSeat } from '@shared/models/interfaces/carriage.model';
 
@@ -9,6 +14,7 @@ import { CarSeat } from '@shared/models/interfaces/carriage.model';
   imports: [NgClass],
   templateUrl: './car-seat.component.html',
   styleUrl: './car-seat.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CarSeatComponent {
   seat = input.required<CarSeat>();

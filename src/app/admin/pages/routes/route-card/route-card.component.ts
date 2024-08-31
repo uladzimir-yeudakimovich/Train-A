@@ -2,7 +2,14 @@ import { RailRoute } from '@admin/models/route.model';
 import { RouteStore } from '@admin/store/routes/routes.store';
 import { StationStore } from '@admin/store/stations/stations.store';
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, computed, inject, input, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  inject,
+  input,
+  signal,
+} from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ConfirmationDialogComponent } from '@shared/components/delete-dialog/confirmation-dialog.component';
@@ -18,6 +25,7 @@ import { routeCardImports } from './route-card.config';
   imports: routeCardImports,
   templateUrl: './route-card.component.html',
   styleUrl: './route-card.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RouteCardComponent {
   route = input.required<RailRoute>();

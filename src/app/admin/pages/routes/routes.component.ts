@@ -1,7 +1,14 @@
 import { RailRoute } from '@admin/models/route.model';
 import { RouteStore } from '@admin/store/routes/routes.store';
 import { StationStore } from '@admin/store/stations/stations.store';
-import { Component, inject, OnInit, Signal, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  OnInit,
+  Signal,
+  signal,
+} from '@angular/core';
 import { MatButton } from '@angular/material/button';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { CarriageStore } from '@shared/store/carriages/carriages.store';
@@ -20,6 +27,7 @@ import { RouteListComponent } from './route-list/route-list.component';
   ],
   templateUrl: './routes.component.html',
   styleUrl: './routes.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RoutesComponent implements OnInit {
   displayCreateRouteForm = signal<boolean>(false);

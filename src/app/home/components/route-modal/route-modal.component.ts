@@ -1,5 +1,11 @@
 import { StationStore } from '@admin/store/stations/stations.store';
-import { Component, inject, OnInit, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  OnInit,
+  signal,
+} from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { RouteModalData, RouteStop } from '@home/models/trip.models';
 import { RideStore } from '@shared/store/ride/ride.store';
@@ -13,6 +19,7 @@ import { routeModalImports } from './route-modal.config';
   imports: routeModalImports,
   templateUrl: './route-modal.component.html',
   styleUrl: './route-modal.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RouteModalComponent implements OnInit {
   readonly dialogRef = inject(MatDialogRef<RouteModalComponent>);

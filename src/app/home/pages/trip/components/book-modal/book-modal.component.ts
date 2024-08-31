@@ -1,4 +1,10 @@
-import { Component, computed, input, output } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  input,
+  output,
+} from '@angular/core';
 import { BookItem } from '@home/models/trip.models';
 import { Message } from '@shared/models/enums/messages.enum';
 import { SnackBarService } from '@shared/services/snack-bar/snack-bar.service';
@@ -11,6 +17,7 @@ import { bookModalImports } from './book-modal.config';
   imports: bookModalImports,
   templateUrl: './book-modal.component.html',
   styleUrl: './book-modal.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BookModalComponent {
   bookItems = input.required<BookItem[]>();

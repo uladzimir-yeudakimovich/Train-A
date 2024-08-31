@@ -1,5 +1,6 @@
 import {
   AfterViewChecked,
+  ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
   computed,
@@ -20,6 +21,7 @@ import { displayedColumns, ordersImports } from './orders.config';
   imports: ordersImports,
   templateUrl: './orders.component.html',
   styleUrl: './orders.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class OrdersComponent implements OnInit, AfterViewChecked {
   isLoading = signal<boolean>(true);
