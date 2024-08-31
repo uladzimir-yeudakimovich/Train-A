@@ -1,5 +1,12 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, inject, OnInit, Signal, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  OnInit,
+  Signal,
+  signal,
+} from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { RouteModalComponent } from '@home/components/route-modal/route-modal.component';
@@ -22,6 +29,7 @@ import { tripImports } from './trip.config';
   imports: tripImports,
   templateUrl: './trip.component.html',
   styleUrls: ['./trip.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TripComponent implements OnInit {
   tripView!: Signal<TripView>;
@@ -66,7 +74,7 @@ export class TripComponent implements OnInit {
       .createOrder(this.bookItems())
       .then(() => {
         this.dialog.open(OrderDialogComponent, {
-          data: { tripInfo: this.tripView() },
+          data: this.tripView(),
         });
       })
       .catch((error) => this.errorSnackBar(error));
