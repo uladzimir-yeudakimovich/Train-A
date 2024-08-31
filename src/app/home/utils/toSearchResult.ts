@@ -2,8 +2,8 @@ import { RideStation, SearchCard } from '@home/models/search-card.model';
 import { SearchResponse } from '@home/models/search-response.model';
 import { SearchRide } from '@home/models/search-route.model';
 
-const getRideTime = (startTime: Date, endTime: Date): number =>
-  new Date(endTime).getTime() - new Date(startTime).getTime();
+export const getRideTime = (startTime: Date, endTime: Date): number =>
+  endTime.getTime() - startTime.getTime();
 
 const getRidePrice = (rides: SearchRide[]) => {
   const prices = rides.map((ride) => ride.price);
@@ -34,14 +34,14 @@ const getRideRoute = (path: number[], rides: SearchRide[]): RideStation[] => {
       case index === 0: {
         const [startTime] = rides[index].time;
 
-        rideStation.startTime = startTime;
+        rideStation.startTime = new Date(startTime);
 
         break;
       }
       case index === rides.length: {
         const [, endTime] = rides[index - 1].time;
 
-        rideStation.startTime = endTime;
+        rideStation.startTime = new Date(endTime);
 
         break;
       }
@@ -50,13 +50,13 @@ const getRideRoute = (path: number[], rides: SearchRide[]): RideStation[] => {
 
         const [startTime] = rides[index].time;
 
-        rideStation.startTime = endTime;
+        rideStation.startTime = new Date(endTime);
 
-        rideStation.endTime = startTime;
+        rideStation.endTime = new Date(startTime);
 
         rideStation.timeSpan = getRideTime(
-          rideStation.startTime,
-          rideStation.endTime,
+          rideStation.startTime!,
+          rideStation.endTime!,
         );
       }
     }
@@ -67,8 +67,6 @@ const getRideRoute = (path: number[], rides: SearchRide[]): RideStation[] => {
 
 export const toSearchResult = (response: SearchResponse): SearchCard[] => {
   const { from, to, routes } = response;
-
-  // console.log('routes', routes);
 
   return routes.flatMap(({ path, schedule }) => {
     const fromIdIndex = path.findIndex((point) => point === from.stationId) - 1;
@@ -81,8 +79,8 @@ export const toSearchResult = (response: SearchResponse): SearchCard[] => {
         toIdIndex,
       );
 
-      const fromTime = segmentsChunk.at(0)!.time[0];
-      const toTime = segmentsChunk.at(-1)!.time[0];
+      const fromTime = new Date(segmentsChunk.at(0)!.time[0]);
+      const toTime = new Date(segmentsChunk.at(-1)!.time[0]);
 
       const rideTime = getRideTime(fromTime, toTime);
 

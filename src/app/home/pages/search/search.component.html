@@ -1,2 +1,7 @@
 <app-search-form [stations]="stations()" />
+
+@if (stations().length) {
+  <app-search-filter [cards]="cards()" />
+}
+
 <app-search-cards [cards]="cards()" />

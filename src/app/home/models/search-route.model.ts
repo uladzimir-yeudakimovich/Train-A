@@ -1,7 +1,7 @@
 export interface SearchRide {
   occupiedSeats: number[];
   price: Record<string, number>;
-  time: Date[];
+  time: string[];
 }
 
 export interface SearchSchedule {

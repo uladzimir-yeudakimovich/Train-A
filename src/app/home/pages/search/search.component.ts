@@ -9,12 +9,13 @@ import {
 import { SearchStore } from '@home/store/search.store';
 
 import { SearchCardsComponent } from './components/search-cards/search-cards.component';
+import { SearchFilterComponent } from './components/search-filter/search-filter.component';
 import { SearchFormComponent } from './components/search-form/search-form.component';
 
 @Component({
   selector: 'app-search',
   standalone: true,
-  imports: [SearchFormComponent, SearchCardsComponent],
+  imports: [SearchFormComponent, SearchCardsComponent, SearchFilterComponent],
   templateUrl: './search.component.html',
   styleUrl: './search.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

@@ -1,0 +1,12 @@
+<mat-tab-group fitInkBarToContent>
+  @for (filter of filters(); track filter) {
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <div>
+          <div>{{ filter | date: "MMMM dd" }}</div>
+          <div>{{ filter | date: "EEEE" }}</div>
+        </div>
+      </ng-template>
+    </mat-tab>
+  }
+</mat-tab-group>
