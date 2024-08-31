@@ -13,5 +13,6 @@ export enum ErrorReason {
   RideNotFound = 'rideNotFound',
   InvalidAccessToken = 'invalidAccessToken',
   InvalidStations = 'invalidStations',
+  InvalidRide = 'invalidRide',
   AlreadyBooked = 'alreadyBooked',
 }

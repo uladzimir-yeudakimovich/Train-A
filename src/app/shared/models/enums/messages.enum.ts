@@ -1,5 +1,6 @@
 export enum Message {
   TripBookedSuccessfully = 'Trip booked successfully',
+  TripExpired = 'Trip has expired. Please select another one',
 
   InvalidAccessToken = 'You cannot perform this action. Please try to login again.',
   InvalidCredentials = 'Invalid email or password',

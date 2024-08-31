@@ -49,7 +49,7 @@ export class RouteCardComponent {
     const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
       data: {
         title: `Delete Route ${this.route().id}`,
-        message: 'Are you sure you want to delete this route?',
+        message: Message.RouteDeleteConfirmation,
       },
     });
     dialogRef.afterClosed().subscribe((result) => {

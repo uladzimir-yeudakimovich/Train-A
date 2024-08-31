@@ -118,22 +118,21 @@ export class TripComponent implements OnInit {
   }
 
   private errorSnackBar(error: HttpErrorResponse) {
-    if (error.status === 400) {
-      switch (error.error.reason) {
-        case ErrorReason.RideNotFound:
-          this.snackBarService.open(Message.RideNotFound);
-          break;
-        case ErrorReason.InvalidStations:
-          this.snackBarService.open(Message.InvalidStations);
-          break;
-        case ErrorReason.AlreadyBooked:
-          this.snackBarService.open(Message.AlreadyBooked);
-          break;
-        default:
-          this.snackBarService.open(Message.UnexpectedError);
-      }
-    } else {
-      this.snackBarService.open(Message.UnexpectedError);
+    switch (error.error.reason) {
+      case ErrorReason.RideNotFound:
+        this.snackBarService.open(Message.RideNotFound);
+        break;
+      case ErrorReason.InvalidStations:
+        this.snackBarService.open(Message.InvalidStations);
+        break;
+      case ErrorReason.AlreadyBooked:
+        this.snackBarService.open(Message.AlreadyBooked);
+        break;
+      case ErrorReason.InvalidRide:
+        this.snackBarService.open(Message.TripExpired);
+        break;
+      default:
+        this.snackBarService.open(Message.UnexpectedError);
     }
   }
 }
