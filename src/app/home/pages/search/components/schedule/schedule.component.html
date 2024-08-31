@@ -1,1 +1,24 @@
-<p>schedule works!</p>
+<div class="modal-header" mat-dialog-title>
+  <h6 class="modal-title">{{ scheduleData.title }}</h6>
+  <button type="button" mat-mini-fab mat-dialog-close>
+    <mat-icon>close</mat-icon>
+  </button>
+</div>
+<mat-divider />
+
+<mat-dialog-content class="modal-content">
+  @for (station of scheduleData.stations; track station.stationId) {
+    @if (!$first) {
+      <div class="modal-divider">
+        <mat-divider [vertical]="true" />
+      </div>
+    }
+    <app-point
+      [point]="station"
+      [isFirst]="$first"
+      [isLast]="$last"
+      [isStartPoint]="scheduleData.from === station.stationName"
+      [isEndPoint]="scheduleData.to === station.stationName"
+    />
+  }
+</mat-dialog-content>

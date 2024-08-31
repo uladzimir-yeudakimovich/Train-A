@@ -7,9 +7,7 @@
             {{ card.rideFrom.time | date: "hh:mm" }}
           </mat-card-title>
           <span class="card-time__span-body">
-            <mat-icon fontSet="material-icons-outlined">
-              fiber_manual_record
-            </mat-icon>
+            <mat-icon> radio_button_checked </mat-icon>
             <mat-divider class="card-time__span-divider" />
             <span>
               {{ card.rideTime | toTime }}
@@ -38,15 +36,26 @@
             {{ card.rideTo.city }}
           </mat-card-subtitle>
         </div>
-        <div>
-          <button mat-stroked-button disabled>
+        <div class="card-time__controls">
+          <button type="button" mat-stroked-button disabled>
             <mat-icon>directions_subway</mat-icon>
             {{ card.rideRoute.at(0)?.stationName }}
             &rArr;
             {{ card.rideRoute.at(-1)?.stationName }}
           </button>
 
-          <button mat-button>
+          <button
+            type="button"
+            mat-button
+            (click)="
+              openModal(
+                card.rideId,
+                card.rideRoute,
+                card.rideFrom.city,
+                card.rideTo.city
+              )
+            "
+          >
             Route <mat-icon iconPositionEnd>keyboard_arrow_down</mat-icon>
           </button>
         </div>

@@ -1,0 +1,21 @@
+:host {
+  min-width: 20rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.point {
+  &-time {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &-label {
+    flex-grow: 1;
+    margin-inline-start: 4rem;
+    display: flex;
+    align-items: center;
+    text-transform: capitalize;
+  }
+}

@@ -5,7 +5,9 @@ import {
   input,
 } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { SearchCard } from '@home/models/search-card.model';
+import { RideStation, SearchCard } from '@home/models/search-card.model';
+
+import { ScheduleComponent } from '../schedule/schedule.component';
 
 import { searchCardsImports } from './search-cards.config';
 
@@ -22,7 +24,21 @@ export class SearchCardsComponent {
 
   cards = input.required<SearchCard[]>();
 
-  openModal(): void {
-    this.schedule.open();
+  openModal(
+    routeId: number,
+    stations: RideStation[],
+    from: string,
+    to: string,
+  ): void {
+    const data = {
+      title: `Route ${routeId}`,
+      stations,
+      from,
+      to,
+    };
+
+    this.schedule.open(ScheduleComponent, {
+      data,
+    });
   }
 }

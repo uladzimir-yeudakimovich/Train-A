@@ -10,9 +10,7 @@
       [matAutocomplete]="autoFrom"
     />
 
-    <mat-icon matPrefix fontSet="material-icons-outlined">
-      fiber_manual_record
-    </mat-icon>
+    <mat-icon matPrefix> radio_button_checked </mat-icon>
 
     <mat-autocomplete #autoFrom="matAutocomplete">
       @for (station of stations(); track station.id) {

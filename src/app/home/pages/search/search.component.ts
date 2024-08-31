@@ -43,7 +43,6 @@ export class SearchComponent implements OnInit {
         });
 
       correctRide.rideRoute = correctRideRoute;
-      console.log(correctRide);
 
       return correctRide;
     });

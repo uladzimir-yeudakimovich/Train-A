@@ -1,0 +1,34 @@
+@let station = point();
+
+<div class="point-time">
+  @if (station.startTime) {
+    <span>{{ station.startTime | date: "hh:mm" }}</span>
+  }
+  @if (station.endTime) {
+    <span>{{ station.endTime | date: "hh:mm" }} </span>
+  }
+</div>
+
+<div class="point-label">
+  @if (isStartPoint()) {
+    <mat-icon> radio_button_checked </mat-icon>
+  } @else if (isEndPoint()) {
+    <mat-icon> fiber_manual_record </mat-icon>
+  } @else {
+    <mat-icon fontSet="material-icons-outlined"> fiber_manual_record </mat-icon>
+  }
+
+  {{ station.stationName }}
+</div>
+
+<div class="point-stop">
+  @if (station.timeSpan) {
+    <span>{{ station.timeSpan | toTime }}</span>
+  }
+  @if (isFirst()) {
+    first station
+  }
+  @if (isLast()) {
+    last station
+  }
+</div>

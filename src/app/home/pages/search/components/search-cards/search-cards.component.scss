@@ -19,12 +19,9 @@
     gap: 0.5rem;
     flex-basis: 30rem;
 
-    & > div {
+    &__span {
       display: flex;
       justify-content: space-between;
-    }
-
-    &__span {
       gap: 1rem;
 
       &-body {
@@ -42,8 +39,22 @@
       }
     }
 
+    &__date {
+      display: flex;
+      justify-content: space-between;
+    }
+
     &__city {
+      display: flex;
+      justify-content: space-between;
       text-transform: capitalize;
+    }
+
+    &__controls {
+      margin-block-start: 1rem;
+      display: flex;
+      gap: 1rem;
+      align-items: center;
     }
   }
 

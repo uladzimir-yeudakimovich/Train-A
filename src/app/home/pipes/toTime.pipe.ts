@@ -28,8 +28,14 @@ export class ToTimePipe implements PipeTransform {
         (millisecondsInSecond * secondsInMinute),
     );
 
-    return days > 0
-      ? `${days}d ${hours}h ${minutes}m`
-      : `${hours}h ${minutes}m`;
+    if (days === 0 && hours === 0) {
+      return `${minutes}m`;
+    }
+
+    if (days === 0 && hours > 0) {
+      return `${hours}h ${minutes}m`;
+    }
+
+    return `${days}d ${hours}h ${minutes}m`;
   }
 }
