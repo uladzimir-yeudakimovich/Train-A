@@ -13,8 +13,10 @@ import {
   signal,
 } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { ErrorReason } from '@shared/models/enums/api-path.enum';
+import { Message } from '@shared/models/enums/messages.enum';
 import { Carriage } from '@shared/models/interfaces/carriage.model';
+import { SnackBarService } from '@shared/services/snack-bar/snack-bar.service';
 import { CarriageStore } from '@shared/store/carriages/carriages.store';
 
 import {
@@ -54,7 +56,7 @@ export class RouteFormComponent implements OnInit {
 
   constructor(
     private formBuilder: FormBuilder,
-    private snackBar: MatSnackBar,
+    private snackBarService: SnackBarService,
   ) {}
 
   ngOnInit(): void {
@@ -162,13 +164,7 @@ export class RouteFormComponent implements OnInit {
   onStationClick(idx: number) {
     const stationControl = this.stations.at(idx);
     if (stationControl.disabled) {
-      this.snackBar.open(
-        'You cannot change this station as this may break the connection with the next station.',
-        'Close',
-        {
-          duration: 5000,
-        },
-      );
+      this.snackBarService.open(Message.RoutFormCannotChangeStation);
     }
   }
 
@@ -240,18 +236,10 @@ export class RouteFormComponent implements OnInit {
   }
 
   private errorSnackBar(error: HttpErrorResponse) {
-    if (error.status === 401 && error.error.reason === 'invalidAccessToken') {
-      this.snackBar.open(
-        'You cannot perform this action. Please try to login again.',
-        'Close',
-        {
-          duration: 5000,
-        },
-      );
+    if (error.error.reason === ErrorReason.InvalidAccessToken) {
+      this.snackBarService.open(Message.InvalidAccessToken);
     } else {
-      this.snackBar.open('An unexpected error occurred.', 'Close', {
-        duration: 5000,
-      });
+      this.snackBarService.open(Message.UnexpectedError);
     }
   }
 }

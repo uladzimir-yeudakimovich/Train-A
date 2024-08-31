@@ -2,10 +2,12 @@ import { StationStore } from '@admin/store/stations/stations.store';
 import { HttpErrorResponse } from '@angular/common/http';
 import { computed, inject, Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { AdminRoleGuard } from '@core/guards/admin.guard';
 import { ConfirmationDialogComponent } from '@shared/components/delete-dialog/confirmation-dialog.component';
+import { ErrorReason } from '@shared/models/enums/api-path.enum';
+import { Message } from '@shared/models/enums/messages.enum';
 import { OrderView } from '@shared/models/interfaces/order.model';
+import { SnackBarService } from '@shared/services/snack-bar/snack-bar.service';
 import { CarriageStore } from '@shared/store/carriages/carriages.store';
 import { OrderStore } from '@shared/store/orders/orders.store';
 import { UserStore } from '@shared/store/users/users.store';
@@ -29,7 +31,7 @@ export class OrderService {
 
   constructor(
     private adminGuard: AdminRoleGuard,
-    private snackBar: MatSnackBar,
+    private snackBarService: SnackBarService,
   ) {}
 
   async initStore() {
@@ -53,7 +55,7 @@ export class OrderService {
     const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
       data: {
         title,
-        message: 'Are you sure you want to cancel this order?',
+        message: Message.OrderCancelConfirmation,
       },
     });
     dialogRef.afterClosed().subscribe(async (result) => {
@@ -61,13 +63,7 @@ export class OrderService {
         await this.orderStore
           .cancelOrder(orderId)
           .then(() => {
-            this.snackBar.open(
-              'Order has been successfully canceled.',
-              'Close',
-              {
-                duration: 5000,
-              },
-            );
+            this.snackBarService.open(Message.OrderCancelled);
           })
           .catch((error) => {
             this.errorSnackBar(error);
@@ -90,33 +86,15 @@ export class OrderService {
   }
 
   private errorSnackBar(error: HttpErrorResponse) {
-    if (error.status === 400 && error.error.reason === 'orderNotFound') {
-      this.snackBar.open(
-        'Order is not found. Try to refresh the page.',
-        'Close',
-        {
-          duration: 5000,
-        },
-      );
-    } else if (
-      error.status === 400 &&
-      error.error.reason === 'orderNotActive'
-    ) {
-      this.snackBar.open(
-        'Order is not active. Try to refresh the page.',
-        'Close',
-        {
-          duration: 5000,
-        },
-      );
-    } else {
-      this.snackBar.open(
-        'An unexpected error occurred. Refresh the page.',
-        'Close',
-        {
-          duration: 5000,
-        },
-      );
+    switch (error.error.reason) {
+      case ErrorReason.OrderNotFound:
+        this.snackBarService.open(Message.OrderNotFound);
+        break;
+      case ErrorReason.OrderNotActive:
+        this.snackBarService.open(Message.OrderNotActive);
+        break;
+      default:
+        this.snackBarService.open(Message.UnexpectedError);
     }
   }
 }

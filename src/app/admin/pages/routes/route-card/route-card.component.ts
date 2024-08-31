@@ -4,9 +4,11 @@ import { StationStore } from '@admin/store/stations/stations.store';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, computed, inject, input, signal } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ConfirmationDialogComponent } from '@shared/components/delete-dialog/confirmation-dialog.component';
+import { ErrorReason } from '@shared/models/enums/api-path.enum';
+import { Message } from '@shared/models/enums/messages.enum';
+import { SnackBarService } from '@shared/services/snack-bar/snack-bar.service';
 
 import { routeCardImports } from './route-card.config';
 
@@ -40,7 +42,7 @@ export class RouteCardComponent {
   constructor(
     private router: Router,
     private activatedRoute: ActivatedRoute,
-    private snackBar: MatSnackBar,
+    private snackBarService: SnackBarService,
   ) {}
 
   openDialog() {
@@ -97,18 +99,10 @@ export class RouteCardComponent {
   }
 
   private errorSnackBar(error: HttpErrorResponse) {
-    if (error.status === 401 && error.error.reason === 'invalidAccessToken') {
-      this.snackBar.open(
-        'You cannot perform this action. Please try to login again.',
-        'Close',
-        {
-          duration: 5000,
-        },
-      );
+    if (error.error.reason === ErrorReason.InvalidAccessToken) {
+      this.snackBarService.open(Message.InvalidAccessToken);
     } else {
-      this.snackBar.open('An unexpected error occurred.', 'Close', {
-        duration: 5000,
-      });
+      this.snackBarService.open(Message.UnexpectedError);
     }
   }
 }

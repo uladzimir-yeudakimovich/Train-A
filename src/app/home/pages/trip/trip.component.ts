@@ -1,14 +1,16 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, inject, OnInit, Signal, signal } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { RouteModalComponent } from '@home/components/route-modal/route-modal.component';
 import { BookItem, TripView } from '@home/models/trip.models';
 import { TripService } from '@home/services/trip/trip.service';
+import { ErrorReason } from '@shared/models/enums/api-path.enum';
+import { Message } from '@shared/models/enums/messages.enum';
 import { RoutePath } from '@shared/models/enums/route-path.enum';
 import { SeatState } from '@shared/models/enums/seat-state.enum';
 import { CarSeat } from '@shared/models/interfaces/carriage.model';
+import { SnackBarService } from '@shared/services/snack-bar/snack-bar.service';
 import { OrderStore } from '@shared/store/orders/orders.store';
 
 import { OrderDialogComponent } from './components/order-dialog/order-dialog.component';
@@ -35,7 +37,7 @@ export class TripComponent implements OnInit {
   constructor(
     private router: Router,
     private activatedRoute: ActivatedRoute,
-    private snackBar: MatSnackBar,
+    private snackBarService: SnackBarService,
     private tripService: TripService,
   ) {}
 
@@ -56,9 +58,7 @@ export class TripComponent implements OnInit {
   onBook() {
     const { rideId } = this.tripView();
     if (this.orderStore.hasOrder(rideId)) {
-      this.snackBar.open('You have already booked this trip', 'Close', {
-        duration: 5000,
-      });
+      this.snackBarService.open(Message.AlreadyBooked);
       return;
     }
 
@@ -120,34 +120,20 @@ export class TripComponent implements OnInit {
   private errorSnackBar(error: HttpErrorResponse) {
     if (error.status === 400) {
       switch (error.error.reason) {
-        case 'rideNotFound':
-          this.snackBar.open('Ride not found. Refresh the page.', 'Close', {
-            duration: 5000,
-          });
+        case ErrorReason.RideNotFound:
+          this.snackBarService.open(Message.RideNotFound);
           break;
-        case 'invalidStations':
-          this.snackBar.open('The ride does not exist.', 'Close', {
-            duration: 5000,
-          });
+        case ErrorReason.InvalidStations:
+          this.snackBarService.open(Message.InvalidStations);
           break;
-        case 'alreadyBooked':
-          this.snackBar.open(
-            'You have already booked this trip. Cancel it in your Orders list.',
-            'Close',
-            {
-              duration: 5000,
-            },
-          );
+        case ErrorReason.AlreadyBooked:
+          this.snackBarService.open(Message.AlreadyBooked);
           break;
         default:
-          this.snackBar.open('Something went wrong', 'Close', {
-            duration: 5000,
-          });
+          this.snackBarService.open(Message.UnexpectedError);
       }
     } else {
-      this.snackBar.open('Something went wrong', 'Close', {
-        duration: 5000,
-      });
+      this.snackBarService.open(Message.UnexpectedError);
     }
   }
 }
