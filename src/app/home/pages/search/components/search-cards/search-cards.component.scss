@@ -6,6 +6,11 @@
   gap: 1rem;
 }
 
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
 .card {
   &-content {
     display: flex;

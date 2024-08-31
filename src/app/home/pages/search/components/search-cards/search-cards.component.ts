@@ -5,7 +5,7 @@ import {
   input,
 } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { RideStation, SearchCard } from '@home/models/search-card.model';
+import { SearchCard } from '@home/models/search-card.model';
 
 import { ScheduleComponent } from '../schedule/schedule.component';
 
@@ -24,17 +24,17 @@ export class SearchCardsComponent {
 
   cards = input.required<SearchCard[]>();
 
-  openModal(
-    routeId: number,
-    stations: RideStation[],
-    from: string,
-    to: string,
-  ): void {
+  openModal(event: Event, card: SearchCard): void {
+    event.preventDefault();
+    event.stopPropagation();
+
+    const { rideId, rideRoute, rideFrom, rideTo } = card;
+
     const data = {
-      title: `Route ${routeId}`,
-      stations,
-      from,
-      to,
+      title: `Route ${rideId}`,
+      stations: rideRoute,
+      from: rideFrom.city,
+      to: rideTo.city,
     };
 
     this.schedule.open(ScheduleComponent, {

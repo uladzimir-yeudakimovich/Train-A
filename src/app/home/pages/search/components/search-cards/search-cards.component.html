@@ -1,86 +1,80 @@
 @for (card of cards(); track card.rideId) {
-  <mat-card>
-    <mat-card-content class="card-content">
-      <div class="card-time">
-        <div class="card-time__span">
-          <mat-card-title>
-            {{ card.rideFrom.time | date: "hh:mm" }}
-          </mat-card-title>
-          <span class="card-time__span-body">
-            <mat-icon> radio_button_checked </mat-icon>
-            <mat-divider class="card-time__span-divider" />
-            <span>
-              {{ card.rideTime | toTime }}
+  <a
+    [routerLink]="['trip', card.rideId]"
+    [queryParams]="{ from: card.rideFrom.id, to: card.rideTo.id }"
+  >
+    <mat-card>
+      <mat-card-content class="card-content">
+        <div class="card-time">
+          <div class="card-time__span">
+            <mat-card-title>
+              {{ card.rideFrom.time | date: "hh:mm" }}
+            </mat-card-title>
+            <span class="card-time__span-body">
+              <mat-icon> radio_button_checked </mat-icon>
+              <mat-divider class="card-time__span-divider" />
+              <span>
+                {{ card.rideTime | toTime }}
+              </span>
+              <mat-divider class="card-time__span-divider" />
+              <mat-icon> fiber_manual_record </mat-icon>
             </span>
-            <mat-divider class="card-time__span-divider" />
-            <mat-icon> fiber_manual_record </mat-icon>
-          </span>
 
-          <mat-card-title>
-            {{ card.rideTo.time | date: "hh:mm" }}
-          </mat-card-title>
-        </div>
-        <div class="card-time__date">
-          <mat-card-subtitle>
-            {{ card.rideFrom.time | date: "MMMM dd" }}
-          </mat-card-subtitle>
-          <mat-card-subtitle>
-            {{ card.rideTo.time | date: "MMMM dd" }}
-          </mat-card-subtitle>
-        </div>
-        <div class="card-time__city">
-          <mat-card-subtitle>
-            {{ card.rideFrom.city }}
-          </mat-card-subtitle>
-          <mat-card-subtitle>
-            {{ card.rideTo.city }}
-          </mat-card-subtitle>
-        </div>
-        <div class="card-time__controls">
-          <button type="button" mat-stroked-button disabled>
-            <mat-icon>directions_subway</mat-icon>
-            {{ card.rideRoute.at(0)?.stationName }}
-            &rArr;
-            {{ card.rideRoute.at(-1)?.stationName }}
-          </button>
+            <mat-card-title>
+              {{ card.rideTo.time | date: "hh:mm" }}
+            </mat-card-title>
+          </div>
+          <div class="card-time__date">
+            <mat-card-subtitle>
+              {{ card.rideFrom.time | date: "MMMM dd" }}
+            </mat-card-subtitle>
+            <mat-card-subtitle>
+              {{ card.rideTo.time | date: "MMMM dd" }}
+            </mat-card-subtitle>
+          </div>
+          <div class="card-time__city">
+            <mat-card-subtitle>
+              {{ card.rideFrom.city }}
+            </mat-card-subtitle>
+            <mat-card-subtitle>
+              {{ card.rideTo.city }}
+            </mat-card-subtitle>
+          </div>
+          <div class="card-time__controls">
+            <button type="button" mat-stroked-button disabled>
+              <mat-icon>directions_subway</mat-icon>
+              {{ card.rideRoute.at(0)?.stationName }}
+              &rArr;
+              {{ card.rideRoute.at(-1)?.stationName }}
+            </button>
 
-          <button
-            type="button"
-            mat-button
-            (click)="
-              openModal(
-                card.rideId,
-                card.rideRoute,
-                card.rideFrom.city,
-                card.rideTo.city
-              )
-            "
-          >
-            Route <mat-icon iconPositionEnd>keyboard_arrow_down</mat-icon>
-          </button>
+            <button type="button" mat-button (click)="openModal($event, card)">
+              Route <mat-icon iconPositionEnd>keyboard_arrow_down</mat-icon>
+            </button>
+          </div>
         </div>
-      </div>
 
-      <ul class="card-price__list">
-        @for (price of card.ridePrice; track price[0]) {
-          <li class="card-price__item">
-            <mat-divider vertical />
-            <div class="card-price__carriage">
-              <mat-card-subtitle>
-                Carriage type
-                {{ price[0] }}
-              </mat-card-subtitle>
+        <ul class="card-price__list">
+          @for (price of card.ridePrice; track price[0]) {
+            <li class="card-price__item">
+              <mat-divider vertical />
+              <div class="card-price__carriage">
+                <mat-card-subtitle>
+                  Carriage type
+                  {{ price[0] }}
+                </mat-card-subtitle>
 
-              <mat-card-subtitle> </mat-card-subtitle>
-              <mat-card-title>
-                {{ price[1] | currency: "USD" : "symbol" : "1.0-0" }}
-              </mat-card-title>
-            </div>
-          </li>
-        }
-      </ul>
-    </mat-card-content>
-  </mat-card>
+                <mat-card-subtitle> </mat-card-subtitle>
+                <mat-card-title>
+                  {{ price[1] | currency: "USD" : "symbol" : "1.0-0" }}
+                </mat-card-title>
+              </div>
+            </li>
+          }
+        </ul>
+      </mat-card-content>
+    </mat-card>
+  </a>
 } @empty {
   <mat-card class="card-empty">
     <img mat-card-image src="noresults.jpg" alt="no results" />

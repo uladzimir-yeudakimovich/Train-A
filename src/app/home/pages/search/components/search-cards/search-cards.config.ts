@@ -9,6 +9,7 @@ import {
 } from '@angular/material/card';
 import { MatDivider } from '@angular/material/divider';
 import { MatIcon } from '@angular/material/icon';
+import { RouterLink } from '@angular/router';
 import { ToTimePipe } from '@home/pipes/toTime.pipe';
 
 export const searchCardsImports = [
@@ -23,4 +24,5 @@ export const searchCardsImports = [
   DatePipe,
   CurrencyPipe,
   ToTimePipe,
+  RouterLink,
 ];
