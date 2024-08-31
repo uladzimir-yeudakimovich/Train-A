@@ -49,6 +49,26 @@ export class SearchComponent implements OnInit {
     });
   });
 
+  dates = computed(() =>
+    [
+      ...new Set(
+        this.cards().map(({ rideFrom }) =>
+          new Date(rideFrom.time).setHours(0, 0, 0, 0),
+        ),
+      ),
+    ].sort((a, b) => a - b),
+  );
+
+  filteredCards = computed(() =>
+    this.searchStore
+      .searchEntities()
+      .filter(
+        ({ rideFrom }) =>
+          !this.searchStore.time() ||
+          rideFrom.time.setHours(0, 0, 0, 0) === this.searchStore.time(),
+      ),
+  );
+
   ngOnInit(): void {
     this.stationStore.getStations();
   }
