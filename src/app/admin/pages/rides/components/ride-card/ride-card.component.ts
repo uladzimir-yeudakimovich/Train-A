@@ -1,4 +1,3 @@
-import { DeleteDialogComponent } from '@admin/components/delete-dialog/delete-dialog.component';
 import { SegmentUI } from '@admin/models/rides.model';
 import { RidesStore } from '@admin/store/rides/ride.store';
 import { DatePipe } from '@angular/common';
@@ -6,6 +5,7 @@ import { Component, computed, inject, input, signal } from '@angular/core';
 import { MatMiniFabButton } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
 import { MatIcon } from '@angular/material/icon';
+import { ConfirmationDialogComponent } from '@shared/components/delete-dialog/confirmation-dialog.component';
 
 @Component({
   selector: 'app-ride-card',
@@ -38,7 +38,9 @@ export class RideCardComponent {
   });
 
   openDialog(): void {
-    const dialogRef = this.dialog.open(DeleteDialogComponent);
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+      data: {},
+    });
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
         this.ridesStore.deleteRide(this.rideId());

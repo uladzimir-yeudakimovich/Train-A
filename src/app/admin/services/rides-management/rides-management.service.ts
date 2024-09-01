@@ -3,28 +3,28 @@ import {
   RouteInformation,
   SegmentUI,
 } from '@admin/models/rides.model';
+import { StationStore } from '@admin/store/stations/stations.store';
 import { mapRidesToUI, mapSegmentsToBE } from '@admin/utils/mapRides';
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { catchError, Observable, of, switchMap, throwError } from 'rxjs';
-
-import { RouteManagementService } from '../route-management/route-management.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class RidesManagementService {
-  constructor(
-    private readonly http: HttpClient,
-    private readonly routeService: RouteManagementService,
-  ) {}
+  private stationsStore = inject(StationStore);
+
+  constructor(private readonly http: HttpClient) {}
 
   getRouteInformation(routeId: number): Observable<RouteInformation> {
     return this.http.get<RideRoute>(`route/${routeId}`).pipe(
       switchMap((response) => {
         const carriages = [...new Set(response.carriages)];
 
-        const stations = this.routeService.getStationCities(response.path);
+        const stations = this.stationsStore
+          .getStationsByIds()(response.path)
+          .map((station) => station.city);
 
         const schedule = mapRidesToUI(response.schedule);
 
