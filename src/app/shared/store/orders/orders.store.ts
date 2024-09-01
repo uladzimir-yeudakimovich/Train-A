@@ -6,7 +6,7 @@ import {
   setEntity,
   withEntities,
 } from '@ngrx/signals/entities';
-import { OrderStatus } from '@shared/models/interfaces/order.model';
+import { Order, OrderStatus } from '@shared/models/interfaces/order.model';
 
 import { orderConfig } from './orders.config';
 
@@ -51,6 +51,10 @@ export const OrderStore = signalStore(
     async loadActualOrders() {
       const orders = await searchService.loadOrders();
       patchState(store, setAllEntities(orders, orderConfig));
+    },
+
+    clear() {
+      patchState(store, setAllEntities([] as Order[], orderConfig));
     },
   })),
 );

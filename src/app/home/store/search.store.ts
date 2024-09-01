@@ -1,4 +1,5 @@
 import { inject } from '@angular/core';
+import { SearchCard } from '@home/models/search-card.model';
 import { SearchRoutesParams } from '@home/models/search-routes-params.model';
 import { SearchService } from '@home/services//search/search.service';
 import { patchState, signalStore, withMethods, withState } from '@ngrx/signals';
@@ -32,6 +33,10 @@ export const SearchStore = signalStore(
 
     setFilter(time: number) {
       patchState(store, { time });
+    },
+
+    clear() {
+      patchState(store, setAllEntities([] as SearchCard[], searchConfig));
     },
   })),
 );
