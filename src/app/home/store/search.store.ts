@@ -1,6 +1,6 @@
 import { inject } from '@angular/core';
 import { SearchRoutesParams } from '@home/models/search-routes-params.model';
-import { SearchService } from '@home/services/search.service';
+import { SearchService } from '@home/services//search/search.service';
 import { patchState, signalStore, withMethods, withState } from '@ngrx/signals';
 import { setAllEntities, withEntities } from '@ngrx/signals/entities';
 
