@@ -17,6 +17,8 @@ export const SearchStore = signalStore(
 
   withMethods((store, searchService = inject(SearchService)) => ({
     async searchRoutes(searchRoutesParams: SearchRoutesParams) {
+      this.setFilter(0);
+
       const response =
         await searchService.getAvailableRoutes(searchRoutesParams);
       // do not save rides before the selected date

@@ -1,4 +1,5 @@
-import { Component, inject, input } from '@angular/core';
+import { Component, effect, inject, input, ViewChild } from '@angular/core';
+import { MatTabGroup } from '@angular/material/tabs';
 import { SearchStore } from '@home/store/search.store';
 
 import { searchFilterImports } from './search-filter.config';
@@ -21,5 +22,15 @@ export class SearchFilterComponent {
       return;
     }
     this.searchStore.setFilter(this.dates()[index - 1]);
+  }
+
+  @ViewChild(MatTabGroup) matTabGroup!: MatTabGroup;
+
+  constructor() {
+    // set "all dates" on new search
+    effect(() => {
+      this.dates();
+      this.matTabGroup.selectedIndex = 0;
+    });
   }
 }
