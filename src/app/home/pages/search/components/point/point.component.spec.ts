@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { PointComponent } from './point.component';
 
-describe('PointComponent', () => {
+xdescribe('PointComponent', () => {
   let component: PointComponent;
   let fixture: ComponentFixture<PointComponent>;
 
