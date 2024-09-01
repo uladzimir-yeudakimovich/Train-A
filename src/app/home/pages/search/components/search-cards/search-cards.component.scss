@@ -15,14 +15,17 @@ a {
   &-content {
     display: flex;
     justify-content: space-between;
+
+    @media (max-width: 768px) {
+      flex-direction: column;
+    }
   }
 
   &-time {
+    margin: 0 auto;
+    width: 40%;
     min-width: 20rem;
-    display: flex;
-    flex-direction: column;
     gap: 0.5rem;
-    flex-basis: 30rem;
 
     &__span {
       display: flex;
