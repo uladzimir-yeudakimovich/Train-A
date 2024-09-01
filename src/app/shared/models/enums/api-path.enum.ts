@@ -9,10 +9,13 @@ export enum ApiPath {
 
 export enum ErrorReason {
   OrderNotFound = 'orderNotFound',
-  OrderNotActive = 'orderNotActiva',
+  OrderNotActive = 'orderNotActive',
   RideNotFound = 'rideNotFound',
   InvalidAccessToken = 'invalidAccessToken',
   InvalidStations = 'invalidStations',
   InvalidRide = 'invalidRide',
   AlreadyBooked = 'alreadyBooked',
+  RecordNotFound = 'recordNotFound',
+  RecordInUse = 'recordInUse',
+  InvalidData = 'invalidData',
 }

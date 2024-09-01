@@ -1,7 +1,15 @@
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import {
+  HttpClientTestingModule,
+  HttpTestingController,
+} from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import {
-  mock400Error, mock403Error, mock500Error, mockPassword, mockUser, mockUserWithRole,
+  mock400Error,
+  mock403Error,
+  mock500Error,
+  mockPassword,
+  mockUser,
+  mockUserWithRole,
 } from '@testing/mock-data';
 
 import { ProfileService } from './profile.service';

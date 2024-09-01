@@ -11,14 +11,8 @@ describe('AppComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [
-        AppComponent,
-        HeaderComponent,
-        HttpClientModule,
-      ],
-      providers: [
-        { provide: ActivatedRoute, useValue: activatedRouteMock },
-      ],
+      imports: [AppComponent, HeaderComponent, HttpClientModule],
+      providers: [{ provide: ActivatedRoute, useValue: activatedRouteMock }],
     }).compileComponents();
 
     const fixture = TestBed.createComponent(AppComponent);

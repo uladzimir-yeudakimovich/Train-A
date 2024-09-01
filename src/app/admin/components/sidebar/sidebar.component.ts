@@ -21,6 +21,5 @@ export class SidebarComponent {
     { label: 'Stations', link: RoutePath.AdminStations, exact: true },
     { label: 'Carriages', link: RoutePath.AdminCarriages },
     { label: 'Routes', link: RoutePath.AdminRoutes },
-    { label: 'Ride Management', link: RoutePath.AdminRideManagement },
   ];
 }

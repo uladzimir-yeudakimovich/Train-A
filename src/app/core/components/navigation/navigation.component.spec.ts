@@ -12,16 +12,12 @@ describe('NavigationComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [
-        NavigationComponent,
-        HttpClientModule,
-      ],
+      imports: [NavigationComponent, HttpClientModule],
       providers: [
         { provide: AuthService, useValue: authServiceMock },
         { provide: ProfileService, useValue: profileServiceMock },
       ],
-    })
-      .compileComponents();
+    }).compileComponents();
 
     fixture = TestBed.createComponent(NavigationComponent);
     component = fixture.componentInstance;

@@ -22,4 +22,8 @@ export enum Message {
   DeleteStationWithActiveRides = 'Cannot delete station with active rides',
 
   UnexpectedError = 'Something went wrong. Please try again later',
+
+  RouteOrRideNotFound = 'Route or ride not found',
+  RideIsAlreadyUsed = 'Ride is already used',
+  TimeOrPriceIrrelevant = 'Time or price is irrelevant',
 }

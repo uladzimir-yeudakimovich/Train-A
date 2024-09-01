@@ -26,7 +26,7 @@
     "@bluehalo/ngx-leaflet": "^18.0.2",
     "@ngrx/eslint-plugin": "^18.0.2",
     "@ngrx/signals": "^18.0.2",
-    "@planess/train-a-backend": "^0.0.7",
+    "@planess/train-a-backend": "^0.0.9",
     "eslint": "^8.57.0",
     "eslint-plugin-import": "^2.29.1",
     "leaflet": "^1.9.4",

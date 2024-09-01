@@ -20,11 +20,8 @@ describe('HeaderComponent', () => {
         MatButtonModule,
         MatIconModule,
       ],
-      providers: [
-        { provide: LoggerService, useValue: loggerServiceMock },
-      ],
-    })
-      .compileComponents();
+      providers: [{ provide: LoggerService, useValue: loggerServiceMock }],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(HeaderComponent);
     component = fixture.componentInstance;
