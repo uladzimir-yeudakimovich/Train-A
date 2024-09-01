@@ -7,6 +7,7 @@ import { StationStore } from '@admin/store/stations/stations.store';
 import { mapRidesToUI, mapSegmentsToBE } from '@admin/utils/mapRides';
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
+import { ApiPath } from '@shared/models/enums/api-path.enum';
 import { catchError, Observable, of, switchMap, throwError } from 'rxjs';
 
 @Injectable({
@@ -18,7 +19,7 @@ export class RidesManagementService {
   constructor(private readonly http: HttpClient) {}
 
   getRouteInformation(routeId: number): Observable<RouteInformation> {
-    return this.http.get<RideRoute>(`route/${routeId}`).pipe(
+    return this.http.get<RideRoute>(`${ApiPath.Route}/${routeId}`).pipe(
       switchMap((response) => {
         const carriages = [...new Set(response.carriages)];
 
@@ -46,7 +47,9 @@ export class RidesManagementService {
     const s = mapSegmentsToBE(segments);
 
     return this.http
-      .post<{ id: number }>(`route/${routeId}/ride`, { segments: s })
+      .post<{
+        id: number;
+      }>(`${ApiPath.Route}/${routeId}/ride`, { segments: s })
       .pipe(catchError((err) => throwError(() => err)));
   }
 
@@ -58,13 +61,13 @@ export class RidesManagementService {
     const s = mapSegmentsToBE(segments);
 
     return this.http
-      .put(`route/${routeId}/ride/${rideId}`, { segments: s })
+      .put(`${ApiPath.Route}/${routeId}/ride/${rideId}`, { segments: s })
       .pipe(catchError((err) => throwError(() => err)));
   }
 
   deleteRide(routeId: number, rideId: number): Observable<object> {
     return this.http
-      .delete(`route/${routeId}/ride/${rideId}`)
+      .delete(`${ApiPath.Route}/${routeId}/ride/${rideId}`)
       .pipe(catchError((err) => throwError(() => err)));
   }
 }
