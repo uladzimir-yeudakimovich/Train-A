@@ -96,6 +96,7 @@ export class SearchFormComponent {
       fromLongitude: fromStation?.longitude ?? 0,
       toLatitude: toStation?.latitude ?? 0,
       toLongitude: toStation?.longitude ?? 0,
+      //! change value to get actual date after refactor
       time: 0,
     };
 

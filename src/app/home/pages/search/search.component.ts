@@ -49,6 +49,8 @@ export class SearchComponent implements OnInit {
     });
   });
 
+  // TODO: change state to get dates and filtered cards in store
+
   dates = computed(() =>
     [
       ...new Set(

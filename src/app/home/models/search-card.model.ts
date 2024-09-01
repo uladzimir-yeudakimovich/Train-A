@@ -20,3 +20,4 @@ export interface SearchCard {
   rideFrom: RidePoint;
   rideTo: RidePoint;
 }
+//! add free seats amount !!!

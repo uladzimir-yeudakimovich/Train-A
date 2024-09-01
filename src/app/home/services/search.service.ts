@@ -21,6 +21,7 @@ export class SearchService {
     return firstValueFrom(
       this.http
         .get<SearchResponse>(ApiPath.Search, { params })
+        // ! add error handling
         .pipe(map((data) => toSearchResult(data))),
     );
   }
