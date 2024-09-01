@@ -2,9 +2,25 @@
   display: block;
   width: 100%;
 
+  .viewport {
+    height: 100vh;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+  }
+
   .list {
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-between;
+    justify-content: space-around;
+  }
+
+  .list-item {
+    margin: 2rem 0;
+    width: 80%;
+
+    @media (min-width: 1200px) {
+      width: calc(45% - 5rem);
+    }
   }
 }

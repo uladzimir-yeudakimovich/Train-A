@@ -1,0 +1,11 @@
+<mat-list role="list">
+  @for (carriage of availableCarriages(); track $index) {
+    <mat-list-item role="listitem" class="carriage">
+      <app-train-car
+        [carriage]="carriage"
+        title="Carriage {{carriage.code}}"
+        (toggleSeat)="onToggleSeat($event, carriage.code)"
+      ></app-train-car>
+    </mat-list-item>
+  }
+</mat-list>

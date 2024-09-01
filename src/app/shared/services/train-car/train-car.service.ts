@@ -1,26 +1,11 @@
-import { inject, Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { SeatState } from '@shared/models/enums/seat-state.enum';
 import { Carriage } from '@shared/models/interfaces/carriage.model';
-import { CarriageStore } from '@shared/store/carriages/carriages.store';
 
 @Injectable()
 export class TrainCarService {
-  private carriageStore = inject(CarriageStore);
-
-  toggleSeatState(carriage: Carriage, seatNumber: number): void {
-    const seat = carriage.seats.find((s) => s.number === seatNumber)!;
-    const isSelected = seat.state === SeatState.Selected;
-    const newState = isSelected ? SeatState.Available : SeatState.Selected;
-
-    this.carriageStore.updateSeat(carriage, { ...seat, state: newState });
-  }
-
-  getSortedSeats(carriage: Carriage): Carriage['seats'] {
-    return this.carriageStore.getSortedSeats(carriage.code);
-  }
-
   getAvailableSeatsNumber(carriage: Carriage): number {
-    return this.carriageStore.getAvailableSeatsNumber(carriage.code);
+    return carriage.seats.filter((s) => s.state !== SeatState.Reserved).length;
   }
 
   getSeatDirection(

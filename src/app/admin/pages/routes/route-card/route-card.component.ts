@@ -1,18 +1,21 @@
-import { DeleteDialogComponent } from '@admin/components/delete-dialog/delete-dialog.component';
 import { RailRoute } from '@admin/models/route.model';
-import { RouteManagementService } from '@admin/services/route-management/route-management.service';
 import { RouteStore } from '@admin/store/routes/routes.store';
 import { StationStore } from '@admin/store/stations/stations.store';
+import { HttpErrorResponse } from '@angular/common/http';
 import {
+  ChangeDetectionStrategy,
   Component,
   computed,
   inject,
   input,
-  OnInit,
   signal,
 } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
+import { ConfirmationDialogComponent } from '@shared/components/delete-dialog/confirmation-dialog.component';
+import { ErrorReason } from '@shared/models/enums/api-path.enum';
+import { Message } from '@shared/models/enums/messages.enum';
+import { SnackBarService } from '@shared/services/snack-bar/snack-bar.service';
 
 import { routeCardImports } from './route-card.config';
 
@@ -22,14 +25,20 @@ import { routeCardImports } from './route-card.config';
   imports: routeCardImports,
   templateUrl: './route-card.component.html',
   styleUrl: './route-card.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class RouteCardComponent implements OnInit {
+export class RouteCardComponent {
   route = input.required<RailRoute>();
 
   displayUpdateForm = signal<boolean>(false);
 
+  isLoading = signal<boolean>(false);
+
   cities = computed(() => {
-    return this.routeService.getStationCities(this.route().path);
+    const stationIds = this.route().path;
+    return this.stationStore
+      .getStationsByIds()(stationIds)
+      .map((station) => station?.city);
   });
 
   readonly dialog = inject(MatDialog);
@@ -39,25 +48,29 @@ export class RouteCardComponent implements OnInit {
   private stationStore = inject(StationStore);
 
   constructor(
-    private routeService: RouteManagementService,
     private router: Router,
     private activatedRoute: ActivatedRoute,
+    private snackBarService: SnackBarService,
   ) {}
 
-  ngOnInit() {
-    this.stationStore.getStations();
-  }
-
   openDialog() {
-    const dialogRef = this.dialog.open(DeleteDialogComponent, {
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
       data: {
         title: `Delete Route ${this.route().id}`,
-        message: 'Are you sure you want to delete this route?',
+        message: Message.RouteDeleteConfirmation,
       },
     });
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
-        this.onDeleteClick();
+        this.isLoading.set(true);
+        this.routeStore
+          .deleteRoute(this.route().id)
+          .catch((error) => {
+            this.errorSnackBar(error);
+          })
+          .finally(() => {
+            this.isLoading.set(false);
+          });
       }
     });
   }
@@ -73,7 +86,31 @@ export class RouteCardComponent implements OnInit {
     this.displayUpdateForm.update((value) => !value);
   }
 
-  private onDeleteClick() {
-    this.routeStore.deleteRoute(this.route().id);
+  get toolbarButtons() {
+    return [
+      {
+        label: 'Update',
+        icon: 'edit_square',
+        click: () => this.toggleUpdateForm(),
+      },
+      {
+        label: 'Assign ride',
+        icon: 'train',
+        click: () => this.onAssignRideClick(),
+      },
+      {
+        label: '',
+        icon: 'delete',
+        click: () => this.openDialog(),
+      },
+    ];
+  }
+
+  private errorSnackBar(error: HttpErrorResponse) {
+    if (error.error.reason === ErrorReason.InvalidAccessToken) {
+      this.snackBarService.open(Message.InvalidAccessToken);
+    } else {
+      this.snackBarService.open(Message.UnexpectedError);
+    }
   }
 }

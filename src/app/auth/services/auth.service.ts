@@ -42,9 +42,16 @@ export class AuthService {
   }
 
   logout(): void {
-    localStorage.removeItem('token');
-    localStorage.removeItem('username');
-    localStorage.removeItem('userRole');
-    this.isLogin.set(false);
+    this.http
+      .delete('logout')
+      .pipe(
+        tap(() => {
+          localStorage.removeItem('token');
+          localStorage.removeItem('username');
+          localStorage.removeItem('userRole');
+          this.isLogin.set(false);
+        }),
+      )
+      .subscribe();
   }
 }

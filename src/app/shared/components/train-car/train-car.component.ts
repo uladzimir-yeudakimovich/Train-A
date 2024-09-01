@@ -1,11 +1,15 @@
 import {
+  ChangeDetectionStrategy,
   Component,
   computed,
   HostListener,
   input,
   OnInit,
+  output,
   signal,
 } from '@angular/core';
+import { MatButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
 import { Carriage } from '@shared/models/interfaces/carriage.model';
 import { TrainCarService } from '@shared/services/train-car/train-car.service';
 
@@ -14,13 +18,20 @@ import { CarSeatComponent } from '../car-seat/car-seat.component';
 @Component({
   selector: 'app-train-car',
   standalone: true,
-  imports: [CarSeatComponent],
+  imports: [CarSeatComponent, MatButton, MatIcon],
   providers: [TrainCarService],
   templateUrl: './train-car.component.html',
   styleUrl: './train-car.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TrainCarComponent implements OnInit {
   carriage = input.required<Carriage>();
+
+  title = input<string>();
+
+  toggleSeat = output<number>();
+
+  updateCarriage = output<Carriage>();
 
   isHorizontal = signal<boolean>(false);
 
@@ -29,7 +40,7 @@ export class TrainCarComponent implements OnInit {
     if (this.isHorizontal()) {
       return carriage.seats;
     }
-    return this.trainCarService.getSortedSeats(carriage);
+    return [...carriage.seats].sort((a, b) => a.number - b.number);
   });
 
   constructor(private trainCarService: TrainCarService) {}
@@ -44,7 +55,7 @@ export class TrainCarComponent implements OnInit {
   }
 
   toggleSeatState(seatNumber: number) {
-    this.trainCarService.toggleSeatState(this.carriage(), seatNumber);
+    this.toggleSeat.emit(seatNumber);
   }
 
   getSeatDirection(seatNumber: number): string {

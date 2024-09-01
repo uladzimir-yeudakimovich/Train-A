@@ -6,8 +6,9 @@ import {
   inject,
   Signal,
 } from '@angular/core';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { OrderStatus } from '@shared/store/orders/orders.config';
+import { Message } from '@shared/models/enums/messages.enum';
+import { OrderStatus } from '@shared/models/interfaces/order.model';
+import { SnackBarService } from '@shared/services/snack-bar/snack-bar.service';
 import { OrderStore } from '@shared/store/orders/orders.store';
 
 import { stationCardsImports } from './station-cards.config';
@@ -27,21 +28,18 @@ export class StationCardsComponent {
 
   private orderStore = inject(OrderStore);
 
-  constructor(private snackBar: MatSnackBar) {
+  constructor(private snackBarService: SnackBarService) {
     this.stations = this.stationStore.stationsEntities;
   }
 
   deleteStation(id: number): void {
-    // TODO: check it when OrderStore will be implemented
     const orders = this.orderStore.ordersEntities();
     const hasActiveOrder = orders.some(
       (order) => order.status === OrderStatus.Active && order.path.includes(id),
     );
 
     if (hasActiveOrder) {
-      this.snackBar.open('Cannot delete station with active rides', 'Close', {
-        duration: 5000,
-      });
+      this.snackBarService.open(Message.DeleteStationWithActiveRides);
     } else {
       this.stationStore.deleteStation(id);
     }

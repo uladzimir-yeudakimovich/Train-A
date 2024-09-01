@@ -1,1 +1,16 @@
-<p>rides works!</p>
+<div class="layout">
+  <div class="title-and-button">
+    <button class="btn" mat-mini-fab (click)="onBackButtonClick()">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    <h3 class="title">Route {{ routeId }}</h3>
+  </div>
+  @if (!formVisible()) {
+    <button class="btn btn-create-ride" mat-flat-button (click)="showForm()">
+      Create Ride
+    </button>
+  } @else {
+    <app-ride-card-form [(formVisible)]="formVisible" />
+  }
+  <app-ride-list />
+</div>

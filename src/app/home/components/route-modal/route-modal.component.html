@@ -1,0 +1,57 @@
+<h2 mat-dialog-title class="header">
+  Route {{ data.rideId }}
+  <span class="spacer"></span>
+  <button mat-icon-button mat-dialog-close>
+    <mat-icon>close</mat-icon>
+  </button>
+</h2>
+<mat-divider></mat-divider>
+<mat-dialog-content class="content">
+  @if (isLoading()) {
+    <div class="spinner-container">
+      <mat-spinner class="spinner" />
+      <div class="label">Loading the trip info</div>
+    </div>
+  } @else {
+    <mat-stepper orientation="vertical" #stepper>
+      @for (stop of routeData(); track $index) {
+        @let isStart = stop.station.id === data.from;
+        @let isEnd = stop.station.id === data.to;
+
+        <mat-step completed="false">
+          <ng-template matStepLabel>
+            <div class="step-label">
+              {{ stop.station.city }}
+
+              <span class="spacer"></span>
+              <span class="dwell">
+                @if (isStart) {
+                  <mat-icon>person_pin_circle</mat-icon>
+                  {{ stop.departure | date: "MMMM d, HH:mm" }}
+                } @else if (isEnd) {
+                  <mat-icon>location_on</mat-icon>
+                  {{ stop.arrival | date: "MMMM d, HH:mm" }}
+                } @else if ($first) {
+                  {{ stop.departure | date: "MMMM d, HH:mm" }}
+                } @else if ($last) {
+                  {{ stop.arrival | date: "MMMM d, HH:mm" }}
+                } @else {
+                  {{ stop.dwellTime }} min
+                }
+              </span>
+            </div>
+          </ng-template>
+
+          <div class="schedule">
+            @if (stop.arrival) {
+              <p>Arrival: {{ stop.arrival | date: "dd/MM HH:mm" }}</p>
+            }
+            @if (stop.departure) {
+              <p>Departure: {{ stop.departure | date: "dd/MM HH:mm" }}</p>
+            }
+          </div>
+        </mat-step>
+      }
+    </mat-stepper>
+  }
+</mat-dialog-content>

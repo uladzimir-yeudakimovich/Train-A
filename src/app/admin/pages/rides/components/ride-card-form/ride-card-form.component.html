@@ -1,0 +1,90 @@
+@if (!ridesStore.loading()) {
+  <div class="form-like">
+    <h3>Create Ride</h3>
+    <div class="container">
+      <div class="stations">
+        @for (station of stations(); track $index) {
+          <p>{{ station }}</p>
+        }
+      </div>
+
+      <div class="dates-and-prices">
+        @for (
+          segment of rideSegments();
+          track $index;
+          let segmentIndex = $index
+        ) {
+          <div class="row">
+            <div class="dates">
+              <div>
+                Departure:
+                <input
+                  type="date"
+                  #departureDate
+                  (change)="
+                    onDepartureDateChange(segmentIndex, departureDate.value)
+                  "
+                />
+                <input
+                  type="time"
+                  #departureTime
+                  (change)="
+                    onDepartureTimeChange(segmentIndex, departureTime.value)
+                  "
+                />
+              </div>
+              <div>
+                Arrival:
+                <input
+                  type="date"
+                  #arrivalDate
+                  (change)="
+                    onArrivalDateChange(segmentIndex, arrivalDate.value)
+                  "
+                />
+                <input
+                  type="time"
+                  #arrivalTime
+                  (change)="
+                    onArrivalTimeChange(segmentIndex, arrivalTime.value)
+                  "
+                />
+              </div>
+            </div>
+
+            <div class="prices">
+              @for (
+                carriage of carriageTypes();
+                track $index;
+                let priceIndex = $index
+              ) {
+                <div class="price">
+                  <div>{{ carriage }}</div>
+                  <input
+                    type="text"
+                    #price
+                    (change)="
+                      onPriceChange(segmentIndex, carriage, price.value)
+                    "
+                  />
+                </div>
+              }
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+    <div class="buttons">
+      <button mat-flat-button color="warn" (click)="onCancelButtonClick()">
+        Cancel
+      </button>
+      <button
+        mat-flat-button
+        [disabled]="!areAllFieldsFilled()"
+        (click)="onCreateButtonClick()"
+      >
+        Create
+      </button>
+    </div>
+  </div>
+}

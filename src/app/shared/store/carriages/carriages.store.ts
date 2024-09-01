@@ -1,13 +1,16 @@
 import { AdminService } from '@admin/services/admin/admin.service';
+import { CarriageService } from '@admin/services/carriage-management/carriage.service';
 import { computed, inject } from '@angular/core';
 import { patchState, signalStore, withMethods } from '@ngrx/signals';
 import {
+  addEntity,
   setAllEntities,
   updateEntity,
   withEntities,
 } from '@ngrx/signals/entities';
 import { SeatState } from '@shared/models/enums/seat-state.enum';
 import { Carriage, CarSeat } from '@shared/models/interfaces/carriage.model';
+import { getSeats } from '@shared/utils/carriage.utils';
 
 import { carriageConfig } from './carriages.config';
 
@@ -22,13 +25,19 @@ export const CarriageStore = signalStore(
 
     async getCarriages() {
       if (!store.carriagesIds().length) {
-        const carriages = await adminService.loadCarriages();
+        const carriages = (await adminService.loadCarriages()).map((c) => {
+          return {
+            ...c,
+            seats: getSeats(c),
+          };
+        });
+
         patchState(store, setAllEntities(carriages, carriageConfig));
       }
     },
   })),
 
-  withMethods((store) => ({
+  withMethods((store, carriageService = inject(CarriageService)) => ({
     getCarriageSignal: (carriageCode: string) =>
       computed(() => store.getCarriage(carriageCode)),
 
@@ -62,17 +71,41 @@ export const CarriageStore = signalStore(
       );
     },
 
-    updateCarriage: (updatedCarriage: Carriage) => {
-      patchState(
-        store,
-        updateEntity(
-          {
-            id: updatedCarriage.code,
-            changes: () => updatedCarriage,
-          },
-          carriageConfig,
-        ),
-      );
+    async updateCarriage(carriage: Carriage) {
+      const response = await carriageService.updateCarriage(carriage);
+      if ('code' in response) {
+        const newCarriage = {
+          ...carriage,
+          seats: getSeats(carriage as Carriage),
+        };
+        patchState(
+          store,
+          updateEntity(
+            {
+              id: carriage.code,
+              changes: newCarriage,
+            },
+            carriageConfig,
+          ),
+        );
+      }
+    },
+
+    async addCarriage(carriage: Carriage) {
+      const response = await carriageService.addCarriage(carriage);
+      if ('code' in response) {
+        const { code } = response;
+        const { name, leftSeats, rightSeats, rows } = carriage;
+        const newCarriage = {
+          code,
+          name,
+          leftSeats,
+          rightSeats,
+          rows,
+          seats: getSeats(carriage as Carriage),
+        } as Carriage;
+        patchState(store, addEntity(newCarriage, carriageConfig));
+      }
     },
   })),
 );

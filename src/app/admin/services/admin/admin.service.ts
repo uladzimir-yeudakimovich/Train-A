@@ -2,6 +2,7 @@ import { RailRoute } from '@admin/models/route.model';
 import { Connection, Station } from '@admin/models/station.model';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { User } from '@auth/models/auth.model';
 import { ApiPath } from '@shared/models/enums/api-path.enum';
 import { Carriage } from '@shared/models/interfaces/carriage.model';
 import { firstValueFrom, map } from 'rxjs';
@@ -15,6 +16,8 @@ export class AdminService {
   readonly loadStations = this.createLoader<Station[]>(ApiPath.Station);
 
   readonly loadCarriages = this.createLoader<Carriage[]>(ApiPath.Carriage);
+
+  readonly loadUsers = this.createLoader<User[]>(ApiPath.Users);
 
   constructor(private http: HttpClient) {}
 

@@ -1,4 +1,7 @@
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import {
+  HttpClientTestingModule,
+  HttpTestingController,
+} from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
 import { mockCredentials } from '@testing/index';
@@ -15,10 +18,7 @@ describe('AuthService', () => {
 
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
-      providers: [
-        AuthService,
-        { provide: Router, useValue: routerSpy },
-      ],
+      providers: [AuthService, { provide: Router, useValue: routerSpy }],
     });
 
     service = TestBed.inject(AuthService);

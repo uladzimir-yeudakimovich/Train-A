@@ -21,6 +21,32 @@ export const StationStore = signalStore(
   { providedIn: 'root' },
   withEntities(stationConfig),
 
+  withComputed(({ stationsEntities, stationsEntityMap }) => ({
+    locations: computed(() =>
+      stationsEntities().map(({ city, latitude, longitude }) => ({
+        location: [latitude, longitude],
+        label: city,
+      })),
+    ),
+    getConnectedStations: computed(() => {
+      const stationsMap = stationsEntityMap();
+
+      return (stationId: number) => {
+        if (!stationId) {
+          return stationsEntities();
+        }
+        const fromStation = stationsMap[stationId];
+        const connectedStations = fromStation.connectedTo.map(
+          (connection) => stationsMap[connection.id],
+        );
+        return connectedStations;
+      };
+    }),
+    getStationsByIds: computed(() => (ids: number[]) => {
+      return ids.map((id) => stationsEntityMap()[id]);
+    }),
+  })),
+
   withMethods((store, adminService = inject(AdminService)) => ({
     async getStations() {
       if (!store.stationsIds().length) {
@@ -74,14 +100,5 @@ export const StationStore = signalStore(
         }, stationConfig),
       );
     },
-  })),
-
-  withComputed(({ stationsEntities }) => ({
-    locations: computed(() =>
-      stationsEntities().map(({ city, latitude, longitude }) => ({
-        location: [latitude, longitude],
-        label: city,
-      })),
-    ),
   })),
 );

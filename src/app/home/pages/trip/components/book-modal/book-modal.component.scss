@@ -1,0 +1,22 @@
+:host {
+  font-weight: 500;
+
+  .card-content,
+  .card-footer {
+    padding: 1rem;
+  }
+
+  .book-item {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .total {
+    display: flex;
+    justify-content: right;
+  }
+
+  .book-button {
+    width: 100%;
+  }
+}

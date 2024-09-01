@@ -46,15 +46,8 @@ export const routes: Routes = [
     path: RoutePath.Orders,
     title: 'Orders',
     loadComponent: () =>
-      import('@orders/orders/orders.component').then((m) => m.OrdersComponent),
-    canActivate: [AuthGuard, AdminRoleGuard],
-  },
-  {
-    path: RoutePath.UserOrders,
-    title: 'My Orders',
-    loadComponent: () =>
-      import('@orders/user-orders/user-orders.component').then(
-        (m) => m.UserOrdersComponent,
+      import('@home/pages/orders/orders.component').then(
+        (m) => m.OrdersComponent,
       ),
     canActivate: [AuthGuard],
   },

@@ -29,7 +29,7 @@ xdescribe('TrainCarComponent', () => {
     component = fixture.componentInstance;
 
     component['trainCarService'] = TestBed.inject(TrainCarService);
-    fixture.componentRef.setInput('carriage', new Carriage('1', 'Carriage 1', 5, 2, 1));
+    fixture.componentRef.setInput('carriage', {} as Carriage);
     fixture.detectChanges();
   });
 

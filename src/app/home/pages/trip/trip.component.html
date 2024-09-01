@@ -1,1 +1,79 @@
-<p>trip works!</p>
+@if (isLoading()) {
+  <div class="spinner-container">
+    <mat-spinner class="spinner" />
+    <div class="label">Loading the trip</div>
+  </div>
+} @else {
+  @let trip = tripView();
+  <div class="head">
+    <div class="head-back">
+      <button mat-icon-button (click)="onBack()">
+        <mat-icon>arrow_back</mat-icon>
+      </button>
+    </div>
+    <div class="head-info">
+      <div class="head-stations">
+        <p>{{ trip.from.city }} - {{ trip.to.city }}</p>
+        <p>
+          {{ trip.departure | date: "MMMM d, HH:mm" }} -
+          {{ trip.arrival | date: "MMMM d, HH:mm" }}
+        </p>
+      </div>
+      <p>
+        <span>Ride {{ tripView().rideId }}</span>
+        <button mat-button (click)="onRoute()">
+          <mat-icon>keyboard_arrow_down</mat-icon>
+          Route
+        </button>
+      </p>
+    </div>
+  </div>
+  <div class="body">
+    <div class="carriages">
+      <mat-tab-group
+        animationDuration="0ms"
+        mat-stretch-tabs="false"
+        mat-align-tabs="start"
+      >
+        @for (trainClass of trip.trainClasses; track $index) {
+
+          <mat-tab>
+            <ng-template mat-tab-label>
+              <mat-list-item>
+                <p matListItemTitle>
+                  Carriage type {{ trainClass.name }}:
+                  {{ trainClass.availableSeats }}
+                </p>
+                <p matListItemLine>
+                  {{ trainClass.price| currency }}
+                </p>
+              </mat-list-item>
+            </ng-template>
+            <app-carriage-list
+              [carriages]="trainClass.carriages"
+            ></app-carriage-list>
+          </mat-tab>
+        }
+      </mat-tab-group>
+    </div>
+
+    <div class="book-modal">
+      <app-book-modal
+        [bookItems]="bookItems()"
+        (bookClick)="onBook()"
+      ></app-book-modal>
+    </div>
+
+    <div class="legend">
+      @for (legendSeat of legendSeats; track $index) {
+        <div class="legend-item">
+          <app-car-seat
+            [seat]="legendSeat.seat"
+            [direction]="'right'"
+          ></app-car-seat>
+          {{ legendSeat.description }}
+        </div>
+      }
+    </div>
+  </div>
+}

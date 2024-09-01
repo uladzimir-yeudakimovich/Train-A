@@ -66,7 +66,9 @@ describe('ChangePasswordComponent', () => {
     passwordControl.setValue('validPassword123');
     component.onSubmit();
 
-    expect(profileService.updateUserPassword).toHaveBeenCalledWith({ password: 'validPassword123' });
+    expect(profileService.updateUserPassword).toHaveBeenCalledWith({
+      password: 'validPassword123',
+    });
   });
 
   it('should not call profileService.updateUserPassword on invalid form submission', () => {
