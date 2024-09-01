@@ -1,21 +1,32 @@
 import { RailRoute } from '@admin/models/route.model';
+import { Station } from '@admin/models/station.model';
 import { RouteStore } from '@admin/store/routes/routes.store';
 import { StationStore } from '@admin/store/stations/stations.store';
+import { HttpErrorResponse } from '@angular/common/http';
 import {
+  ChangeDetectionStrategy,
   Component,
-  computed,
   inject,
   input,
   OnInit,
   output,
   Signal,
+  signal,
 } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ErrorReason } from '@shared/models/enums/api-path.enum';
+import { Message } from '@shared/models/enums/messages.enum';
 import { Carriage } from '@shared/models/interfaces/carriage.model';
+import { SnackBarService } from '@shared/services/snack-bar/snack-bar.service';
 import { CarriageStore } from '@shared/store/carriages/carriages.store';
 
-import { routeFormImports } from './route-form.config';
+import {
+  maxCarriagesNumber,
+  maxStationsNumber,
+  minCarriagesNumber,
+  minStationsNumber,
+  routeFormImports,
+} from './route-form.config';
 import { minArrayLength } from './route-form.utils';
 
 @Component({
@@ -24,6 +35,7 @@ import { minArrayLength } from './route-form.utils';
   imports: routeFormImports,
   templateUrl: './route-form.component.html',
   styleUrl: './route-form.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RouteFormComponent implements OnInit {
   route = input<RailRoute>();
@@ -34,20 +46,9 @@ export class RouteFormComponent implements OnInit {
 
   carriageOptions!: Signal<Partial<Carriage>[]>;
 
-  connectedStationsMap = computed(() => {
-    const stationsMap = this.stationStore.stationsEntityMap();
+  connectedStationsMap!: Signal<(stationId: number) => Station[]>;
 
-    return (stationId: number) => {
-      if (!stationId) {
-        return this.stationStore.stationsEntities();
-      }
-      const fromStation = stationsMap[stationId];
-      const connectedStations = fromStation.connectedTo.map(
-        (connection) => stationsMap[connection.id],
-      );
-      return connectedStations;
-    };
-  });
+  isLoading = signal<boolean>(false);
 
   private carriageStore = inject(CarriageStore);
 
@@ -57,19 +58,28 @@ export class RouteFormComponent implements OnInit {
 
   constructor(
     private formBuilder: FormBuilder,
-    private snackBar: MatSnackBar,
+    private snackBarService: SnackBarService,
   ) {}
 
   ngOnInit(): void {
-    const minStationsNumber = 3;
-    const minCarriagesNumber = 3;
-
-    this.carriageStore.getCarriages();
+    this.connectedStationsMap = this.stationStore.getConnectedStations;
     this.carriageOptions = this.carriageStore.carriagesEntities;
 
     this.routeForm = this.formBuilder.group({
-      stations: this.formBuilder.array([], minArrayLength(minStationsNumber)),
-      carriages: this.formBuilder.array([], minArrayLength(minCarriagesNumber)),
+      stations: this.formBuilder.array(
+        [],
+        [
+          minArrayLength(minStationsNumber),
+          Validators.maxLength(maxStationsNumber),
+        ],
+      ),
+      carriages: this.formBuilder.array(
+        [],
+        [
+          minArrayLength(minCarriagesNumber),
+          Validators.maxLength(maxCarriagesNumber),
+        ],
+      ),
     });
     this.initRouteForm();
   }
@@ -81,14 +91,33 @@ export class RouteFormComponent implements OnInit {
     const isUpdateMode = !!this.route();
     const newRoute = this.getFormRoute();
 
+    this.isLoading.set(true);
     if (isUpdateMode) {
-      this.routeStore.updateRoute(this.route()!.id, newRoute);
-      this.onClose();
+      this.routeStore
+        .updateRoute(this.route()!.id, newRoute)
+        .then(() => {
+          this.onClose();
+        })
+        .catch((error) => {
+          this.errorSnackBar(error);
+        })
+        .finally(() => {
+          this.isLoading.set(false);
+        });
       return;
     }
 
-    this.routeStore.postRoute(newRoute);
-    this.onReset();
+    this.routeStore
+      .postRoute(newRoute)
+      .then(() => {
+        this.onReset();
+      })
+      .catch((error) => {
+        this.errorSnackBar(error);
+      })
+      .finally(() => {
+        this.isLoading.set(false);
+      });
   }
 
   onReset() {
@@ -125,23 +154,19 @@ export class RouteFormComponent implements OnInit {
     event.stopPropagation();
     this.stations.removeAt(idx);
     this.enableLastTwoStations();
+    this.routeForm.markAsDirty();
   }
 
   onDeleteCarriage(event: Event, idx: number) {
     event.stopPropagation();
     this.carriages.removeAt(idx);
+    this.routeForm.markAsDirty();
   }
 
   onStationClick(idx: number) {
     const stationControl = this.stations.at(idx);
     if (stationControl.disabled) {
-      this.snackBar.open(
-        'You cannot change this station as this may break the connection with the next station.',
-        'Close',
-        {
-          duration: 5000,
-        },
-      );
+      this.snackBarService.open(Message.RoutFormCannotChangeStation);
     }
   }
 
@@ -155,6 +180,10 @@ export class RouteFormComponent implements OnInit {
     return this.carriages.hasError('minArrayLength')
       ? 'At least 3 carriages are required'
       : '';
+  }
+
+  isSaveDisabled(): boolean {
+    return !this.routeForm.valid || this.routeForm.pristine;
   }
 
   get stations() {
@@ -173,9 +202,14 @@ export class RouteFormComponent implements OnInit {
   }
 
   private initRouteForm() {
-    if (this.route()) {
-      this.addStationControl(this.route()!.path);
-      this.addCarriageControl(this.route()!.carriages);
+    const route = this.route();
+    if (route) {
+      route.path.forEach((stationId) => {
+        this.stations.push(this.formBuilder.control(stationId));
+      });
+      route.carriages.forEach((carriage) => {
+        this.carriages.push(this.formBuilder.control(carriage));
+      });
     }
     // empty fields at the end
     this.addCarriageControl();
@@ -190,42 +224,24 @@ export class RouteFormComponent implements OnInit {
       this.stations.enable();
       return;
     }
-    this.stations.disable();
+    this.stations.disable({ emitEvent: false, onlySelf: true });
     stations[stations.length - 1].enable();
     stations[stations.length - 2].enable();
   }
 
-  private addCarriageControl(initValues?: string[]) {
-    this.addControl(this.carriages, initValues);
+  private addCarriageControl() {
+    this.carriages.push(this.formBuilder.control(null));
   }
 
-  private addStationControl(initValues?: number[]) {
-    this.addControl(this.stations, initValues);
+  private addStationControl() {
+    this.stations.push(this.formBuilder.control(null));
   }
 
-  private addControl<T>(controls: FormArray, initValues?: T[]) {
-    if (!initValues) {
-      controls.push(this.formBuilder.control(''));
-      return;
+  private errorSnackBar(error: HttpErrorResponse) {
+    if (error.error.reason === ErrorReason.InvalidAccessToken) {
+      this.snackBarService.open(Message.InvalidAccessToken);
+    } else {
+      this.snackBarService.open(Message.UnexpectedError);
     }
-    initValues.forEach((value: T) => {
-      controls.push(this.formBuilder.control(value));
-    });
-  }
-
-  canSubmit(): boolean {
-    if (!this.route()) {
-      return this.routeForm.valid;
-    }
-    // update form: can sumbit if form is valid and there are changes
-    const route = this.route()!;
-    this.stations.enable();
-    const { path, carriages } = this.getFormRoute();
-    this.enableLastTwoStations();
-
-    const hasChangedFields =
-      path!.join() !== route.path.join() ||
-      carriages!.join() !== route.carriages.join();
-    return this.routeForm.valid && hasChangedFields;
   }
 }

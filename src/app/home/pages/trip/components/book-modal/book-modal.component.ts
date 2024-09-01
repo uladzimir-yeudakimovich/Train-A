@@ -1,6 +1,13 @@
-import { Component, computed, input, output } from '@angular/core';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  input,
+  output,
+} from '@angular/core';
 import { BookItem } from '@home/models/trip.models';
+import { Message } from '@shared/models/enums/messages.enum';
+import { SnackBarService } from '@shared/services/snack-bar/snack-bar.service';
 
 import { bookModalImports } from './book-modal.config';
 
@@ -10,6 +17,7 @@ import { bookModalImports } from './book-modal.config';
   imports: bookModalImports,
   templateUrl: './book-modal.component.html',
   styleUrl: './book-modal.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BookModalComponent {
   bookItems = input.required<BookItem[]>();
@@ -20,13 +28,11 @@ export class BookModalComponent {
 
   bookClick = output<boolean>();
 
-  constructor(private snackBar: MatSnackBar) {}
+  constructor(private snackBarService: SnackBarService) {}
 
   onBook(): void {
     if (this.bookItems().length !== 1) {
-      this.snackBar.open('Please select only one seat', 'Close', {
-        duration: 5000,
-      });
+      this.snackBarService.open(Message.SelectedTooManySeats);
       return;
     }
     this.bookClick.emit(true);

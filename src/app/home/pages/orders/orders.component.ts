@@ -1,7 +1,9 @@
 import {
-  AfterViewInit,
+  AfterViewChecked,
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
-  effect,
+  computed,
   OnInit,
   signal,
   ViewChild,
@@ -19,35 +21,44 @@ import { displayedColumns, ordersImports } from './orders.config';
   imports: ordersImports,
   templateUrl: './orders.component.html',
   styleUrl: './orders.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class OrdersComponent implements OnInit, AfterViewInit {
+export class OrdersComponent implements OnInit, AfterViewChecked {
   isLoading = signal<boolean>(true);
 
   displayedColumns: string[] = displayedColumns;
 
-  dataSource = new MatTableDataSource<OrderView>();
+  getDataSource!: () => MatTableDataSource<OrderView>;
+
+  private dataSourceComputed = computed(() => {
+    const dataSource = new MatTableDataSource<OrderView>();
+    return () => {
+      dataSource.data = this.orderService.orderViews();
+      return dataSource;
+    };
+  });
 
   @ViewChild(MatSort) sort!: MatSort;
 
-  constructor(private orderService: OrderService) {
-    effect(() => {
-      const orderViews = this.orderService.orderViews();
-      this.dataSource.data = orderViews;
+  constructor(
+    private orderService: OrderService,
+    private cdr: ChangeDetectorRef,
+  ) {}
+
+  ngOnInit() {
+    this.getDataSource = this.dataSourceComputed();
+    this.orderService.initStore().then(() => {
+      this.isLoading.set(false);
     });
   }
 
-  async ngOnInit() {
-    await this.orderService.initStore();
-    this.isLoading.set(false);
-  }
-
-  async ngAfterViewInit() {
-    await this.orderService.initStore(); // sort is undefined without it
-    this.dataSource.sort = this.sort;
+  ngAfterViewChecked() {
+    this.getDataSource().sort = this.sort;
   }
 
   onCancelOrder(orderId: number) {
     this.orderService.cancelOrder(orderId);
+    this.cdr.detectChanges();
   }
 
   get orderStatus() {

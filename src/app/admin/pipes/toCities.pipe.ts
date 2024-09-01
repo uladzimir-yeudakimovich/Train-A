@@ -15,8 +15,8 @@ export class ToCitiesPipe implements PipeTransform {
         (connectedToProps) =>
           stations.find((item) => item.id === connectedToProps.id)?.city,
       )
-      .filter(Boolean);
+      .filter((city): city is string => Boolean(city));
 
-    return cityNames.join(' - ');
+    return cityNames.join('  —  ');
   }
 }

@@ -6,3 +6,13 @@ export enum ApiPath {
   Order = 'order',
   Users = 'users',
 }
+
+export enum ErrorReason {
+  OrderNotFound = 'orderNotFound',
+  OrderNotActive = 'orderNotActiva',
+  RideNotFound = 'rideNotFound',
+  InvalidAccessToken = 'invalidAccessToken',
+  InvalidStations = 'invalidStations',
+  InvalidRide = 'invalidRide',
+  AlreadyBooked = 'alreadyBooked',
+}

@@ -1,12 +1,13 @@
-@import '@shared/styles/variables.scss';
+@import "@shared/styles/variables.scss";
 
 :host {
-  width: 100%;
-  margin: 1rem;
-
-  padding: 1rem 2rem;
-  border-radius: 1rem;
-  box-shadow: 0 0 0.5rem rgba(0, 0, 0, 0.3);
+  .wrapper {
+    width: 100%;
+    height: 100%;
+    padding: 1rem 2rem;
+    border-radius: 1rem;
+    box-shadow: 0 0 0.5rem rgba(0, 0, 0, 0.3);
+  }
 
   .mat-toolbar {
     background-color: $white;
@@ -33,10 +34,31 @@
   .carriages-list {
     margin-left: 1rem;
   }
-}
 
-@media (min-width: 1200px) {
-  :host {
-    width: calc(50% - 6rem);
+  .spinner-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    position: relative;
+
+    .spinner {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    .label {
+      position: absolute;
+      font-size: 1.2rem;
+      top: calc(50% - 6rem);
+      left: 50%;
+      transform: translateX(-50%);
+    }
   }
 }

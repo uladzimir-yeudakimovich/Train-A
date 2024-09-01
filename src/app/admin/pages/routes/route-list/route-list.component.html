@@ -1,5 +1,7 @@
-<div class="list">
-  @for (route of routes(); track route.id; let i = $index) {
-    <app-route-card [route]="route"></app-route-card>
-  }
-</div>
+<cdk-virtual-scroll-viewport appendOnly itemSize="10" class="viewport">
+  <div class="list">
+    <div *cdkVirtualFor="let route of routes()" class="list-item">
+      <app-route-card [route]="route"></app-route-card>
+    </div>
+  </div>
+</cdk-virtual-scroll-viewport>

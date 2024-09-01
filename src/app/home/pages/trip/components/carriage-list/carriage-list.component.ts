@@ -1,4 +1,11 @@
-import { Component, computed, inject, input, Signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  inject,
+  input,
+  Signal,
+} from '@angular/core';
 import { MatList, MatListItem } from '@angular/material/list';
 import { TripStore } from '@home/store/trip/trip.store';
 import { TrainCarComponent } from '@shared/components/train-car/train-car.component';
@@ -12,6 +19,7 @@ import { TrainCarService } from '@shared/services/train-car/train-car.service';
   providers: [TrainCarService],
   templateUrl: './carriage-list.component.html',
   styleUrl: './carriage-list.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CarriageListComponent {
   carriages = input.required<Carriage[]>();

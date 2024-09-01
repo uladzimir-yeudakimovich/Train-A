@@ -1,12 +1,10 @@
-@let typesWithCarriages = tripStore.getGroupedCarriages();
-@let availableSeatsMap = tripStore.getAvailableSeatsMap();
-
 @if (isLoading()) {
   <div class="spinner-container">
     <mat-spinner class="spinner" />
     <div class="label">Loading the trip</div>
   </div>
 } @else {
+  @let trip = tripView();
   <div class="head">
     <div class="head-back">
       <button mat-icon-button (click)="onBack()">
@@ -15,14 +13,14 @@
     </div>
     <div class="head-info">
       <div class="head-stations">
-        <p>{{ tripInfo.from.city }} - {{ tripInfo.to.city }}</p>
+        <p>{{ trip.from.city }} - {{ trip.to.city }}</p>
         <p>
-          {{ tripInfo.departure | date: "MMMM d, HH:mm" }} -
-          {{ tripInfo.arrival | date: "MMMM d, HH:mm" }}
+          {{ trip.departure | date: "MMMM d, HH:mm" }} -
+          {{ trip.arrival | date: "MMMM d, HH:mm" }}
         </p>
       </div>
       <p>
-        <span>Ride {{ tripInfo.rideId }}</span>
+        <span>Ride {{ tripView().rideId }}</span>
         <button mat-button (click)="onRoute()">
           <mat-icon>keyboard_arrow_down</mat-icon>
           Route
@@ -37,21 +35,22 @@
         mat-stretch-tabs="false"
         mat-align-tabs="start"
       >
-        @for (carItem of typesWithCarriages(); track $index) {
+        @for (trainClass of trip.trainClasses; track $index) {
+
           <mat-tab>
             <ng-template mat-tab-label>
               <mat-list-item>
                 <p matListItemTitle>
-                  Carriage type {{ carItem.type }}:
-                  {{ availableSeatsMap()[carItem.type] }}
+                  Carriage type {{ trainClass.name }}:
+                  {{ trainClass.availableSeats }}
                 </p>
                 <p matListItemLine>
-                  {{ priceMap[carItem.type] | currency }}
+                  {{ trainClass.price| currency }}
                 </p>
               </mat-list-item>
             </ng-template>
             <app-carriage-list
-              [carriages]="carItem.carriages"
+              [carriages]="trainClass.carriages"
             ></app-carriage-list>
           </mat-tab>
         }
