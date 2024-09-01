@@ -1,4 +1,11 @@
 <mat-tab-group fitInkBarToContent (selectedIndexChange)="filterTime($event)">
+  <mat-tab>
+      <ng-template mat-tab-label>
+        <div>
+          <div>All rides</div>
+        </div>
+      </ng-template>
+    </mat-tab>
   @for (time of dates(); track time) {
     <mat-tab>
       <ng-template mat-tab-label>

@@ -20,9 +20,11 @@ export const SearchStore = signalStore(
       const response =
         await searchService.getAvailableRoutes(searchRoutesParams);
       // do not save rides before the selected date
-      const filteredResponse = response.filter((ride) => {
-        return ride.rideFrom.time.getTime() / 1000 >= searchRoutesParams.time;
-      });
+      const filteredResponse = response
+        .filter((ride) => {
+          return ride.rideFrom.time.getTime() / 1000 >= searchRoutesParams.time;
+        })
+        .sort((a, b) => a.rideFrom.time.getTime() - b.rideFrom.time.getTime());
       patchState(store, setAllEntities(filteredResponse, searchConfig));
     },
 

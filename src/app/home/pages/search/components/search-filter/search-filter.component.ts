@@ -16,6 +16,10 @@ export class SearchFilterComponent {
   dates = input.required<number[]>();
 
   filterTime(index: number) {
-    this.searchStore.setFilter(this.dates()[index]);
+    if (index === 0) {
+      this.searchStore.setFilter(0);
+      return;
+    }
+    this.searchStore.setFilter(this.dates()[index - 1]);
   }
 }
