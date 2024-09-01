@@ -105,9 +105,9 @@ export const toSearchResult = (
   const { from, to, routes } = response;
 
   return routes.flatMap(({ path, schedule }) => {
-    const fromIdIndex = path.findIndex((point) => point === from.stationId) - 1;
+    const fromIdIndex = path.findIndex((point) => point === from.stationId);
 
-    const toIdIndex = path.findIndex((point) => point === to.stationId) - 1;
+    const toIdIndex = path.findIndex((point) => point === to.stationId);
 
     return schedule.map(({ rideId, segments }) => {
       const segmentsChunk = segments.slice(
@@ -116,7 +116,7 @@ export const toSearchResult = (
       );
 
       const fromTime = new Date(segmentsChunk.at(0)!.time[0]);
-      const toTime = new Date(segmentsChunk.at(-1)!.time[0]);
+      const toTime = new Date(segmentsChunk.at(-1)!.time[1]);
 
       const rideTime = getRideTime(fromTime, toTime);
 
