@@ -16,8 +16,11 @@ export interface SearchCard {
   rideId: number;
   rideRoute: RideStation[];
   rideTime: number;
-  ridePrice: [string, number][];
+  carTypeInfo: {
+    carType: string;
+    price: number;
+    availableSeats: number;
+  }[];
   rideFrom: RidePoint;
   rideTo: RidePoint;
 }
-//! add free seats amount !!!

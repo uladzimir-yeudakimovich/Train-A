@@ -55,18 +55,20 @@
         </div>
 
         <ul class="card-price__list">
-          @for (price of card.ridePrice; track price[0]) {
+          @for (carTypeInfo of card.carTypeInfo; track carTypeInfo.carType) {
             <li class="card-price__item">
               <mat-divider vertical />
               <div class="card-price__carriage">
                 <mat-card-subtitle>
                   Carriage type
-                  {{ price[0] }}
+                  {{ carTypeInfo.carType }}
                 </mat-card-subtitle>
 
-                <mat-card-subtitle> </mat-card-subtitle>
+                <mat-card-subtitle>
+                  {{ carTypeInfo.availableSeats }} seats
+                </mat-card-subtitle>
                 <mat-card-title>
-                  {{ price[1] | currency: "USD" : "symbol" : "1.0-0" }}
+                  {{ carTypeInfo.price | currency: "USD" : "symbol" : "1.0-0" }}
                 </mat-card-title>
               </div>
             </li>

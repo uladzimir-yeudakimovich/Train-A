@@ -112,6 +112,7 @@ export class SearchFormComponent {
   }
 
   private errorSnackBar(error: HttpErrorResponse) {
+    console.log('error', error);
     if (error.error.reason === ErrorReason.StationNotFound) {
       this.snackBarService.open(Message.StationNotFound);
     } else {

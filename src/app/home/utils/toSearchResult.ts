@@ -1,29 +1,62 @@
 import { RideStation, SearchCard } from '@home/models/search-card.model';
 import { SearchResponse } from '@home/models/search-response.model';
 import { SearchRide } from '@home/models/search-route.model';
+import { Carriage } from '@shared/models/interfaces/carriage.model';
+import { Segment } from '@shared/models/interfaces/ride.model';
+import { getSeats } from '@shared/utils/carriage.utils';
+import {
+  calculateAvailableSeatsByCarriageType,
+  calculateTotalPriceByCarriageType,
+  getSeatScopes,
+} from '@shared/utils/ride.utils';
 
 export const getRideTime = (startTime: Date, endTime: Date): number =>
   endTime.getTime() - startTime.getTime();
 
-const getRidePrice = (rides: SearchRide[]) => {
-  const prices = rides.map((ride) => ride.price);
+const getCarTypeInfo = (rides: SearchRide[], carriageTypes: Carriage[]) => {
+  // const carriageStore = inject(CarriageStore); // todo: fix
+  const carTypeInfo: {
+    carType: string;
+    price: number;
+    availableSeats: number;
+  }[] = [];
 
-  const totalPrice = prices.reduce(
-    (acc, price) => {
-      Object.keys(price).forEach((key) => {
-        if (acc[key]) {
-          acc[key] += price[key];
-        } else {
-          acc[key] = price[key];
-        }
-      });
+  const segments = rides.map((ride) => {
+    return {
+      time: ride.time,
+      price: ride.price,
+      occupiedSeats: ride.occupiedSeats,
+    } as Segment;
+  });
+  const priceMap = calculateTotalPriceByCarriageType(segments);
 
-      return acc;
-    },
-    {} as Record<string, number>,
+  const tripCarriageTypes = Object.keys(segments[0].price);
+  // const carriages = carriageStore.carriagesEntities();
+  const tripCarriages: Carriage[] = tripCarriageTypes.map((carType, idx) => {
+    const carriage = carriageTypes.find((c) => c.name === carType)!;
+    return { ...carriage, code: (idx + 1).toString() };
+  });
+  const seatScopes = getSeatScopes(tripCarriages);
+
+  const occupiedSeats = segments.flatMap((segment) => segment.occupiedSeats!);
+  const tripCarriagesWithOccupiedSeats = tripCarriages.map((carriage, idx) => {
+    const { from, to } = seatScopes[idx];
+    const occupiedSeatsInCarriage = occupiedSeats
+      .filter((s) => s >= from && s <= to)
+      .map((seat) => seat - from + 1);
+    return { ...carriage, seats: getSeats(carriage, occupiedSeatsInCarriage) };
+  });
+  const availableSeatsMap = calculateAvailableSeatsByCarriageType(
+    tripCarriagesWithOccupiedSeats,
   );
 
-  return Object.entries(totalPrice);
+  tripCarriageTypes.forEach((carType) => {
+    const price = priceMap[carType];
+    const availableSeats = availableSeatsMap[carType];
+    carTypeInfo.push({ carType, price, availableSeats });
+  });
+
+  return carTypeInfo;
 };
 
 const getRideRoute = (path: number[], rides: SearchRide[]): RideStation[] => {
@@ -65,7 +98,10 @@ const getRideRoute = (path: number[], rides: SearchRide[]): RideStation[] => {
   });
 };
 
-export const toSearchResult = (response: SearchResponse): SearchCard[] => {
+export const toSearchResult = (
+  response: SearchResponse,
+  carriageTypes: Carriage[],
+): SearchCard[] => {
   const { from, to, routes } = response;
 
   return routes.flatMap(({ path, schedule }) => {
@@ -86,13 +122,13 @@ export const toSearchResult = (response: SearchResponse): SearchCard[] => {
 
       const rideRoute = getRideRoute(path, segments);
 
-      const ridePrice = getRidePrice(segmentsChunk);
+      const carTypeInfo = getCarTypeInfo(segmentsChunk, carriageTypes);
 
       return {
         rideId,
         rideRoute,
         rideTime,
-        ridePrice,
+        carTypeInfo,
 
         rideFrom: {
           id: from.stationId,
