@@ -49,13 +49,11 @@ export class SearchComponent implements OnInit {
     });
   });
 
-  // TODO: change state to get dates and filtered cards in store
-
   dates = computed(() =>
     [
       ...new Set(
-        this.cards().map(
-          ({ rideFrom }) => new Date(rideFrom.time).setHours(0, 0, 0, 0), // TODO: get time
+        this.cards().map(({ rideFrom }) =>
+          new Date(rideFrom.time).setHours(0, 0, 0, 0),
         ),
       ),
     ].sort((a, b) => a - b),
@@ -67,7 +65,8 @@ export class SearchComponent implements OnInit {
       .filter(
         ({ rideFrom }) =>
           !this.searchStore.time() ||
-          rideFrom.time.setHours(0, 0, 0, 0) === this.searchStore.time(),
+          new Date(rideFrom.time).setHours(0, 0, 0, 0) ===
+            this.searchStore.time(),
       ),
   );
 

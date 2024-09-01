@@ -55,7 +55,8 @@ export class SearchFormComponent {
   searchForm = this.formBuilder.nonNullable.group({
     from: ['', Validators.required],
     to: ['', Validators.required],
-    time: [getTomorrow(), [Validators.required, this.noFutureValidator]],
+    date: [getTomorrow(), [Validators.required, this.noFutureValidator]],
+    time: [''],
   });
 
   constructor(private snackBarService: SnackBarService) {}
@@ -68,16 +69,20 @@ export class SearchFormComponent {
     return this.searchForm.get('to')!;
   }
 
-  get time(): AbstractControl<Date> {
+  get date(): AbstractControl<Date> {
+    return this.searchForm.get('date')!;
+  }
+
+  get time(): AbstractControl<string> {
     return this.searchForm.get('time')!;
   }
 
   get timeErrorMessage(): string {
-    if (this.time.hasError('required')) {
+    if (this.date.hasError('required')) {
       return 'Required';
     }
 
-    if (this.time.hasError('noFuture')) {
+    if (this.date.hasError('noFuture')) {
       return 'Only future days';
     }
 
@@ -97,13 +102,22 @@ export class SearchFormComponent {
       ({ city }) => city === this.to.value,
     );
 
+    let time = this.date.value.setHours(0, 0, 0, 0);
+    if (this.time.value) {
+      const [hours, minutes] = this.time.value
+        .toString()
+        .split(':')
+        .map(Number);
+      const timeInMilliseconds = hours * 60 * 60 * 1000 + minutes * 60 * 1000;
+      time += timeInMilliseconds;
+    }
+
     const searchRoutesParams: SearchRoutesParams = {
       fromLatitude: fromStation?.latitude ?? 0,
       fromLongitude: fromStation?.longitude ?? 0,
       toLatitude: toStation?.latitude ?? 0,
       toLongitude: toStation?.longitude ?? 0,
-      //! change value to get actual date after refactor
-      time: 0,
+      time: time / 1000,
     };
 
     await this.searchStore.searchRoutes(searchRoutesParams).catch((error) => {
@@ -119,7 +133,6 @@ export class SearchFormComponent {
   }
 
   private errorSnackBar(error: HttpErrorResponse) {
-    console.log('error', error);
     if (error.error.reason === ErrorReason.StationNotFound) {
       this.snackBarService.open(Message.StationNotFound);
     } else {

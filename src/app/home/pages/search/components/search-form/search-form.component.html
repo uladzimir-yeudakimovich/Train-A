@@ -14,7 +14,10 @@
     <mat-icon matPrefix> radio_button_checked </mat-icon>
 
     <mat-autocomplete #autoFrom="matAutocomplete">
-      @for (station of stationsAutocomplete(fromInput.value); track station.id) {
+      @for (
+        station of stationsAutocomplete(fromInput.value);
+        track station.id
+      ) {
         <mat-option [value]="station.city">{{ station.city }}</mat-option>
       }
     </mat-autocomplete>
@@ -63,18 +66,24 @@
     <input
       matInput
       [matDatepicker]="picker"
-      formControlName="time"
-      name="time"
+      formControlName="date"
+      name="date"
     />
 
     <mat-datepicker-toggle matPrefix [for]="picker" />
 
     <mat-datepicker #picker />
 
-    @if (time.invalid) {
+    @if (date.invalid) {
       <mat-error>{{ timeErrorMessage }}</mat-error>
     }
   </mat-form-field>
+
+  @if (date.value) {
+    <mat-form-field>
+      <input matInput type="time" formControlName="time" name="time" />
+    </mat-form-field>
+  }
 
   <button
     class="form-control"

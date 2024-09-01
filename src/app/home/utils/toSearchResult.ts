@@ -14,7 +14,6 @@ export const getRideTime = (startTime: Date, endTime: Date): number =>
   endTime.getTime() - startTime.getTime();
 
 const getCarTypeInfo = (rides: SearchRide[], carriageTypes: Carriage[]) => {
-  // const carriageStore = inject(CarriageStore); // todo: fix
   const carTypeInfo: {
     carType: string;
     price: number;
