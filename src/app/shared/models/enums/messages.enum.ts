@@ -26,4 +26,5 @@ export enum Message {
   RouteOrRideNotFound = 'Route or ride not found',
   RideIsAlreadyUsed = 'Ride is already used',
   TimeOrPriceIrrelevant = 'Time or price is irrelevant',
+  StationNotFound = 'Station not found. Try another one',
 }

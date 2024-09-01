@@ -1,4 +1,5 @@
 import { Station } from '@admin/models/station.model';
+import { HttpErrorResponse } from '@angular/common/http';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -15,6 +16,9 @@ import { provideNativeDateAdapter } from '@angular/material/core';
 import { SearchRoutesParams } from '@home/models/search-routes-params.model';
 import { SearchStore } from '@home/store/search.store';
 import { getTomorrow } from '@home/utils/getTomorrow.util';
+import { ErrorReason } from '@shared/models/enums/api-path.enum';
+import { Message } from '@shared/models/enums/messages.enum';
+import { SnackBarService } from '@shared/services/snack-bar/snack-bar.service';
 
 import { searchFormImports } from './search-form.config';
 
@@ -53,6 +57,8 @@ export class SearchFormComponent {
     to: ['', Validators.required],
     time: [getTomorrow(), [Validators.required, this.noFutureValidator]],
   });
+
+  constructor(private snackBarService: SnackBarService) {}
 
   get from(): AbstractControl<string> {
     return this.searchForm.get('from')!;
@@ -100,6 +106,16 @@ export class SearchFormComponent {
       time: 0,
     };
 
-    await this.searchStore.searchRoutes(searchRoutesParams);
+    await this.searchStore.searchRoutes(searchRoutesParams).catch((error) => {
+      this.errorSnackBar(error);
+    });
+  }
+
+  private errorSnackBar(error: HttpErrorResponse) {
+    if (error.error.reason === ErrorReason.StationNotFound) {
+      this.snackBarService.open(Message.StationNotFound);
+    } else {
+      this.snackBarService.open(Message.UnexpectedError);
+    }
   }
 }

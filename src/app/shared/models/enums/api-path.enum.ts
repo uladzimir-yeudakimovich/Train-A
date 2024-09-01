@@ -18,4 +18,5 @@ export enum ErrorReason {
   RecordNotFound = 'recordNotFound',
   RecordInUse = 'recordInUse',
   InvalidData = 'invalidData',
+  StationNotFound = 'stationNotFound',
 }
