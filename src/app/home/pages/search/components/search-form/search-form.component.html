@@ -8,12 +8,13 @@
       placeholder="From"
       aria-label="From"
       [matAutocomplete]="autoFrom"
+      #fromInput
     />
 
     <mat-icon matPrefix> radio_button_checked </mat-icon>
 
     <mat-autocomplete #autoFrom="matAutocomplete">
-      @for (station of stations(); track station.id) {
+      @for (station of stationsAutocomplete(fromInput.value); track station.id) {
         <mat-option [value]="station.city">{{ station.city }}</mat-option>
       }
     </mat-autocomplete>
@@ -42,12 +43,13 @@
       placeholder="To"
       aria-label="To"
       [matAutocomplete]="autoTo"
+      #toInput
     />
 
     <mat-icon matPrefix> fiber_manual_record </mat-icon>
 
     <mat-autocomplete #autoTo="matAutocomplete">
-      @for (station of stations(); track station.id) {
+      @for (station of stationsAutocomplete(toInput.value); track station.id) {
         <mat-option [value]="station.city">{{ station.city }}</mat-option>
       }
     </mat-autocomplete>

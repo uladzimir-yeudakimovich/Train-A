@@ -111,6 +111,13 @@ export class SearchFormComponent {
     });
   }
 
+  stationsAutocomplete(value: string): Station[] {
+    const filterValue = value.toLowerCase();
+    return this.stations().filter(({ city }) =>
+      city.toLowerCase().includes(filterValue),
+    );
+  }
+
   private errorSnackBar(error: HttpErrorResponse) {
     console.log('error', error);
     if (error.error.reason === ErrorReason.StationNotFound) {
