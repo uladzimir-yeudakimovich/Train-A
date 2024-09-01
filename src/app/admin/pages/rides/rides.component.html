@@ -6,12 +6,7 @@
     <h3 class="title">Route {{ routeId }}</h3>
   </div>
   @if (!formVisible()) {
-    <button
-      class="btn btn-create-ride"
-      mat-flat-button
-      (click)="showForm()"
-      [disabled]="ridesStore.error()"
-    >
+    <button class="btn btn-create-ride" mat-flat-button (click)="showForm()">
       Create Ride
     </button>
   } @else {

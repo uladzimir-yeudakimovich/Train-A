@@ -35,7 +35,7 @@ export class RidesManagementService {
           schedule,
         });
       }),
-      catchError((err) => throwError(() => err.error)),
+      catchError((err) => throwError(() => err)),
     );
   }
 
@@ -47,7 +47,7 @@ export class RidesManagementService {
 
     return this.http
       .post<{ id: number }>(`route/${routeId}/ride`, { segments: s })
-      .pipe(catchError((err) => throwError(() => err.error)));
+      .pipe(catchError((err) => throwError(() => err)));
   }
 
   updateRide(
@@ -59,12 +59,12 @@ export class RidesManagementService {
 
     return this.http
       .put(`route/${routeId}/ride/${rideId}`, { segments: s })
-      .pipe(catchError((err) => throwError(() => err.error)));
+      .pipe(catchError((err) => throwError(() => err)));
   }
 
   deleteRide(routeId: number, rideId: number): Observable<object> {
     return this.http
       .delete(`route/${routeId}/ride/${rideId}`)
-      .pipe(catchError((err) => throwError(() => err.error)));
+      .pipe(catchError((err) => throwError(() => err)));
   }
 }

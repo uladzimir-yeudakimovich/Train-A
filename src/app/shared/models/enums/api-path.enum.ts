@@ -15,4 +15,7 @@ export enum ErrorReason {
   InvalidStations = 'invalidStations',
   InvalidRide = 'invalidRide',
   AlreadyBooked = 'alreadyBooked',
+  RecordNotFound = 'recordNotFound',
+  RecordInUse = 'recordInUse',
+  InvalidData = 'invalidData',
 }
