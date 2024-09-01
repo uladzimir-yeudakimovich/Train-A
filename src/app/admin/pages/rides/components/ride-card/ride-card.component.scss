@@ -4,8 +4,17 @@
   border-radius: 5px;
 }
 
-.title {
+.title-and-button {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   border-bottom: 1px solid gray;
+  margin-bottom: 20px;
+  padding-block: 10px;
+}
+
+.title {
+  font-size: 28px;
 }
 
 .content {

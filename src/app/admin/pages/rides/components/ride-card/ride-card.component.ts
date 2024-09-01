@@ -1,8 +1,10 @@
+import { DeleteDialogComponent } from '@admin/components/delete-dialog/delete-dialog.component';
 import { SegmentUI } from '@admin/models/rides.model';
 import { RidesStore } from '@admin/store/rides/ride.store';
 import { DatePipe } from '@angular/common';
 import { Component, computed, inject, input, signal } from '@angular/core';
 import { MatMiniFabButton } from '@angular/material/button';
+import { MatDialog } from '@angular/material/dialog';
 import { MatIcon } from '@angular/material/icon';
 
 @Component({
@@ -21,6 +23,8 @@ export class RideCardComponent {
 
   segments = input.required<SegmentUI[]>();
 
+  dialog = inject(MatDialog);
+
   prices = computed(() => {
     return this.segments().map((segment) =>
       Object.entries(segment.price).map(([type, value]) => ({ type, value })),
@@ -32,6 +36,15 @@ export class RideCardComponent {
       signal({ departure: false, arrival: false, price: false }),
     );
   });
+
+  openDialog(): void {
+    const dialogRef = this.dialog.open(DeleteDialogComponent);
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.ridesStore.deleteRide(this.rideId());
+      }
+    });
+  }
 
   toggleEditMode(index: number, type: 'departure' | 'arrival' | 'price'): void {
     this.editMode()[index].update((value) => ({

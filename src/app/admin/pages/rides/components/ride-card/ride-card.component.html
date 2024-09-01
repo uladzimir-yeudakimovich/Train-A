@@ -1,5 +1,10 @@
 <div class="card">
-  <h5 class="title">Ride {{ rideId() }}</h5>
+  <div class="title-and-button">
+    <div class="title">Ride {{ rideId() }}</div>
+    <button mat-mini-fab (click)="openDialog()">
+      <mat-icon>delete</mat-icon>
+    </button>
+  </div>
   <div class="content">
     <div class="stations">
       @for (station of stations(); track $index) {

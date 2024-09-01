@@ -61,4 +61,10 @@ export class RidesManagementService {
       .put(`route/${routeId}/ride/${rideId}`, { segments: s })
       .pipe(catchError((err) => throwError(() => err.error)));
   }
+
+  deleteRide(routeId: number, rideId: number): Observable<object> {
+    return this.http
+      .delete(`route/${routeId}/ride/${rideId}`)
+      .pipe(catchError((err) => throwError(() => err.error)));
+  }
 }

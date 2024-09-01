@@ -76,5 +76,18 @@ export const RidesStore = signalStore(
         },
       });
     },
+    deleteRide(rideId: number) {
+      ridesService.deleteRide(store.routeId(), rideId).subscribe({
+        next() {
+          patchState(store, (state) => ({
+            ...state,
+            schedule: state.schedule.filter((ride) => ride.rideId !== rideId),
+          }));
+        },
+        error(error) {
+          patchState(store, { error });
+        },
+      });
+    },
   })),
 );
