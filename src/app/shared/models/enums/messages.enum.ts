@@ -27,4 +27,7 @@ export enum Message {
   RideIsAlreadyUsed = 'Ride is already used',
   TimeOrPriceIrrelevant = 'Time or price is irrelevant',
   StationNotFound = 'Station not found. Try another one',
+
+  CarriageAlreadyExists = 'Carriage already exists',
+  RecordInUse = 'It is used in some order. You cannot delete it',
 }

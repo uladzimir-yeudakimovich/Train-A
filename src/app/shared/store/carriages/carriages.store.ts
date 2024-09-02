@@ -10,6 +10,7 @@ import {
 } from '@ngrx/signals/entities';
 import { SeatState } from '@shared/models/enums/seat-state.enum';
 import { Carriage, CarSeat } from '@shared/models/interfaces/carriage.model';
+import { SnackBarService } from '@shared/services/snack-bar/snack-bar.service';
 import { getSeats } from '@shared/utils/carriage.utils';
 
 import { carriageConfig } from './carriages.config';
@@ -37,75 +38,89 @@ export const CarriageStore = signalStore(
     },
   })),
 
-  withMethods((store, carriageService = inject(CarriageService)) => ({
-    getCarriageSignal: (carriageCode: string) =>
-      computed(() => store.getCarriage(carriageCode)),
+  withMethods(
+    (
+      store,
+      carriageService = inject(CarriageService),
+      snackBarService = inject(SnackBarService),
+    ) => ({
+      getCarriageSignal: (carriageCode: string) =>
+        computed(() => store.getCarriage(carriageCode)),
 
-    getSortedSeats: (carriageCode: string) => {
-      const carriage = store.getCarriage(carriageCode);
-      return [...carriage.seats].sort((a, b) => a.number - b.number);
-    },
+      getSortedSeats: (carriageCode: string) => {
+        const carriage = store.getCarriage(carriageCode);
+        return [...carriage.seats].sort((a, b) => a.number - b.number);
+      },
 
-    getAvailableSeatsNumber: (carriageCode: string) => {
-      const carriage = store.getCarriage(carriageCode);
-      return carriage.seats.filter((s) => s.state !== SeatState.Reserved)
-        .length;
-    },
+      getAvailableSeatsNumber: (carriageCode: string) => {
+        const carriage = store.getCarriage(carriageCode);
+        return carriage.seats.filter((s) => s.state !== SeatState.Reserved)
+          .length;
+      },
 
-    updateSeat: (carriage: Carriage, updatedSeat: CarSeat) => {
-      patchState(
-        store,
-        updateEntity(
-          {
-            id: carriage.code,
-            changes: (newCar) => {
-              const seat = newCar.seats.find(
-                (s) => s.number === updatedSeat.number,
-              )!;
-              seat.state = updatedSeat.state;
-              return newCar;
-            },
-          },
-          carriageConfig,
-        ),
-      );
-    },
-
-    async updateCarriage(carriage: Carriage) {
-      const response = await carriageService.updateCarriage(carriage);
-      if ('code' in response) {
-        const newCarriage = {
-          ...carriage,
-          seats: getSeats(carriage as Carriage),
-        };
+      updateSeat: (carriage: Carriage, updatedSeat: CarSeat) => {
         patchState(
           store,
           updateEntity(
             {
               id: carriage.code,
-              changes: newCarriage,
+              changes: (newCar) => {
+                const seat = newCar.seats.find(
+                  (s) => s.number === updatedSeat.number,
+                )!;
+                seat.state = updatedSeat.state;
+                return newCar;
+              },
             },
             carriageConfig,
           ),
         );
-      }
-    },
+      },
 
-    async addCarriage(carriage: Carriage) {
-      const response = await carriageService.addCarriage(carriage);
-      if ('code' in response) {
-        const { code } = response;
-        const { name, leftSeats, rightSeats, rows } = carriage;
-        const newCarriage = {
-          code,
-          name,
-          leftSeats,
-          rightSeats,
-          rows,
-          seats: getSeats(carriage as Carriage),
-        } as Carriage;
-        patchState(store, addEntity(newCarriage, carriageConfig));
-      }
-    },
-  })),
+      async updateCarriage(carriage: Carriage) {
+        await carriageService
+          .updateCarriage(carriage)
+          .then((response) => {
+            if ('code' in response) {
+              const newCarriage = {
+                ...carriage,
+                seats: getSeats(carriage as Carriage),
+              };
+              patchState(
+                store,
+                updateEntity(
+                  {
+                    id: carriage.code,
+                    changes: newCarriage,
+                  },
+                  carriageConfig,
+                ),
+              );
+            }
+          })
+          .catch((error) => snackBarService.displayError(error));
+      },
+
+      async addCarriage(carriage: Carriage) {
+        await carriageService
+          .addCarriage(carriage)
+          .then((response) => {
+            if ('code' in response) {
+              const { code } = response;
+              const { name, leftSeats, rightSeats, rows } = carriage;
+              const newCarriage = {
+                code,
+                name,
+                leftSeats,
+                rightSeats,
+                rows,
+                seats: getSeats(carriage as Carriage),
+              } as Carriage;
+              patchState(store, addEntity(newCarriage, carriageConfig));
+            }
+          })
+          .catch((error) => snackBarService.displayError(error));
+      },
+    }),
+  ),
 );

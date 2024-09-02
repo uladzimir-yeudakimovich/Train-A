@@ -22,11 +22,13 @@ export function getErrorMessage(error: HttpErrorResponse): string {
     case ErrorReason.OrderNotActive:
       return Message.OrderNotActive;
     case ErrorReason.RecordInUse:
-      return Message.DeleteStationWithActiveRides;
+      return Message.RecordInUse;
     case ErrorReason.InvalidData:
       return Message.RoutFormCannotChangeStation;
     case ErrorReason.RecordNotFound:
       return Message.RouteOrRideNotFound;
+    case ErrorReason.InvalidCarriageUniqueKey:
+      return Message.CarriageAlreadyExists;
     default:
       return Message.UnexpectedError;
   }
