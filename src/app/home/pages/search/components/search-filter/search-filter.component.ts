@@ -29,8 +29,9 @@ export class SearchFilterComponent {
   constructor() {
     // set "all dates" on new search
     effect(() => {
-      this.dates();
-      this.matTabGroup.selectedIndex = 0;
+      const dates = this.dates();
+      this.matTabGroup.selectedIndex =
+        dates.indexOf(this.searchStore.time()) + 1;
     });
   }
 }

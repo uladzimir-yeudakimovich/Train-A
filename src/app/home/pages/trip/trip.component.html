@@ -13,9 +13,15 @@
     </div>
     <div class="head-info">
       <div class="head-stations">
-        <p>{{ trip.from.city }} - {{ trip.to.city }}</p>
+        <div class="head-cities">
+          <mat-icon>directions_subway</mat-icon>
+          {{ trip.from.city }}
+          &rArr;
+          {{ trip.to.city }}
+        </div>
         <p>
-          {{ trip.departure | date: "MMMM d, HH:mm" }} -
+          {{ trip.departure | date: "MMMM d, HH:mm" }}
+          &rArr;
           {{ trip.arrival | date: "MMMM d, HH:mm" }}
         </p>
       </div>
@@ -36,7 +42,6 @@
         mat-align-tabs="start"
       >
         @for (trainClass of trip.trainClasses; track $index) {
-
           <mat-tab>
             <ng-template mat-tab-label>
               <mat-list-item>
@@ -45,7 +50,7 @@
                   {{ trainClass.availableSeats }}
                 </p>
                 <p matListItemLine>
-                  {{ trainClass.price| currency }}
+                  {{ trainClass.price | currency }}
                 </p>
               </mat-list-item>
             </ng-template>

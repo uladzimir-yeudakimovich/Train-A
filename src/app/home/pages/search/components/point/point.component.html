@@ -2,10 +2,10 @@
 
 <div class="point-time">
   @if (station.startTime) {
-    <span>{{ station.startTime | date: "H:mm" }}</span>
+    <span>{{ station.startTime | date: "HH:mm" }}</span>
   }
   @if (station.endTime) {
-    <span>{{ station.endTime | date: "H:mm" }} </span>
+    <span>{{ station.endTime | date: "HH:mm" }} </span>
   }
 </div>
 
