@@ -1,10 +1,8 @@
 import { StationStore } from '@admin/store/stations/stations.store';
-import { HttpErrorResponse } from '@angular/common/http';
 import { computed, inject, Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { displayedColumns } from '@home/pages/orders/orders.config';
 import { ConfirmationDialogComponent } from '@shared/components/delete-dialog/confirmation-dialog.component';
-import { ErrorReason } from '@shared/models/enums/api-path.enum';
 import { Message } from '@shared/models/enums/messages.enum';
 import { Order, OrderView } from '@shared/models/interfaces/order.model';
 import { SnackBarService } from '@shared/services/snack-bar/snack-bar.service';
@@ -67,7 +65,7 @@ export class OrderService {
             this.snackBarService.open(Message.OrderCancelled);
           })
           .catch((error) => {
-            this.errorSnackBar(error);
+            this.snackBarService.displayError(error);
           });
       }
     });
@@ -95,19 +93,6 @@ export class OrderService {
       });
     } catch {
       return [];
-    }
-  }
-
-  private errorSnackBar(error: HttpErrorResponse) {
-    switch (error.error.reason) {
-      case ErrorReason.OrderNotFound:
-        this.snackBarService.open(Message.OrderNotFound);
-        break;
-      case ErrorReason.OrderNotActive:
-        this.snackBarService.open(Message.OrderNotActive);
-        break;
-      default:
-        this.snackBarService.open(Message.UnexpectedError);
     }
   }
 }
