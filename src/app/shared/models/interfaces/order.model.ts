@@ -25,6 +25,7 @@ export interface Order {
 
 export interface OrderView {
   id: number;
+  userName?: string;
   status: OrderStatus;
   startStation: string;
   startTime: string;

@@ -2,10 +2,11 @@ import { StationStore } from '@admin/store/stations/stations.store';
 import { HttpErrorResponse } from '@angular/common/http';
 import { computed, inject, Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { displayedColumns } from '@home/pages/orders/orders.config';
 import { ConfirmationDialogComponent } from '@shared/components/delete-dialog/confirmation-dialog.component';
 import { ErrorReason } from '@shared/models/enums/api-path.enum';
 import { Message } from '@shared/models/enums/messages.enum';
-import { OrderView } from '@shared/models/interfaces/order.model';
+import { Order, OrderView } from '@shared/models/interfaces/order.model';
 import { SnackBarService } from '@shared/services/snack-bar/snack-bar.service';
 import { CarriageStore } from '@shared/store/carriages/carriages.store';
 import { OrderStore } from '@shared/store/orders/orders.store';
@@ -72,14 +73,26 @@ export class OrderService {
     });
   }
 
+  getDisplayedColumns() {
+    if (this.profileService.userRole() === 'manager') {
+      return ['username', ...displayedColumns];
+    }
+    return displayedColumns;
+  }
+
   private getOrderViews(): OrderView[] {
     try {
       const orders = this.orderStore.ordersEntities();
       const stationsMap = this.stationStore.stationsEntityMap();
       const carriages = this.carriageStore.carriagesEntities();
-      return orders.map((order) =>
-        transformOrderToView(stationsMap, order, carriages),
-      );
+      const users = this.userStore.usersEntityMap();
+      return orders.map((order: Order) => {
+        const user = users[order.userId];
+        return {
+          ...transformOrderToView(stationsMap, order, carriages),
+          userName: user?.name ?? user?.email,
+        };
+      });
     } catch {
       return [];
     }

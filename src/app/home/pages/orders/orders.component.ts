@@ -12,8 +12,9 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { OrderService } from '@home/services/orders/order.service';
 import { OrderStatus, OrderView } from '@shared/models/interfaces/order.model';
+import { ProfileService } from '@user/services/profile.service';
 
-import { displayedColumns, ordersImports } from './orders.config';
+import { ordersImports } from './orders.config';
 
 @Component({
   selector: 'app-orders',
@@ -26,7 +27,9 @@ import { displayedColumns, ordersImports } from './orders.config';
 export class OrdersComponent implements OnInit, AfterViewChecked {
   isLoading = signal<boolean>(true);
 
-  displayedColumns: string[] = displayedColumns;
+  isManager = this.profileService.userRole() === 'manager';
+
+  displayedColumns: string[] = this.orderService.getDisplayedColumns();
 
   getDataSource!: () => MatTableDataSource<OrderView>;
 
@@ -43,6 +46,7 @@ export class OrdersComponent implements OnInit, AfterViewChecked {
   constructor(
     private orderService: OrderService,
     private cdr: ChangeDetectorRef,
+    private profileService: ProfileService,
   ) {}
 
   ngOnInit() {

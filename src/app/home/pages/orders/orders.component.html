@@ -5,7 +5,20 @@
   </div>
 } @else {
   <div class="order-table">
-    <table mat-table [dataSource]="getDataSource()" matSort class="mat-elevation-z8">
+    <table
+      mat-table
+      [dataSource]="getDataSource()"
+      matSort
+      class="mat-elevation-z8"
+    >
+      @if (isManager) {
+        <ng-container matColumnDef="username">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            User name
+          </th>
+          <td mat-cell *matCellDef="let order">{{ order.userName }}</td>
+        </ng-container>
+      }
       <ng-container matColumnDef="startStation">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>
           Departure station
