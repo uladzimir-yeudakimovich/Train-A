@@ -10,12 +10,12 @@
       [dataSource]="getDataSource()"
       matSort
       class="mat-elevation-z8"
+      matSortActive="tripDuration"
+      matSortDirection="asc"
     >
       @if (isManager) {
         <ng-container matColumnDef="username">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>
-            User name
-          </th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>User name</th>
           <td mat-cell *matCellDef="let order">{{ order.userName }}</td>
         </ng-container>
       }
