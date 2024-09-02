@@ -1,5 +1,9 @@
 <form class="form" [formGroup]="stationForm" (ngSubmit)="createStation()">
-  <mat-form-field appearance="outline" subscriptSizing="dynamic" floatLabel="always">
+  <mat-form-field
+    appearance="outline"
+    subscriptSizing="dynamic"
+    floatLabel="always"
+  >
     <mat-label> City </mat-label>
 
     <input matInput type="text" formControlName="city" name="city" />
@@ -9,7 +13,11 @@
     }
   </mat-form-field>
 
-  <mat-form-field appearance="outline" subscriptSizing="dynamic" floatLabel="always">
+  <mat-form-field
+    appearance="outline"
+    subscriptSizing="dynamic"
+    floatLabel="always"
+  >
     <mat-label> Latitude </mat-label>
 
     <input matInput type="number" formControlName="latitude" name="latitude" />
@@ -19,10 +27,19 @@
     }
   </mat-form-field>
 
-  <mat-form-field appearance="outline" subscriptSizing="dynamic" floatLabel="always">
+  <mat-form-field
+    appearance="outline"
+    subscriptSizing="dynamic"
+    floatLabel="always"
+  >
     <mat-label> Longitude </mat-label>
 
-    <input matInput type="number" formControlName="longitude" name="longitude" />
+    <input
+      matInput
+      type="number"
+      formControlName="longitude"
+      name="longitude"
+    />
 
     @if (longitude.invalid) {
       <mat-error>{{ lngError }}</mat-error>
@@ -31,7 +48,11 @@
 
   <ng-container formArrayName="relations">
     @for (control of relations.controls; track createId()) {
-      <mat-form-field appearance="outline" subscriptSizing="dynamic" floatLabel="always">
+      <mat-form-field
+        appearance="outline"
+        subscriptSizing="dynamic"
+        floatLabel="always"
+      >
         @if ($index === 0) {
           <mat-label>Connected</mat-label>
         }
@@ -43,26 +64,41 @@
         </mat-select>
 
         @if ($index !== 0) {
-          <button mat-icon-button matSuffix type="button" (click)="removeField($index)">
+          <button
+            mat-icon-button
+            matSuffix
+            type="button"
+            (click)="removeField($index)"
+          >
             <mat-icon>close</mat-icon>
           </button>
         }
 
-        @if (relations.controls.at($index)?.errors?.['required']) {
+        @if (relations.controls.at($index)?.errors?.["required"]) {
           <mat-error>Required</mat-error>
         }
       </mat-form-field>
     }
-    @if (relations.hasError('nonUnique')) {
+
+    @if (relations.hasError("nonUnique")) {
       <mat-error>Stations must be unique</mat-error>
     }
 
-    <button class="form-control" mat-raised-button type="button" (click)="addField()">
+    <button
+      class="form-control"
+      mat-raised-button
+      type="button"
+      (click)="addField()"
+    >
       add another city
     </button>
-
-    <button class="form-control" mat-raised-button type="submit" [disabled]="stationForm.invalid">
-      save
-    </button>
   </ng-container>
+  <button
+    class="form-control"
+    mat-raised-button
+    type="submit"
+    [disabled]="stationForm.invalid"
+  >
+    save
+  </button>
 </form>

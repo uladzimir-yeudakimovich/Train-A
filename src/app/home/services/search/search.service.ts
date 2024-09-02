@@ -1,19 +1,28 @@
-import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { inject, Injectable } from '@angular/core';
 import { AdminRoleGuard } from '@core/guards/admin.guard';
+import { SearchCard } from '@home/models/search-card.model';
+import { SearchResponse } from '@home/models/search-response.model';
+import { SearchRoutesParams } from '@home/models/search-routes-params.model';
+import { toSearchResult } from '@home/utils/toSearchResult';
 import { ApiPath } from '@shared/models/enums/api-path.enum';
 import { Order } from '@shared/models/interfaces/order.model';
 import { Ride } from '@shared/models/interfaces/ride.model';
-import { firstValueFrom } from 'rxjs';
+import { CarriageStore } from '@shared/store/carriages/carriages.store';
+import { firstValueFrom, map } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class SearchService {
+  private carriageStore = inject(CarriageStore);
+
   constructor(
     private http: HttpClient,
     private adminGuard: AdminRoleGuard,
-  ) {}
+  ) {
+    this.carriageStore.getCarriages();
+  }
 
   loadRide(id: number): Promise<Ride> {
     return firstValueFrom(this.http.get<Ride>(`${ApiPath.Search}/${id}`)).catch(
@@ -58,6 +67,21 @@ export class SearchService {
       (error) => {
         throw error;
       },
+    );
+  }
+
+  getAvailableRoutes(
+    searchRoutesParams: SearchRoutesParams,
+  ): Promise<SearchCard[]> {
+    const params = new HttpParams({ fromObject: { ...searchRoutesParams } });
+
+    return firstValueFrom(
+      this.http.get<SearchResponse>(ApiPath.Search, { params }).pipe(
+        map((data) => {
+          const carriageTypes = this.carriageStore.carriagesEntities();
+          return toSearchResult(data, carriageTypes);
+        }),
+      ),
     );
   }
 }

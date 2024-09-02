@@ -1,1 +1,7 @@
-<p>search works!</p>
+<app-search-form [stations]="stations()" />
+
+@if (dates().length) {
+  <app-search-filter [dates]="dates()" />
+}
+
+<app-search-cards [cards]="filteredCards()" />

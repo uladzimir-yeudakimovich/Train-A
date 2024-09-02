@@ -1,0 +1,26 @@
+.modal {
+  &-header {
+    display: flex;
+    align-items: center;
+    margin-block-end: 0;
+    padding-block: 1rem;
+  }
+
+  &-title {
+    flex-grow: 1;
+    margin-block-end: 0;
+  }
+
+  &-content {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &-divider {
+    min-height: 2rem;
+    display: flex;
+    mat-divider {
+      margin-inline-start: 8rem;
+    }
+  }
+}

@@ -49,7 +49,7 @@ export class OrderService {
     if (this.adminGuard.canActivate()) {
       const order = this.orderStore.ordersEntityMap()[orderId];
       const user = this.userStore.usersEntityMap()[order.userId];
-      title = `Cancel ${user.email}'s Order ${orderId}`;
+      title = `Cancel ${user.name ?? user.email}'s Order ${orderId}`;
     }
 
     const dialogRef = this.dialog.open(ConfirmationDialogComponent, {

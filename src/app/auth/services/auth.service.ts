@@ -1,6 +1,8 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Injectable, signal } from '@angular/core';
+import { inject, Injectable, signal } from '@angular/core';
+import { SearchStore } from '@home/store/search.store';
 import { ApiPath } from '@shared/models/enums/api-path.enum';
+import { OrderStore } from '@shared/store/orders/orders.store';
 import { Observable, tap } from 'rxjs';
 
 import { Credentials, Token } from '../models/auth.model';
@@ -17,6 +19,10 @@ const httpOptions = {
 })
 export class AuthService {
   isLogin = signal<boolean>(!!localStorage.getItem('token'));
+
+  private orderStore = inject(OrderStore);
+
+  private searchStore = inject(SearchStore);
 
   constructor(private http: HttpClient) {}
 
@@ -36,6 +42,9 @@ export class AuthService {
   }
 
   logout(): void {
+    this.orderStore.clear();
+    this.searchStore.clear();
+
     this.http
       .delete(ApiPath.Logout)
       .pipe(

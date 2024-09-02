@@ -1,0 +1,103 @@
+<form class="form" [formGroup]="searchForm" (ngSubmit)="onSubmit()">
+  <div class="form-stations">
+    <mat-form-field class="form-field" appearance="outline">
+      <input
+        matInput
+        formControlName="from"
+        type="text"
+        name="from"
+        placeholder="From"
+        aria-label="From"
+        [matAutocomplete]="autoFrom"
+        #fromInput
+      />
+
+      <mat-icon matPrefix> radio_button_checked </mat-icon>
+
+      <mat-autocomplete #autoFrom="matAutocomplete">
+        @for (
+          station of stationsAutocomplete(fromInput.value);
+          track station.id
+        ) {
+          <mat-option [value]="station.city">{{ station.city }}</mat-option>
+        }
+      </mat-autocomplete>
+
+      @if (from.hasError("required")) {
+        <mat-error>Required</mat-error>
+      }
+    </mat-form-field>
+    <div class="form-swap-wrapper">
+      <button
+        class="form-swap"
+        type="button"
+        mat-mini-fab
+        (click)="swapValue()"
+        [disabled]="!from.value && !to.value"
+      >
+        <mat-icon>swap_horiz</mat-icon>
+      </button>
+    </div>
+
+    <mat-form-field class="form-field" appearance="outline">
+      <input
+        matInput
+        formControlName="to"
+        type="text"
+        name="to"
+        placeholder="To"
+        aria-label="To"
+        [matAutocomplete]="autoTo"
+        #toInput
+      />
+
+      <mat-icon matPrefix> fiber_manual_record </mat-icon>
+
+      <mat-autocomplete #autoTo="matAutocomplete">
+        @for (
+          station of stationsAutocomplete(toInput.value);
+          track station.id
+        ) {
+          <mat-option [value]="station.city">{{ station.city }}</mat-option>
+        }
+      </mat-autocomplete>
+
+      @if (to.hasError("required")) {
+        <mat-error>Required</mat-error>
+      }
+    </mat-form-field>
+  </div>
+  <div class="form-date">
+    <mat-form-field appearance="outline">
+      <input
+        matInput
+        [matDatepicker]="picker"
+        formControlName="date"
+        name="date"
+      />
+
+      <mat-datepicker-toggle matPrefix [for]="picker" />
+
+      <mat-datepicker #picker />
+
+      @if (date.invalid) {
+        <mat-error>{{ timeErrorMessage }}</mat-error>
+      }
+    </mat-form-field>
+
+    @if (date.value) {
+      <mat-form-field>
+        <input matInput type="time" formControlName="time" name="time" />
+      </mat-form-field>
+    }
+  </div>
+
+  <button
+    class="form-control"
+    mat-flat-button
+    type="submit"
+    [disabled]="searchForm.invalid"
+  >
+    Search
+  </button>
+</form>

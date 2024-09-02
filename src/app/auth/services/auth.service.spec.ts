@@ -4,6 +4,8 @@ import {
 } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
+import { SearchStore } from '@home/store/search.store';
+import { OrderStore } from '@shared/store/orders/orders.store';
 import { mockCredentials } from '@testing/index';
 
 import { AuthService } from './auth.service';
@@ -18,7 +20,22 @@ describe('AuthService', () => {
 
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
-      providers: [AuthService, { provide: Router, useValue: routerSpy }],
+      providers: [
+        AuthService,
+        { provide: Router, useValue: routerSpy },
+        {
+          provide: OrderStore,
+          useValue: {
+            clear: jest.fn(),
+          },
+        },
+        {
+          provide: SearchStore,
+          useValue: {
+            clear: jest.fn(),
+          },
+        },
+      ],
     });
 
     service = TestBed.inject(AuthService);
