@@ -2,14 +2,14 @@
   <h4><b>Sign In</b></h4>
   <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
     <mat-form-field class="form-field" subscriptSizing="dynamic" appearance="outline">
-      <mat-label>email</mat-label>
+      <mat-label>Email</mat-label>
       <input matInput formControlName="email" name="email" type="email" />
       @if (loginForm.get('email')!.invalid) {
         <mat-error> {{ getEmailErrorMessage() }} </mat-error>
       }
     </mat-form-field>
     <mat-form-field class="form-field" subscriptSizing="dynamic" appearance="outline">
-      <mat-label>password</mat-label>
+      <mat-label>Password</mat-label>
       <input matInput formControlName="password" name="password" type="password" />
       @if (loginForm.get('password')!.invalid) {
         <mat-error> {{ getPasswordErrorMessage() }} </mat-error>
