@@ -2,7 +2,6 @@ import { StationStore } from '@admin/store/stations/stations.store';
 import { HttpErrorResponse } from '@angular/common/http';
 import { computed, inject, Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { AdminRoleGuard } from '@core/guards/admin.guard';
 import { ConfirmationDialogComponent } from '@shared/components/delete-dialog/confirmation-dialog.component';
 import { ErrorReason } from '@shared/models/enums/api-path.enum';
 import { Message } from '@shared/models/enums/messages.enum';
@@ -12,6 +11,7 @@ import { CarriageStore } from '@shared/store/carriages/carriages.store';
 import { OrderStore } from '@shared/store/orders/orders.store';
 import { UserStore } from '@shared/store/users/users.store';
 import { transformOrderToView } from '@shared/utils/ride.utils';
+import { ProfileService } from '@user/services/profile.service';
 
 @Injectable({
   providedIn: 'root',
@@ -30,12 +30,12 @@ export class OrderService {
   private carriageStore = inject(CarriageStore);
 
   constructor(
-    private adminGuard: AdminRoleGuard,
+    private profileService: ProfileService,
     private snackBarService: SnackBarService,
   ) {}
 
   async initStore() {
-    const isManager = this.adminGuard.canActivate();
+    const isManager = this.profileService.userRole() === 'manager';
     await this.orderStore.getOrders();
     await this.stationStore.getStations();
     await this.carriageStore.getCarriages();
@@ -46,7 +46,7 @@ export class OrderService {
 
   cancelOrder(orderId: number) {
     let title = `Cancel Order ${orderId}`;
-    if (this.adminGuard.canActivate()) {
+    if (this.profileService.userRole() === 'manager') {
       const order = this.orderStore.ordersEntityMap()[orderId];
       const user = this.userStore.usersEntityMap()[order.userId];
       title = `Cancel ${user.name ?? user.email}'s Order ${orderId}`;

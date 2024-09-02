@@ -2,7 +2,7 @@ export enum Message {
   TripBookedSuccessfully = 'Trip booked successfully',
   TripExpired = 'Trip has expired. Please select another one',
 
-  InvalidAccessToken = 'You cannot perform this action. Please try to login again.',
+  InvalidAccessToken = 'You cannot perform this action.',
   InvalidCredentials = 'Invalid email or password',
 
   RouteDeleteConfirmation = 'Are you sure you want to delete this route?',

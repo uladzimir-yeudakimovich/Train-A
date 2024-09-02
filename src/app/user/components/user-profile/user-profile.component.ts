@@ -112,7 +112,7 @@ export class UserProfileComponent implements OnInit {
       .subscribe({
         next: (response) => {
           this.userInformationForm.setValue({
-            name: response.name ?? 'John Doe',
+            name: response.name ?? 'Name Surname',
             email: response.email,
           });
         },
