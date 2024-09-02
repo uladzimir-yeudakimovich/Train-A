@@ -13,7 +13,11 @@ import {
 export const getRideTime = (startTime: Date, endTime: Date): number =>
   endTime.getTime() - startTime.getTime();
 
-const getCarTypeInfo = (rides: SearchRide[], carriageTypes: Carriage[]) => {
+const getCarTypeInfo = (
+  rides: SearchRide[],
+  tripCarriageTypes: string[],
+  carriageTypes: Carriage[],
+) => {
   const carTypeInfo: {
     carType: string;
     price: number;
@@ -29,8 +33,6 @@ const getCarTypeInfo = (rides: SearchRide[], carriageTypes: Carriage[]) => {
   });
   const priceMap = calculateTotalPriceByCarriageType(segments);
 
-  const tripCarriageTypes = Object.keys(segments[0].price);
-  // const carriages = carriageStore.carriagesEntities();
   const tripCarriages: Carriage[] = tripCarriageTypes.map((carType, idx) => {
     const carriage = carriageTypes.find((c) => c.name === carType)!;
     return { ...carriage, code: (idx + 1).toString() };
@@ -49,7 +51,8 @@ const getCarTypeInfo = (rides: SearchRide[], carriageTypes: Carriage[]) => {
     tripCarriagesWithOccupiedSeats,
   );
 
-  tripCarriageTypes.forEach((carType) => {
+  const uniqueTripCarriageTypes = Array.from(new Set(tripCarriageTypes));
+  uniqueTripCarriageTypes.forEach((carType) => {
     const price = priceMap[carType];
     const availableSeats = availableSeatsMap[carType];
     carTypeInfo.push({ carType, price, availableSeats });
@@ -103,7 +106,7 @@ export const toSearchResult = (
 ): SearchCard[] => {
   const { from, to, routes } = response;
 
-  return routes.flatMap(({ path, schedule }) => {
+  return routes.flatMap(({ path, schedule, carriages }) => {
     const fromIdIndex = path.findIndex((point) => point === from.stationId);
 
     const toIdIndex = path.findIndex((point) => point === to.stationId);
@@ -121,7 +124,11 @@ export const toSearchResult = (
 
       const rideRoute = getRideRoute(path, segments);
 
-      const carTypeInfo = getCarTypeInfo(segmentsChunk, carriageTypes);
+      const carTypeInfo = getCarTypeInfo(
+        segmentsChunk,
+        carriages,
+        carriageTypes,
+      );
 
       return {
         rideId,
