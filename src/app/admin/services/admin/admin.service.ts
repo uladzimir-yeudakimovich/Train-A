@@ -5,6 +5,7 @@ import { Injectable } from '@angular/core';
 import { User } from '@auth/models/auth.model';
 import { ApiPath } from '@shared/models/enums/api-path.enum';
 import { Carriage } from '@shared/models/interfaces/carriage.model';
+import { SnackBarService } from '@shared/services/snack-bar/snack-bar.service';
 import { firstValueFrom, map } from 'rxjs';
 
 @Injectable({
@@ -19,7 +20,10 @@ export class AdminService {
 
   readonly loadUsers = this.createLoader<User[]>(ApiPath.Users);
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private snackBarService: SnackBarService,
+  ) {}
 
   deleteStation(id: number): Promise<Station> {
     return firstValueFrom(
