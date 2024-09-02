@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
 import { SearchStore } from '@home/store/search.store';
-import { RoutePath } from '@shared/models/enums/route-path.enum';
+import { ApiPath } from '@shared/models/enums/api-path.enum';
 import { OrderStore } from '@shared/store/orders/orders.store';
 import { Observable, tap } from 'rxjs';
 
@@ -27,24 +27,18 @@ export class AuthService {
   constructor(private http: HttpClient) {}
 
   registration(credentials: Credentials): Observable<object> {
-    return this.http.post<object>(
-      RoutePath.Registration,
-      credentials,
-      httpOptions,
-    );
+    return this.http.post<object>(ApiPath.SignUp, credentials, httpOptions);
   }
 
   login(credentials: Credentials): Observable<Token> {
     const { email } = credentials;
-    return this.http
-      .post<Token>(RoutePath.Login, credentials, httpOptions)
-      .pipe(
-        tap(({ token }) => {
-          localStorage.setItem('token', token);
-          localStorage.setItem('username', email);
-          this.isLogin.set(true);
-        }),
-      );
+    return this.http.post<Token>(ApiPath.SignIn, credentials, httpOptions).pipe(
+      tap(({ token }) => {
+        localStorage.setItem('token', token);
+        localStorage.setItem('username', email);
+        this.isLogin.set(true);
+      }),
+    );
   }
 
   logout(): void {
@@ -52,7 +46,7 @@ export class AuthService {
     this.searchStore.clear();
 
     this.http
-      .delete('logout')
+      .delete(ApiPath.Logout)
       .pipe(
         tap(() => {
           localStorage.removeItem('token');

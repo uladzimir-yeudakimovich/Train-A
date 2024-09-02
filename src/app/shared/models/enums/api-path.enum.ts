@@ -1,4 +1,7 @@
 export enum ApiPath {
+  SignUp = 'signup',
+  SignIn = 'signin',
+  Logout = 'logout',
   Station = 'station',
   Route = 'route',
   Carriage = 'carriage',
