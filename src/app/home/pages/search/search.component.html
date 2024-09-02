@@ -1,7 +1,9 @@
-<app-search-form [stations]="stations()" />
+<div class="wrapper">
+  <app-search-form [stations]="stations()" />
 
-@if (dates().length) {
-  <app-search-filter [dates]="dates()" />
-}
+  @if (dates().length) {
+    <app-search-filter [dates]="dates()" />
+  }
 
-<app-search-cards [cards]="filteredCards()" />
+  <app-search-cards [cards]="filteredCards()" />
+</div>

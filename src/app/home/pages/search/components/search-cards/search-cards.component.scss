@@ -4,6 +4,7 @@
   flex-direction: column;
   padding-inline: 1rem;
   gap: 1rem;
+  margin-top: 1rem;
 }
 
 a {
@@ -16,8 +17,16 @@ a {
     display: flex;
     justify-content: space-between;
 
+    ::ng-deep .mat-mdc-tab .mdc-tab-indicator__content--underline {
+      border: none !important;
+    }
+
     @media (max-width: 768px) {
       flex-direction: column;
+
+      .card-price__list {
+        margin: 0 auto;
+      }
     }
   }
 
@@ -68,11 +77,9 @@ a {
 
   &-price {
     &__list {
-      list-style: none;
+      overflow-x: auto;
       padding: 0;
       margin: 0;
-      display: flex;
-      gap: 1rem;
     }
 
     &__item {

@@ -1,6 +1,10 @@
 :host {
-  min-height: 100vh;
   display: flex;
-  flex-direction: column;
-  gap: 1rem;
+  
+  .wrapper {
+    min-height: 90vh;
+    margin: 0 auto;
+    gap: 1rem;
+    max-width: 100%;
+  }
 }
