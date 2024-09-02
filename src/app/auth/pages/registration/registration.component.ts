@@ -45,7 +45,7 @@ export class RegistrationComponent {
 
   onRegistration(): void {
     const emailControl = this.registrationForm.get('email');
-    emailControl?.addValidators(emailValidator());
+    emailControl?.addValidators(emailValidator()); // AC3
     emailControl?.updateValueAndValidity();
 
     if (this.registrationForm.valid) {
@@ -67,7 +67,6 @@ export class RegistrationComponent {
 
   getEmailErrorMessage(): string {
     const emailControl = this.registrationForm.get('email');
-    console.log('errors', emailControl!.errors);
     if (emailControl!.hasError('required')) {
       return 'Please enter an email';
     }
