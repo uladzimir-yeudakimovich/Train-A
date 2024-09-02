@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable, signal } from '@angular/core';
-import { RoutePath } from '@shared/models/enums/route-path.enum';
+import { ApiPath } from '@shared/models/enums/api-path.enum';
 import { Observable, tap } from 'rxjs';
 
 import { Credentials, Token } from '../models/auth.model';
@@ -21,29 +21,23 @@ export class AuthService {
   constructor(private http: HttpClient) {}
 
   registration(credentials: Credentials): Observable<object> {
-    return this.http.post<object>(
-      RoutePath.Registration,
-      credentials,
-      httpOptions,
-    );
+    return this.http.post<object>(ApiPath.SignUp, credentials, httpOptions);
   }
 
   login(credentials: Credentials): Observable<Token> {
     const { email } = credentials;
-    return this.http
-      .post<Token>(RoutePath.Login, credentials, httpOptions)
-      .pipe(
-        tap(({ token }) => {
-          localStorage.setItem('token', token);
-          localStorage.setItem('username', email);
-          this.isLogin.set(true);
-        }),
-      );
+    return this.http.post<Token>(ApiPath.SignIn, credentials, httpOptions).pipe(
+      tap(({ token }) => {
+        localStorage.setItem('token', token);
+        localStorage.setItem('username', email);
+        this.isLogin.set(true);
+      }),
+    );
   }
 
   logout(): void {
     this.http
-      .delete('logout')
+      .delete(ApiPath.Logout)
       .pipe(
         tap(() => {
           localStorage.removeItem('token');
