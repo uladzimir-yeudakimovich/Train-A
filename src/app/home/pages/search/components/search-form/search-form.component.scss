@@ -20,6 +20,7 @@
 
       .form-swap-wrapper {
         position: relative;
+        z-index: 1;
 
         .form-swap {
           position: absolute;
@@ -38,7 +39,11 @@
     &-date {
       display: flex;
       flex-direction: row;
-      width: 100%;
+      width: 15rem;
+
+      .form-time {
+        width: 50%;
+      }
 
       mat-form-field {
         width: 100%;
@@ -52,6 +57,10 @@
       flex-direction: column;
 
       .form-control {
+        width: 100%;
+      }
+
+      .form-date {
         width: 100%;
       }
     }
