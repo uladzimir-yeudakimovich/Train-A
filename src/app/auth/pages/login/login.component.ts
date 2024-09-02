@@ -1,4 +1,9 @@
-import { ChangeDetectorRef, Component, DestroyRef } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  DestroyRef,
+  OnInit,
+} from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -16,7 +21,7 @@ import { formImports } from '../form.config';
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit {
   linkRegistration = RoutePath.Registration;
 
   constructor(
@@ -38,6 +43,12 @@ export class LoginComponent {
       Validators.minLength(8),
     ]),
   });
+
+  ngOnInit() {
+    if (this.authService.isLogin()) {
+      this.router.navigate([RoutePath.Search]);
+    }
+  }
 
   getEmailErrorMessage(): string {
     const emailControl = this.loginForm.get('email');
