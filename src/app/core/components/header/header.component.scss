@@ -5,6 +5,10 @@
     display: flex;
     gap: 2rem;
     background-color: $primaryBackgroundColor;
+
+    @media (max-width: 576px) {
+      gap: 0.2rem;
+    }
   }
 
   &-logo {
