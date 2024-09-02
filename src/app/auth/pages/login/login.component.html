@@ -19,7 +19,7 @@
       <button type="submit" mat-flat-button class="btn" [disabled]="loginForm.invalid">
         Sign In
       </button>
-      <a mat-button class="btn" [href]="linkRegistration">Sign Up</a>
+      <a mat-button class="btn" [routerLink]="['/', linkRegistration]">Sign Up</a>
     </mat-card-actions>
   </form>
 </mat-card>

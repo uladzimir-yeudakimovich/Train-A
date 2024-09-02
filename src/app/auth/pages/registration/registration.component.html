@@ -36,7 +36,7 @@
       <button type="submit" mat-flat-button class="btn" [disabled]="registrationForm.invalid">
         Register
       </button>
-      <a mat-button class="btn" [href]="linkLogin">Sign In</a>
+      <a mat-button class="btn" [routerLink]="['/', linkLogin]">Sign In</a>
     </mat-card-actions>
   </form>
 </mat-card>
