@@ -65,6 +65,12 @@ export class OrdersComponent implements OnInit, AfterViewChecked {
     this.cdr.detectChanges();
   }
 
+  canCancel(order: OrderView) {
+    const isActive = order.status === OrderStatus.Active;
+    const isCompleted = order.startTime < new Date().toISOString();
+    return isActive && !isCompleted;
+  }
+
   get orderStatus() {
     return OrderStatus;
   }
