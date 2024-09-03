@@ -1,5 +1,5 @@
 import { ToCitiesPipe } from '@admin/pipes/toCities.pipe';
-import { MatMiniFabButton } from '@angular/material/button';
+import { MatIconButton } from '@angular/material/button';
 import {
   MatCard,
   MatCardContent,
@@ -15,7 +15,7 @@ export const stationCardsImports = [
   MatCardTitle,
   MatCardSubtitle,
   MatCardContent,
-  MatMiniFabButton,
   MatIcon,
   ToCitiesPipe,
+  MatIconButton,
 ];
