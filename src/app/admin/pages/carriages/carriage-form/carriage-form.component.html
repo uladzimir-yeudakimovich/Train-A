@@ -12,7 +12,7 @@
       <mat-label>Rows</mat-label>
       <input matInput type="number" formControlName="rows" min="1" max="50" placeholder="Enter number of rows">
       @if(carriageForm.get('rows')?.invalid && carriageForm.get('rows')?.touched) {
-        <mat-error>Number of rows must be at least 1</mat-error>
+        <mat-error>Invalid number of rows</mat-error>
       }
     </mat-form-field>
 
@@ -20,7 +20,7 @@
       <mat-label>Left Seats</mat-label>
       <input matInput type="number" formControlName="leftSeats" min="1" max="5" placeholder="Enter number of left seats">
       @if(carriageForm.get('leftSeats')?.invalid && carriageForm.get('leftSeats')?.touched) {
-        <mat-error>Number of left seats must be at least 1</mat-error>
+        <mat-error>Number of left seats must be between 1 and 5</mat-error>
       }
     </mat-form-field>
 
@@ -28,7 +28,7 @@
       <mat-label>Right Seats</mat-label>
       <input matInput type="number" formControlName="rightSeats" min="1" max="5" placeholder="Enter number of right seats">
       @if(carriageForm.get('rightSeats')?.invalid && carriageForm.get('rightSeats')?.touched) {
-        <mat-error>Number of right seats must be at least 1</mat-error>
+        <mat-error>Number of right seats must be between 1 and 5</mat-error>
       }
     </mat-form-field>
 
