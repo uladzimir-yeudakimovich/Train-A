@@ -38,7 +38,6 @@ export class RegistrationComponent {
       ]),
       confirmPassword: new FormControl('', [Validators.required]),
     },
-    { validators: this.matchValidator('password', 'confirmPassword') },
   );
 
   constructor(
@@ -54,8 +53,9 @@ export class RegistrationComponent {
     emailControl?.updateValueAndValidity();
 
     if (this.registrationForm.valid) {
-      const { email, password } = this.registrationForm.value;
-      this.authService
+      const { email, password, confirmPassword } = this.registrationForm.value;
+      if (password === confirmPassword) {
+        this.authService
         .registration({ email, password })
         .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe(
@@ -65,6 +65,11 @@ export class RegistrationComponent {
             this.cdr.detectChanges();
           },
         );
+      } else {
+        const confirmPasswordControl = this.registrationForm.get('confirmPassword');
+        const error = { confirmedValidator: 'Passwords do not match' };
+        confirmPasswordControl!.setErrors(error);
+      }
     } else {
       this.registrationForm.markAllAsTouched();
     }
@@ -100,36 +105,9 @@ export class RegistrationComponent {
 
   getConfirmPasswordErrorMessage(): string {
     const confirmControl = this.registrationForm.get('confirmPassword');
-    if (confirmControl!.hasError('required')) {
-      return 'Please confirm a password';
-    }
     if (confirmControl!.hasError('confirmedValidator')) {
       return 'Passwords do not match';
     }
     return '';
-  }
-
-  matchValidator(
-    controlName: string,
-    matchingControlName: string,
-  ): ValidatorFn {
-    return (abstractControl: AbstractControl) => {
-      const control = abstractControl.get(controlName);
-      const matchingControl = abstractControl.get(matchingControlName);
-
-      if (
-        matchingControl!.errors &&
-        !matchingControl!.errors?.confirmedValidator
-      ) {
-        return null;
-      }
-      if (control!.value !== matchingControl!.value) {
-        const error = { confirmedValidator: 'Passwords do not match' };
-        matchingControl!.setErrors(error);
-        return error;
-      }
-      matchingControl!.setErrors(null);
-      return null;
-    };
   }
 }
