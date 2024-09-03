@@ -24,7 +24,6 @@ export class RegistrationComponent {
     {
       email: new FormControl('', [
         Validators.required,
-        Validators.email,
         emailValidator(),
       ]),
       password: new FormControl('', [
