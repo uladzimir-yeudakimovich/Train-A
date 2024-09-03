@@ -36,7 +36,10 @@ export class RegistrationComponent {
         Validators.required,
         trimmedLengthValidator(8, 225),
       ]),
-      confirmPassword: new FormControl('', [Validators.required]),
+      confirmPassword: new FormControl('', [
+        Validators.required,
+        trimmedLengthValidator(8, 225),
+      ]),
     },
   );
 
