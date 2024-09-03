@@ -12,10 +12,8 @@ export const RideStore = signalStore(
 
   withMethods((store, searchService = inject(SearchService)) => ({
     async getRide(id: number) {
-      if (!store.ridesEntityMap()[id]) {
-        const ride = await searchService.loadRide(id);
-        patchState(store, setEntity(ride, rideConfig));
-      }
+      const ride = await searchService.loadRide(id);
+      patchState(store, setEntity(ride, rideConfig));
     },
   })),
 );
