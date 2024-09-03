@@ -9,6 +9,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '@auth/services/auth.service';
 import { emailValidator } from '@auth/validators/email.validator';
+import { trimmedLengthValidator } from '@auth/validators/password.validator';
 import { RoutePath } from '@shared/models/enums/route-path.enum';
 import { ProfileService } from '@user/services/profile.service';
 
@@ -40,8 +41,7 @@ export class LoginComponent implements OnInit {
     ]),
     password: new FormControl('', [
       Validators.required,
-      Validators.minLength(8),
-      Validators.maxLength(255),
+      trimmedLengthValidator(8, 225),
     ]),
   });
 
