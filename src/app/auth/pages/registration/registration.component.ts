@@ -1,10 +1,8 @@
 import { ChangeDetectorRef, Component, DestroyRef } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import {
-  AbstractControl,
   FormControl,
   FormGroup,
-  ValidatorFn,
   Validators,
 } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -14,6 +12,7 @@ import { trimmedLengthValidator } from '@auth/validators/password.validator';
 import { RoutePath } from '@shared/models/enums/route-path.enum';
 
 import { formImports } from '../form.config';
+import { matchValidator } from '@auth/validators/match.validator';
 
 @Component({
   selector: 'app-registration',
@@ -36,11 +35,9 @@ export class RegistrationComponent {
         Validators.required,
         trimmedLengthValidator(8, 225),
       ]),
-      confirmPassword: new FormControl('', [
-        Validators.required,
-        trimmedLengthValidator(8, 225),
-      ]),
+      confirmPassword: new FormControl('', []),
     },
+    { validators: matchValidator('password', 'confirmPassword') },
   );
 
   constructor(
@@ -51,28 +48,19 @@ export class RegistrationComponent {
   ) {}
 
   onRegistration(): void {
-    const emailControl = this.registrationForm.get('email');
-    emailControl?.addValidators(emailValidator()); // AC3
-    emailControl?.updateValueAndValidity();
-
     if (this.registrationForm.valid) {
-      const { email, password, confirmPassword } = this.registrationForm.value;
-      if (password === confirmPassword) {
-        this.authService
-        .registration({ email, password })
-        .pipe(takeUntilDestroyed(this.destroyRef))
-        .subscribe(
-          () => this.router.navigate([RoutePath.Login]),
-          (err) => {
-            emailControl?.setErrors({ alreadyExists: err.message });
-            this.cdr.detectChanges();
-          },
-        );
-      } else {
-        const confirmPasswordControl = this.registrationForm.get('confirmPassword');
-        const error = { confirmedValidator: 'Passwords do not match' };
-        confirmPasswordControl!.setErrors(error);
-      }
+      const { email, password } = this.registrationForm.value;
+      this.authService
+      .registration({ email, password })
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(
+        () => this.router.navigate([RoutePath.Login]),
+        (err) => {
+          const emailControl = this.registrationForm.get('email');
+          emailControl?.setErrors({ alreadyExists: err.message });
+          this.cdr.detectChanges();
+        },
+      );
     } else {
       this.registrationForm.markAllAsTouched();
     }
