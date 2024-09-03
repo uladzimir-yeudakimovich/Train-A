@@ -25,6 +25,10 @@ a {
     @media (max-width: 768px) {
       flex-direction: column;
 
+      .card-time {
+        width: 100%;
+      }
+
       .card-price__list {
         margin: 0 auto;
       }
