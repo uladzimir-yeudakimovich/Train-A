@@ -1,0 +1,1 @@
+var r=function(i){return i.Search="",i.Registration="signup",i.Login="signin",i.UserProfile="profile",i.TripDetails="trip/:rideId",i.Orders="orders",i.Admin="admin",i.AdminStations="stations",i.AdminCarriages="carriages",i.AdminRoutes="routes",i.AdminRideManagement="routes/:id",i.NotFound="**",i}(r||{});export{r as a};
