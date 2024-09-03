@@ -41,4 +41,9 @@ export class SearchCardsComponent {
       data,
     });
   }
+
+  tabClick(event: Event): void {
+    event.preventDefault();
+    event.stopPropagation();
+  }
 }

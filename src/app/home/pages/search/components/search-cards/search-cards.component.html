@@ -54,7 +54,7 @@
           </div>
         </div>
 
-        <mat-tab-group class="card-price__list">
+        <mat-tab-group class="card-price__list" (click)="tabClick($event)">
           @for (carTypeInfo of card.carTypeInfo; track carTypeInfo.carType) {
             <mat-tab>
               <ng-template mat-tab-label>

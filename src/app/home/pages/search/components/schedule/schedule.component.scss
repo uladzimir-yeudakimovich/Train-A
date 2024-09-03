@@ -21,6 +21,10 @@
     display: flex;
     mat-divider {
       margin-inline-start: 8rem;
+
+      @media (max-width: 768px) {
+        margin-inline-start: 5rem;
+      }
     }
   }
 }
