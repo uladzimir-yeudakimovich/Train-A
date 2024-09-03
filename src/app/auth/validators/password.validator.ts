@@ -10,7 +10,7 @@ export const trimmedLengthValidator = (
     }
     const trimmedValue = control.value.trim();
     if (trimmedValue.length < minLength || trimmedValue.length > maxLength) {
-      return { minLength: true };
+      return { minlength: true };
     }
     return null;
   };
