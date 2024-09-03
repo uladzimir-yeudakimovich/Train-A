@@ -22,10 +22,7 @@ export class RegistrationComponent {
 
   registrationForm: FormGroup = new FormGroup(
     {
-      email: new FormControl('', [
-        Validators.required,
-        emailValidator(),
-      ]),
+      email: new FormControl('', [Validators.required, emailValidator()]),
       password: new FormControl('', [
         Validators.required,
         trimmedLengthValidator(8, 225),
