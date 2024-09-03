@@ -15,6 +15,11 @@
         flex-direction: row;
         justify-content: space-between;
         font-size: 1.2rem;
+
+        .head-cities {
+          display: flex;
+          align-items: center;
+        }
       }
     }
   }

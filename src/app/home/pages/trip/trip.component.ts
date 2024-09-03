@@ -1,4 +1,3 @@
-import { HttpErrorResponse } from '@angular/common/http';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -12,7 +11,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { RouteModalComponent } from '@home/components/route-modal/route-modal.component';
 import { BookItem, TripView } from '@home/models/trip.models';
 import { TripService } from '@home/services/trip/trip.service';
-import { ErrorReason } from '@shared/models/enums/api-path.enum';
 import { Message } from '@shared/models/enums/messages.enum';
 import { RoutePath } from '@shared/models/enums/route-path.enum';
 import { SeatState } from '@shared/models/enums/seat-state.enum';
@@ -77,7 +75,7 @@ export class TripComponent implements OnInit {
           data: this.tripView(),
         });
       })
-      .catch((error) => this.errorSnackBar(error));
+      .catch((error) => this.snackBarService.displayError(error));
   }
 
   onBack(): void {
@@ -123,24 +121,5 @@ export class TripComponent implements OnInit {
 
     this.tripView = this.tripService.getTripView();
     this.isLoading.set(false);
-  }
-
-  private errorSnackBar(error: HttpErrorResponse) {
-    switch (error.error.reason) {
-      case ErrorReason.RideNotFound:
-        this.snackBarService.open(Message.RideNotFound);
-        break;
-      case ErrorReason.InvalidStations:
-        this.snackBarService.open(Message.InvalidStations);
-        break;
-      case ErrorReason.AlreadyBooked:
-        this.snackBarService.open(Message.AlreadyBooked);
-        break;
-      case ErrorReason.InvalidRide:
-        this.snackBarService.open(Message.TripExpired);
-        break;
-      default:
-        this.snackBarService.open(Message.UnexpectedError);
-    }
   }
 }

@@ -2,7 +2,6 @@ import { RailRoute } from '@admin/models/route.model';
 import { Station } from '@admin/models/station.model';
 import { RouteStore } from '@admin/store/routes/routes.store';
 import { StationStore } from '@admin/store/stations/stations.store';
-import { HttpErrorResponse } from '@angular/common/http';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -14,7 +13,6 @@ import {
   signal,
 } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ErrorReason } from '@shared/models/enums/api-path.enum';
 import { Message } from '@shared/models/enums/messages.enum';
 import { Carriage } from '@shared/models/interfaces/carriage.model';
 import { SnackBarService } from '@shared/services/snack-bar/snack-bar.service';
@@ -99,7 +97,7 @@ export class RouteFormComponent implements OnInit {
           this.onClose();
         })
         .catch((error) => {
-          this.errorSnackBar(error);
+          this.snackBarService.displayError(error);
         })
         .finally(() => {
           this.isLoading.set(false);
@@ -113,7 +111,7 @@ export class RouteFormComponent implements OnInit {
         this.onReset();
       })
       .catch((error) => {
-        this.errorSnackBar(error);
+        this.snackBarService.displayError(error);
       })
       .finally(() => {
         this.isLoading.set(false);
@@ -235,13 +233,5 @@ export class RouteFormComponent implements OnInit {
 
   private addStationControl() {
     this.stations.push(this.formBuilder.control(null));
-  }
-
-  private errorSnackBar(error: HttpErrorResponse) {
-    if (error.error.reason === ErrorReason.InvalidAccessToken) {
-      this.snackBarService.open(Message.InvalidAccessToken);
-    } else {
-      this.snackBarService.open(Message.UnexpectedError);
-    }
   }
 }

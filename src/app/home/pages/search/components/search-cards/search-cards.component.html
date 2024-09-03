@@ -54,26 +54,26 @@
           </div>
         </div>
 
-        <ul class="card-price__list">
+        <mat-tab-group class="card-price__list">
           @for (carTypeInfo of card.carTypeInfo; track carTypeInfo.carType) {
-            <li class="card-price__item">
-              <mat-divider vertical />
-              <div class="card-price__carriage">
-                <mat-card-subtitle>
-                  Carriage type
-                  {{ carTypeInfo.carType }}
-                </mat-card-subtitle>
-
-                <mat-card-subtitle>
-                  {{ carTypeInfo.availableSeats }} seats
-                </mat-card-subtitle>
-                <mat-card-title>
-                  {{ carTypeInfo.price | currency: "USD" : "symbol" : "1.0-0" }}
-                </mat-card-title>
-              </div>
-            </li>
+            <mat-tab>
+              <ng-template mat-tab-label>
+                <div>
+                  <div>
+                    Carriage type
+                    {{ carTypeInfo.carType }}
+                  </div>
+                  <div>{{ carTypeInfo.availableSeats }} seats</div>
+                  <div>
+                    {{
+                      carTypeInfo.price | currency: "USD" : "symbol" : "1.0-0"
+                    }}
+                  </div>
+                </div>
+              </ng-template>
+            </mat-tab>
           }
-        </ul>
+        </mat-tab-group>
       </mat-card-content>
     </mat-card>
   </a>

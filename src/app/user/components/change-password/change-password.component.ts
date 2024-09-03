@@ -48,6 +48,7 @@ export class ChangePasswordComponent {
     password: this.formBuilder.control('', [
       Validators.required,
       Validators.minLength(8),
+      Validators.maxLength(255),
     ]),
   });
 

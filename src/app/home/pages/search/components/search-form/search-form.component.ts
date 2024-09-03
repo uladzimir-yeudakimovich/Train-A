@@ -1,5 +1,4 @@
 import { Station } from '@admin/models/station.model';
-import { HttpErrorResponse } from '@angular/common/http';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -16,8 +15,6 @@ import { provideNativeDateAdapter } from '@angular/material/core';
 import { SearchRoutesParams } from '@home/models/search-routes-params.model';
 import { SearchStore } from '@home/store/search.store';
 import { getTomorrow } from '@home/utils/getTomorrow.util';
-import { ErrorReason } from '@shared/models/enums/api-path.enum';
-import { Message } from '@shared/models/enums/messages.enum';
 import { SnackBarService } from '@shared/services/snack-bar/snack-bar.service';
 
 import { searchFormImports } from './search-form.config';
@@ -121,7 +118,7 @@ export class SearchFormComponent {
     };
 
     await this.searchStore.searchRoutes(searchRoutesParams).catch((error) => {
-      this.errorSnackBar(error);
+      this.snackBarService.displayError(error);
     });
   }
 
@@ -130,13 +127,5 @@ export class SearchFormComponent {
     return this.stations().filter(({ city }) =>
       city.toLowerCase().includes(filterValue),
     );
-  }
-
-  private errorSnackBar(error: HttpErrorResponse) {
-    if (error.error.reason === ErrorReason.StationNotFound) {
-      this.snackBarService.open(Message.StationNotFound);
-    } else {
-      this.snackBarService.open(Message.UnexpectedError);
-    }
   }
 }

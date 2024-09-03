@@ -1,3 +1,11 @@
-<app-globalmap [(latLngOutput)]="location" />
-<app-station-form [latlng]="location()" />
-<app-station-cards />
+<div class="form-map">
+  <div class="global-map">
+    <app-globalmap [(latLngOutput)]="location" />
+  </div>
+  <div class="form">
+    <app-station-form [latlng]="location()" />
+  </div>
+</div>
+<div class="list">
+  <app-station-cards />
+</div>

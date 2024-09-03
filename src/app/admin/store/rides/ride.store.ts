@@ -1,10 +1,7 @@
 import { RouteInformation, SegmentUI } from '@admin/models/rides.model';
 import { RidesManagementService } from '@admin/services/rides-management/rides-management.service';
-import { HttpErrorResponse } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { patchState, signalStore, withMethods, withState } from '@ngrx/signals';
-import { ErrorReason } from '@shared/models/enums/api-path.enum';
-import { Message } from '@shared/models/enums/messages.enum';
 import { SnackBarService } from '@shared/services/snack-bar/snack-bar.service';
 
 export interface RidesState extends RouteInformation {
@@ -41,7 +38,7 @@ export const RidesStore = signalStore(
             });
           },
           error: (error) => {
-            this.showError(error);
+            snackBarService.displayError(error);
             patchState(store, { loading: false });
           },
           complete: () => {
@@ -56,7 +53,7 @@ export const RidesStore = signalStore(
             .updateRide(store.routeId(), rideId, ride.segments)
             .subscribe({
               error: (error) => {
-                this.showError(error);
+                snackBarService.displayError(error);
               },
             });
         }
@@ -77,7 +74,7 @@ export const RidesStore = signalStore(
             });
           },
           error: (error) => {
-            this.showError(error);
+            snackBarService.displayError(error);
           },
           complete: () => {
             patchState(store, { loading: false });
@@ -93,28 +90,9 @@ export const RidesStore = signalStore(
             }));
           },
           error: (error) => {
-            this.showError(error);
+            snackBarService.displayError(error);
           },
         });
-      },
-      showError(error: HttpErrorResponse) {
-        switch (error.error.reason) {
-          case ErrorReason.RecordNotFound:
-            snackBarService.open(Message.RouteOrRideNotFound);
-            break;
-          case ErrorReason.RecordInUse:
-            snackBarService.open(Message.RideIsAlreadyUsed);
-            break;
-          case ErrorReason.InvalidData:
-            snackBarService.open(Message.TimeOrPriceIrrelevant);
-            break;
-          case ErrorReason.InvalidAccessToken:
-            snackBarService.open(Message.InvalidAccessToken);
-            break;
-          default:
-            snackBarService.open(Message.UnexpectedError);
-            break;
-        }
       },
     }),
   ),

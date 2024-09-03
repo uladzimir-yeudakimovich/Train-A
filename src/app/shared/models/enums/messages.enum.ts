@@ -2,7 +2,7 @@ export enum Message {
   TripBookedSuccessfully = 'Trip booked successfully',
   TripExpired = 'Trip has expired. Please select another one',
 
-  InvalidAccessToken = 'You cannot perform this action. Please try to login again.',
+  InvalidAccessToken = 'You cannot perform this action.',
   InvalidCredentials = 'Invalid email or password',
 
   RouteDeleteConfirmation = 'Are you sure you want to delete this route?',
@@ -27,4 +27,7 @@ export enum Message {
   RideIsAlreadyUsed = 'Ride is already used',
   TimeOrPriceIrrelevant = 'Time or price is irrelevant',
   StationNotFound = 'Station not found. Try another one',
+
+  CarriageAlreadyExists = 'Carriage already exists',
+  RecordInUse = 'It is used in some order. You cannot delete it',
 }

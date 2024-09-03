@@ -22,4 +22,5 @@ export enum ErrorReason {
   RecordInUse = 'recordInUse',
   InvalidData = 'invalidData',
   StationNotFound = 'stationNotFound',
+  InvalidCarriageUniqueKey = 'invalidUniqueKey',
 }

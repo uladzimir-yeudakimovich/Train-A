@@ -9,13 +9,15 @@
 
   .form-field {
     width: 100%;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
   }
 
   .card-actions {
     padding: 0;
     justify-content: end;
     gap: 5px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
 
     .btn {
       border-radius: 4px;

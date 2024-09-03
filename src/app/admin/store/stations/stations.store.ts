@@ -14,6 +14,7 @@ import {
   updateAllEntities,
   withEntities,
 } from '@ngrx/signals/entities';
+import { SnackBarService } from '@shared/services/snack-bar/snack-bar.service';
 
 import { stationConfig } from './stations.config';
 
@@ -47,58 +48,72 @@ export const StationStore = signalStore(
     }),
   })),
 
-  withMethods((store, adminService = inject(AdminService)) => ({
-    async getStations() {
-      if (!store.stationsIds().length) {
-        const stations = await adminService.loadStations();
-        patchState(store, setAllEntities(stations, stationConfig));
-      }
-    },
+  withMethods(
+    (
+      store,
+      adminService = inject(AdminService),
+      snackBarService = inject(SnackBarService),
+    ) => ({
+      async getStations() {
+        if (!store.stationsIds().length) {
+          const stations = await adminService.loadStations();
+          patchState(store, setAllEntities(stations, stationConfig));
+        }
+      },
 
-    async deleteStation(id: number): Promise<void> {
-      await adminService.deleteStation(id);
-      patchState(store, removeEntity(id, stationConfig));
-      this.deleteStationFromConnected(id);
-    },
+      async deleteStation(id: number): Promise<void> {
+        await adminService
+          .deleteStation(id)
+          .then(() => {
+            patchState(store, removeEntity(id, stationConfig));
+            this.deleteStationFromConnected(id);
+          })
+          .catch((error) => snackBarService.displayError(error));
+      },
 
-    async addStation(partialStation: Partial<Station>): Promise<void> {
-      const newStation = await adminService.postStation(partialStation);
-      patchState(store, setEntity(newStation, stationConfig));
-      this.addStationToConnected(newStation);
-    },
+      async addStation(partialStation: Partial<Station>): Promise<void> {
+        await adminService
+          .postStation(partialStation)
+          .then((newStation) => {
+            patchState(store, setEntity(newStation, stationConfig));
+            this.addStationToConnected(newStation);
+          })
+          .catch((error) => snackBarService.displayError(error));
+      },
 
-    deleteStationFromConnected(stationToDeleteId: number): void {
-      const stations = store.stationsEntities();
-      const updatedStations = stations.map((station) => {
-        const connectedTo = station.connectedTo.filter(
-          (connection) => connection.id !== stationToDeleteId,
-        );
-        return { ...station, connectedTo };
-      });
-      patchState(store, setAllEntities(updatedStations, stationConfig));
-    },
-
-    addStationToConnected(stationToConnect: Station): void {
-      const stations = store.stationsEntityMap();
-      const connectedStations = stationToConnect.connectedTo.map(
-        (connection) => stations[connection.id],
-      );
-      const updatedStations = connectedStations.map((connectedStation) => {
-        const connectedTo = [
-          ...connectedStation.connectedTo,
-          { id: stationToConnect.id },
-        ];
-        return { ...connectedStation, connectedTo };
-      });
-      patchState(
-        store,
-        updateAllEntities((station) => {
-          const updatedStation = updatedStations.find(
-            (updated) => updated.id === station.id,
+      deleteStationFromConnected(stationToDeleteId: number): void {
+        const stations = store.stationsEntities();
+        const updatedStations = stations.map((station) => {
+          const connectedTo = station.connectedTo.filter(
+            (connection) => connection.id !== stationToDeleteId,
           );
-          return updatedStation ?? station;
-        }, stationConfig),
-      );
-    },
-  })),
+          return { ...station, connectedTo };
+        });
+        patchState(store, setAllEntities(updatedStations, stationConfig));
+      },
+
+      addStationToConnected(stationToConnect: Station): void {
+        const stations = store.stationsEntityMap();
+        const connectedStations = stationToConnect.connectedTo.map(
+          (connection) => stations[connection.id],
+        );
+        const updatedStations = connectedStations.map((connectedStation) => {
+          const connectedTo = [
+            ...connectedStation.connectedTo,
+            { id: stationToConnect.id },
+          ];
+          return { ...connectedStation, connectedTo };
+        });
+        patchState(
+          store,
+          updateAllEntities((station) => {
+            const updatedStation = updatedStations.find(
+              (updated) => updated.id === station.id,
+            );
+            return updatedStation ?? station;
+          }, stationConfig),
+        );
+      },
+    }),
+  ),
 );

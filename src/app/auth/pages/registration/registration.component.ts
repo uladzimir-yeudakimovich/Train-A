@@ -9,6 +9,7 @@ import {
 } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '@auth/services/auth.service';
+import { emailValidator } from '@auth/validators/email.validator';
 import { RoutePath } from '@shared/models/enums/route-path.enum';
 
 import { formImports } from '../form.config';
@@ -29,6 +30,7 @@ export class RegistrationComponent {
       password: new FormControl('', [
         Validators.required,
         Validators.minLength(8),
+        Validators.maxLength(255),
       ]),
       confirmPassword: new FormControl('', [Validators.required]),
     },
@@ -43,6 +45,10 @@ export class RegistrationComponent {
   ) {}
 
   onRegistration(): void {
+    const emailControl = this.registrationForm.get('email');
+    emailControl?.addValidators(emailValidator()); // AC3
+    emailControl?.updateValueAndValidity();
+
     if (this.registrationForm.valid) {
       const { email, password } = this.registrationForm.value;
       this.authService
@@ -51,7 +57,6 @@ export class RegistrationComponent {
         .subscribe(
           () => this.router.navigate([RoutePath.Login]),
           (err) => {
-            const emailControl = this.registrationForm.get('email');
             emailControl?.setErrors({ alreadyExists: err.message });
             this.cdr.detectChanges();
           },
@@ -64,7 +69,10 @@ export class RegistrationComponent {
   getEmailErrorMessage(): string {
     const emailControl = this.registrationForm.get('email');
     if (emailControl!.hasError('required')) {
-      return 'Please enter a email';
+      return 'Please enter an email';
+    }
+    if (emailControl!.hasError('invalidEmail')) {
+      return 'Incorrect email';
     }
     if (emailControl!.hasError('email')) {
       return 'The email is invalid';

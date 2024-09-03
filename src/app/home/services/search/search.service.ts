@@ -1,6 +1,5 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { AdminRoleGuard } from '@core/guards/admin.guard';
 import { SearchCard } from '@home/models/search-card.model';
 import { SearchResponse } from '@home/models/search-response.model';
 import { SearchRoutesParams } from '@home/models/search-routes-params.model';
@@ -9,6 +8,7 @@ import { ApiPath } from '@shared/models/enums/api-path.enum';
 import { Order } from '@shared/models/interfaces/order.model';
 import { Ride } from '@shared/models/interfaces/ride.model';
 import { CarriageStore } from '@shared/store/carriages/carriages.store';
+import { ProfileService } from '@user/services/profile.service';
 import { firstValueFrom, map } from 'rxjs';
 
 @Injectable({
@@ -19,7 +19,7 @@ export class SearchService {
 
   constructor(
     private http: HttpClient,
-    private adminGuard: AdminRoleGuard,
+    private profileService: ProfileService,
   ) {
     this.carriageStore.getCarriages();
   }
@@ -34,7 +34,7 @@ export class SearchService {
   }
 
   loadOrders(): Promise<Order[]> {
-    const isManager = this.adminGuard.canActivate();
+    const isManager = this.profileService.userRole() === 'manager';
     const attr = isManager ? '?all=true' : '';
     return firstValueFrom(
       this.http.get<Order[]>(`${ApiPath.Order}${attr}`),

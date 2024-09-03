@@ -1,7 +1,33 @@
 :host {
-  display: grid;
-  grid-template-columns: 1fr auto;
+  display: flex;
+  flex-direction: column;
   gap: 2rem;
   padding-inline: 1rem;
   padding-block: 1rem;
+
+  .form-map {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+  
+  .global-map {
+    width: 100%;
+  }
+
+  @media (min-width: 992px) {
+    margin: 0 5%;
+
+    .form-map {
+      flex-direction: row;
+    }
+
+    .global-map {
+      width: 75%;
+    }
+
+    .form {
+      width: 25%;
+    }
+  }
 }

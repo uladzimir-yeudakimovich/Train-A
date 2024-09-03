@@ -1,6 +1,7 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Message } from '@shared/models/enums/messages.enum';
+import { getErrorMessage } from '@shared/utils/erorr-message.util';
 
 @Injectable({
   providedIn: 'root',
@@ -8,9 +9,14 @@ import { Message } from '@shared/models/enums/messages.enum';
 export class SnackBarService {
   constructor(public snackBar: MatSnackBar) {}
 
-  open(message: Message) {
+  open(message: string) {
     this.snackBar.open(message, 'Close', {
       duration: 5000,
     });
+  }
+
+  displayError(error: HttpErrorResponse) {
+    const message = getErrorMessage(error);
+    this.open(message);
   }
 }

@@ -1,7 +1,6 @@
 import { RailRoute } from '@admin/models/route.model';
 import { RouteStore } from '@admin/store/routes/routes.store';
 import { StationStore } from '@admin/store/stations/stations.store';
-import { HttpErrorResponse } from '@angular/common/http';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -13,7 +12,6 @@ import {
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ConfirmationDialogComponent } from '@shared/components/delete-dialog/confirmation-dialog.component';
-import { ErrorReason } from '@shared/models/enums/api-path.enum';
 import { Message } from '@shared/models/enums/messages.enum';
 import { SnackBarService } from '@shared/services/snack-bar/snack-bar.service';
 
@@ -66,7 +64,7 @@ export class RouteCardComponent {
         this.routeStore
           .deleteRoute(this.route().id)
           .catch((error) => {
-            this.errorSnackBar(error);
+            this.snackBarService.displayError(error);
           })
           .finally(() => {
             this.isLoading.set(false);
@@ -104,13 +102,5 @@ export class RouteCardComponent {
         click: () => this.openDialog(),
       },
     ];
-  }
-
-  private errorSnackBar(error: HttpErrorResponse) {
-    if (error.error.reason === ErrorReason.InvalidAccessToken) {
-      this.snackBarService.open(Message.InvalidAccessToken);
-    } else {
-      this.snackBarService.open(Message.UnexpectedError);
-    }
   }
 }
