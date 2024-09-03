@@ -1,18 +1,14 @@
 import { ChangeDetectorRef, Component, DestroyRef } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import {
-  FormControl,
-  FormGroup,
-  Validators,
-} from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '@auth/services/auth.service';
 import { emailValidator } from '@auth/validators/email.validator';
+import { matchValidator } from '@auth/validators/match.validator';
 import { trimmedLengthValidator } from '@auth/validators/password.validator';
 import { RoutePath } from '@shared/models/enums/route-path.enum';
 
 import { formImports } from '../form.config';
-import { matchValidator } from '@auth/validators/match.validator';
 
 @Component({
   selector: 'app-registration',
@@ -51,16 +47,16 @@ export class RegistrationComponent {
     if (this.registrationForm.valid) {
       const { email, password } = this.registrationForm.value;
       this.authService
-      .registration({ email, password })
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe(
-        () => this.router.navigate([RoutePath.Login]),
-        (err) => {
-          const emailControl = this.registrationForm.get('email');
-          emailControl?.setErrors({ alreadyExists: err.message });
-          this.cdr.detectChanges();
-        },
-      );
+        .registration({ email, password })
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe(
+          () => this.router.navigate([RoutePath.Login]),
+          (err) => {
+            const emailControl = this.registrationForm.get('email');
+            emailControl?.setErrors({ alreadyExists: err.message });
+            this.cdr.detectChanges();
+          },
+        );
     } else {
       this.registrationForm.markAllAsTouched();
     }

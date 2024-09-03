@@ -1,4 +1,4 @@
-import { AbstractControl, ValidatorFn } from "@angular/forms";
+import { AbstractControl, ValidatorFn } from '@angular/forms';
 
 export const matchValidator = (
   password: string,
@@ -22,4 +22,4 @@ export const matchValidator = (
     confirmPasswordControl!.setErrors(null);
     return null;
   };
-}
+};
