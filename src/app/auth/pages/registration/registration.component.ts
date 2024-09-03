@@ -45,8 +45,7 @@ export class RegistrationComponent {
 
   onRegistration(): void {
     if (this.registrationForm.valid) {
-      const { email } = this.registrationForm.value;
-      const { password } = this.registrationForm.value.password.trim();
+      const { email, password } = this.registrationForm.value;
       this.authService
         .registration({ email, password })
         .pipe(takeUntilDestroyed(this.destroyRef))
