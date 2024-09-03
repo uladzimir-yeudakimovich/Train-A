@@ -47,7 +47,7 @@ export class StationFormComponent {
       longitude: [0, [Validators.max(180), Validators.min(-180)]],
 
       relations: this.formBuilder.array(
-        [this.formBuilder.control<number | null>(null, Validators.required)],
+        [this.formBuilder.control<number | null>(null)],
         this.uniqueRelationsValidator,
       ),
     },
@@ -130,8 +130,15 @@ export class StationFormComponent {
     return this.stationForm.get('relations') as FormArray;
   }
 
-  addField(): void {
-    const city = this.formBuilder.control(null, Validators.required);
+  onSetConnected(fieldIdx: number) {
+    const lastFieldIdx = this.relations.length - 1;
+    if (fieldIdx === lastFieldIdx) {
+      this.addField();
+    }
+  }
+
+  private addField(): void {
+    const city = this.formBuilder.control(null);
     this.relations.push(city);
   }
 
@@ -144,9 +151,10 @@ export class StationFormComponent {
   }
 
   async createStation() {
-    const newStation = mapFormToStation(
-      this.stationForm.value as StationFormData,
-    );
+    const newStation = mapFormToStation({
+      ...this.stationForm.value,
+      relations: this.relations.value.filter((item: number | null) => !!item),
+    } as StationFormData);
 
     await this.stationStore.addStation(newStation);
 
