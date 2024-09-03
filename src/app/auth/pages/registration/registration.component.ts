@@ -1,15 +1,11 @@
 import { ChangeDetectorRef, Component, DestroyRef } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import {
-  AbstractControl,
-  FormControl,
-  FormGroup,
-  ValidatorFn,
-  Validators,
-} from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '@auth/services/auth.service';
 import { emailValidator } from '@auth/validators/email.validator';
+import { matchValidator } from '@auth/validators/match.validator';
+import { trimmedLengthValidator } from '@auth/validators/password.validator';
 import { RoutePath } from '@shared/models/enums/route-path.enum';
 
 import { formImports } from '../form.config';
@@ -26,15 +22,17 @@ export class RegistrationComponent {
 
   registrationForm: FormGroup = new FormGroup(
     {
-      email: new FormControl('', [Validators.required, Validators.email]),
+      email: new FormControl('', [
+        Validators.required,
+        emailValidator(),
+      ]),
       password: new FormControl('', [
         Validators.required,
-        Validators.minLength(8),
-        Validators.maxLength(255),
+        trimmedLengthValidator(8, 225),
       ]),
-      confirmPassword: new FormControl('', [Validators.required]),
+      confirmPassword: new FormControl('', []),
     },
-    { validators: this.matchValidator('password', 'confirmPassword') },
+    { validators: matchValidator('password', 'confirmPassword') },
   );
 
   constructor(
@@ -45,10 +43,6 @@ export class RegistrationComponent {
   ) {}
 
   onRegistration(): void {
-    const emailControl = this.registrationForm.get('email');
-    emailControl?.addValidators(emailValidator()); // AC3
-    emailControl?.updateValueAndValidity();
-
     if (this.registrationForm.valid) {
       const { email, password } = this.registrationForm.value;
       this.authService
@@ -57,6 +51,7 @@ export class RegistrationComponent {
         .subscribe(
           () => this.router.navigate([RoutePath.Login]),
           (err) => {
+            const emailControl = this.registrationForm.get('email');
             emailControl?.setErrors({ alreadyExists: err.message });
             this.cdr.detectChanges();
           },
@@ -96,36 +91,9 @@ export class RegistrationComponent {
 
   getConfirmPasswordErrorMessage(): string {
     const confirmControl = this.registrationForm.get('confirmPassword');
-    if (confirmControl!.hasError('required')) {
-      return 'Please confirm a password';
-    }
     if (confirmControl!.hasError('confirmedValidator')) {
       return 'Passwords do not match';
     }
     return '';
-  }
-
-  matchValidator(
-    controlName: string,
-    matchingControlName: string,
-  ): ValidatorFn {
-    return (abstractControl: AbstractControl) => {
-      const control = abstractControl.get(controlName);
-      const matchingControl = abstractControl.get(matchingControlName);
-
-      if (
-        matchingControl!.errors &&
-        !matchingControl!.errors?.confirmedValidator
-      ) {
-        return null;
-      }
-      if (control!.value !== matchingControl!.value) {
-        const error = { confirmedValidator: 'Passwords do not match' };
-        matchingControl!.setErrors(error);
-        return error;
-      }
-      matchingControl!.setErrors(null);
-      return null;
-    };
   }
 }
