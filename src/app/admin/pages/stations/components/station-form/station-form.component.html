@@ -47,34 +47,34 @@
   </mat-form-field>
 
   <ng-container formArrayName="relations">
-    @for (control of relations.controls; track createId()) {
+    @for (control of relations.controls; track createId(); let i = $index) {
       <mat-form-field
         appearance="outline"
         subscriptSizing="dynamic"
         floatLabel="always"
       >
-        @if ($index === 0) {
+        @if ($first) {
           <mat-label>Connected</mat-label>
         }
 
-        <mat-select [formControlName]="$index">
+        <mat-select [formControlName]="i" (selectionChange)="onSetConnected(i)">
           @for (station of stations(); track station.id) {
             <mat-option [value]="station.id">{{ station.city }}</mat-option>
           }
         </mat-select>
 
-        @if ($index !== 0) {
+        @if (!$last) {
           <button
             mat-icon-button
             matSuffix
             type="button"
-            (click)="removeField($index)"
+            (click)="removeField(i)"
           >
             <mat-icon>close</mat-icon>
           </button>
         }
 
-        @if (relations.controls.at($index)?.errors?.["required"]) {
+        @if (relations.controls.at(i)?.errors?.["required"]) {
           <mat-error>Required</mat-error>
         }
       </mat-form-field>
@@ -83,15 +83,6 @@
     @if (relations.hasError("nonUnique")) {
       <mat-error>Stations must be unique</mat-error>
     }
-
-    <button
-      class="form-control"
-      mat-raised-button
-      type="button"
-      (click)="addField()"
-    >
-      add another city
-    </button>
   </ng-container>
   <button
     class="form-control"
