@@ -3,13 +3,23 @@
 $borderDistance: 0.25rem;
 $borderRadius: 7px;
 $borderOpacity: .5;
-$seatSize: 2rem;
 
 :host {
+  --seatSize: 2rem;
+  
+  @media (max-width: 576px) {
+    --seatSize: 1.7rem;
+
+    .seat {
+      font-size: 0.9rem;
+      margin: 2px;
+    }
+  }
+  
   .seat {
     position: relative;
-    width: $seatSize;
-    height: $seatSize;
+    width: var(--seatSize);
+    height: var(--seatSize);
     margin: 10px;
     padding: 0;
     border: 0;
@@ -31,14 +41,14 @@ $seatSize: 2rem;
     &.left::before {
       top: -$borderDistance;
       bottom: -$borderDistance;
-      width: $seatSize*.5+$borderDistance;
+      width: calc(var(--seatSize) * 0.5 + #{$borderDistance});
     }
     
     &.top::before,
     &.bottom::before {
       left: -$borderDistance;
       right: -$borderDistance;
-      height: $seatSize*.5+$borderDistance;
+      height: calc(var(--seatSize) * 0.5 + #{$borderDistance});
     }
     
     &.left:before {

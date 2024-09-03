@@ -9,6 +9,7 @@ import {
   AbstractControl,
   FormBuilder,
   ValidationErrors,
+  ValidatorFn,
   Validators,
 } from '@angular/forms';
 import { provideNativeDateAdapter } from '@angular/material/core';
@@ -35,26 +36,45 @@ export class SearchFormComponent {
 
   private formBuilder = inject(FormBuilder);
 
-  private noFutureValidator = (
-    control: AbstractControl,
-  ): ValidationErrors | null => {
-    const { value } = control;
+  private noFutureValidator = (day: string, time: string): ValidatorFn => {
+    return (control: AbstractControl): ValidationErrors | null => {
+      const dayControl = control.get(day);
+      const timeControl = control.get(time);
 
-    if (!value) {
-      return null;
-    }
+      if (!dayControl?.value) {
+        return null;
+      }
 
-    const noFuture = Date.now() >= (value as Date).getTime();
+      let noFuture = false;
+      if (timeControl?.value) {
+        let timeValue = new Date(dayControl.value).getTime();
+        const [hours, minutes] = this.time.value
+          .toString()
+          .split(':')
+          .map(Number);
+        const timeInMilliseconds = hours * 60 * 60 * 1000 + minutes * 60 * 1000;
+        timeValue += timeInMilliseconds;
 
-    return noFuture ? { noFuture: true } : null;
+        noFuture = Date.now() > timeValue;
+      } else {
+        const userDay = new Date(dayControl.value);
+        const currentDay = new Date().setHours(0, 0, 0, 0);
+        noFuture = currentDay > userDay.getTime();
+      }
+
+      return noFuture ? { noFuture: true } : null;
+    };
   };
 
-  searchForm = this.formBuilder.nonNullable.group({
-    from: ['', Validators.required],
-    to: ['', Validators.required],
-    date: [getTomorrow(), [Validators.required, this.noFutureValidator]],
-    time: [''],
-  });
+  searchForm = this.formBuilder.nonNullable.group(
+    {
+      from: ['', Validators.required],
+      to: ['', Validators.required],
+      date: [getTomorrow(), [Validators.required]],
+      time: [''],
+    },
+    { validators: [this.noFutureValidator('date', 'time')] },
+  );
 
   constructor(private snackBarService: SnackBarService) {}
 
@@ -107,6 +127,9 @@ export class SearchFormComponent {
         .map(Number);
       const timeInMilliseconds = hours * 60 * 60 * 1000 + minutes * 60 * 1000;
       time += timeInMilliseconds;
+    }
+    if (time < Date.now()) {
+      time = Date.now();
     }
 
     const searchRoutesParams: SearchRoutesParams = {

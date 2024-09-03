@@ -5,7 +5,7 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { MatButton, MatMiniFabButton } from '@angular/material/button';
+import { MatButton, MatIconButton } from '@angular/material/button';
 import {
   MatDialogActions,
   MatDialogClose,
@@ -30,7 +30,7 @@ import { ProfileService } from '@user/services/profile.service';
     MatFormField,
     MatInput,
     MatDialogClose,
-    MatMiniFabButton,
+    MatIconButton,
     MatError,
   ],
   templateUrl: './change-password.component.html',
