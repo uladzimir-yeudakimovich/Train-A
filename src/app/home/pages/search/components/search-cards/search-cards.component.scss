@@ -31,6 +31,7 @@ a {
 
       .card-price__list {
         margin: 0 auto;
+        padding: 1rem 0;
       }
     }
   }
@@ -84,6 +85,7 @@ a {
     &__list {
       overflow-x: auto;
       padding: 0;
+      padding-bottom: 3rem;
     }
 
     &__item {

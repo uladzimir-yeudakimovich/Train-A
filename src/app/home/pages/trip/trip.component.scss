@@ -7,6 +7,10 @@
     font-weight: 500;
     display: flex;
 
+    @media (max-width: 768px) {
+      padding: 0.5rem;
+    }
+
     .head-info {
       width: 100%;
 
@@ -26,6 +30,10 @@
   .body {
     margin-top: 1rem;
     padding: 0 5rem 5rem 5rem;
+
+    @media (max-width: 768px) {
+      padding: 0;
+    }
   }
 
   .legend {
