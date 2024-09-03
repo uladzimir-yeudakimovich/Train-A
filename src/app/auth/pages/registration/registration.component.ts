@@ -27,7 +27,11 @@ export class RegistrationComponent {
 
   registrationForm: FormGroup = new FormGroup(
     {
-      email: new FormControl('', [Validators.required, Validators.email]),
+      email: new FormControl('', [
+        Validators.required,
+        Validators.email,
+        emailValidator(),
+      ]),
       password: new FormControl('', [
         Validators.required,
         trimmedLengthValidator(8, 225),
