@@ -7,6 +7,7 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "jest",
+    "e2e": "npx cypress open",
     "lint": "ng lint",
     "format": "prettier . --write",
     "deploy": "ng deploy --repo=https://github.com/uladzimir-yeudakimovich/Train-A/"
@@ -27,6 +28,7 @@
     "@ngrx/eslint-plugin": "^18.0.2",
     "@ngrx/signals": "^18.0.2",
     "@planess/train-a-backend": "^0.0.11",
+    "cypress": "^13.14.2",
     "eslint": "^8.57.0",
     "eslint-plugin-import": "^2.29.1",
     "leaflet": "^1.9.4",
