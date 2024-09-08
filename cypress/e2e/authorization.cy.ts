@@ -1,6 +1,8 @@
+import { RoutePath } from "@shared/models/enums/route-path.enum";
+
 describe('SignIn Page', () => {
     beforeEach(() => {
-        cy.visit('http://localhost:4200/Train-A/#/signin');
+        cy.visit(RoutePath.Login);
     });
 
     it('should have a title with form', () => {
@@ -22,10 +24,8 @@ describe('SignIn Page', () => {
     });
 
     it('should navigate to Home after submitting the form', () => {
-        cy.get('input[type="email"]').type('admin@admin.com');
-        cy.get('input[type="password"]').type('my-password');
-        cy.get('button[type="submit"]').click();
-        cy.url().should('eq', 'http://localhost:4200/Train-A/#/');
+        cy.login('admin@admin.com', 'my-password');
+        cy.url().should('eq', Cypress.config().baseUrl + RoutePath.Search);
     });
 
     it('should show error messages for unsuccessful login', () => {
