@@ -1,6 +1,6 @@
 #!/bin/sh
 
-echo "Checking commit messages..."
+echo "Checking commit messages for ${GITHUB_BASE_REF}"
 
 BASE_BRANCH=$(git merge-base ${GITHUB_BASE_REF} HEAD)
 
