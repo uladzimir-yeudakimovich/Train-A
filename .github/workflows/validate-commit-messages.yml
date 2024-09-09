@@ -24,7 +24,7 @@ jobs:
 
       - name: Run commit message validation
         env:
-          GITHUB_BASE_REF: ${{ github.head_ref || github.ref_name }} 
+          GITHUB_BASE_REF: ${GITHUB_REF##*/}
         run: |
           chmod +x ./.validate_commit.sh
           ./.validate_commit.sh
