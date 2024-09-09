@@ -1,8 +1,7 @@
 {
   "env": {
     "browser": true,
-    "jest": true,
-    "cypress": true
+    "jest": true
   },
   "overrides": [
     {
@@ -23,7 +22,8 @@
         "plugin:@typescript-eslint/stylistic",
         "plugin:@angular-eslint/recommended",
         "plugin:import/typescript",
-        "airbnb-base"
+        "airbnb-base",
+        "plugin:cypress/recommended"
       ],
       "plugins": ["simple-import-sort", "prettier"],
       "rules": {

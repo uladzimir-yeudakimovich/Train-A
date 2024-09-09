@@ -70,6 +70,7 @@ describe('Authorized Navigation', () => {
   
   beforeEach(() => {
     cy.register('user@user.com', 'my-password');
+    cy.wait(500);
     cy.login('user@user.com', 'my-password');
   });
 
