@@ -1,0 +1,23 @@
+name: Validate Commit Messages
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+
+jobs:
+  validate-commits:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up shell
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y git
+
+      - name: Run commit message validation
+        run: |
+          chmod +x ./.validate_commit.sh
+          ./.validate_commit.sh
