@@ -1,7 +1,6 @@
 #!/bin/sh
 
-# Get the current branch
-CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
+CURRENT_BRANCH=${GITHUB_HEAD_REF}
 echo "Checking commit messages for ${CURRENT_BRANCH} against main"
 
 git fetch origin main:main
