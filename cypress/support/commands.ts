@@ -2,6 +2,7 @@ import { ApiPath } from '@shared/models/enums/api-path.enum';
 import { RoutePath } from '@shared/models/enums/route-path.enum';
 
 declare global {
+  // eslint-disable-next-line @typescript-eslint/no-namespace
   namespace Cypress {
     interface Chainable {
       login(email: string, password: string): Chainable<void>;
@@ -13,6 +14,8 @@ declare global {
 
 Cypress.Commands.add('login', (email: string, password: string) => {
   cy.visit(RoutePath.Login);
+  // eslint-disable-next-line cypress/no-unnecessary-waiting
+  cy.wait(500);
   cy.get('input[type="email"]').type(email);
   cy.get('input[type="password"]').type(password);
   cy.get('button[type="submit"]').click();

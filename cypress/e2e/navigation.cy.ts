@@ -110,6 +110,8 @@ describe('Authorized Navigation', () => {
 describe('Admin Navigation', () => {
   beforeEach(() => {
     cy.login('admin@admin.com', 'my-password');
+    // eslint-disable-next-line cypress/no-unnecessary-waiting
+    cy.wait(1000);
     cy.get('app-navigation').get('a').contains('Admin').click();
   });
 
