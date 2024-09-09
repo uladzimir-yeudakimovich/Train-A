@@ -23,10 +23,11 @@ describe('Search Page', () => {
 
     cy.get('input[placeholder="From"]').type('city1');
     cy.get('input[placeholder="To"]').type('city10');
-    cy.get('input[name="date"]').clear().type(formDate);
+    cy.get('input[name="date"]').clear();
+    cy.get('input[name="date"]').type(formDate);
     cy.get('button[type="submit"]').click();
     cy.url().should('include', RoutePath.Search);
-   
+
     cy.get('body').then(($body) => {
       if ($body.find('app-search-filter').length) {
         cy.get('app-search-filter').should('be.visible');

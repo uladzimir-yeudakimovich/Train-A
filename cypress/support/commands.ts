@@ -1,5 +1,5 @@
-import { RoutePath } from '@shared/models/enums/route-path.enum';
 import { ApiPath } from '@shared/models/enums/api-path.enum';
+import { RoutePath } from '@shared/models/enums/route-path.enum';
 
 declare global {
   namespace Cypress {

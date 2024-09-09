@@ -67,10 +67,10 @@ describe('Unauthorized Navigation', () => {
 });
 
 describe('Authorized Navigation', () => {
-  
   beforeEach(() => {
     cy.register('user@user.com', 'my-password');
-    cy.wait(500);
+    // eslint-disable-next-line cypress/no-unnecessary-waiting
+    cy.wait(1000);
     cy.login('user@user.com', 'my-password');
   });
 
