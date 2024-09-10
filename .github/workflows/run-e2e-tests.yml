@@ -17,7 +17,7 @@ jobs:
           --health-cmd="curl --fail http://localhost:4200 || exit 1"
           --health-interval=10s
           --health-timeout=5s
-          --health-retries=3
+          --health-retries=2
         volumes:
           - .:/workspace
         command: >
