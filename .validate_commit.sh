@@ -1,10 +1,12 @@
 #!/bin/sh
 
-echo "Checking commit messages..."
+CURRENT_BRANCH=${GITHUB_HEAD_REF}
+echo "Checking commit messages for ${CURRENT_BRANCH} against main"
 
-BASE_BRANCH=$(git merge-base origin/${GITHUB_BASE_REF} HEAD)
+git fetch origin main:main
+BASE_BRANCH=$(git merge-base main ${CURRENT_BRANCH})
 
-if git log --format="%s" $BASE_BRANCH..HEAD | grep -vE '^(init|feat|fix|docs|chore|refactor)( #[0-9]+)?: .{1,100}'
+if git log --format="%s" $BASE_BRANCH..${CURRENT_BRANCH} | grep -vE '^(init|feat|fix|docs|chore|refactor)( #[0-9]+)?: .{1,100}'
 then
     echo "Invalid commit message found."
     exit 1
