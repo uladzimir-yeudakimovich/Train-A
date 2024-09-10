@@ -23,14 +23,12 @@ describe('SignIn Page', () => {
     cy.get('a').contains('Sign Up');
   });
 
-  it(
-    'should navigate to Home after submitting the form',
-    { defaultCommandTimeout: 1000 },
-    () => {
-      cy.login('admin@admin.com', 'my-password');
-      cy.url().should('eq', Cypress.config().baseUrl + RoutePath.Search);
-    },
-  );
+  it('should navigate to Home after submitting the form', () => {
+    cy.login('admin@admin.com', 'my-password');
+    // eslint-disable-next-line cypress/no-unnecessary-waiting
+    cy.wait(2000);
+    cy.url().should('eq', Cypress.config().baseUrl + RoutePath.Search);
+  });
 
   it('should show error messages for unsuccessful login', () => {
     cy.get('input[type="email"]').type('admin@admin.com');

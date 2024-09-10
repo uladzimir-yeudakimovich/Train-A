@@ -34,6 +34,7 @@
       "@environments/*": ["./src/environments/*"],
       "@user/*": ["./src/app/user/*"]
     },
+    "baseUrl": "./",
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,

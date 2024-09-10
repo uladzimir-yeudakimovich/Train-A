@@ -1,0 +1,39 @@
+name: Run Cypress E2E Tests
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+
+jobs:
+  e2e-tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18.19.1'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Start Angular app
+        run: npm run start &
+        env:
+          CI: true
+
+      - name: Wait for Angular app to be ready
+        run: |
+          echo "Waiting for Angular app to be ready..."
+          while ! curl -sSf http://localhost:4200 > /dev/null; do
+            echo "Waiting for Angular app to be ready..."
+            sleep 5
+          done
+
+      - name: Run Cypress tests
+        run: npm run e2e:ci

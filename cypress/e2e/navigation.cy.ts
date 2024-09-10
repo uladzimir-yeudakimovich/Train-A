@@ -69,13 +69,11 @@ describe('Unauthorized Navigation', () => {
 describe('Authorized Navigation', () => {
   beforeEach(() => {
     cy.register('user@user.com', 'my-password');
-    // eslint-disable-next-line cypress/no-unnecessary-waiting
-    cy.wait(1000);
     cy.login('user@user.com', 'my-password');
   });
 
   it('should redirect to Home page', () => {
-    cy.visit(RoutePath.Login);
+    cy.visit(RoutePath.Login, { timeout: 3000 });
     cy.url().should('eq', Cypress.config().baseUrl + RoutePath.Search);
   });
 
@@ -110,8 +108,6 @@ describe('Authorized Navigation', () => {
 describe('Admin Navigation', () => {
   beforeEach(() => {
     cy.login('admin@admin.com', 'my-password');
-    // eslint-disable-next-line cypress/no-unnecessary-waiting
-    cy.wait(1000);
     cy.get('app-navigation').get('a').contains('Admin').click();
   });
 
