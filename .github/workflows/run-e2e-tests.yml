@@ -1,0 +1,49 @@
+name: Run Cypress E2E Tests
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+
+jobs:
+  e2e-tests:
+    runs-on: ubuntu-latest
+
+    services:
+      web:
+        image: node:18.19.1
+        ports:
+          - 4200:4200
+        options: >-
+          --health-cmd="curl --fail http://localhost:4200 || exit 1"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
+        volumes:
+          - .:/workspace
+        command: >
+          sh -c "cd /workspace && npm install && npm run start"
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18.19.1'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Wait for Angular app to be ready
+        run: |
+          echo "Waiting for Angular app to be ready..."
+          while ! curl -sSf http://localhost:4200 > /dev/null; do
+            echo "Waiting for Angular app to be ready..."
+            sleep 5
+          done
+
+      - name: Run Cypress tests
+        run: npm run e2e:ci

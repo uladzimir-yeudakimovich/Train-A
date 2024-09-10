@@ -8,6 +8,7 @@
     "watch": "ng build --watch --configuration development",
     "test": "jest",
     "e2e": "npx cypress open",
+    "e2e:ci": "npx cypress run",
     "lint": "ng lint",
     "format": "prettier . --write",
     "deploy": "ng deploy --repo=https://github.com/uladzimir-yeudakimovich/Train-A/"
