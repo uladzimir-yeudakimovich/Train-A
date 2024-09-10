@@ -25,8 +25,6 @@ describe('SignIn Page', () => {
 
   it('should navigate to Home after submitting the form', () => {
     cy.login('admin@admin.com', 'my-password');
-    // eslint-disable-next-line cypress/no-unnecessary-waiting
-    cy.wait(4000);
     cy.url().should('eq', Cypress.config().baseUrl + RoutePath.Search);
   });
 
