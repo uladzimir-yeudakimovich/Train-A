@@ -8,21 +8,6 @@ jobs:
   e2e-tests:
     runs-on: ubuntu-latest
 
-    services:
-      web:
-        image: node:18.19.1
-        ports:
-          - 4200:4200
-        options: >-
-          --health-cmd="curl --fail http://localhost:4200 || exit 1"
-          --health-interval=10s
-          --health-timeout=5s
-          --health-retries=2
-        volumes:
-          - .:/workspace
-        command: >
-          sh -c "cd /workspace && npm install && npm run start"
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -36,6 +21,11 @@ jobs:
 
       - name: Install dependencies
         run: npm install
+
+      - name: Start Angular app
+        run: npm run start &
+        env:
+          CI: true
 
       - name: Wait for Angular app to be ready
         run: |
