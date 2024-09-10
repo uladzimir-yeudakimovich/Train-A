@@ -19,7 +19,7 @@ Cypress.Commands.add('login', (email: string, password: string) => {
   cy.get('input[type="email"]').type(email);
   cy.get('input[type="password"]').type(password);
   cy.get('button[type="submit"]').click();
-  cy.wait(2500);
+  cy.wait(3000);
 });
 
 Cypress.Commands.add('register', (email: string, password: string) => {
@@ -29,7 +29,7 @@ Cypress.Commands.add('register', (email: string, password: string) => {
   cy.get('input[name="password"]').type(password);
   cy.get('input[name="confirmPassword"]').type(password);
   cy.get('button[type="submit"]').click();
-  cy.wait(4000);
+  cy.wait(3000);
 });
 
 Cypress.Commands.add('mockRegisterUser', () => {
