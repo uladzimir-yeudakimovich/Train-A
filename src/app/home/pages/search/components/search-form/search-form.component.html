@@ -71,25 +71,23 @@
     <mat-form-field appearance="outline">
       <input
         matInput
-        [matDatepicker]="picker"
+        [owlDateTime]="datetime"
+        [min]="currentDateTime"
         formControlName="date"
-        name="date"
+        placeholder="Date"
+        readonly
       />
-
-      <mat-datepicker-toggle matPrefix [for]="picker" />
-
-      <mat-datepicker #picker />
-
-      @if (date.invalid) {
-        <mat-error>{{ timeErrorMessage }}</mat-error>
-      }
+      <button
+        matPrefix
+        mat-icon-button
+        type="button"
+        class="trigger"
+        [owlDateTimeTrigger]="datetime"
+      >
+        <mat-icon>today</mat-icon>
+      </button>
+      <owl-date-time #datetime></owl-date-time>
     </mat-form-field>
-
-    @if (date.value) {
-      <mat-form-field class="form-time" appearance="outline">
-        <input matInput type="time" formControlName="time" name="time" />
-      </mat-form-field>
-    }
   </div>
 
   <button

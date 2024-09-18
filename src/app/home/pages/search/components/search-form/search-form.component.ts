@@ -5,17 +5,10 @@ import {
   inject,
   input,
 } from '@angular/core';
-import {
-  AbstractControl,
-  FormBuilder,
-  ValidationErrors,
-  ValidatorFn,
-  Validators,
-} from '@angular/forms';
+import { AbstractControl, FormBuilder, Validators } from '@angular/forms';
 import { provideNativeDateAdapter } from '@angular/material/core';
 import { SearchRoutesParams } from '@home/models/search-routes-params.model';
 import { SearchStore } from '@home/store/search.store';
-import { getTomorrow } from '@home/utils/getTomorrow.util';
 import { SnackBarService } from '@shared/services/snack-bar/snack-bar.service';
 
 import { searchFormImports } from './search-form.config';
@@ -32,49 +25,17 @@ import { searchFormImports } from './search-form.config';
 export class SearchFormComponent {
   stations = input.required<Station[]>();
 
+  readonly currentDateTime: Date = new Date(new Date().setSeconds(0, 0));
+
   private searchStore = inject(SearchStore);
 
   private formBuilder = inject(FormBuilder);
 
-  private noFutureValidator = (day: string, time: string): ValidatorFn => {
-    return (control: AbstractControl): ValidationErrors | null => {
-      const dayControl = control.get(day);
-      const timeControl = control.get(time);
-
-      if (!dayControl?.value) {
-        return null;
-      }
-
-      let noFuture = false;
-      if (timeControl?.value) {
-        let timeValue = new Date(dayControl.value).getTime();
-        const [hours, minutes] = this.time.value
-          .toString()
-          .split(':')
-          .map(Number);
-        const timeInMilliseconds = hours * 60 * 60 * 1000 + minutes * 60 * 1000;
-        timeValue += timeInMilliseconds;
-
-        noFuture = Date.now() > timeValue;
-      } else {
-        const userDay = new Date(dayControl.value);
-        const currentDay = new Date().setHours(0, 0, 0, 0);
-        noFuture = currentDay > userDay.getTime();
-      }
-
-      return noFuture ? { noFuture: true } : null;
-    };
-  };
-
-  searchForm = this.formBuilder.nonNullable.group(
-    {
-      from: ['', Validators.required],
-      to: ['', Validators.required],
-      date: [getTomorrow(), [Validators.required]],
-      time: [''],
-    },
-    { validators: [this.noFutureValidator('date', 'time')] },
-  );
+  searchForm = this.formBuilder.nonNullable.group({
+    from: ['', Validators.required],
+    to: ['', Validators.required],
+    date: [this.currentDateTime],
+  });
 
   constructor(private snackBarService: SnackBarService) {}
 
@@ -90,22 +51,6 @@ export class SearchFormComponent {
     return this.searchForm.get('date')!;
   }
 
-  get time(): AbstractControl<string> {
-    return this.searchForm.get('time')!;
-  }
-
-  get timeErrorMessage(): string {
-    if (this.date.hasError('required')) {
-      return 'Required';
-    }
-
-    if (this.date.hasError('noFuture')) {
-      return 'Only future days';
-    }
-
-    return '';
-  }
-
   swapValue(): void {
     this.searchForm.patchValue({ from: this.to.value, to: this.from.value });
   }
@@ -119,17 +64,9 @@ export class SearchFormComponent {
       ({ city }) => city === this.to.value,
     );
 
-    let time = this.date.value.setHours(0, 0, 0, 0);
-    if (this.time.value) {
-      const [hours, minutes] = this.time.value
-        .toString()
-        .split(':')
-        .map(Number);
-      const timeInMilliseconds = hours * 60 * 60 * 1000 + minutes * 60 * 1000;
-      time += timeInMilliseconds;
-    }
-    if (time < Date.now()) {
-      time = Date.now();
+    let dateTime = this.date.value.getTime();
+    if (dateTime < Date.now()) {
+      dateTime = Date.now();
     }
 
     const searchRoutesParams: SearchRoutesParams = {
@@ -137,7 +74,7 @@ export class SearchFormComponent {
       fromLongitude: fromStation?.longitude ?? 0,
       toLatitude: toStation?.latitude ?? 0,
       toLongitude: toStation?.longitude ?? 0,
-      time: time / 1000,
+      time: dateTime / 1000,
     };
 
     await this.searchStore.searchRoutes(searchRoutesParams).catch((error) => {
