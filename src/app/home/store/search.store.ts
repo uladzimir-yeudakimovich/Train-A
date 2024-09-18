@@ -9,6 +9,8 @@ import { searchConfig } from './search.config';
 
 const initialState = {
   time: 0,
+  hasSearched: false,
+  isLoading: false,
 };
 
 export const SearchStore = signalStore(
@@ -18,6 +20,7 @@ export const SearchStore = signalStore(
 
   withMethods((store, searchService = inject(SearchService)) => ({
     async searchRoutes(searchRoutesParams: SearchRoutesParams) {
+      patchState(store, { isLoading: true });
       this.setFilter(0);
 
       const response =
@@ -28,7 +31,10 @@ export const SearchStore = signalStore(
           return ride.rideFrom.time.getTime() / 1000 >= searchRoutesParams.time;
         })
         .sort((a, b) => a.rideFrom.time.getTime() - b.rideFrom.time.getTime());
+
       patchState(store, setAllEntities(filteredResponse, searchConfig));
+      patchState(store, { hasSearched: true });
+      patchState(store, { isLoading: false });
     },
 
     setFilter(time: number) {

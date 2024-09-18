@@ -6,6 +6,7 @@ import {
   inject,
   OnInit,
 } from '@angular/core';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { SearchStore } from '@home/store/search.store';
 
 import { SearchCardsComponent } from './components/search-cards/search-cards.component';
@@ -15,7 +16,12 @@ import { SearchFormComponent } from './components/search-form/search-form.compon
 @Component({
   selector: 'app-search',
   standalone: true,
-  imports: [SearchFormComponent, SearchCardsComponent, SearchFilterComponent],
+  imports: [
+    SearchFormComponent,
+    SearchCardsComponent,
+    SearchFilterComponent,
+    MatProgressSpinner,
+  ],
   templateUrl: './search.component.html',
   styleUrl: './search.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -26,6 +32,8 @@ export class SearchComponent implements OnInit {
   private searchStore = inject(SearchStore);
 
   stations = this.stationStore.stationsEntities;
+
+  isLoading = this.searchStore.isLoading;
 
   cards = computed(() => {
     const stationsMap = this.stationStore.stationsEntityMap();
@@ -58,6 +66,8 @@ export class SearchComponent implements OnInit {
       ),
     ].sort((a, b) => a - b),
   );
+
+  hasSearched = this.searchStore.hasSearched;
 
   filteredCards = computed(() =>
     this.searchStore
