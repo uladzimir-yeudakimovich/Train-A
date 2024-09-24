@@ -1,16 +1,28 @@
 <div class="list">
+  <div class="action-buttons">
+    <button mat-button (click)="accordion().openAll()">Expand All</button>
+    <button mat-button (click)="accordion().closeAll()">Collapse All</button>
+  </div>
   @if (store.loading()) {
     <mat-progress-spinner
       class="spinner"
       mode="indeterminate"
     ></mat-progress-spinner>
   } @else {
-    @for (ride of store.schedule(); track $index) {
-      <app-ride-card
-        [rideId]="ride.rideId"
-        [stations]="store.stations()"
-        [segments]="ride.segments"
-      />
-    }
+    <mat-accordion class="example-headers-align" multi>
+      @for (ride of store.schedule(); track $index) {
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            <mat-panel-title> Ride {{ ride.rideId }} </mat-panel-title>
+          </mat-expansion-panel-header>
+
+          <app-ride-card
+            [rideId]="ride.rideId"
+            [stations]="store.stations()"
+            [segments]="ride.segments"
+          />
+        </mat-expansion-panel>
+      }
+    </mat-accordion>
   }
 </div>
