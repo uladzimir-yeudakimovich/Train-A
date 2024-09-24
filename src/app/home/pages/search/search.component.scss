@@ -1,5 +1,9 @@
 :host {
   display: flex;
+
+  @media (min-width: 992px) {
+    margin: 0 100px;
+  }
   
   .wrapper {
     min-height: 90vh;
@@ -19,7 +23,7 @@
 
     .spinner {
       position: absolute;
-      top: 50%;
+      top: 55%;
       left: 50%;
       transform: translate(-50%, -50%);
     }
@@ -27,7 +31,7 @@
     .label {
       position: absolute;
       font-size: 1.5rem;
-      top: calc(50% - 6rem);
+      top: calc(55% - 6rem);
       left: 50%;
       transform: translateX(-50%);
     }
