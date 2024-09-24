@@ -1,5 +1,5 @@
 @for (station of stations(); track station.id) {
-  <mat-card class="card">
+  <mat-card class="card" [id]="station.city">
     <mat-card-header>
       <mat-card-title class="card-title">
         {{ station.city }}

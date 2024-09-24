@@ -13,6 +13,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ConfirmationDialogComponent } from '@shared/components/delete-dialog/confirmation-dialog.component';
 import { Message } from '@shared/models/enums/messages.enum';
+import { RoutePath } from '@shared/models/enums/route-path.enum';
 import { SnackBarService } from '@shared/services/snack-bar/snack-bar.service';
 
 import { routeCardImports } from './route-card.config';
@@ -82,6 +83,18 @@ export class RouteCardComponent {
 
   toggleUpdateForm() {
     this.displayUpdateForm.update((value) => !value);
+  }
+
+  navigateToStation(stationId: string): void {
+    this.router.navigate([RoutePath.Admin, RoutePath.AdminStations], {
+      fragment: stationId,
+    });
+  }
+
+  navigateToCarriage(carType: string): void {
+    this.router.navigate([RoutePath.Admin, RoutePath.AdminCarriages], {
+      fragment: carType,
+    });
   }
 
   get toolbarButtons() {

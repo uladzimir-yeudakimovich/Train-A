@@ -29,13 +29,21 @@
       <div class="cities">
         <span>Cities:</span>
         <p class="cities-list">
-          {{ cities() | joinWithDash }}
+          @for (city of cities(); track $index) {
+            <button class="list-item" mat-stroked-button (click)="navigateToStation(city)">
+              {{ city }}
+            </button>
+          }
         </p>
       </div>
       <div class="carriages">
         <span>Carriage Types:</span>
         <p class="carriages-list">
-          {{ route().carriages | joinWithDash }}
+          @for (carType of route().carriages; track $index) {
+            <button class="list-item" mat-stroked-button (click)="navigateToCarriage(carType)">
+              {{ carType }}
+            </button>
+          }
         </p>
       </div>
     } @else {
