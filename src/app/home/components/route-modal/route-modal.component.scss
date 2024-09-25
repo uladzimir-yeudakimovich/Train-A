@@ -9,6 +9,12 @@
 
   .content {
     margin: 0 1rem;
+
+    &-loading {
+      width: 350px;
+      height: 350px;
+      position: relative;
+    }
   }
 
   .step-label {
@@ -31,25 +37,5 @@
   .dwell {
     display: flex;
     align-items: center;
-  }
-
-  .spinner-container {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 350px;
-    height: 100%;
-
-    .spinner {
-      width: 30px !important;
-    }
-
-    .label {
-      position: absolute;
-      font-size: 1.2rem;
-      top: calc(50% - 1rem);
-      left: 50%;
-      transform: translateX(-50%);
-    }
   }
 }

@@ -2,10 +2,7 @@
   <app-search-form [stations]="stations()" />
 
   @if (isLoading()) {
-    <div class="spinner-container">
-      <mat-spinner class="spinner" />
-      <div class="label">Loading...</div>
-    </div>
+    <app-spinner [loadText]="'Loading...'"></app-spinner>
   }
   @else if (hasSearched()) {
     @if (dates().length) {

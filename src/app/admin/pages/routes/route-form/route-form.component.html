@@ -1,7 +1,6 @@
 @if (isLoading()) {
-  <div class="spinner-container">
-    <mat-spinner class="spinner" />
-    <div class="label">Saving changes...</div>
+  <div class="content-loading">
+    <app-spinner [loadText]="'Saving...'"></app-spinner>
   </div>
 } @else {
   <form [formGroup]="routeForm" (ngSubmit)="onSubmit()" class="form">

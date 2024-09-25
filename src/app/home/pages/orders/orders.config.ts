@@ -1,9 +1,9 @@
 import { CurrencyPipe, DatePipe } from '@angular/common';
 import { MatButton } from '@angular/material/button';
-import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
 import { TimePipe } from '@home/pipes/time.pipe';
+import { SpinnerComponent } from '@shared/components/spinner/spinner.component';
 
 export const ordersImports = [
   MatTableModule,
@@ -12,7 +12,7 @@ export const ordersImports = [
   DatePipe,
   CurrencyPipe,
   TimePipe,
-  MatProgressSpinner,
+  SpinnerComponent,
 ];
 
 export const displayedColumns = [

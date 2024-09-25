@@ -6,8 +6,8 @@ import {
   inject,
   OnInit,
 } from '@angular/core';
-import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { SearchStore } from '@home/store/search.store';
+import { SpinnerComponent } from '@shared/components/spinner/spinner.component';
 
 import { SearchCardsComponent } from './components/search-cards/search-cards.component';
 import { SearchFilterComponent } from './components/search-filter/search-filter.component';
@@ -20,7 +20,7 @@ import { SearchFormComponent } from './components/search-form/search-form.compon
     SearchFormComponent,
     SearchCardsComponent,
     SearchFilterComponent,
-    MatProgressSpinner,
+    SpinnerComponent,
   ],
   templateUrl: './search.component.html',
   styleUrl: './search.component.scss',

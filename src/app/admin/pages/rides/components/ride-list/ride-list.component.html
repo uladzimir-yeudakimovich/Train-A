@@ -1,15 +1,14 @@
 <div class="list">
-  <div class="action-buttons">
-    <button mat-button (click)="accordion().openAll()">Expand All</button>
-    <button mat-button (click)="accordion().closeAll()">Collapse All</button>
-  </div>
+  @if (store.schedule().length) {
+    <div class="action-buttons">
+      <button mat-button (click)="accordion().openAll()">Expand All</button>
+      <button mat-button (click)="accordion().closeAll()">Collapse All</button>
+    </div>
+  }
   @if (store.loading()) {
-    <mat-progress-spinner
-      class="spinner"
-      mode="indeterminate"
-    ></mat-progress-spinner>
+    <app-spinner [loadText]="'Loading the rides...'"></app-spinner>
   } @else {
-    <mat-accordion class="example-headers-align" multi>
+    <mat-accordion multi>
       @for (ride of store.schedule(); track $index) {
         <mat-expansion-panel>
           <mat-expansion-panel-header>

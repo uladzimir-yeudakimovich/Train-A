@@ -6,9 +6,9 @@ import {
   MatDialogTitle,
 } from '@angular/material/dialog';
 import { MatIcon } from '@angular/material/icon';
-import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { MatToolbar, MatToolbarRow } from '@angular/material/toolbar';
 import { RouterLink } from '@angular/router';
+import { SpinnerComponent } from '@shared/components/spinner/spinner.component';
 
 import { RouteFormComponent } from '../route-form/route-form.component';
 
@@ -22,6 +22,6 @@ export const routeCardImports = [
   MatDialogClose,
   MatDialogContent,
   MatDialogTitle,
-  MatProgressSpinner,
   RouterLink,
+  SpinnerComponent,
 ];

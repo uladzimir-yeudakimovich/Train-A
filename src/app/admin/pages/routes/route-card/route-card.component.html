@@ -1,8 +1,7 @@
 <div class="wrapper">
   @if (isLoading()) {
-    <div class="spinner-container">
-      <mat-spinner class="spinner" />
-      <div class="label">Deleting the route</div>
+    <div class="content-loading">
+      <app-spinner [loadText]="'Deleting...'"></app-spinner>
     </div>
   } @else {
     <mat-toolbar>
@@ -30,7 +29,11 @@
         <span>Cities:</span>
         <p class="cities-list">
           @for (city of cities(); track $index) {
-            <button class="list-item" mat-stroked-button (click)="navigateToStation(city)">
+            <button
+              class="list-item"
+              mat-stroked-button
+              (click)="navigateToStation(city)"
+            >
               {{ city }}
             </button>
           }
@@ -40,7 +43,11 @@
         <span>Carriage Types:</span>
         <p class="carriages-list">
           @for (carType of route().carriages; track $index) {
-            <button class="list-item" mat-stroked-button (click)="navigateToCarriage(carType)">
+            <button
+              class="list-item"
+              mat-stroked-button
+              (click)="navigateToCarriage(carType)"
+            >
               {{ carType }}
             </button>
           }
