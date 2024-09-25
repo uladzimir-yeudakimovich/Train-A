@@ -1,7 +1,17 @@
-<cdk-virtual-scroll-viewport appendOnly itemSize="10" class="viewport">
-  <div class="list">
-    <div *cdkVirtualFor="let route of routes()" class="list-item">
+<mat-paginator
+  (page)="handlePageEvent($event)"
+  [length]="routes().length"
+  [pageSize]="pageSizeOptions[0]"
+  [pageSizeOptions]="pageSizeOptions"
+  [showFirstLastButtons]="true"
+  aria-label="Select page"
+>
+</mat-paginator>
+
+<div class="list">
+  @for (route of pageRoutes(); track $index) {
+    <div class="list-item">
       <app-route-card [route]="route"></app-route-card>
     </div>
-  </div>
-</cdk-virtual-scroll-viewport>
+  }
+</div>
