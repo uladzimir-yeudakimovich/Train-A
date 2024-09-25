@@ -1,4 +1,3 @@
-import { JoinWithDashPipe } from '@admin/pipes/join-with-dash.pipe';
 import { MatButton } from '@angular/material/button';
 import {
   MatDialogActions,
@@ -18,7 +17,6 @@ export const routeCardImports = [
   MatToolbarRow,
   MatToolbar,
   MatButton,
-  JoinWithDashPipe,
   RouteFormComponent,
   MatDialogActions,
   MatDialogClose,
