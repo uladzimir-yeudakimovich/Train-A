@@ -19,7 +19,17 @@
     </mat-card-header>
     <mat-card-content class="card-content">
       <p>Connected to:</p>
-      <p>{{ station.connectedTo | toCities : stations() }}</p>
+      <p>
+        @for (city of getConnectedCities(station); track $index) {
+          <button
+            class="list-item"
+            mat-stroked-button
+            (click)="navigateToStation(city)"
+          >
+            {{ city }}
+          </button>
+        }
+      </p>
     </mat-card-content>
   </mat-card>
 }

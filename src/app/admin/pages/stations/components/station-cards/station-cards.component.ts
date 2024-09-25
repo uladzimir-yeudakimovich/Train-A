@@ -7,7 +7,7 @@ import {
   inject,
   Signal,
 } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Message } from '@shared/models/enums/messages.enum';
 import { OrderStatus } from '@shared/models/interfaces/order.model';
 import { SnackBarService } from '@shared/services/snack-bar/snack-bar.service';
@@ -33,21 +33,16 @@ export class StationCardsComponent implements AfterViewInit {
   constructor(
     private snackBarService: SnackBarService,
     private activatedRoute: ActivatedRoute,
+    private router: Router,
   ) {
     this.stations = this.stationStore.stationsEntities;
   }
 
   ngAfterViewInit(): void {
     const { fragment } = this.activatedRoute.snapshot;
-    const element = document.getElementById(fragment ?? '');
-    if (!element) return;
-    const elementPosition = element.getBoundingClientRect().top;
-    const offsetPosition = elementPosition - window.innerHeight - 100;
-
-    window.scrollTo({
-      top: offsetPosition,
-      behavior: 'smooth',
-    });
+    if (fragment) {
+      setTimeout(() => this.scrollToCity(fragment), 500);
+    }
   }
 
   deleteStation(id: number): void {
@@ -61,5 +56,34 @@ export class StationCardsComponent implements AfterViewInit {
     } else {
       this.stationStore.deleteStation(id);
     }
+  }
+
+  getConnectedCities(station: Station): string[] {
+    return station.connectedTo
+      .map(
+        (connectedStation) =>
+          this.stations().find((s) => s.id === connectedStation.id)?.city,
+      )
+      .filter((city): city is string => Boolean(city));
+  }
+
+  navigateToStation(city: string): void {
+    this.router.navigate([], {
+      fragment: city,
+      relativeTo: this.activatedRoute,
+    });
+    this.scrollToCity(city);
+  }
+
+  private scrollToCity(city: string): void {
+    const element = document.getElementById(city);
+    if (!element) return;
+    const elementPosition = element.getBoundingClientRect().top;
+    const offsetPosition = elementPosition - 100; // - window.innerHeight;
+
+    window.scrollTo({
+      top: offsetPosition + window.scrollY,
+      behavior: 'smooth',
+    });
   }
 }
