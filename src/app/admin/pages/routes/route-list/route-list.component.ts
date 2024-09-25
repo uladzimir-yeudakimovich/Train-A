@@ -2,8 +2,10 @@ import { RailRoute } from '@admin/models/route.model';
 import {
   ChangeDetectionStrategy,
   Component,
+  computed,
   input,
   OnInit,
+  Signal,
   signal,
 } from '@angular/core';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
@@ -21,21 +23,25 @@ import { RouteCardComponent } from '../route-card/route-card.component';
 export class RouteListComponent implements OnInit {
   routes = input.required<RailRoute[]>();
 
-  pageRoutes = signal<RailRoute[]>([]);
+  pageRoutes!: Signal<RailRoute[]>;
 
   readonly pageSizeOptions = [10, 20, 50, 100];
 
+  private pageEvent = signal<PageEvent>({
+    length: this.pageSizeOptions[0],
+    pageIndex: 0,
+    pageSize: this.pageSizeOptions[0],
+  });
+
   ngOnInit(): void {
-    this.setPageRoutes(0, this.pageSizeOptions[0]);
+    this.pageRoutes = computed(() => {
+      const start = this.pageEvent().pageIndex * this.pageEvent().pageSize;
+      const end = start + this.pageEvent().pageSize;
+      return this.routes().slice(start, end);
+    });
   }
 
   handlePageEvent(e: PageEvent) {
-    this.setPageRoutes(e.pageIndex, e.pageSize);
-  }
-
-  private setPageRoutes(pageIndex: number, pageSize: number): void {
-    const start = pageIndex * pageSize;
-    const end = start + pageSize;
-    this.pageRoutes.set(this.routes().slice(start, end));
+    this.pageEvent.set(e);
   }
 }
