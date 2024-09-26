@@ -1,8 +1,5 @@
 @if (isLoading()) {
-  <div class="spinner-container">
-    <mat-spinner class="spinner" />
-    <div class="label">Loading orders</div>
-  </div>
+  <app-spinner [loadText]="'Loading orders...'"></app-spinner>
 } @else {
   <div class="order-table">
     <table

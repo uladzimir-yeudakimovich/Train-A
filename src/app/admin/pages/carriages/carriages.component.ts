@@ -1,6 +1,6 @@
 import { Component, inject, OnInit, Signal, signal } from '@angular/core';
 import { MatButton } from '@angular/material/button';
-import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import { SpinnerComponent } from '@shared/components/spinner/spinner.component';
 import { Carriage } from '@shared/models/interfaces/carriage.model';
 import { CarriageStore } from '@shared/store/carriages/carriages.store';
 
@@ -14,7 +14,7 @@ import { CarriageListComponent } from './carriage-list/carriage-list.component';
     MatButton,
     CarriageFormComponent,
     CarriageListComponent,
-    MatProgressSpinner,
+    SpinnerComponent,
   ],
   templateUrl: './carriages.component.html',
   styleUrl: './carriages.component.scss',

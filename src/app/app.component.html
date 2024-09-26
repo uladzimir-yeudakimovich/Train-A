@@ -1,2 +1,7 @@
 <app-header />
 <router-outlet />
+<div class="scroll-to-top" [ngClass]="{ show: showScrollButton() }">
+  <button mat-mini-fab (click)="scrollToTop()">
+    <mat-icon>arrow_upward</mat-icon>
+  </button>
+</div>

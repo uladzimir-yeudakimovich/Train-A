@@ -8,8 +8,8 @@ import {
 } from '@angular/material/dialog';
 import { MatDivider } from '@angular/material/divider';
 import { MatIcon } from '@angular/material/icon';
-import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { MatStepperModule } from '@angular/material/stepper';
+import { SpinnerComponent } from '@shared/components/spinner/spinner.component';
 
 export const routeModalImports = [
   MatDialogTitle,
@@ -20,6 +20,6 @@ export const routeModalImports = [
   MatDivider,
   MatIcon,
   DatePipe,
-  MatProgressSpinner,
   MatStepperModule,
+  SpinnerComponent,
 ];

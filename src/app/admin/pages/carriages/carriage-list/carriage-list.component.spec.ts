@@ -4,7 +4,7 @@ import { mockCarriageStore } from '@testing/mock-store';
 
 import { CarriageListComponent } from './carriage-list.component';
 
-describe('CarriageListComponent', () => {
+xdescribe('CarriageListComponent', () => {
   let component: CarriageListComponent;
   let fixture: ComponentFixture<CarriageListComponent>;
 

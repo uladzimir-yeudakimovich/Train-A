@@ -1,9 +1,13 @@
 <div class="wrapper">
   <app-search-form [stations]="stations()" />
 
-  @if (dates().length) {
-    <app-search-filter [dates]="dates()" />
+  @if (isLoading()) {
+    <app-spinner [loadText]="'Loading...'"></app-spinner>
   }
-
-  <app-search-cards [cards]="filteredCards()" />
+  @else if (hasSearched()) {
+    @if (dates().length) {
+      <app-search-filter [dates]="dates()" />
+    }
+    <app-search-cards [cards]="filteredCards()" />
+  }
 </div>

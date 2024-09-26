@@ -10,7 +10,7 @@ import {
   signal,
 } from '@angular/core';
 import { MatButton } from '@angular/material/button';
-import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import { SpinnerComponent } from '@shared/components/spinner/spinner.component';
 import { CarriageStore } from '@shared/store/carriages/carriages.store';
 
 import { RouteFormComponent } from './route-form/route-form.component';
@@ -23,7 +23,7 @@ import { RouteListComponent } from './route-list/route-list.component';
     RouteListComponent,
     MatButton,
     RouteFormComponent,
-    MatProgressSpinner,
+    SpinnerComponent,
   ],
   templateUrl: './routes.component.html',
   styleUrl: './routes.component.scss',

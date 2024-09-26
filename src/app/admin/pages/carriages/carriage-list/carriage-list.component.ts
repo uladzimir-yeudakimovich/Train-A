@@ -1,8 +1,9 @@
-import { Component, inject, input, signal } from '@angular/core';
+import { AfterViewInit, Component, inject, input, signal } from '@angular/core';
 import { MatButton } from '@angular/material/button';
 import { MatCard } from '@angular/material/card';
 import { MatIcon } from '@angular/material/icon';
 import { MatList, MatListItem } from '@angular/material/list';
+import { ActivatedRoute } from '@angular/router';
 import { TrainCarComponent } from '@shared/components/train-car/train-car.component';
 import { Carriage } from '@shared/models/interfaces/carriage.model';
 import { CarriageStore } from '@shared/store/carriages/carriages.store';
@@ -24,12 +25,14 @@ import { CarriageFormComponent } from '../carriage-form/carriage-form.component'
   templateUrl: './carriage-list.component.html',
   styleUrl: './carriage-list.component.scss',
 })
-export class CarriageListComponent {
+export class CarriageListComponent implements AfterViewInit {
   carriages = input.required<Carriage[]>();
 
   selectedCarriageCode = signal<string | null>(null);
 
   store = inject(CarriageStore);
+
+  constructor(private activatedRoute: ActivatedRoute) {}
 
   toggleForm(carriageCode: string) {
     const currentSelection = this.selectedCarriageCode();
@@ -45,5 +48,18 @@ export class CarriageListComponent {
 
   closeForm() {
     this.selectedCarriageCode.set(null);
+  }
+
+  ngAfterViewInit(): void {
+    const { fragment } = this.activatedRoute.snapshot;
+    const element = document.getElementById(fragment ?? '');
+    if (!element) return;
+    const elementPosition = element.getBoundingClientRect().top;
+    const offsetPosition = elementPosition - window.innerHeight - 100;
+
+    window.scrollTo({
+      top: offsetPosition,
+      behavior: 'smooth',
+    });
   }
 }

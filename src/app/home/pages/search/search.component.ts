@@ -7,6 +7,7 @@ import {
   OnInit,
 } from '@angular/core';
 import { SearchStore } from '@home/store/search.store';
+import { SpinnerComponent } from '@shared/components/spinner/spinner.component';
 
 import { SearchCardsComponent } from './components/search-cards/search-cards.component';
 import { SearchFilterComponent } from './components/search-filter/search-filter.component';
@@ -15,7 +16,12 @@ import { SearchFormComponent } from './components/search-form/search-form.compon
 @Component({
   selector: 'app-search',
   standalone: true,
-  imports: [SearchFormComponent, SearchCardsComponent, SearchFilterComponent],
+  imports: [
+    SearchFormComponent,
+    SearchCardsComponent,
+    SearchFilterComponent,
+    SpinnerComponent,
+  ],
   templateUrl: './search.component.html',
   styleUrl: './search.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -26,6 +32,8 @@ export class SearchComponent implements OnInit {
   private searchStore = inject(SearchStore);
 
   stations = this.stationStore.stationsEntities;
+
+  isLoading = this.searchStore.isLoading;
 
   cards = computed(() => {
     const stationsMap = this.stationStore.stationsEntityMap();
@@ -58,6 +66,8 @@ export class SearchComponent implements OnInit {
       ),
     ].sort((a, b) => a - b),
   );
+
+  hasSearched = this.searchStore.hasSearched;
 
   filteredCards = computed(() =>
     this.searchStore

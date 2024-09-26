@@ -1,6 +1,10 @@
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
-import { MatButton, MatMiniFabButton } from '@angular/material/button';
+import {
+  MatButton,
+  MatIconButton,
+  MatMiniFabButton,
+} from '@angular/material/button';
 import {
   MatDatepicker,
   MatDatepickerInput,
@@ -13,6 +17,10 @@ import {
 } from '@angular/material/form-field';
 import { MatIcon } from '@angular/material/icon';
 import { MatInput, MatLabel } from '@angular/material/input';
+import {
+  OwlDateTimeModule,
+  OwlNativeDateTimeModule,
+} from '@danielmoncada/angular-datetime-picker';
 
 export const searchFormImports = [
   ReactiveFormsModule,
@@ -24,8 +32,11 @@ export const searchFormImports = [
   MatButton,
   MatMiniFabButton,
   MatIcon,
+  MatIconButton,
   MatDatepicker,
   MatDatepickerToggle,
   MatDatepickerInput,
   MatAutocompleteModule,
+  OwlDateTimeModule,
+  OwlNativeDateTimeModule,
 ];

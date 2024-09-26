@@ -8,9 +8,8 @@
 <mat-divider></mat-divider>
 <mat-dialog-content class="content">
   @if (isLoading()) {
-    <div class="spinner-container">
-      <mat-spinner class="spinner" />
-      <div class="label">Loading the trip info</div>
+    <div class="content-loading">
+      <app-spinner [loadText]="'Loading the trip info...'"></app-spinner>
     </div>
   } @else {
     <mat-stepper orientation="vertical" #stepper>
