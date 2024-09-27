@@ -1,6 +1,6 @@
 <mat-list class="list">
   @for (carriage of carriages(); track carriage.code) {
-    <mat-card class="card" [id]="carriage.name">
+    <mat-card class="card" [id]="'car' + (carriage.name | removeWhitespace)">
       @if (selectedCarriageCode() === carriage.code) {
         <h6 class="text-center">Update {{ carriage.name }}</h6>
         <app-carriage-form

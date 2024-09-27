@@ -1,3 +1,4 @@
+import { RemoveWhitespacePipe } from '@admin/pipes/remove-whitespace/remove-whitespace.pipe';
 import { MatButton, MatIconButton } from '@angular/material/button';
 import {
   MatCard,
@@ -17,4 +18,5 @@ export const stationCardsImports = [
   MatIcon,
   MatIconButton,
   MatButton,
+  RemoveWhitespacePipe,
 ];

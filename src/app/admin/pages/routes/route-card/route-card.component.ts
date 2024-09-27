@@ -15,6 +15,7 @@ import { ConfirmationDialogComponent } from '@shared/components/delete-dialog/co
 import { Message } from '@shared/models/enums/messages.enum';
 import { RoutePath } from '@shared/models/enums/route-path.enum';
 import { SnackBarService } from '@shared/services/snack-bar/snack-bar.service';
+import { CarriageStore } from '@shared/store/carriages/carriages.store';
 
 import { routeCardImports } from './route-card.config';
 
@@ -33,6 +34,12 @@ export class RouteCardComponent {
 
   isLoading = signal<boolean>(false);
 
+  carriageTypes = computed(() => {
+    const { carriages } = this.route();
+    const carriageMap = this.carriageStore.carriagesEntityMap();
+    return carriages.map((carriageCode) => carriageMap[carriageCode].name);
+  });
+
   cities = computed(() => {
     const stationIds = this.route().path;
     return this.stationStore
@@ -45,6 +52,8 @@ export class RouteCardComponent {
   private routeStore = inject(RouteStore);
 
   private stationStore = inject(StationStore);
+
+  private carriageStore = inject(CarriageStore);
 
   constructor(
     private router: Router,

@@ -42,7 +42,7 @@
       <div class="carriages">
         <span>Carriage Types:</span>
         <p class="carriages-list">
-          @for (carType of route().carriages; track $index) {
+          @for (carType of carriageTypes(); track $index) {
             <button
               class="list-item"
               mat-stroked-button
