@@ -1,0 +1,1 @@
+import{ra as i}from"./chunk-MTQVXK5S.js";function a(e){return e.replace(/[^a-zA-Z0-9-_]/g,"")}var s=(()=>{let t=class t{transform(r){return r.replace(/\s/g,"")}};t.\u0275fac=function(n){return new(n||t)},t.\u0275pipe=i({name:"removeWhitespace",type:t,pure:!0,standalone:!0});let e=t;return e})();export{a,s as b};
