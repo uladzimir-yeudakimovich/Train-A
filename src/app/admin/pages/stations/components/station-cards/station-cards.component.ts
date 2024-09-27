@@ -1,5 +1,6 @@
 import { Station } from '@admin/models/station.model';
 import { StationStore } from '@admin/store/stations/stations.store';
+import { sanitizeId } from '@admin/utils/specialCharactersSanitizer';
 import {
   AfterViewInit,
   ChangeDetectionStrategy,
@@ -43,7 +44,7 @@ export class StationCardsComponent implements AfterViewInit {
   ngAfterViewInit(): void {
     const { fragment } = this.activatedRoute.snapshot;
     if (fragment) {
-      setTimeout(() => this.scrollToCity(fragment), 500);
+      setTimeout(() => this.scrollToCity(fragment), 1000);
     }
   }
 
@@ -78,8 +79,11 @@ export class StationCardsComponent implements AfterViewInit {
   }
 
   private scrollToCity(city: string): void {
-    const element = this.renderer.selectRootElement(`#${city}`, true);
-    if (!element) return;
+    const sanitizedCity = sanitizeId(city);
+    const element = this.renderer.selectRootElement(
+      `#station${sanitizedCity}`,
+      true,
+    );
     const elementPosition = element.getBoundingClientRect().top;
     const offsetPosition = elementPosition + window.scrollY - 100;
 

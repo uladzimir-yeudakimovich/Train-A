@@ -1,3 +1,5 @@
+import { RemoveWhitespacePipe } from '@admin/pipes/remove-whitespace/remove-whitespace.pipe';
+import { sanitizeId } from '@admin/utils/specialCharactersSanitizer';
 import {
   AfterViewInit,
   Component,
@@ -28,6 +30,7 @@ import { CarriageFormComponent } from '../carriage-form/carriage-form.component'
     CarriageFormComponent,
     MatCard,
     MatIcon,
+    RemoveWhitespacePipe,
   ],
   templateUrl: './carriage-list.component.html',
   styleUrl: './carriage-list.component.scss',
@@ -62,10 +65,19 @@ export class CarriageListComponent implements AfterViewInit {
 
   ngAfterViewInit(): void {
     const { fragment } = this.activatedRoute.snapshot;
-    const element = this.renderer.selectRootElement(`#${fragment}`, true);
-    if (!element) return;
+    if (fragment) {
+      setTimeout(() => this.scrollToCarriage(fragment), 1000);
+    }
+  }
+
+  private scrollToCarriage(carriageName: string): void {
+    const sanitizedCarriage = sanitizeId(carriageName);
+    const element = this.renderer.selectRootElement(
+      `#car${sanitizedCarriage}`,
+      true,
+    );
     const elementPosition = element.getBoundingClientRect().top;
-    const offsetPosition = elementPosition - window.innerHeight - 100;
+    const offsetPosition = elementPosition + window.scrollY - 100;
 
     window.scrollTo({
       top: offsetPosition,
