@@ -5,6 +5,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   inject,
+  Renderer2,
   Signal,
 } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -34,6 +35,7 @@ export class StationCardsComponent implements AfterViewInit {
     private snackBarService: SnackBarService,
     private activatedRoute: ActivatedRoute,
     private router: Router,
+    private renderer: Renderer2,
   ) {
     this.stations = this.stationStore.stationsEntities;
   }
@@ -76,13 +78,13 @@ export class StationCardsComponent implements AfterViewInit {
   }
 
   private scrollToCity(city: string): void {
-    const element = document.getElementById(city);
+    const element = this.renderer.selectRootElement(`#${city}`, true);
     if (!element) return;
     const elementPosition = element.getBoundingClientRect().top;
-    const offsetPosition = elementPosition - 100; // - window.innerHeight;
+    const offsetPosition = elementPosition + window.scrollY - 100;
 
     window.scrollTo({
-      top: offsetPosition + window.scrollY,
+      top: offsetPosition,
       behavior: 'smooth',
     });
   }
