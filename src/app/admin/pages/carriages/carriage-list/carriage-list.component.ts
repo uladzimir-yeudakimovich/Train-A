@@ -1,4 +1,11 @@
-import { AfterViewInit, Component, inject, input, signal } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  inject,
+  input,
+  Renderer2,
+  signal,
+} from '@angular/core';
 import { MatButton } from '@angular/material/button';
 import { MatCard } from '@angular/material/card';
 import { MatIcon } from '@angular/material/icon';
@@ -32,7 +39,10 @@ export class CarriageListComponent implements AfterViewInit {
 
   store = inject(CarriageStore);
 
-  constructor(private activatedRoute: ActivatedRoute) {}
+  constructor(
+    private activatedRoute: ActivatedRoute,
+    private renderer: Renderer2,
+  ) {}
 
   toggleForm(carriageCode: string) {
     const currentSelection = this.selectedCarriageCode();
@@ -52,7 +62,7 @@ export class CarriageListComponent implements AfterViewInit {
 
   ngAfterViewInit(): void {
     const { fragment } = this.activatedRoute.snapshot;
-    const element = document.getElementById(fragment ?? '');
+    const element = this.renderer.selectRootElement(`#${fragment}`, true);
     if (!element) return;
     const elementPosition = element.getBoundingClientRect().top;
     const offsetPosition = elementPosition - window.innerHeight - 100;
